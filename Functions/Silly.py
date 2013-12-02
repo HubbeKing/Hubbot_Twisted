@@ -55,5 +55,6 @@ class Instantiate(Function):
 		elif message.Command == "both":
 			return IRCResponse(ResponseType.Say, "http://www.youtube.com/watch?v=OawrlVoQqSs", message.ReplyTo)
 		
-		elif message.Commmand == "no":
+		elif message.Command == "no":
 			return IRCResponse(ResponseType.Say, "http://www.youtube.com/watch?v=YKss2uYpih8", message.ReplyTo)
+			
