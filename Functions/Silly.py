@@ -10,7 +10,7 @@ class Instantiate(Function):
 		if message.Type != "PRIVMSG":
 			return
 
-		elif message.Command == "nope":
+		if message.Command == "nope":
 			return IRCResponse(ResponseType.Say, "http://www.youtube.com/watch?v=gvdf5n-zI14", message.ReplyTo)
 			
 		elif message.Command == "donotwant":
