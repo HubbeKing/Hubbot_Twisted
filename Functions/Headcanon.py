@@ -16,6 +16,10 @@ import GlobalVars
 class Instantiate(Function):
 	pbin = PastebinPython(api_dev_key='cef9f4fcc03a220f47fcef895abe4cc1')
 	Help = "headcanon [add/search/list/remove/help] -- used to store Symphony's headcanon!"
+	Help += "\nHeadcanon functions: {}".format(", ".join(subCommands))
+	Help += "\nSyntax is: "
+	Help += GlobalVars.CommandChar
+	Help += "headcanon help <command>"
 	
 	def GetResponse(self, message):
 		if message.Type == "PRIVMSG" and message.Command == "headcanon":
