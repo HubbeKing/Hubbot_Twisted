@@ -45,7 +45,7 @@ class IRCMessage:
         
         if (self.MessageList[0].startswith(GlobalVars.CommandChar)):
             self.Command = self.MessageList[0][1:]
-			self.Command = self.Command.lower()
+            self.Command = self.Command.lower()
             self.Parameters = unicodeMessage[len(self.Command)+2:]
 
             if self.Parameters.strip():
