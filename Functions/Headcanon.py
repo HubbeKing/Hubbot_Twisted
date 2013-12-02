@@ -18,13 +18,13 @@ class Instantiate(Function):
 	Help = "headcanon [add/search/list/remove/help] -- used to store Symphony's headcanon!"
 	
 	def GetResponse(self, message):
-		if message.Type == "PRIVMSG":
+		if message.Type == "PRIVMSG" and message.Command == "headcanon":
 			filename = "headcanon/headcanon.pkl"
 			with open(filename, "rb") as pkl_file:
 				headcanon = pickle.load(pkl_file)
 		
 			if len(message.ParameterList) == 0:
-				return IRCResponse(ResponseType.Say, Help, message.ReplyTo)
+				return IRCResponse(ResponseType.Say, self.Help, message.ReplyTo)
 			
 			subCommand = message.ParameterList[0]
 			subCommands = ["add", "search", "list", "remove", "help"]
