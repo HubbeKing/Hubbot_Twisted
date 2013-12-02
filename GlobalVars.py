@@ -6,7 +6,11 @@ CurrentNick = "Hubbot"
 server = "irc.desertbus.org"
 port = 6667
 channels = ["#desertbus"]
-admins = ["HubbeKing"]
+admins = ["HubbeKing", "HubbeWork", "HubbePhone", "DoctorGyarados",\
+           "DoctorGyaradroid", "DoctorGyarados|GAEM",\
+           "DoctorGyarados|Away", "Docket", "Gyaradroid",\
+		   "Symphony", "Symphone", "Sympho|afk",\
+           "Symphosewing", "Symphonom", "Symphonomnom"]
 
 finger = "Y U DO DIS"
 version = 0.1
