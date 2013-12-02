@@ -8,6 +8,10 @@ from pastebin_python.pastebin_exceptions import *
 from pastebin_python.pastebin_constants import *
 from pastebin_python.pastebin_formats import *
 from string import find
+from IRCMessage import IRCMessage
+from IRCResponse import IRCResponse, ResponseType
+from Function import Function
+import GlobalVars
 
 class Instantiate(Function):
 	pbin = PastebinPython(api_dev_key='cef9f4fcc03a220f47fcef895abe4cc1')
