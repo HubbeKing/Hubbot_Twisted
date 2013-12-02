@@ -18,7 +18,7 @@ class Instantiate(Function):
 	Help = "headcanon [add/search/list/remove/help] -- used to store Symphony's headcanon!"
 	
 	def GetResponse(self, message):
-		if message.Type != "PRIVMSG" and message.User.Name in GlobalVars.Admins:
+		if message.Type == "PRIVMSG":
 			filename = "headcanon/headcanon.pkl"
 			with open(filename, "rb") as pkl_file:
 				headcanon = pickle.load(pkl_file)
@@ -27,7 +27,7 @@ class Instantiate(Function):
 				return IRCResponse(ResponseType.Say, Help, message.ReplyTo)
 			
 			subCommand = message.ParameterList[0]
-			subCommands = ["add", "search", "list", "remove"]
+			subCommands = ["add", "search", "list", "remove", "help"]
 			if subCommand.lower() == "help":
 				try:
 					helpCmd = message.ParameterList[1]
@@ -51,7 +51,7 @@ class Instantiate(Function):
 					returnString += "headcanon help <command>"
 				return IRCResponse(ResponseType.Say, returnString, message.ReplyTo)
 			
-			elif subCommand.lower() == "add":
+			elif subCommand.lower() == "add" and message.User.Name in GlobalVars.Admins:
 				if len(message.ParameterList) == 1:
 					return IRCResponse(ResponseType.Say, "Maybe you should read the help text?", message.ReplyTo)
 				addString = ""
@@ -92,7 +92,7 @@ class Instantiate(Function):
 					except:
 						return IRCResponse(ResponseType.Say, "Uh-oh, something broke!", message.ReplyTo)
 						
-			elif subCommand.lower() == "remove":
+			elif subCommand.lower() == "remove" and message.User.Name in GlobalVars.Admins:
 				try:
 					re_string = "{}".format(" ".join(message.ParameterList[1:]))
 					for canon in headcanon:
