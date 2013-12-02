@@ -15,7 +15,8 @@ import GlobalVars
 
 class Instantiate(Function):
 	pbin = PastebinPython(api_dev_key='cef9f4fcc03a220f47fcef895abe4cc1')
-	Help = "headcanon [add/search/list/remove/help] -- used to store Symphony's headcanon!"
+	subCommands = ["add", "search", "list", "remove", "help"]
+	Help = "headcanon [function] -- used to store Symphony's headcanon!"
 	Help += "\nHeadcanon functions: {}".format(", ".join(subCommands))
 	Help += "\nSyntax is: "
 	Help += GlobalVars.CommandChar
@@ -31,7 +32,6 @@ class Instantiate(Function):
 				return IRCResponse(ResponseType.Say, self.Help, message.ReplyTo)
 			
 			subCommand = message.ParameterList[0]
-			subCommands = ["add", "search", "list", "remove", "help"]
 			if subCommand.lower() == "help":
 				try:
 					helpCmd = message.ParameterList[1]
