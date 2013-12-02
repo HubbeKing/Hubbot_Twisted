@@ -10,51 +10,51 @@ class Instantiate(Function):
 		if message.Type != "PRIVMSG":
 			return
 
-		if message.Command.lower() == "nope":
+		if message.Command == "nope":
 			return IRCResponse(ResponseType.Say, "http://www.youtube.com/watch?v=gvdf5n-zI14", message.ReplyTo)
 			
-		elif message.Command.lower() == "donotwant":
+		elif message.Command == "donotwant":
 			return IRCResponse(ResponseType.Say, "http://www.youtube.com/watch?v=oKI-tD0L18A", message.ReplyTo)
 			
-		elif message.Command.lower() == "yes":
+		elif message.Command == "yes":
 			return IRCResponse(ResponseType.Say, "http://www.youtube.com/watch?v=P3ALwKeSEYs", message.ReplyTo)
 			
-		elif message.Command.lower() == "store":
+		elif message.Command == "store":
 			return IRCResponse(ResponseType.Say, "http://www.youtube.com/watch?v=iRZ2Sh5-XuM", message.ReplyTo)
 			
-		elif message.Command.lower() == "stupid":
+		elif message.Command == "stupid":
 			return IRCResponse(ResponseType.Say, "http://www.youtube.com/watch?v=yytbDZrw1jc", message.ReplyTo)
 		
-		elif message.Command.lower() == "fixyou":
+		elif message.Command == "fixyou":
 			return IRCResponse(ResponseType.Say, "http://www.youtube.com/watch?v=oin0KNElSG0", message.ReplyTo)
 		
-		elif message.Command.lower() == "yup":
+		elif message.Command == "yup":
 			return IRCResponse(ResponseType.Say, "http://www.youtube.com/watch?v=K0QHw7iy1Rg", message.ReplyTo)
 		
-		elif message.Command.lower() == "heya":
+		elif message.Command == "heya":
 			return IRCResponse(ResponseType.Say, "http://www.youtube.com/watch?v=ZZ5LpwO-An4", message.ReplyTo)
 		
-		elif message.Command.lower() == "what":
+		elif message.Command == "what":
 			return IRCResponse(ResponseType.Say, "http://www.youtube.com/watch?v=PDXrXBsTFSE", message.ReplyTo)
 		
-		elif message.Command.lower() == "goat":
+		elif message.Command == "goat":
 			return IRCResponse(ResponseType.Say, "http://www.youtube.com/watch?v=SIaFtAKnqBU", message.ReplyTo)
 		
-		elif message.Command.lower() == "mybrand":
+		elif message.Command == "mybrand":
 			return IRCResponse(ResponseType.Say, "http://www.youtube.com/watch?v=V-fRuoMIfpw", message.ReplyTo)
 			
-		elif message.Command.lower() == "whoa":
+		elif message.Command == "whoa":
 			return IRCResponse(ResponseType.Say, "http://www.youtube.com/watch?v=6q-gHrEaEAs", message.ReplyTo)
 		
-		elif message.Command.lower() == "hngh":
+		elif message.Command == "hngh":
 			return IRCResponse(ResponseType.Say, "http://24.media.tumblr.com/tumblr_malzltlKk21rggqwfo1_500.gif", message.ReplyTo)
 		
-		elif message.Command.lower() == "ps" or message.Command.lower() == "psc":
+		elif message.Command == "ps" or message.Command == "psc":
 			return IRCResponse(ResponseType.Say, "https://docs.google.com/document/d/1C4Maba3fXrLYMMIXK67OOn7C2c31V6nff5inGAZStsw/edit?pli=1", message.ReplyTo)
 		
-		elif message.Command.lower() == "both":
+		elif message.Command == "both":
 			return IRCResponse(ResponseType.Say, "http://www.youtube.com/watch?v=OawrlVoQqSs", message.ReplyTo)
 		
-		elif message.Command.lower() == "no":
+		elif message.Command == "no":
 			return IRCResponse(ResponseType.Say, "http://www.youtube.com/watch?v=YKss2uYpih8", message.ReplyTo)
 			
