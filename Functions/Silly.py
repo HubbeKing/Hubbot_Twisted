@@ -58,3 +58,12 @@ class Instantiate(Function):
 		elif message.Command == "no":
 			return IRCResponse(ResponseType.Say, "http://www.youtube.com/watch?v=YKss2uYpih8", message.ReplyTo)
 			
+		elif message.Command == "hunt":
+			if message.User.Name in GlobalVars.admins:
+				line1 = "LAPTOP CHAT ENGAGE"
+				line2 = "THRUSTERS TO MAXIMUM POWER"
+				line3 = "FLOOD TUBES THREE AND FOUR"
+				line4 = "HUNT FOR RED OCTOBER"
+				sendLine = line1 + "\n" + line2 + "\n" + line3 + "\n" + line4
+				return IRCResponse(ResponseType.Say, sendLine, message.ReplyTo)
+			
