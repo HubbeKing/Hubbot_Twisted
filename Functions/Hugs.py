@@ -16,7 +16,7 @@ class Instantiate(Function):
 			pkl_file = open(filename, "rb")
 			hug_dict = pickle.load(pkl_file)
 			pkl_file.close()
-			commonWords = ["and", "of", "all", "to", "the", "both", "back", "again", "any", "one", "<3", "with"]
+			commonWords = ["and","of","all","to","the","both","back","again","any","one","<3","with","","<3s","so","hard","right","in","him","her"]
 			pattern = "hu+g|cuddle|snu+ggle|snu+g|squeeze|glomp"
 			match = re.search(pattern, message.MessageList[0] , re.IGNORECASE)
 			if match:
