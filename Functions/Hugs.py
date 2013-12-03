@@ -30,7 +30,7 @@ class Instantiate(Function):
 						nick = string.lower(nick)
 						receivers.append(nick)
 				for index in range(0, len(receivers)):
-					giver = message.User.Name
+					giver = string.lower(message.User.Name)
 					receiver = receivers[index]
 					if giver not in hug_dict:
 						hug_dict[giver] = [1,0]
