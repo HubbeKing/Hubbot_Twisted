@@ -31,14 +31,17 @@ class HubbeBot(irc.IRCClient):
     
     def privmsg(self, user, channel, msg):
         message = IRCMessage('PRIVMSG', user, channel, msg)
+        self.log(u'<{0}> {1}'.format(message.User.Name, message.MessageString), message.ReplyTo)
         self.handleMessage(message)
 
     def action(self, user, channel, msg):
         message = IRCMessage('ACTION', user, channel, msg)
+        self.log(u'*{0} {1}*'.format(message.User.Name, message.MessageString), message.ReplyTo)
         self.handleMessage(message)
     
     def noticed(self, user, channel, msg):
         message = IRCMessage('NOTICE', user, channel, msg)
+        self.log(u'[{0}] {1}'.format(message.User.Name, message.MessageString), message.ReplyTo)
         self.handleMessage(message)
 
     def nickChanged(self, nick):
@@ -60,10 +63,13 @@ class HubbeBot(irc.IRCClient):
         
         if (response.Type == ResponseType.Say):
             self.msg(response.Target, response.Response.encode('utf-8'))
+            self.log(u'<{0}> {1}'.format(self.nickname, response.Response), response.Target)
         elif (response.Type == ResponseType.Do):
             self.describe(response.Target, response.Response.encode('utf-8'))
+            self.log(u'*{0} {1}*'.format(self.nickname, response.Response), response.Target)
         elif (response.Type == ResponseType.Notice):
             self.notice(response.Target, response.Response.encode('utf-8'))
+            self.log(u'[{0}] {1}'.format(self.nickname, response.Response), response.Target)
         elif (response.Type == ResponseType.Raw):
             self.sendLine(response.Response.encode('utf-8'))
 
@@ -80,11 +86,27 @@ class HubbeBot(irc.IRCClient):
                     self.responses.append(response)
             except Exception:
                 print "Python Execution Error in '%s': %s" % (name, str( sys.exc_info() ))
-        
+                traceback.print_tb(sys.exc_info()[2])
+				
         for response in self.responses:
             self.sendResponse(response)
         self.responses = []
-
+        
+    def log(self, text, target):
+        now = datetime.datetime.utcnow()
+        time = now.strftime("[%H:%M]")
+        data = u'{0} {1}'.format(time, text)
+        print target, data
+        
+        fileName = "{0}{1}.txt".format(target, now.strftime("-%Y%m%d"))
+        fileDirs = os.path.join(GlobalVars.logPath, GlobalVars.server)
+        if not os.path.exists(fileDirs):
+            os.makedirs(fileDirs)
+        filePath = os.path.join(fileDirs, fileName)
+        
+        with codecs.open(filePath, 'a+', 'utf-8') as f:
+            f.write(data + '\n')
+        
 class HubbeBotFactory(protocol.ClientFactory):
 	
 	protocol = HubbeBot
