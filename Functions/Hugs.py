@@ -82,5 +82,4 @@ class Instantiate(Function):
 					else:
 						matchedNicksString = matchedNicksString + name + ", "
 						numberOfMatches += 1
-				returnString = matchedNicksString + "\n" + HugString
-				return IRCResponse(ResponseType.Say, returnString, message.ReplyTo)
+				return IRCResponse(ResponseType.Say, matchedNicksString, message.ReplyTo), IRCResponse(ResponseType.Say, HugString, message.ReplyTo)
