@@ -40,7 +40,7 @@ class HubbeBot(irc.IRCClient):
         self.handleMessage(message)
     
     def noticed(self, user, channel, msg):
-        message = IRCMessage('NOTICE', user, channel, msg)
+        message = IRCMessage('NOTICE', user, channel, msg.upper())
         self.log(u'[{0}] {1}'.format(message.User.Name, message.MessageString), message.ReplyTo)
         self.handleMessage(message)
 
