@@ -1,5 +1,6 @@
 *.pkl
 logs/
+data/
 
 #################
 ## Eclipse
