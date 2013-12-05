@@ -58,7 +58,7 @@ class Instantiate(Function):
 					returnString += "headcanon help <command>"
 				return IRCResponse(ResponseType.Say, returnString, message.ReplyTo)
 			
-			elif subCommand.lower() == "add" and message.User.Name in GlobalVars.Admins:
+			elif subCommand.lower() == "add" and message.User.Name in GlobalVars.admins:
 				if len(message.ParameterList) == 1:
 					return IRCResponse(ResponseType.Say, "Maybe you should read the help text?", message.ReplyTo)
 				addString = ""
@@ -66,8 +66,9 @@ class Instantiate(Function):
 					addString = addString + word + " "
 				headcanon.append(addString)
 				with sqlite3.connect(filename) as conn:
-                                        c = conn.cursor
-                                        c.execute("INSERT INTO headcanon VALUES (?)", addString)
+                                        c = conn.cursor()
+                                        c.execute("INSERT INTO headcanon VALUES (?)", (addString,))
+                                        conn.commit()
 				return IRCResponse(ResponseType.Say, "Successfully added line!", message.ReplyTo)
 				
 			elif subCommand.lower() == "search":
@@ -100,7 +101,7 @@ class Instantiate(Function):
 					except:
 						return IRCResponse(ResponseType.Say, "Uh-oh, something broke!", message.ReplyTo)
 						
-			elif subCommand.lower() == "remove" and message.User.Name in GlobalVars.Admins:
+			elif subCommand.lower() == "remove" and message.User.Name in GlobalVars.admins:
 				try:
 					re_string = "{}".format(" ".join(message.ParameterList[1:]))
 					for canon in headcanon:
@@ -108,8 +109,9 @@ class Instantiate(Function):
 						if match:
 							headcanon.remove(match.string)
 							with sqlite3.connect(filename) as conn:
-                                                                c = conn.cursor
-                                                                c.execute("DELETE FROM headcanon WHERE canon=?", match.string)
+                                                                c = conn.cursor()
+                                                                c.execute("DELETE FROM headcanon WHERE canon=?", (match.string,))
+                                                                conn.commit()
 							return IRCResponse(ResponseType.Say, 'Removed "' + match.string + '"', message.ReplyTo)
 					return IRCResponse(ResponseType.Say, '"' + match.string + '"was not found!', message.ReplyTo)
 				except:
