@@ -2,7 +2,7 @@ import random
 import re
 import urllib2
 import json
-import pickle
+import sqlite3
 from pastebin_python import PastebinPython
 from pastebin_python.pastebin_exceptions import *
 from pastebin_python.pastebin_constants import *
@@ -24,9 +24,12 @@ class Instantiate(Function):
 	
 	def GetResponse(self, message):
 		if message.Type == "PRIVMSG" and message.Command == "headcanon":
-			filename = "headcanon/headcanon.pkl"
-			with open(filename, "rb") as pkl_file:
-				headcanon = pickle.load(pkl_file)
+			filename = "data/data.db"
+			headcanon = []
+			with sqlite3.connect(filename) as conn:
+                                c = conn.cursor()
+                                for row in c.execute("SELECT * FROM headcanon"):
+                                        headcanon.append(row[0])
 		
 			if len(message.ParameterList) == 0:
 				return IRCResponse(ResponseType.Say, self.Help, message.ReplyTo)
@@ -62,8 +65,9 @@ class Instantiate(Function):
 				for word in message.ParameterList[1:]:
 					addString = addString + word + " "
 				headcanon.append(addString)
-				with open(filename, "wb") as pkl_file:
-					pickle.dump(headcanon, pkl_file)
+				with sqlite3.connect(filename) as conn:
+                                        c = conn.cursor
+                                        c.execute("INSERT INTO headcanon VALUES (?)", addString)
 				return IRCResponse(ResponseType.Say, "Successfully added line!", message.ReplyTo)
 				
 			elif subCommand.lower() == "search":
@@ -103,8 +107,9 @@ class Instantiate(Function):
 						match = re.search(re_string, canon, re.IGNORECASE)
 						if match:
 							headcanon.remove(match.string)
-							with open(filename, "wb") as pkl_file:
-								pickle.dump(headcanon, pkl_file)
+							with sqlite3.connect(filename) as conn:
+                                                                c = conn.cursor
+                                                                c.execute("DELETE FROM headcanon WHERE canon=?", match.string)
 							return IRCResponse(ResponseType.Say, 'Removed "' + match.string + '"', message.ReplyTo)
 					return IRCResponse(ResponseType.Say, '"' + match.string + '"was not found!', message.ReplyTo)
 				except:
