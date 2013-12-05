@@ -7,4 +7,4 @@ c = conn.cursor()
 
 c.execute("CREATE TABLE hugs (nick text, given int, received int)")
 
-c.execute("INSERT INTO hugs VALUES (%s, %s, %s)" %(hugs[0], hugs[1], hugs[2]))
+c.execute("INSERT INTO hugs VALUES (?, ?, ?)", (hugs[0], hugs[1], hugs[2]))
