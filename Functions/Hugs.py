@@ -37,20 +37,29 @@ class Instantiate(Function):
 					receiver = receivers[index]
 					if giver not in hug_dict:
 						hug_dict[giver] = [1,0]
+						with sqlite3.connect(filename) as conn:
+                                                        c = conn.cursor()
+                                                        c.execute("INSERT INTO hugs VALUES (?,?,?)", (giver,1,0))
+                                                        conn.commit()
 					else:
 						hug_dict[giver] = list(hug_dict[giver])
 						hug_dict[giver][0] += 1
+						with sqlite3.connect(filename) as conn:
+                                                        c = conn.cursor()
+                                                        c.execute("UPDATE hugs SET given=? WHERE nick=?", (hug_dict[giver][0], giver))
+                                                        conn.commit()
 					if receiver not in hug_dict:
 						hug_dict[receiver] = [0,1]
+						with sqlite3.connect(filename) as conn:
+                                                        c = conn.cursor()
+                                                        c.execute("INSERT INTO hugs VALUES (?,?,?)", (receiver,0,1))
+                                                        conn.commit()
 					else:
 						hug_dict[receiver] = list(hug_dict[receiver])
 						hug_dict[receiver][1] += 1
-				with sqlite3.connect(filename) as conn:
-                                        c = conn.cursor()
-                                        c.execute("UPDATE hugs SET given=? WHERE nick=?", (hug_dict[giver][0], hug_dict[giver]))
-                                        for rec in receiver:
-                                                c.execute("UPDATE hugs SET received=? WHERE nick=?", (hug_dict[rec][1], hug_dict[rec]))
-                                        conn.commit()
+						with sqlite3.connect(filename) as conn:
+                                                        c = conn.cursor()
+                                                        c.execute("UPDATE hugs SET received=? WHERE nick=?", (hug_dict[receiver][1], receiver))
 			
 		elif message.Type == "PRIVMSG":
 			if message.Command == "hugs":
