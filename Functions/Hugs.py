@@ -12,10 +12,12 @@ class Instantiate(Function):
 	
 	def GetResponse(self, message):
 		if message.Type == "ACTION":
-			filename = "hugs/hugs.pkl"
-			pkl_file = open(filename, "rb")
-			hug_dict = pickle.load(pkl_file)
-			pkl_file.close()
+			filename = "data/data.db"
+			hug_dict = {}
+			with sqlite3.connect(filename) as conn:
+                                c = conn.cursor()
+                                for row in c.execute("SELECT * FROM hugs"):
+                                        hug_dict[row[0]] = [row[1], row[2]]
 			commonWords = ["and","of","all","to","the","both","back","again","any","one","<3","with","","<3s","so","hard","right","in","him","her","booper"]
 			pattern = "hu+g|cuddle|snu+ggle|snu+g|squeeze|glomp"
 			match = re.search(pattern, message.MessageList[0] , re.IGNORECASE)
@@ -42,16 +44,21 @@ class Instantiate(Function):
 					else:
 						hug_dict[receiver] = list(hug_dict[receiver])
 						hug_dict[receiver][1] += 1
-				output = open(filename, "wb")
-				pickle.dump(hug_dict, output)
-				output.close()
+				with sqlite3.connect(filename) as conn:
+                                        c = conn.cursor()
+                                        c.execute("UPDATE hugs SET given=? WHERE nick=?", (hug_dict[giver][0], hug_dict[giver]))
+                                        for rec in receiver:
+                                                c.execute("UPDATE hugs SET received=? WHERE nick=?", (hug_dict[rec][1], hug_dict[rec]))
+                                        conn.commit()
 			
 		elif message.Type == "PRIVMSG":
 			if message.Command == "hugs":
-				filename = "hugs/hugs.pkl"
-				pkl_file = open(filename, "rb")
-				hug_dict = pickle.load(pkl_file)
-				pkl_file.close()
+				filename = "data/data.db"
+				hug_dict = {}
+				with sqlite3.connect(filename) as conn:
+                                        c = conn.cursor()
+                                        for row in c.execute("SELECT * FROM hugs"):
+                                                hug_dict[row[0]] = [row[1], row[2]]
 				if len(message.ParameterList) == 0:
 					target = message.User.Name
 				else:
