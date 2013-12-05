@@ -4,11 +4,12 @@ from Function import Function
 import GlobalVars
 
 import string
-import pickle
+import sqlite3
 import re
 
 class Instantiate(Function):
 	Help = "hugs [nick] -- How many hugs has this person given and received?"
+	# hug_dict is : {"nick":[given, received]}
 	
 	def GetResponse(self, message):
 		if message.Type == "ACTION":
