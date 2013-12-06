@@ -3,6 +3,8 @@ import os
 functions = {}
 
 CurrentNick = "Hubbot"
+connections = {"irc.desertbus.org":["#desertbus", "#unmoderated"], "irc.applejack.me":["#survivors"]}
+
 server = "irc.desertbus.org"
 port = 6667
 channels = ["#desertbus"]
