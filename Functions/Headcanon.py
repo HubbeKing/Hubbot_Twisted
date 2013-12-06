@@ -3,6 +3,7 @@ import re
 import urllib2
 import json
 import sqlite3
+import sys, platform, os, traceback, datetime, codecs
 from pastebin_python import PastebinPython
 from pastebin_python.pastebin_exceptions import *
 from pastebin_python.pastebin_constants import *
@@ -14,7 +15,6 @@ from Function import Function
 import GlobalVars
 
 class Instantiate(Function):
-	pbin = PastebinPython(api_dev_key='cef9f4fcc03a220f47fcef895abe4cc1')
 	subCommands = ["add", "search", "list", "remove", "help"]
 	Help = "headcanon [function] -- used to store Symphony's headcanon!"
 	Help += "\nHeadcanon functions: {}".format(", ".join(subCommands))
@@ -87,6 +87,7 @@ class Instantiate(Function):
 					return IRCResponse(ResponseType.Say, returnString, message.ReplyTo)
 				
 			elif subCommand.lower() == "list":
+                                pbin = PastebinPython(api_dev_key='cef9f4fcc03a220f47fcef895abe4cc1')
 				pasteBinString = ""
 				if len(headcanon) == 0:
 					return IRCResponse(ResponseType.Say, "The database is empty! D:", message.ReplyTo)
@@ -96,10 +97,10 @@ class Instantiate(Function):
 					try:
 						pbin.createAPIUserKey("HubbeKing", "hgllabf2142")
 						pasteBinStr = pbin.createPaste(pasteBinString, "headcanon", "text", 1, "10M")
-						pasteBinUrl = self.ShortenGoogl(pasteBinStr)
-						return IRCResponse(ResponseType.Say, "Link posted! (Expires in 10 minutes) " + pasteBinUrl, message.ReplyTo)
+						#pasteBinUrl = self.ShortenGoogl(pasteBinStr)
+						return IRCResponse(ResponseType.Say, "Link posted! (Expires in 10 minutes) " + pasteBinStr, message.ReplyTo)
 					except Exception:
-                                                print "Python Execution Error in '%s': %s" % (name, str( sys.exc_info() ))
+                                                print "Python Execution Error in '%s': %s" % ("headcanon", str( sys.exc_info() ))
                                                 traceback.print_tb(sys.exc_info()[2])
 						return IRCResponse(ResponseType.Say, "Uh-oh, something broke!", message.ReplyTo)
 						
@@ -117,7 +118,7 @@ class Instantiate(Function):
 							return IRCResponse(ResponseType.Say, 'Removed "' + match.string + '"', message.ReplyTo)
 					return IRCResponse(ResponseType.Say, '"' + match.string + '"was not found!', message.ReplyTo)
 				except Exception:
-                                        print "Python Execution Error in '%s': %s" % (name, str( sys.exc_info() ))
+                                        print "Python Execution Error in '%s': %s" % ("headcanon", str( sys.exc_info() ))
                                         traceback.print_tb(sys.exc_info()[2])
 					return IRCReponse(ResponseType.Say, "Something broke!", message.ReplyTo)
 				
