@@ -98,7 +98,9 @@ class Instantiate(Function):
 						pasteBinStr = pbin.createPaste(pasteBinString, "headcanon", "text", 1, "10M")
 						pasteBinUrl = self.ShortenGoogl(pasteBinStr)
 						return IRCResponse(ResponseType.Say, "Link posted! (Expires in 10 minutes) " + pasteBinUrl, message.ReplyTo)
-					except:
+					except Exception:
+                                                print "Python Execution Error in '%s': %s" % (name, str( sys.exc_info() ))
+                                                traceback.print_tb(sys.exc_info()[2])
 						return IRCResponse(ResponseType.Say, "Uh-oh, something broke!", message.ReplyTo)
 						
 			elif subCommand.lower() == "remove" and message.User.Name in GlobalVars.admins:
@@ -114,7 +116,9 @@ class Instantiate(Function):
                                                                 conn.commit()
 							return IRCResponse(ResponseType.Say, 'Removed "' + match.string + '"', message.ReplyTo)
 					return IRCResponse(ResponseType.Say, '"' + match.string + '"was not found!', message.ReplyTo)
-				except:
+				except Exception:
+                                        print "Python Execution Error in '%s': %s" % (name, str( sys.exc_info() ))
+                                        traceback.print_tb(sys.exc_info()[2])
 					return IRCReponse(ResponseType.Say, "Something broke!", message.ReplyTo)
 				
 	def ShortenGoogl(url):
