@@ -26,7 +26,7 @@ class HubbeBot(irc.IRCClient):
     responses = []
 
     def signedOn(self):
-        for channel in GlobalVars.channels:
+        for channel in args[1:]:
             self.join(channel)
     
     def privmsg(self, user, channel, msg):
@@ -121,5 +121,6 @@ class HubbeBotFactory(protocol.ClientFactory):
 if __name__ == "__main__":
 	AutoLoadFunctions()
 	hubbot = HubbeBotFactory()
-	reactor.connectTCP(GlobalVars.server, GlobalVars.port, hubbot)
+	args = sys.argv
+	reactor.connectTCP(args[0], GlobalVars.port, hubbot)
 	reactor.run()
