@@ -3,11 +3,10 @@ import os
 functions = {}
 
 CurrentNick = "Hubbot"
-connections = {"irc.desertbus.org":["#desertbus", "#unmoderated"], "irc.applejack.me":["#survivors"]}
+connections = {"irc.desertbus.org":["#desertbus", "#unmoderated", "#help", "#games"], "irc.applejack.me":["#survivors"]}
 
-server = "irc.desertbus.org"
 port = 6667
-channels = ["#desertbus"]
+
 admins = ["HubbeKing", "HubbeWork", "HubbePhone", "DoctorGyarados",\
            "DoctorGyaradroid", "DoctorGyarados|GAEM",\
            "DoctorGyarados|Away", "Docket", "Gyaradroid",\
@@ -15,7 +14,7 @@ admins = ["HubbeKing", "HubbeWork", "HubbePhone", "DoctorGyarados",\
            "Symphosewing", "Symphonom", "Symphonomnom"]
 
 finger = "Y U DO DIS"
-version = 1.0
+version = 1.0.0
 source = "https://github.com/HubbeKing/Hubbot_Twisted/"
 
 CommandChar = "+"

@@ -1,7 +1,6 @@
 import sys, platform, os, traceback, datetime, codecs
 from twisted.words.protocols import irc
-from twisted.internet import protocol
-from twisted.internet import reactor
+from twisted.internet import protocol, reactor
 
 from IRCResponse import IRCResponse, ResponseType
 from IRCMessage import IRCMessage
@@ -107,16 +106,27 @@ class HubbeBot(irc.IRCClient):
         with codecs.open(filePath, 'a+', 'utf-8') as f:
             f.write(data + '\n')
         
-class HubbeBotFactory(protocol.ClientFactory):
+class HubbeBotFactory(protocol.ReconnectingClientFactory):
 	
 	protocol = HubbeBot
 	
-	def clientConnectionLost(self, connector, reason):
-		connector.connect()
-		
-	def clientConnectionFailed(self, connector, reason):
-		print "Connection failed: ", reason
-		reactor.stop
+	def startedConnecting(self, connector):
+            print "-#- Started to connect."
+
+        def buildProtocol(self, addr):
+            print "-#- Connected."
+            print "-#- Resetting reconnectiong delay"
+            self.resetDelay()
+            return HubbeBot()
+
+        def clientConnectionLost(self, connector, reason):
+            print "-!- Connection lost. Reason:", reason
+            protocol.ReconnectingClientFactory.clientConnectionLost(self, connector, reason)
+
+        def clientConnectionFailed(self, connector, reason):
+            print "-!- Connection failed. Reason:", reason
+            protocol.ReconnectingClientFactory.clientConnectionFailed(self, connector, reason)
+            
 		
 if __name__ == "__main__":
 	AutoLoadFunctions()
