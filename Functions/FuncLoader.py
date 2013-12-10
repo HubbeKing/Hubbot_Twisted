@@ -31,10 +31,12 @@ class Instantiate(Function):
                 for name, func in GlobalVars.functions.iteritems():
                     if name != 'FuncLoader':
                         LoadFunction(name)
+                        LoadFunction(name)
                 return IRCResponse(ResponseType.Say, "All functions reloaded!", message.ReplyTo)
             
             else:
                 try:
+                    loadType = LoadFunction(path)
                     loadType = LoadFunction(path)
                     return IRCResponse(ResponseType.Say, "Function '%s' %soaded!" % (path, loadType), message.ReplyTo)
                 except Exception:
