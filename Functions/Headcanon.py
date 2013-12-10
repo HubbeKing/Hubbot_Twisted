@@ -97,7 +97,6 @@ class Instantiate(Function):
 					try:
 						pbin.createAPIUserKey("HubbeKing", "hgllabf2142")
 						pasteBinStr = pbin.createPaste(pasteBinString, "headcanon", "text", 1, "10M")
-						#pasteBinUrl = self.ShortenGoogl(pasteBinStr)
 						return IRCResponse(ResponseType.Say, "Link posted! (Expires in 10 minutes) " + pasteBinStr, message.ReplyTo)
 					except Exception:
                                                 print "Python Execution Error in '%s': %s" % ("headcanon", str( sys.exc_info() ))
@@ -121,20 +120,3 @@ class Instantiate(Function):
                                         print "Python Execution Error in '%s': %s" % ("headcanon", str( sys.exc_info() ))
                                         traceback.print_tb(sys.exc_info()[2])
 					return IRCReponse(ResponseType.Say, "Something broke!", message.ReplyTo)
-				
-	def ShortenGoogl(url):
-		post = '{{longUrl": "{0}"}}'.format(url)
-		
-		googlKey = 'AIzaSyCU7yKR6eTkme1cTUqFoSJxhG-v83trPy4'
-		
-		apiURL = 'https://www.googleapis.com/urlshortener/v1/url?key={0}'.format(googlKey)
-		
-		headers = {"Content-Type": "application/json"}
-		
-		try:
-			request = urllib2.Request(apiURL, post, headers)
-			response = json.loads(urllib2.urlopen(request).read())
-			return response['id']
-			
-		except Exception, e:
-			print "Goo.gl error: %s" % e
