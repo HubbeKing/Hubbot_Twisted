@@ -68,6 +68,6 @@ class Instantiate(Function):
 				sendLine = line1 + "\n" + line2 + "\n" + line3 + "\n" + line4
 				return IRCResponse(ResponseType.Say, sendLine, message.ReplyTo)
 
-		elif message.MessageString.lower().startswith("nope"):
-                        return IRCResponse(ResponseType.Say, "I don't think so either.", message.ReplyTo)
+		#elif message.MessageString.lower().startswith("nope"):
+                        #return IRCResponse(ResponseType.Say, "I don't think so either.", message.ReplyTo)
 			
