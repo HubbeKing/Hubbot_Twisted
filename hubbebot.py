@@ -98,7 +98,7 @@ class HubbeBot(irc.IRCClient):
         print target, data
         
         fileName = "{0}{1}.txt".format(target, now.strftime("-%Y%m%d"))
-        fileDirs = os.path.join(GlobalVars.logPath, GlobalVars.server)
+        fileDirs = os.path.join(GlobalVars.logPath, sys.argv[1])
         if not os.path.exists(fileDirs):
             os.makedirs(fileDirs)
         filePath = os.path.join(fileDirs, fileName)

@@ -14,7 +14,7 @@ admins = ["HubbeKing", "HubbeWork", "HubbePhone", "DoctorGyarados",\
            "Symphosewing", "Symphonom", "Symphonomnom"]
 
 finger = "Y U DO DIS"
-version = 1.0.0
+version = "1.0.0"
 source = "https://github.com/HubbeKing/Hubbot_Twisted/"
 
 CommandChar = "+"

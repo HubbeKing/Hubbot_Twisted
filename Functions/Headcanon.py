@@ -23,6 +23,7 @@ class Instantiate(Function):
 	Help += "headcanon help <command>"
 	
 	def GetResponse(self, message):
+                subCommands = ["add", "search", "list", "remove", "help"]
 		if message.Type == "PRIVMSG" and message.Command == "headcanon":
 			filename = "data/data.db"
 			headcanon = []
