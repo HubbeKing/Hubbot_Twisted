@@ -9,7 +9,8 @@ class Instantiate(Function):
 	def GetResponse(self, message):
 		if message.Type != "PRIVMSG":
 			return
-
+		if message.Command == "silly":
+                        return Help
 		if message.Command == "nope":
 			return IRCResponse(ResponseType.Say, "http://www.youtube.com/watch?v=gvdf5n-zI14", message.ReplyTo)
 			
@@ -66,4 +67,7 @@ class Instantiate(Function):
 				line4 = "HUNT FOR RED OCTOBER"
 				sendLine = line1 + "\n" + line2 + "\n" + line3 + "\n" + line4
 				return IRCResponse(ResponseType.Say, sendLine, message.ReplyTo)
+
+		elif message.MessageString.lower().startswith("nope"):
+                        return IRCResponse(ResponseType.Say, "I don't think so either.", message.ReplyTo)
 			
