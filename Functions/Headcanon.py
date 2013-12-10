@@ -23,7 +23,6 @@ class Instantiate(Function):
 	Help += "headcanon help <command>"
 	
 	def GetResponse(self, message):
-                subCommands = ["add", "search", "list", "remove", "help"]
 		if message.Type == "PRIVMSG" and message.Command == "headcanon":
 			filename = "data/data.db"
 			headcanon = []
@@ -39,8 +38,8 @@ class Instantiate(Function):
 			if subCommand.lower() == "help":
 				try:
 					helpCmd = message.ParameterList[1]
-					if helpCmd not in subCommands:
-						returnString = "Headcanon functions: {}".format(", ".join(subCommands))
+					if helpCmd not in self.subCommands:
+						returnString = "Headcanon functions: {}".format(", ".join(self.subCommands))
 						returnString += "\nSyntax is: "
 						returnString += GlobalVars.CommandChar
 						returnString += "headcanon help <command>"
@@ -53,7 +52,7 @@ class Instantiate(Function):
 					elif helpCmd == "remove":
 						returnString = GlobalVars.CommandChar + "headcanon remove <string> - used to remove lines to the headcanon."
 				except:
-					returnString = "Headcanon functions: {}".format(", ".join(subCommands))
+					returnString = "Headcanon functions: {}".format(", ".join(self.subCommands))
 					returnString += "\nSyntax is: "
 					returnString += GlobalVars.CommandChar
 					returnString += "headcanon help <command>"
