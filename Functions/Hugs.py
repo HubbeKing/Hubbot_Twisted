@@ -19,7 +19,7 @@ class Instantiate(Function):
                                 c = conn.cursor()
                                 for row in c.execute("SELECT * FROM hugs"):
                                         hug_dict[row[0]] = [row[1], row[2]]
-			commonWords = ["and","of","all","to","the","both","back","again","any","one","<3","with","","<3s","so","hard","right","in","him","her","booper","up","on",":)","against","its"]
+			commonWords = ["and","of","all","to","the","both","back","again","any","one","<3","with","","<3s","so","hard","right","in","him","her","booper","up","on",":)","against","its","harder"]
 			pattern = "hu+g|cuddle|snu+ggle|snu+g|squeeze|glomp"
 			match = re.search(pattern, message.MessageList[0] , re.IGNORECASE)
 			if match:
@@ -60,6 +60,7 @@ class Instantiate(Function):
 						with sqlite3.connect(filename) as conn:
                                                         c = conn.cursor()
                                                         c.execute("UPDATE hugs SET received=? WHERE nick=?", (hug_dict[receiver][1], receiver))
+                                                        conn.commit()
 			
 		elif message.Type == "PRIVMSG":
 			if message.Command == "hugs":
