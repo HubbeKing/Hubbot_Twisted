@@ -100,7 +100,3 @@ class Instantiate(Function):
 						matchedNicksString = matchedNicksString + name + ", "
 						numberOfMatches += 1
 				return IRCResponse(ResponseType.Say, matchedNicksString, message.ReplyTo), IRCResponse(ResponseType.Say, HugString, message.ReplyTo)
-
-			elif message.Command == "cadd":
-                                for word in message.ParameterList:
-                                        GlobalVars.commonWords.append(word)
