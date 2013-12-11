@@ -30,7 +30,8 @@ class HubbeBot(irc.IRCClient):
     
     def privmsg(self, user, channel, msg):
         message = IRCMessage('PRIVMSG', user, channel, msg)
-        self.log(u'<{0}> {1}'.format(message.User.Name, message.MessageString), message.ReplyTo)
+        if msg.startswith(GlobalVars.CommandChar):
+            self.log(u'<{0}> {1}'.format(message.User.Name, message.MessageString), message.ReplyTo)
         self.handleMessage(message)
 
     def action(self, user, channel, msg):
@@ -129,7 +130,10 @@ class HubbeBotFactory(protocol.ReconnectingClientFactory):
             
 		
 if __name__ == "__main__":
-	AutoLoadFunctions()
-	hubbot = HubbeBotFactory()
-	reactor.connectTCP(sys.argv[1], GlobalVars.port, hubbot)
-	reactor.run()
+    if len(sys.argv)< 3:
+        print "Correct usage: hubbot.py <server> <channel> [channel]"
+    else:
+        AutoLoadFunctions()
+        hubbot = HubbeBotFactory()
+        reactor.connectTCP(sys.argv[1], GlobalVars.port, hubbot)
+        reactor.run()
