@@ -36,7 +36,7 @@ class HubbeBot(irc.IRCClient):
 
     def action(self, user, channel, msg):
         message = IRCMessage('ACTION', user, channel, msg)
-        self.log(u'*{0} {1}*'.format(message.User.Name, message.MessageString), message.ReplyTo)
+        #self.log(u'*{0} {1}*'.format(message.User.Name, message.MessageString), message.ReplyTo)
         self.handleMessage(message)
     
     def noticed(self, user, channel, msg):
@@ -86,6 +86,7 @@ class HubbeBot(irc.IRCClient):
                     self.responses.append(response)
             except Exception:
                 print "Python Execution Error in '%s': %s" % (name, str( sys.exc_info() ))
+                self.log("Python Execution Error in '%s': %s" % (name, str(sys.exc_info())))
                 traceback.print_tb(sys.exc_info()[2])
 				
         for response in self.responses:
