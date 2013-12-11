@@ -19,13 +19,12 @@ class Instantiate(Function):
                                 c = conn.cursor()
                                 for row in c.execute("SELECT * FROM hugs"):
                                         hug_dict[row[0]] = [row[1], row[2]]
-			commonWords = ["and","of","all","to","the","both","back","again","any","one","<3","with","","<3s","so","hard","right","in","him","her","booper","up","on",":)","against","its","harder"]
 			pattern = "hu+g|cuddle|snu+ggle|snu+g|squeeze|glomp"
 			match = re.search(pattern, message.MessageList[0] , re.IGNORECASE)
 			if match:
 				receivers = []
 				for nick in message.MessageList[1:]:
-					if string.lower(nick) not in commonWords:
+					if string.lower(nick) not in GlobalVars.commonWords:
 						nick = string.rstrip(nick, "\x01")
 						nick = string.rstrip(nick, ".")
 						nick = string.rstrip(nick, "!")
@@ -101,3 +100,7 @@ class Instantiate(Function):
 						matchedNicksString = matchedNicksString + name + ", "
 						numberOfMatches += 1
 				return IRCResponse(ResponseType.Say, matchedNicksString, message.ReplyTo), IRCResponse(ResponseType.Say, HugString, message.ReplyTo)
+
+			elif message.Command == "cadd":
+                                for word in message.ParameterList:
+                                        GlobalVars.commonWords.append(word)
