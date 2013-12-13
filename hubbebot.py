@@ -1,6 +1,7 @@
 import sys, platform, os, traceback, datetime, codecs
 from twisted.words.protocols import irc
 from twisted.internet import protocol, reactor
+import re
 
 from IRCResponse import IRCResponse, ResponseType
 from IRCMessage import IRCMessage
@@ -36,7 +37,10 @@ class HubbeBot(irc.IRCClient):
 
     def action(self, user, channel, msg):
         message = IRCMessage('ACTION', user, channel, msg)
-        #self.log(u'*{0} {1}*'.format(message.User.Name, message.MessageString), message.ReplyTo)
+        pattern = pattern = "hu+g|cuddle|snu+ggle|snu+g|squeeze|glomp"
+	match = re.search(pattern, msg, re.IGNORECASE)
+	if match:
+            self.log(u'*{0} {1}*'.format(message.User.Name, message.MessageString), message.ReplyTo)
         self.handleMessage(message)
     
     def noticed(self, user, channel, msg):
