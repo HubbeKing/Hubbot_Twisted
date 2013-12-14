@@ -65,8 +65,7 @@ class Instantiate(Function):
 				line2 = "THRUSTERS TO MAXIMUM POWER"
 				line3 = "FLOOD TUBES THREE AND FOUR"
 				line4 = "HUNT FOR RED OCTOBER"
-				sendLine = line1 + "\n" + line2 + "\n" + line3 + "\n" + line4
-				return IRCResponse(ResponseType.Say, sendLine, message.ReplyTo)
+				return IRCResponse(ResponseType.Say, line1, message.ReplyTo), IRCResponse(ResponseType.Say, line2, message.ReplyTo), IRCResponse(ResponseType.Say, line3, message.ReplyTo), IRCResponse(ResponseType.Say, line4, message.ReplyTo)
 
 		#elif message.MessageString.lower().startswith("nope"):
                         #return IRCResponse(ResponseType.Say, "I don't think so either.", message.ReplyTo)
