@@ -30,7 +30,10 @@ class Instantiate(Function):
 						nick = string.rstrip(nick, "!")
 						nick = string.rstrip(nick, ",")
 						nick = string.lower(nick)
-						receivers.append(nick)
+						regexPattern = r"^[^a-zA-Z0-9`_\[\]\{\}\|\^\\]+$"
+						invalid = re.match(regexPattern, nick)
+						if not invalid:
+                                                        receivers.append(nick)
 				for index in range(0, len(receivers)):
 					giver = string.lower(message.User.Name)
 					receiver = receivers[index]
