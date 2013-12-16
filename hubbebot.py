@@ -90,7 +90,6 @@ class HubbeBot(irc.IRCClient):
                     self.responses.append(response)
             except Exception:
                 print "Python Execution Error in '%s': %s" % (name, str( sys.exc_info() ))
-                self.log("Python Execution Error in '%s': %s" % (name, str(sys.exc_info())))
                 traceback.print_tb(sys.exc_info()[2])
 				
         for response in self.responses:
