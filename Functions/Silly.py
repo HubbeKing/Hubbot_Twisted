@@ -1,3 +1,4 @@
+import datetime
 from IRCMessage import IRCMessage
 from IRCResponse import IRCResponse, ResponseType
 from Function import Function
@@ -5,6 +6,8 @@ import GlobalVars
 
 class Instantiate(Function):
 	Help = "nope, donotwant, yes, yup, store, goat, stupid, fixyou, heya, HNGH, PS, whoa, what, mybrand, both, no -- Used to post silly things!"
+        seconds = 300
+        lastTriggered = datetime.datetime.min
 	
 	def GetResponse(self, message):
 		if message.Type != "PRIVMSG":
@@ -67,6 +70,8 @@ class Instantiate(Function):
 				line4 = "HUNT FOR RED OCTOBER"
 				return IRCResponse(ResponseType.Say, line1, message.ReplyTo), IRCResponse(ResponseType.Say, line2, message.ReplyTo), IRCResponse(ResponseType.Say, line3, message.ReplyTo), IRCResponse(ResponseType.Say, line4, message.ReplyTo)
 
-		#elif message.MessageString.lower().startswith("nope"):
-                        #return IRCResponse(ResponseType.Say, "I don't think so either.", message.ReplyTo)
+		elif message.MessageString.lower().startswith("nope"):
+                        if (datetime.datetime.now() - self.lastTriggered).seconds >= self.seconds:
+                                self.lastTriggered = datetime.datetime.now()
+                                return IRCResponse(ResponseType.Say, "I don't think so either.", message.ReplyTo)
 			
