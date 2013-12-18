@@ -74,4 +74,3 @@ class Instantiate(Function):
                         if (datetime.datetime.now() - self.lastTriggered).seconds >= self.seconds:
                                 self.lastTriggered = datetime.datetime.now()
                                 return IRCResponse(ResponseType.Say, "I don't think so either.", message.ReplyTo)
-			
