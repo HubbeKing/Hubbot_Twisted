@@ -3,7 +3,7 @@ from IRCResponse import IRCResponse, ResponseType
 from Function import Function
 
 class Instantiate(Function):
-    Help = "mumble, gmod, theship/ship, starbound, starbound2, jcmp, tetri -- Used to post server info for games!"
+    Help = "mumble, gmod, theship/ship, starbound, starbound2, jcmp, tetri, cockatrice -- Used to post server info for games!"
     mumbleIP = 'The mumble server is hosted at: mumble.dahou.se:64740'
     gmodMods = 'List of mods needed for GMOD: http://steamcommunity.com/sharedfiles/filedetails/?id=185811989'
     gmodIP = "The Garrys Mod server is hosted at: gmod.dahou.se"
@@ -12,6 +12,7 @@ class Instantiate(Function):
     jcmpIP = "Ricin's Just Cause 2 MP server is hosted at: jc-mp.117.me"
     ricinStarboundIP = "Ricin's Starbound server is hosted at: sb.117.me"
     tetrinetIP = "Ricin's Tetrinet server is hosted at: tn.ricin.us"
+    cockatriceIP = "The Cockatrice server is hosted at: cockatrice.dahou.se:4747"
 
     filename = "data/data.db"
 
@@ -32,5 +33,7 @@ class Instantiate(Function):
             return IRCResponse(ResponseType.Say, self.jcmpIP, message.ReplyTo)
         elif message.Command == "tetri":
             return IRCResponse(ResponseType.Say, self.tetrinetIP, message.ReplyTo)
+        elif message.Command == "cockatrice":
+            return IRCResponse(ResponseType.Say, self.cockatriceIP, message.ReplyTo)
             
 
