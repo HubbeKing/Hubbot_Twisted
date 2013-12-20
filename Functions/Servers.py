@@ -9,7 +9,7 @@ class Instantiate(Function):
     gmodIP = "The Garrys Mod server is hosted at: gmod.dahou.se"
     theShipIP = 'The Ship server is hosted at: ash.dahou.se:27025'
     starboundIP = "The Starbound server is hosted at: starbound.dahou.se"
-    jcmpIP = "Ricin's Just Cause 2 MP server is hosted at: jc-mp.117.me"
+    jcmpIP = "Ricin's Just Cause 2 MP server is hosted at: jcmp.117.me"
     ricinStarboundIP = "Ricin's Starbound server is hosted at: sb.117.me"
     tetrinetIP = "Ricin's Tetrinet server is hosted at: tn.ricin.us"
     cockatriceIP = "The Cockatrice server is hosted at: cockatrice.dahou.se:4747"
