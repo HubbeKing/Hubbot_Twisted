@@ -36,7 +36,7 @@ class HubbeBot(irc.IRCClient):
             self.channels = channels
 
     def signedOn(self):
-        for channel in channels:
+        for channel in self.channels:
             self.join(channel)
     
     def privmsg(self, user, channel, msg):
@@ -113,7 +113,7 @@ class HubbeBot(irc.IRCClient):
         print target, data
         
         fileName = "{0}{1}.txt".format(target, now.strftime("-%Y%m%d"))
-        fileDirs = os.path.join(GlobalVars.logPath, server)
+        fileDirs = os.path.join(GlobalVars.logPath, self.server)
         if not os.path.exists(fileDirs):
             os.makedirs(fileDirs)
         filePath = os.path.join(fileDirs, fileName)
