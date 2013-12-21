@@ -48,8 +48,8 @@ class HubbeBot(irc.IRCClient):
     def action(self, user, channel, msg):
         message = IRCMessage('ACTION', user, channel, msg)
         pattern = pattern = "hu+g|cuddle|snu+ggle|snu+g|squeeze|glomp"
-	match = re.search(pattern, msg, re.IGNORECASE)
-	if match:
+        match = re.search(pattern, msg, re.IGNORECASE)
+        if match:
             self.log(u'*{0} {1}*'.format(message.User.Name, message.MessageString), message.ReplyTo)
         self.handleMessage(message)
     
@@ -122,25 +122,29 @@ class HubbeBot(irc.IRCClient):
             f.write(data + '\n')
         
 class HubbeBotFactory(protocol.ReconnectingClientFactory):
-	
-	protocol = HubbeBot
-	
-	def startedConnecting(self, connector):
-            print "-#- Started to connect."
 
-        def buildProtocol(self, addr):
-            print "-#- Connected."
-            print "-#- Resetting reconnectiong delay"
-            self.resetDelay()
-            return HubbeBot()
+    def __init__(self, protocol=None):
+        if protocol is None:
+            self.protocol = HubbeBot()
+        else:
+            self.protocol = protocol
+            
+    def startedConnecting(self, connector):
+        print "-#- Started to connect."
 
-        def clientConnectionLost(self, connector, reason):
-            print "-!- Connection lost. Reason:", reason
-            protocol.ReconnectingClientFactory.clientConnectionLost(self, connector, reason)
+    def buildProtocol(self, addr):
+        print "-#- Connected."
+        print "-#- Resetting reconnectiong delay"
+        self.resetDelay()
+        return HubbeBot()
 
-        def clientConnectionFailed(self, connector, reason):
-            print "-!- Connection failed. Reason:", reason
-            protocol.ReconnectingClientFactory.clientConnectionFailed(self, connector, reason)
+    def clientConnectionLost(self, connector, reason):
+        print "-!- Connection lost. Reason:", reason
+        protocol.ReconnectingClientFactory.clientConnectionLost(self, connector, reason)
+
+    def clientConnectionFailed(self, connector, reason):
+        print "-!- Connection failed. Reason:", reason
+        protocol.ReconnectingClientFactory.clientConnectionFailed(self, connector, reason)
             
 		
 if __name__ == "__main__":
