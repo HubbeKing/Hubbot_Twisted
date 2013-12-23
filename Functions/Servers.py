@@ -5,7 +5,7 @@ import GlobalVars
 
 class Instantiate(Function):
     Help = "mumble, gmod, theship/ship, starbound, starbound2, jcmp, tetri, cockatrice, kf -- Used to post server info for games! Usage: %s<server>" %GlobalVars.CommandChar
-    mumbleIP = 'The mumble server is hosted at: mumble.dahou.se:64740'
+    mumbleIP = 'The mumble server is hosted at: mumble.dahou.se'
     gmodMods = 'List of mods needed for GMOD: http://steamcommunity.com/sharedfiles/filedetails/?id=185811989'
     gmodIP = "The Garrys Mod server is hosted at: gmod.dahou.se"
     theShipIP = 'The Ship server is hosted at: ash.dahou.se:27025'
