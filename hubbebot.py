@@ -107,7 +107,7 @@ class HubbeBot(irc.IRCClient):
         self.responses = []
         
     def log(self, text, target):
-        now = datetime.datetime.utcnow()
+        now = datetime.datetime.now()
         time = now.strftime("[%H:%M]")
         data = u'{0} {1}'.format(time, text)
         print target, data
