@@ -3,7 +3,7 @@ import os
 functions = {}
 
 CurrentNick = "Hubbot"
-connections = {"irc.desertbus.org":["#desertbus", "#unmoderated", "#help", "#games"], "irc.applejack.me":["#survivors"]}
+connections = {"irc.desertbus.org":["#desertbus", "#unmoderated"], "irc.applejack.me":["#survivors"]}
 
 port = 6667
 
