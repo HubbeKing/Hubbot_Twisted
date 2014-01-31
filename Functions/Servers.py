@@ -39,5 +39,7 @@ class Instantiate(Function):
             return IRCResponse(ResponseType.Say, self.cockatriceIP, message.ReplyTo)
         elif message.Command == "kf":
             return IRCResponse(ResponseType.Say, self.killingfloorIP, message.ReplyTo)
+        elif message.Command == "<server>":
+            return IRCResponse(ResponseType.Say, "Seriously?", message.ReplyTo)
             
 
