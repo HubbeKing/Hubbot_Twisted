@@ -8,10 +8,11 @@ connections = {"irc.desertbus.org":["#desertbus", "#unmoderated"], "irc.applejac
 port = 6667
 
 admins = ["HubbeKing", "HubbeWork", "HubbePhone", "DoctorGyarados",\
-           "DoctorGyaradroid", "DoctorGyarados|GAEM",\
-           "DoctorGyarados|Away", "Docket", "Gyaradroid",\
-		   "Symphony", "Symphone", "Sympho|afk",\
-           "Symphosewing", "Symphonom", "Symphonomnom"]
+          "DoctorGyaradroid", "DoctorGyarados|GAEM",\
+          "DoctorGyarados|Away", "Docket", "Gyaradroid",\
+          "Symphony", "Symphone", "Sympho|afk",\
+          "Symphosewing", "Symphonom", "Symphonomnom"\
+          "Heufy|Work", "HeufyDroid", "Heufneutje"]
 
 finger = "Y U DO DIS"
 version = "1.0.0"
