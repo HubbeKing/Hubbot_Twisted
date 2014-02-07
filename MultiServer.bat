@@ -1,1 +1,0 @@
-C:\Python27\Lib\site-packages\twisted\scripts\twistd.py -noy C:\Users\Hubbe\Documents\GitHub\Hubbot_Twisted\MultiServer.tac
