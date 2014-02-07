@@ -8,6 +8,7 @@ class Instantiate(Function):
 	Help = "nope, donotwant, yes, yup, store, goat, stupid, fixyou, heya, HNGH, PS, whoa, what, mybrand, both, no -- Used to post silly things! Usage: %s<thing>" %GlobalVars.CommandChar
         seconds = 300
         lastTriggered = datetime.datetime.min
+        lastWelcomed = datetime.datetime.min
 	
 	def GetResponse(self, message):
 		if message.Type != "PRIVMSG":
@@ -77,3 +78,9 @@ class Instantiate(Function):
                                 
                 elif message.Command == "<thing>":
                         return IRCResponse(ResponseType.Say, "Har har.", message.ReplyTo)
+
+                elif "hi" in message.MessageString.lower() or "hello" in message.MessageString.lower():
+                        if GlobalVars.CurrentNick.lower() in message.MessageString.lower():
+                                if (datetime.datetime.now() - self.lastWelcomed).seconds >= self.seconds:
+                                        self.lastWelcomed = datetime.datetime.now()
+                                        return IRCResponse(ResponseType.Say, "Hello " + message.User.Name + "! Nice to see you!", message.ReplyTo)
