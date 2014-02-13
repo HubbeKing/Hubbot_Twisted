@@ -12,7 +12,8 @@ admins = ["HubbeKing", "HubbeWork", "HubbePhone", "DoctorGyarados",
           "DoctorGyarados|Away", "Docket", "Gyaradroid",
           "Symphony", "Symphone", "Sympho|afk",
           "Symphosewing", "Symphonom", "Symphonomnom",
-          "Heufy|Work", "HeufyDroid", "Heufneutje"]
+          "Heufy|Work", "HeufyDroid", "Heufneutje",
+          "T-M|Work", "T-M|Phone", "Tyranic-Moron"]
 
 finger = "Y U DO DIS"
 version = "1.0.0"
