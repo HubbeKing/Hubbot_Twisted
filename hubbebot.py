@@ -64,12 +64,18 @@ class HubbeBot(irc.IRCClient):
     
     def irc_JOIN(self, prefix, params):
         message = IRCMessage('JOIN', prefix, params[0], '')
+        self.handleMessage(message)
     
     def irc_PART(self, prefix, params):
         partMessage = u''
         if len(params) > 1:
             partMessage = u', message: '+u' '.join(params[1:])
         message = IRCMessage('PART', prefix, params[0], partMessage)
+        self.handleMessage(message)
+
+    def irc_QUIT(self, prefix, params):
+        message = IRCMessage('QUIT', prefix, params[0], '')
+        self.handleMessage(message)
 
     def sendResponse(self, response):
         if (response == None or response.Response == None):
