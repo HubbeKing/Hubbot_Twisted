@@ -12,8 +12,9 @@ class Instantiate(Function):
         if message.Command == "timer":
             if len(message.ParameterList) != 1:
                 return IRCResponse(ResponseType.Say, "Please use only 1 argument.", message.ReplyTo)
-            delay = float(ParameterList[0])
-            HubbeBot.reactor.callLater(self.notifyUser(message))
-
+            delay = float(message.ParameterList[0])
+            return IRCResponse(ResponseType.Say, message.User.Name + ": A timer has been started!", message.ReplyTo)
+            HubbeBot.reactor.callLater(delay, self.notifyUser(message), "timer")
+            
     def notifyUser(message):
         HubbeBot.sendResponse(IRCResponse(ResponseType.Say, message.User.Name + ": Time is up!", message.ReplyTo))
