@@ -14,7 +14,7 @@ import re
 class Instantiate(Function):
     Help = "leave/gtfo - makes the bot leave the current channel"
 
-    def GetResponse(self, message):
+    def GetResponse(self, HubbeBot, message):
         if message.Type != 'PRIVMSG':
             return
         

@@ -7,7 +7,7 @@ import re
 class Instantiate(Function):
     Help = "nick <nick> - changes the bot's nick to the one specified"
     
-    def GetResponse(self, message):
+    def GetResponse(self, HubbeBot, message):
         if message.Type != "PRIVMSG":
             return
         

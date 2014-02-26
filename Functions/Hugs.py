@@ -11,7 +11,7 @@ class Instantiate(Function):
 	Help = "hugs [nick] -- How many hugs has this person given and received?"
 	# hug_dict is : {"nick":[given, received]}
 	
-	def GetResponse(self, message):
+	def GetResponse(self, HubbeBot, message):
 		if message.Type == "ACTION":
 			filename = "data/data.db"
 			hug_dict = {}

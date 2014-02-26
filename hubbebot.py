@@ -96,7 +96,7 @@ class HubbeBot(irc.IRCClient):
     def handleMessage(self, message):
         for (name, func) in GlobalVars.functions.items():
             try:
-                response = func.GetResponse(message)
+                response = func.GetResponse(self, message)
                 if response is None:
                     continue
                 if hasattr(response, '__iter__'):

@@ -14,7 +14,7 @@ import re
 class Instantiate(Function):
     Help = 'join <channel> - makes the bot join the specified channel(s)'
 
-    def GetResponse(self, message):
+    def GetResponse(self, HubbeBot, message):
         if message.Type != 'PRIVMSG':
             return
         

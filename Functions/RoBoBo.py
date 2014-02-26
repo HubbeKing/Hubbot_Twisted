@@ -7,7 +7,7 @@ from FunctionHandler import LoadFunction, UnloadFunction
 class Instantiate(Function):
     Help = "Toggles the IdentCheck module if RoBoBo is derpin'."
 
-    def GetResponse(self, message):
+    def GetResponse(self, HubbeBot, message):
         if message.Type == 'JOIN':
             if message.User.Name.startswith("RoBoBo"):
                 UnloadFunction("IdentCheck")

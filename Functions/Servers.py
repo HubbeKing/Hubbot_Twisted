@@ -17,7 +17,7 @@ class Instantiate(Function):
 
     filename = "data/data.db"
 
-    def GetResponse(self, message):
+    def GetResponse(self, HubbeBot, message):
         if message.Command == "servers":
             return IRCResponse(ResponseType.Say, self.Help, message.ReplyTo)
         if message.Command == "mumble":

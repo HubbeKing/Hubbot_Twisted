@@ -9,7 +9,7 @@ class Instantiate(Function):
         seconds = 300
         lastTriggered = datetime.datetime.min
 	
-	def GetResponse(self, message):
+	def GetResponse(self, HubbeBot, message):
 		if message.Type != "PRIVMSG":
 			return
 		if message.Command == "silly":

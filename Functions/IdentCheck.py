@@ -6,7 +6,7 @@ import random
 class Instantiate(Function):
     Help = "Reveal the secret inside... WHAT ARE YOU REALLY?"
 
-    def GetResponse(self, message):
+    def GetResponse(self, HubbeBot, message):
         if message.Type != "PRIVMSG":
             return
         if message.MessageString.lower().startswith("meow"):

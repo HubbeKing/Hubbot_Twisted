@@ -9,7 +9,7 @@ class Instantiate(Function):
 
     Help = 'command(s)/help/function(s) (<function>) - Returns a list of loaded functions, or the help text of a particular function if one is specified'
     
-    def GetResponse(self, message):
+    def GetResponse(self, HubbeBot, message):
         if message.Type != 'PRIVMSG':
             return
         

@@ -22,7 +22,7 @@ class Instantiate(Function):
 	Help += GlobalVars.CommandChar
 	Help += "headcanon help <command>"
 	
-	def GetResponse(self, message):
+	def GetResponse(self, HubbeBot, message):
 		if message.Type == "PRIVMSG" and message.Command == "headcanon":
 			filename = "data/data.db"
 			headcanon = []
