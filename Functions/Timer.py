@@ -23,5 +23,5 @@ class Instantiate(Function):
             return IRCResponse(ResponseType.Say, message.User.Name + ": A timer has been started!", message.ReplyTo)
             
             
-    def notifyUser(self, HubbeBot, delay, message):
-        HubbeBot.sendResponse(IRCResponse(ResponseType.Say, message.User.Name + ": Your " + str(int(delay)) + " second timer is up!" , message.ReplyTo))
+    def notifyUser(self, HubbeBot, message):
+        HubbeBot.sendResponse(IRCResponse(ResponseType.Say, message.User.Name + ": Your " + message.ParameterList[0] + " second timer is up!" , message.ReplyTo))
