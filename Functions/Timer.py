@@ -19,7 +19,7 @@ class Instantiate(Function):
                     return IRCResponse(ResponseType.Say, "Do you really need a timer that long?", message.ReplyTo)
             except:
                 return IRCResponse(ResponseType.Say, "That doesn't look like a number to me...", message.ReplyTo)
-            reactor.callLater(delay, self.notifyUser, HubbeBot, delay, message)
+            reactor.callLater(delay, self.notifyUser, HubbeBot, message)
             return IRCResponse(ResponseType.Say, message.User.Name + ": A timer has been started!", message.ReplyTo)
             
             
