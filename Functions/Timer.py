@@ -15,7 +15,7 @@ class Instantiate(Function):
                 return IRCResponse(ResponseType.Say, "Please use only 1 argument.", message.ReplyTo)
             try:
                 delay = float(message.ParameterList[0])
-                if delay > 3.15569e7:
+                if delay > (60*60*24*365):
                     return IRCResponse(ResponseType.Say, "Do you really need a timer that long?", message.ReplyTo)
             except:
                 return IRCResponse(ResponseType.Say, "That doesn't look like a number to me...", message.ReplyTo)
