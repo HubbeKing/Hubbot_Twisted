@@ -1,3 +1,4 @@
+from twisted.internet import reactor
 from IRCMessage import IRCMessage
 from IRCResponse import IRCResponse, ResponseType
 from Function import Function
@@ -13,7 +14,7 @@ class Instantiate(Function):
             if len(message.ParameterList) != 1:
                 return IRCResponse(ResponseType.Say, "Please use only 1 argument.", message.ReplyTo)
             delay = float(message.ParameterList[0])
-            HubbeBot.reactor.callLater(delay, notifyUser, message)
+            reactor.callLater(delay, self.notifyUser, message)
             return IRCResponse(ResponseType.Say, message.User.Name + ": A timer has been started!", message.ReplyTo)
             
             
