@@ -31,7 +31,7 @@ class Instantiate(Function):
                 return IRCResponse(ResponseType.Do, "points at " + message.User.Name + ', "CRITICAL KITTEH!"', message.ReplyTo)
         if message.MessageString.lower().startswith("rawr"):
             roll = random.randint(1,20)
-            if (message.User.Name == "Itazu") or (message.User.Name == "Trahsi"):
+            if (message.User.Name == "Itazu") or (message.User.Name == "Trahsi") or (message.User.Name == "reptile"):
                 return IRCResponse(ResponseType.Say, message.User.Name + " is a DRAGON!" , message.ReplyTo)
             elif (roll == 1):
                 reroll = random.randint(1,20)
