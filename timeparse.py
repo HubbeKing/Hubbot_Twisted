@@ -51,7 +51,7 @@ OPTSEP      = lambda x: r'(?:{x}\s*(?:{SEPARATORS}\s*)?)?'.format(
     x=x, SEPARATORS=SEPARATORS)
 
 TIMEFORMATS = [
-    r'{WEEKS}\s*{DAYS}\s*{HOURS}\s*{MINS}\s*{SECS}'.format(
+    r'{YEARS}\s*{MONTHS}\s*{WEEKS}\s*{DAYS}\s*{HOURS}\s*{MINS}\s*{SECS}'.format(
         YEARS=OPTSEP(YEARS),
         MONTHS=OPTSEP(MONTHS),
         WEEKS=OPTSEP(WEEKS),
