@@ -33,8 +33,8 @@ kinds of time expressions.
 
 import re
 
-#YEARS      = r'(?P<years>\d+)\s*(?:ys?|yrs?.?|years?)'
-#MONTHS     = r'(?P<months>\d+)\s*(?:mos?.?|mths?.?|months?)'
+YEARS      = r'(?P<years>\d+)\s*(?:ys?|yrs?.?|years?)'
+MONTHS     = r'(?P<months>\d+)\s*(?:mos?.?|mths?.?|months?)'
 WEEKS       = r'(?P<weeks>[\d.]+)\s*(?:w|wks?|weeks?)'
 DAYS        = r'(?P<days>[\d.]+)\s*(?:d|dys?|days?)'
 HOURS       = r'(?P<hours>[\d.]+)\s*(?:h|hrs?|hours?)'
@@ -52,8 +52,8 @@ OPTSEP      = lambda x: r'(?:{x}\s*(?:{SEPARATORS}\s*)?)?'.format(
 
 TIMEFORMATS = [
     r'{WEEKS}\s*{DAYS}\s*{HOURS}\s*{MINS}\s*{SECS}'.format(
-        #YEARS=OPTSEP(YEARS),
-        #MONTHS=OPTSEP(MONTHS),
+        YEARS=OPTSEP(YEARS),
+        MONTHS=OPTSEP(MONTHS),
         WEEKS=OPTSEP(WEEKS),
         DAYS=OPTSEP(DAYS),
         HOURS=OPTSEP(HOURS),
@@ -70,8 +70,8 @@ TIMEFORMATS = [
     ]
 
 MULTIPLIERS = dict([
-        #('years',  60 * 60 * 24 * 365),
-        #('months', 60 * 60 * 24 * 30),
+        ('years',  60 * 60 * 24 * 365),
+        ('months', 60 * 60 * 24 * 30),
         ('weeks',   60 * 60 * 24 * 7),
         ('days',    60 * 60 * 24),
         ('hours',   60 * 60),
