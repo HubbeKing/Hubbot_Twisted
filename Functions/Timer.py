@@ -7,7 +7,7 @@ import re
 from timeparse import timeparse
 
 class Instantiate(Function):
-    Help = "timer <time> - starts a countdown timer and notifies you when time's up."
+    Help = "timer <time> - starts a countdown timer and notifies you when time's up. Max 1yrs0mths0w0d0h0m0s"
 
     def GetResponse(self, HubbeBot, message):
         if message.Type != "PRIVMSG":
