@@ -22,7 +22,7 @@ class Instantiate(Function):
             except:
                 delay = timeparse(message.ParameterList[0])
             if delay <= 0 or delay == None:
-                return IRCResponse(ResponseType.Say, "T don't think I understand that...", message.ReplyTo)
+                return IRCResponse(ResponseType.Say, "I don't think I understand that...", message.ReplyTo)
             elif delay > (60*60*24*365):
                 return IRCResponse(ResponseType.Say, "Do you really need a timer that long?", message.ReplyTo)
             elif delay < 1:
