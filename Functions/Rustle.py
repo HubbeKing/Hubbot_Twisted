@@ -4,7 +4,7 @@ from Function import Function
 import random
 
 class Instantiate(Function):
-    Help = "rustle <rustlee> - There's no need to be upset. REVEAL THE SECRET INSIDE."
+    Help = "rustle <rustlee> - There's no need to be upset."
 
     def GetResponse(self, HubbeBot, message):
         if message.Type != "PRIVMSG":
