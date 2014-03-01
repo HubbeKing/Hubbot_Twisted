@@ -13,7 +13,7 @@ class Instantiate(Function):
             roll = random.randint(1,20)
             if (message.User.Name == "BillTheCat"):
                 return IRCResponse(ResponseType.Say, "Uhm... Hi?", message.ReplyTo)
-            if message.User.Name == "Caitiri":
+            if message.User.Name.startswith("Caitiri") or message.User.Name == "Caity":
                 return IRCResponse(ResponseType.Do, "points at " + message.User.Name + ', "KITTEH!"', message.ReplyTo)
             elif (roll == 1):
                 reroll = random.randint(1,20)
