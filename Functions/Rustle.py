@@ -20,11 +20,11 @@ class Instantiate(Function):
                 if (reroll == 20):
                     return IRCResponse(ResponseType.Do, "points at " + message.User.Name + ', "CRITICAL PUPPEH!"', message.ReplyTo), IRCResponse(ResponseType.Say, "Wait, what?", message.ReplyTo)
                 else:
-                    return IRCResponse(ResponseType.Do, "points at " + message.User.Name + ', "NOT EVEN A LITTLE BIT KITTEH."', message.ReplyTo)
+                    return IRCResponse(ResponseType.Do, "points at " + message.User.Name + ', "NOT KITTEH."', message.ReplyTo)
             elif (roll > 1) and (roll < 8):
                 return IRCResponse(ResponseType.Do, "points at " + message.User.Name + ', "NOT KITTEH."', message.ReplyTo)
             elif (roll > 7) and (roll < 14):
-                return IRCResponse(ResponseType.Do, "points at " + message.User.Name + ', "MAYBE KITTEH?"', message.ReplyTo)
+                return IRCResponse(ResponseType.Do, "points at " + message.User.Name + ', "MEHBEH KITTEH?"', message.ReplyTo)
             elif (roll > 13) and (roll < 20):
                 return IRCResponse(ResponseType.Do, "points at " + message.User.Name + ', "KITTEH!"', message.ReplyTo)
             else:
