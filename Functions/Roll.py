@@ -99,7 +99,7 @@ class Instantiate(Function):
                 for i in range(numberOfDice):
                     results.append(random.randint(1,sides))
             else:
-                return IRCResponse(ResponseType.Say, "I can't roll that many dice, silly!", message.ReplyTo)
+                return IRCResponse(ResponseType.Say, "I can't roll dice like that, silly!", message.ReplyTo)
 
             if modifier > 100:
                 return IRCResponse(ResponseType.Say, "That modifier is too big, silly!", message.ReplyTo)
