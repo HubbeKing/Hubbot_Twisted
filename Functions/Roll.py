@@ -45,7 +45,7 @@ class Instantiate(Function):
                         try:
                             modifier = int(paramList[1])
                         except:
-                            return IRCResponse(ResponseType.Say, "I don't understand that.41", message.ReplyTo)
+                            return IRCResponse(ResponseType.Say, "I don't think that's a number.", message.ReplyTo)
                 else:
                     # find - modifier in ParameterList[0]
                     negIndex = paramList[0].index("-")
@@ -53,53 +53,55 @@ class Instantiate(Function):
                         modifier = int(paramList[0][negIndex+1:])
                         modifier = -modifier
                     except:
-                        return IRCResponse(ResponseType.Say, "I don't understand that.49", message.ReplyTo)
+                        return IRCResponse(ResponseType.Say, "I don't think that's a number.", message.ReplyTo)
             else:
                 # find + modifier in ParameterList[0]
                 posIndex = paramList[0].index("+")
                 try:
                     modifier = int(paramList[0][posIndex+1:])
                 except:
-                    return IRCResponse(ResponseType.Say, "I don't understand that.56", message.ReplyTo)
+                    return IRCResponse(ResponseType.Say, "I don't think that's a number.", message.ReplyTo)
 
             if negIndex == False and posIndex == False:
                 # no modifier in ParameterList[0]
                 try:
                     sides = int(paramList[0][dIndex+1:])
                 except:
-                    return IRCResponse(ResponseType.Say, "I don't understand that.63", message.ReplyTo)
+                    return IRCResponse(ResponseType.Say, "I don't think that's a number.", message.ReplyTo)
                 try:
                     numberOfDice = int(paramList[0][0:dIndex])
                 except:
-                    return IRCResponse(ResponseType.Say, "I don't understand that.67", message.ReplyTo)
+                    return IRCResponse(ResponseType.Say, "I don't think that's a number.", message.ReplyTo)
             else:
                 if negIndex != False:
                     # negative sign in ParameterList[0]
                     try:
                         sides = int(paramList[0][dIndex+1:negIndex])
                     except:
-                        return IRCResponse(ResponseType.Say, "I don't understand that.74", message.ReplyTo)
+                        return IRCResponse(ResponseType.Say, "I don't think that's a number.", message.ReplyTo)
                     try:
                         numberOfDice = int(paramList[0][0:dIndex])
                     except:
-                        return IRCResponse(ResponseType.Say, "I don't understand that.78", message.ReplyTo)
+                        return IRCResponse(ResponseType.Say, "I don't think that's a number.", message.ReplyTo)
                 else:
                     # positive sign in ParameterList[0]
                     try:
                         sides = int(paramList[0][dIndex+1:posIndex])
                     except:
-                        return IRCResponse(ResponseType.Say, "I don't understand that.84", message.ReplyTo)
+                        return IRCResponse(ResponseType.Say, "I don't think that's a number.", message.ReplyTo)
                     try:
                         numberOfDice = int(paramList[0][0:dIndex])
                     except:
-                        return IRCResponse(ResponseType.Say, "I don't understand that.88", message.ReplyTo)
+                        return IRCResponse(ResponseType.Say, "I don't think that's a number.", message.ReplyTo)
                     
-            if numberOfDice < 33 and sides < 201:
+            if numberOfDice > 33:
+                return IRCResponse(ResponseType.Say, "I can't roll that many dice, silly!", message.ReplyTo)
+            elif sides > 201:
+                return IRCResponse(ResponseType.Say, "I can't roll dice that big, silly!", message.ReplyTo)
+            else:
                 results = []
                 for i in range(numberOfDice):
                     results.append(random.randint(1,sides))
-            else:
-                return IRCResponse(ResponseType.Say, "I can't roll dice like that, silly!", message.ReplyTo)
 
             if modifier > 100:
                 return IRCResponse(ResponseType.Say, "That modifier is too big, silly!", message.ReplyTo)
