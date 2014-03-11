@@ -88,10 +88,15 @@ class Instantiate(Function):
                 return IRCResponse(ResponseType.Say, "That modifier is too big, silly!", message.ReplyTo)
             if modifier < 100:
                 return IRCResponse(ResponseType.Say, "That modifier is too big, silly!", message.ReplyTo)
-                
+
+            if modifier < 0:
+                modString = " -" + str(abs(modifier))
+            else:
+                modString = " +" + str(abs(modifier))
+            
             if verbose:
                 # output entire list and sum
-                return IRCResponse(ResponseType.Say, message.User.Name + " rolled: " + str(results) + " +" + str(modifier) + " | " + str(sum(results)+modifier), message.ReplyTo)
+                return IRCResponse(ResponseType.Say, message.User.Name + " rolled: " + str(results) + modString + " | " + str(sum(results)+modifier), message.ReplyTo)
             else:
                 # output sum
                 return IRCResponse(ResponseType.Say, message.User.Name + " rolled: " + str(sum(results)+modifier), message.ReplyTo)
