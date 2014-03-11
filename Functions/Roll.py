@@ -24,13 +24,25 @@ class Instantiate(Function):
             if message.ParameterList[0].find("+")==-1:
                 if message.ParameterList[0].find("-")==-1:
                     if len(message.ParameterList) != 2:
-                        # no modifier
+                        modifier = 0
                     else:
-                        # interpret ParameterList[1] as modifier, store somewhere?
+                        # interpret ParameterList[1] as modifier
+                        modifier = int(ParameterList[1])
                 else:
                     # find - modifier in ParameterList[0]
+                    negIndex = message.ParameterList[0].index("-")
+                    try:
+                        modifier = int(message.ParameterList[0][negIndex:])
+                    except:
+                        return IRCResponse(ResponseType.Say, "I don't understand that.", message.ReplyTo)
             else:
                 # find + modifier in ParameterList[0]
+                posIndex = message.ParameterList[0].index("+")
+                try:
+                    modifier = int(message.ParameterList[0][posIndex:])
+                except:
+                    return IRCResponse(ResponseType.Say, "I don't understand that.", message.ReplyTo)
+
 
             # use dIndex to interpret dice expression
             # roll them dice
