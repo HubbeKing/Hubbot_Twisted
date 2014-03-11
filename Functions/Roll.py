@@ -4,7 +4,7 @@ from Function import Function
 import random
 
 class Instantiate(Function):
-    Help = "roll <dice> - Roll up some polyhedral dice! Ex: XdY+Zv - roll X Y-sided dice, with a +Z modifier and verbose output"
+    Help = "roll <dice> - Roll up some polyhedral dice! Limited to 32d200 +/-100 Ex: XdYv +Z - roll X Y-sided dice, with a +Z modifier and verbose output"
 
     def GetResponse(self, HubbeBot, message):
         if message.Type != "PRIVMSG":
@@ -76,10 +76,18 @@ class Instantiate(Function):
                         numberOfDice = int(message.ParameterList[0][0:dIndex])
                     except:
                         return IRCResponse(ResponseType.Say, "I don't understand that.", message.ReplyTo)
+                    
+            if numberOfDice < 33 and sides < 201:
+                results = []
+                for i in range(numberOfDice):
+                    results.append(random.randint(1,sides))
+            else:
+                return IRCResponse(ResponseType.Say, "I can't roll that many dice, silly!", message.ReplyTo)
 
-            results = []
-            for i in range(numberOfDice):
-                results.append(random.randint(1,sides))
+            if modifier > 100:
+                return IRCResponse(ResponseType.Say, "That modifier is too big, silly!", message.ReplyTo)
+            if modifier < 100:
+                return IRCResponse(ResponseType.Say, "That modifier is too big, silly!", message.ReplyTo)
                 
             if verbose:
                 # output entire list and sum
