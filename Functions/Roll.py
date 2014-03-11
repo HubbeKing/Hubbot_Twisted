@@ -49,14 +49,14 @@ class Instantiate(Function):
                 # no modifier in ParameterList[0]
                 try:
                     sides = int(message.ParameterList[0][dIndex+1:])
-                else:
+                except:
                     return IRCResponse(ResponseType.Say, "I don't understand that.", message.ReplyTo)
                 try:
                     numberOfDice = int(message.ParameterList[0][0:dIndex])
                 except:
                     return IRCResponse(ResponseType.Say, "I don't understand that.", message.ReplyTo)
             else:
-                if negIndex = False:
+                if negIndex == False:
                     # negative sign in ParameterList[0]
                     try:
                         sides = int(message.ParameterList[0][dIndex+1:negIndex])
