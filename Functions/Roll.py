@@ -58,10 +58,10 @@ class Instantiate(Function):
 
             if negIndex == False and posIndex == False:
                 # no modifier in ParameterList[0]
-                #try:
-                sides = int(paramList[0][dIndex+1:])
-                #except:
-                #    return IRCResponse(ResponseType.Say, "I don't understand that.63", message.ReplyTo)
+                try:
+                    sides = int(paramList[0][dIndex+1:])
+                except:
+                    return IRCResponse(ResponseType.Say, "I don't understand that.63", message.ReplyTo)
                 try:
                     numberOfDice = int(paramList[0][0:dIndex])
                 except:
