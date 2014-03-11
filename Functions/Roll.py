@@ -4,7 +4,7 @@ from Function import Function
 import random
 
 class Instantiate(Function):
-    Help = "roll <dice> - Roll up some polyhedral dice! Limited to 32d200 +/-100 Ex: XdYv +Z - roll X Y-sided dice, with a +Z modifier and verbose output"
+    Help = "roll <dice> - Roll up some polyhedral dice! Limited to 128d200 +/-1000 Ex: XdYv +Z - roll X Y-sided dice, with a +Z modifier and verbose output"
 
     def GetResponse(self, HubbeBot, message):
         if message.Type != "PRIVMSG":
@@ -94,7 +94,7 @@ class Instantiate(Function):
                     except:
                         return IRCResponse(ResponseType.Say, "I don't think that's a number.", message.ReplyTo)
                     
-            if numberOfDice > 33:
+            if numberOfDice > 129:
                 return IRCResponse(ResponseType.Say, "I can't roll that many dice, silly!", message.ReplyTo)
             elif sides > 201:
                 return IRCResponse(ResponseType.Say, "I can't roll dice that big, silly!", message.ReplyTo)
@@ -103,9 +103,9 @@ class Instantiate(Function):
                 for i in range(numberOfDice):
                     results.append(random.randint(1,sides))
 
-            if modifier > 100:
+            if modifier > 1000:
                 return IRCResponse(ResponseType.Say, "That modifier is too big, silly!", message.ReplyTo)
-            if modifier < -100:
+            if modifier < -1000:
                 return IRCResponse(ResponseType.Say, "That modifier is too big, silly!", message.ReplyTo)
 
             if modifier == 0:
@@ -115,9 +115,11 @@ class Instantiate(Function):
             else:
                 modString = " +" + str(abs(modifier))
             
-            if verbose:
+            if verbose and numberOfDice <= 20:
                 # output entire list and sum
                 return IRCResponse(ResponseType.Say, message.User.Name + " rolled: " + str(results) + modString + " | " + str(sum(results)+modifier), message.ReplyTo)
+            elif verbose and numberOfDice > 20:
+                return IRCResponse(ResponseType.Say, message.User.Name + " rolled: " + "[LOTS]" + modString + " | " + str(sum(results)+modifier), message.ReplyTo)
             else:
                 # output sum
                 return IRCResponse(ResponseType.Say, message.User.Name + " rolled: " + str(sum(results)+modifier), message.ReplyTo)
