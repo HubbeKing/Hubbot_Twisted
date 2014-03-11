@@ -19,7 +19,7 @@ class Instantiate(Function):
             else:
                 dIndex = message.ParameterList[0].index("d")
             if message.ParameterList[0].find("v")==-1 or message.ParameterList[1].find("v"):
-                continue
+                verbose = False
             else:
                 verbose = True
             if message.ParameterList[0].find("+")==-1:
@@ -33,18 +33,57 @@ class Instantiate(Function):
                     # find - modifier in ParameterList[0]
                     negIndex = message.ParameterList[0].index("-")
                     try:
-                        modifier = int(message.ParameterList[0][negIndex:])
+                        modifier = int(message.ParameterList[0][negIndex+1:])
+                        modifier = -modifier
                     except:
                         return IRCResponse(ResponseType.Say, "I don't understand that.", message.ReplyTo)
             else:
                 # find + modifier in ParameterList[0]
                 posIndex = message.ParameterList[0].index("+")
                 try:
-                    modifier = int(message.ParameterList[0][posIndex:])
+                    modifier = int(message.ParameterList[0][posIndex+1:])
                 except:
                     return IRCResponse(ResponseType.Say, "I don't understand that.", message.ReplyTo)
 
+            if negIndex == False and posIndex == False:
+                # no modifier in ParameterList[0]
+                try:
+                    sides = int(message.ParameterList[0][dIndex+1:])
+                else:
+                    return IRCResponse(ResponseType.Say, "I don't understand that.", message.ReplyTo)
+                try:
+                    numberOfDice = int(message.ParameterList[0][0:dIndex])
+                except:
+                    return IRCResponse(ResponseType.Say, "I don't understand that.", message.ReplyTo)
+            else:
+                if negIndex = False:
+                    # negative sign in ParameterList[0]
+                    try:
+                        sides = int(message.ParameterList[0][dIndex+1:negIndex])
+                    except:
+                        return IRCResponse(ResponseType.Say, "I don't understand that.", message.ReplyTo)
+                    try:
+                        numberOfDice = int(message.ParameterList[0][0:dIndex])
+                    except:
+                        return IRCResponse(ResponseType.Say, "I don't understand that.", message.ReplyTo)
+                else:
+                    # positive sign in ParameterList[0]
+                    try:
+                        sides = int(message.ParameterList[0][dIndex+1:posIndex])
+                    except:
+                        return IRCResponse(ResponseType.Say, "I don't understand that.", message.ReplyTo)
+                    try:
+                        numberOfDice = int(message.ParameterList[0][0:dIndex])
+                    except:
+                        return IRCResponse(ResponseType.Say, "I don't understand that.", message.ReplyTo)
 
-            # use dIndex to interpret dice expression
-            # roll them dice
-            # if verbose, output entire list and sum, otherwise just sum
+            results = []
+            for i in range(numberOfDice):
+                results.append(random.randint(1,sides))
+                
+            if verbose:
+                # output entire list and sum
+                return IRCResponse(ResponseType.Say, message.User.Name + " rolled: " + str(results) + " +" + str(modifier) + " | " + str(sum(results)+modifier), message.ReplyTo)
+            else:
+                # output sum
+                return IRCResponse(ResponseType.Say, message.User.Name + " rolled: " + str(sum(results)+modifier), message.ReplyTo)
