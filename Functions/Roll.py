@@ -11,6 +11,7 @@ class Instantiate(Function):
             return
         if message.Command == "roll":
             verbose = False
+            negIndex = posIndex = False
             if len(message.ParameterList) < 1:
                 return IRCResponse(ResponseType.Say, "Roll what?", message.ReplyTo)
             if message.ParameterList[0].find("d")==-1:
