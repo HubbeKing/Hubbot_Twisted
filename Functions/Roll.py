@@ -11,7 +11,7 @@ class Instantiate(Function):
             return
         if message.Command == "roll":
             if len(message.ParameterList) > 1:
-                if message.ParameterList[0].find("v")==-1 or message.ParameterList[1].find("v")==-1:
+                if message.ParameterList[0].find("v")==-1 and message.ParameterList[1].find("v")==-1:
                     verbose = False
                     paramList = message.ParameterList
                 else:
