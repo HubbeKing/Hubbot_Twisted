@@ -106,7 +106,9 @@ class Instantiate(Function):
             if modifier < -100:
                 return IRCResponse(ResponseType.Say, "That modifier is too big, silly!", message.ReplyTo)
 
-            if modifier < 0:
+            if modifier == 0:
+                modString = ""
+            elif modifier < 0:
                 modString = " -" + str(abs(modifier))
             else:
                 modString = " +" + str(abs(modifier))
