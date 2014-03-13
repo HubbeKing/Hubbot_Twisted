@@ -44,7 +44,7 @@ class IRCMessage:
         else:
             self.TargetType = TargetTypes.USER
         
-        if (self.MessageList[0].startswith(GlobalVars.CommandChar)):
+        if self.MessageList[0].startswith(GlobalVars.CommandChar):
             self.Command = self.MessageList[0][1:]
             self.Command = self.Command.lower()
             self.Command = re.sub("[^a-zA-Z0-9\{0}]".format(GlobalVars.CommandChar), "", self.Command)
@@ -52,6 +52,8 @@ class IRCMessage:
 
         elif self.MessageList[0].startswith(GlobalVars.CurrentNick) and len(self.MessageList) > 1:
             self.Command = self.MessageList[1]
+            self.Command = self.Command.lower()
+            self.Command = re.sub("[^a-zA-Z0-9\{0}]".format(GlobalVars.CommandChar), "", self.Command)
             self.Parameters = u' '.join(self.MessageList[2:])
 
         if self.Parameters.strip():
