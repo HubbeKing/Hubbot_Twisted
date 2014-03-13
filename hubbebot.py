@@ -94,6 +94,7 @@ class HubbeBot(irc.IRCClient):
             self.sendLine(response.Response.encode('utf-8'))
 
     def handleMessage(self, message):
+        self.responses = [] # in case earlier Function responses caused some weird errors
         for (name, func) in GlobalVars.functions.items():
             try:
                 response = func.GetResponse(self, message)
