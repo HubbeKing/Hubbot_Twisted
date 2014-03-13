@@ -102,6 +102,6 @@ class Instantiate(Function):
 					else:
 						matchedNicksString = matchedNicksString + name + ", "
 						numberOfMatches += 1
-				if numberOfMatches > 30:
+				if len(matchedNicksString) > 50:
                                         matchedNicksString = "Matches found: LOTS."
 				return IRCResponse(ResponseType.Say, matchedNicksString, message.ReplyTo), IRCResponse(ResponseType.Say, HugString, message.ReplyTo)
