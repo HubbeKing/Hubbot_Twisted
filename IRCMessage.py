@@ -1,5 +1,6 @@
 from enumType import enum
 import GlobalVars
+import re
 
 TargetTypes = enum('CHANNEL', 'USER')
 
@@ -46,6 +47,7 @@ class IRCMessage:
         if (self.MessageList[0].startswith(GlobalVars.CommandChar)):
             self.Command = self.MessageList[0][1:]
             self.Command = self.Command.lower()
+            self.Command = re.sub("[^a-zA-Z0-9\{0}]".format(GlobalVars.CommandChar), "", self.Command)
             self.Parameters = unicodeMessage[len(self.Command)+2:]
 
         elif self.MessageList[0].startswith(GlobalVars.CurrentNick) and len(self.MessageList) > 1:
