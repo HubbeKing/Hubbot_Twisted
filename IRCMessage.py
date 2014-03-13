@@ -29,7 +29,7 @@ class IRCMessage:
     ParameterList = []
 
     def __init__(self, type, user, channel, message):
-        unicodeMessage = message.decode('utf-8', "ignore")
+        unicodeMessage = message.decode('utf-8', 'ignore')
         self.Type = type
         self.MessageList = unicodeMessage.strip().split(' ')
         self.MessageString = unicodeMessage
@@ -48,10 +48,14 @@ class IRCMessage:
             self.Command = self.Command.lower()
             self.Parameters = unicodeMessage[len(self.Command)+2:]
 
-            if self.Parameters.strip():
-                self.ParameterList = self.Parameters.split(' ')
+        elif self.MessageList[0].startswith(GlobalVars.CurrentNick) and len(self.MessageList) > 1:
+            self.Command = self.MessageList[1]
+            self.Parameters = u' '.join(self.MessageList[2:])
 
-                self.ParameterList = [param for param in self.ParameterList if param != '']
+        if self.Parameters.strip():
+            self.ParameterList = self.Parameters.split(' ')
 
-                if len(self.ParameterList) == 1 and not self.ParameterList[0]:
-                    self.ParameterList = []
+            self.ParameterList = [param for param in self.ParameterList if param != '']
+
+            if len(self.ParameterList) == 1 and not self.ParameterList[0]:
+                self.ParameterList = []
