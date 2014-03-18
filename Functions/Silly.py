@@ -5,7 +5,7 @@ from Function import Function
 import GlobalVars
 
 class Instantiate(Function):
-	Help = "nope, donotwant, yes, yup, store, goat, stupid, fixyou, heya, HNGH, PS, whoa, what, mybrand, both, no -- Used to post silly things! Usage: %s<thing>" %GlobalVars.CommandChar
+	Help = "donotwant, yes, yup, store, goat, stupid, fixyou, heya, HNGH, PS, whoa, what, mybrand, both, no -- Used to post silly things! Usage: %s<thing>" %GlobalVars.CommandChar
         seconds = 300
         lastTriggered = datetime.datetime.min
 	
@@ -69,11 +69,6 @@ class Instantiate(Function):
 				line3 = "FLOOD TUBES THREE AND FOUR"
 				line4 = "HUNT FOR RED OCTOBER"
 				return IRCResponse(ResponseType.Say, line1, message.ReplyTo), IRCResponse(ResponseType.Say, line2, message.ReplyTo), IRCResponse(ResponseType.Say, line3, message.ReplyTo), IRCResponse(ResponseType.Say, line4, message.ReplyTo)
-
-		elif message.MessageString.lower().startswith("nope"):
-                        if (datetime.datetime.now() - self.lastTriggered).seconds >= self.seconds:
-                                self.lastTriggered = datetime.datetime.now()
-                                return IRCResponse(ResponseType.Say, "I don't think so either.", message.ReplyTo)
-                                
+			
                 elif message.Command == "<thing>":
                         return IRCResponse(ResponseType.Say, "Har har.", message.ReplyTo)
