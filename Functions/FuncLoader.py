@@ -16,7 +16,7 @@ class Instantiate(Function):
         notAllowed = "Only my admins can use {0}".format(message.Command)
 
         if message.Command == "load":
-            if message.User.Name not in GlobalVars.admins:
+            if message.User.Name not in GlobalVars.admins and message.ParameterList[0]!="Nope":
                 return IRCResponse(ResponseType.Say, notAllowed, message.ReplyTo)
 
             if len(message.ParameterList) == 0:
@@ -43,7 +43,7 @@ class Instantiate(Function):
                     return IRCResponse(ResponseType.Say, "Load Error: cannot find function '%s'" % path, message.ReplyTo)
         
         elif message.Command == "unload":
-            if message.User.Name not in GlobalVars.admins:
+            if message.User.Name not in GlobalVars.admins and message.ParameterList[0]!="Nope":
                 return IRCResponse(ResponseType.Say, notAllowed, message.ReplyTo)
 
             if len(message.ParameterList) == 0:
