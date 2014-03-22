@@ -4,6 +4,7 @@ functions = {}
 
 CurrentNick = "Hubbot"
 connections = {"irc.desertbus.org":["#desertbus", "#unmoderated"], "applejack.me":["#survivors"]}
+nonDefaultModules = ["IdentCheck"]
 
 port = 6667
 

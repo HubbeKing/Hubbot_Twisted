@@ -46,7 +46,7 @@ def AutoLoadFunctions():
             continue
         
         try:
-            if item[:-3]!="IdentCheck":
+            if item[:-3] not in GlobalVars.nonDefaultModules:
                 LoadFunction(item[:-3])
         except Exception, x:
             print x.args
