@@ -46,6 +46,7 @@ def AutoLoadFunctions():
             continue
         
         try:
-            LoadFunction(item[:-3])
+            if item[:-3]!="IdentCheck":
+                LoadFunction(item[:-3])
         except Exception, x:
             print x.args
