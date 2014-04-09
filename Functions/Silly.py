@@ -73,5 +73,5 @@ class Instantiate(Function):
                 elif message.Command == "<thing>":
                         return IRCResponse(ResponseType.Say, "Har har.", message.ReplyTo)
 
-                elif message.Command == "disappoint":
+                elif message.Command.startswith("disappoint"):
                         return IRCResponse(ResponseType.Say, "https://31.media.tumblr.com/cea6574a24b490ada8bec694e87b307b/tumblr_n3blu9k5CW1tsipf6o6_400.gif", message.ReplyTo)
