@@ -5,7 +5,7 @@ from Function import Function
 import GlobalVars
 
 class Instantiate(Function):
-	Help = "donotwant, yes, yup, store, goat, stupid, fixyou, heya, HNGH, PS, whoa, what, mybrand, both, no, dissapoint -- Used to post silly things! Usage: %s<thing>" %GlobalVars.CommandChar
+	Help = "donotwant, yes, yup, store, goat, stupid, fixyou, heya, HNGH, PS, whoa, what, mybrand, both, no, disappoint -- Used to post silly things! Usage: %s<thing>" %GlobalVars.CommandChar
         seconds = 300
         lastTriggered = datetime.datetime.min
 	
@@ -73,5 +73,5 @@ class Instantiate(Function):
                 elif message.Command == "<thing>":
                         return IRCResponse(ResponseType.Say, "Har har.", message.ReplyTo)
 
-                elif message.Command == "dissapoint":
+                elif message.Command == "disappoint":
                         return IRCResponse(ResponseType.Say, "https://31.media.tumblr.com/cea6574a24b490ada8bec694e87b307b/tumblr_n3blu9k5CW1tsipf6o6_400.gif", message.ReplyTo)
