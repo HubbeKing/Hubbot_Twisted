@@ -28,3 +28,5 @@ os.chdir(dname)
 logPath = os.path.join(dname, "logs")
 
 commonWords = ["and","of","all","to","the","both","back","again","any","one","<3","with","","<3s","so","hard","right","in","him","her","booper","up","on",":)","against","its","harder","teh","sneakgrabs","people",":3"]
+
+bothandler = None

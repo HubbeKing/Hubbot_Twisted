@@ -8,7 +8,7 @@ class BotHandler:
     def __init__(self):
         for (server,channels) in GlobalVars.connections.items():
             self.startBotFactory(server, channels)
-
+        GlobalVars.bothandler = self
         reactor.run()
 
     def startBotFactory(self, server, channels):
