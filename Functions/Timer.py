@@ -31,13 +31,13 @@ class Instantiate(Function):
             else:
                 reactor.callLater(delay, self.notifyUser, HubbeBot, flag, message)
                 if flag:
-                    return IRCResponse(ResponseType.Say, message.User.Name + ": A " + message.ParameterList[0] + " second timer has been started!", message.ReplyTo)
+                    return IRCResponse(ResponseType.Say, "{}: A {} second timer has been started!".format(message.User.Name, message.ParameterList[0]), message.ReplyTo)
                 else: 
-                    return IRCResponse(ResponseType.Say, message.User.Name + ": A " + message.ParameterList[0] + " timer has been started!", message.ReplyTo)
+                    return IRCResponse(ResponseType.Say, "{}: A {} timer has been started!".format(message.User.Name, message.ParameterList[0]), message.ReplyTo)
                     
             
     def notifyUser(self, HubbeBot, flag, message):
         if flag:
-            HubbeBot.sendResponse(IRCResponse(ResponseType.Say, message.User.Name + ": Your " + message.ParameterList[0] + " second timer is up!" , message.ReplyTo))
+            HubbeBoy.sendResponse(IRCResponse(ResponseType.Say, "{}: Your {} second timer is up!".format(message.User.Name, message.ParameterList[0]), message.ReplyTo))
         else:
-            HubbeBot.sendResponse(IRCResponse(ResponseType.Say, message.User.Name + ": Your " + message.ParameterList[0] + " timer is up!" , message.ReplyTo))
+            HubbeBot.sendResponse(IRCResponse(ResponseType.Say, "{}: Your {} timer is up!".format(message.User.Name, message.ParameterList[0]), message.ReplyTo))
