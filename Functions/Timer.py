@@ -38,6 +38,6 @@ class Instantiate(Function):
             
     def notifyUser(self, HubbeBot, flag, message):
         if flag:
-            HubbeBoy.sendResponse(IRCResponse(ResponseType.Say, "{}: Your {} second timer is up!".format(message.User.Name, message.ParameterList[0]), message.ReplyTo))
+            HubbeBot.sendResponse(IRCResponse(ResponseType.Say, "{}: Your {} second timer is up!".format(message.User.Name, message.ParameterList[0]), message.ReplyTo))
         else:
             HubbeBot.sendResponse(IRCResponse(ResponseType.Say, "{}: Your {} timer is up!".format(message.User.Name, message.ParameterList[0]), message.ReplyTo))
