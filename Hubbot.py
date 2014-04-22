@@ -93,8 +93,8 @@ class Hubbot(irc.IRCClient):
     def handleMessage(self, message):
         self.responses = [] # in case earlier Function responses caused some weird errors
         if message.Command == 'quit' and datetime.datetime.now() > startTime + datetime.timedelta(seconds=10) and message.User.Name in GlobalVars.admins:
-            global quitting
-            quitting = True
+            global Quitting
+            Quitting = True
             quitMessage = "ohok".encode("utf-8")
             GlobalVars.bothandler.stopBotFactory(self.server, quitMessage)
         
@@ -149,7 +149,8 @@ class HubbotFactory(protocol.ReconnectingClientFactory):
 
     def clientConnectionLost(self, connector, reason):
         print "-!- Connection lost. Reason:", reason
-        protocol.ReconnectingClientFactory.clientConnectionLost(self, connector, reason)
+        if not Quitting:
+            protocol.ReconnectingClientFactory.clientConnectionLost(self, connector, reason)
 
     def clientConnectionFailed(self, connector, reason):
         print "-!- Connection failed. Reason:", reason
