@@ -3,7 +3,7 @@ from hubbebot import HubbeBot, HubbeBotFactory
 import GlobalVars
 
 class BotHandler:
-    bots = {}
+    botfactories = {}
 
     def __init__(self):
         for (server,channels) in GlobalVars.connections.items():
