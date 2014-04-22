@@ -142,7 +142,7 @@ class HubbeBotFactory(protocol.ReconnectingClientFactory):
         print "-#- Connected."
         print "-#- Resetting reconnectiong delay"
         self.resetDelay()
-        return HubbeBot()
+        return self.protocol
 
     def clientConnectionLost(self, connector, reason):
         print "-!- Connection lost. Reason:", reason
