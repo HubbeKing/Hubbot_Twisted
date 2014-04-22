@@ -89,7 +89,7 @@ class Instantiate(Function):
 						hugData[0] += hugCounts[0]
 						hugData[1] += hugCounts[1]
 						
-				HugString = target + " has received " + str(hugData[1]) + " hugs and given " + str(hugData[0]) + " hugs."
+				HugString = "{} has received {} hugs and given {} hugs.".format(target, hugData[1], hugData[0])
 				matchedNicksString = "Matches found: "
 				numberOfMatches = 0
 				for name in matches:
