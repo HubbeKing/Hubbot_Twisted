@@ -8,6 +8,9 @@ from IRCMessage import IRCMessage
 from FunctionHandler import AutoLoadFunctions
 import GlobalVars
 
+Quitting = False
+startTime = datetime.datetime.now()
+
 class Hubbot(irc.IRCClient):
 
     nickname = GlobalVars.CurrentNick
@@ -89,6 +92,12 @@ class Hubbot(irc.IRCClient):
 
     def handleMessage(self, message):
         self.responses = [] # in case earlier Function responses caused some weird errors
+        if message.Command == 'quit' and datetime.datetime.now() > startTime + datetime.timedelta(seconds=10) and message.User.Name in GlobalVars.admins:
+            global quitting
+            quitting = True
+            quitMessage = "ohok".encode("utf-8")
+            GlobalVars.bothandler.stopBotFactory(self.server, quitMessage)
+        
         for (name, func) in GlobalVars.functions.items():
             try:
                 response = func.GetResponse(self, message)
