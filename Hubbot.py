@@ -8,8 +8,6 @@ from IRCMessage import IRCMessage
 from FunctionHandler import AutoLoadFunctions
 import GlobalVars
 
-Quitting = False
-startTime = datetime.datetime.now()
 
 class Hubbot(irc.IRCClient):
 
@@ -27,6 +25,9 @@ class Hubbot(irc.IRCClient):
     sourceURL = GlobalVars.source
     
     responses = []
+    
+    Quitting = False
+    startTime = datetime.datetime.now()
 
     def __init__(self, server, channels):
         self.server = server
@@ -93,8 +94,7 @@ class Hubbot(irc.IRCClient):
     def handleMessage(self, message):
         self.responses = [] # in case earlier Function responses caused some weird errors
         if message.Command == 'quit' and datetime.datetime.now() > startTime + datetime.timedelta(seconds=10) and message.User.Name in GlobalVars.admins:
-            global Quitting
-            Quitting = True
+            self.Quitting = True
             quitMessage = "ohok".encode("utf-8")
             GlobalVars.bothandler.stopBotFactory(self.server, quitMessage)
         
@@ -149,7 +149,7 @@ class HubbotFactory(protocol.ReconnectingClientFactory):
 
     def clientConnectionLost(self, connector, reason):
         print "-!- Connection lost. Reason:", reason
-        if not Quitting:
+        if not self.protocol.Quitting:
             protocol.ReconnectingClientFactory.clientConnectionLost(self, connector, reason)
 
     def clientConnectionFailed(self, connector, reason):
