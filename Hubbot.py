@@ -132,10 +132,10 @@ class Hubbot(irc.IRCClient):
         
 class HubbotFactory(protocol.ReconnectingClientFactory):
 
-    def __init__(self, server, channels):
+    def __init__(self, server, port, channels):
         AutoLoadFunctions()
         self.protocol = Hubbot(server,channels)
-        reactor.connectTCP(server, GlobalVars.port, self)
+        reactor.connectTCP(server, port, self)
             
     def startedConnecting(self, connector):
         print "-#- Started to connect."

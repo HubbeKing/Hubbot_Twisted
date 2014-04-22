@@ -3,10 +3,8 @@ import os
 functions = {}
 
 CurrentNick = "Hubbot"
-connections = {"irc.desertbus.org":["#desertbus", "#unmoderated"], "applejack.me":["#survivors"]}
+connections = {"irc.desertbus.org:6667":["#desertbus", "#unmoderated"], "applejack.me:6667":["#survivors"]}
 nonDefaultModules = ["IdentCheck"]
-
-port = 6667
 
 admins = ["HubbeKing", "HubbeWork", "HubbePhone", "DoctorGyarados",
           "DoctorGyaradroid", "DoctorGyarados|GAEM",

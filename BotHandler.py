@@ -6,19 +6,21 @@ class BotHandler:
     botfactories = {}
 
     def __init__(self):
-        for (server,channels) in GlobalVars.connections.items():
-            self.startBotFactory(server, channels)
+        for (server_with_port,channels) in GlobalVars.connections.items():
+            server = server_with_port.split(":")[0]
+            port = int(server_with_port.split(":")[1])
+            self.startBotFactory(server, port, channels)
         GlobalVars.bothandler = self
         reactor.run()
 
-    def startBotFactory(self, server, channels):
+    def startBotFactory(self, server, port, channels):
         if server in self.botfactories:
             print "Already on server '{}'.".format(server)
             return False
 
         print "Joining server '{}'.".format(server)
 
-        botfactory = HubbotFactory(server,channels)
+        botfactory = HubbotFactory(server, port, channels)
         self.botfactories[server] = botfactory
         return True
 
