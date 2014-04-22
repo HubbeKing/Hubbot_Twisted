@@ -4,7 +4,7 @@ from Function import Function
 import random
 
 class Instantiate(Function):
-    Help = "roll <dice> - Roll up some polyhedral dice! Limited to 128d200 +/-1000 Ex: XdYv +Z - roll X Y-sided dice, with a +Z modifier and verbose output"
+    Help = "roll <dice> - Roll up some polyhedral dice! Ex: 4d20v +8 - roll 4 20-sided dice, with a +8 modifier and verbose output"
 
     def GetResponse(self, HubbeBot, message):
         if message.Type != "PRIVMSG":
@@ -94,19 +94,19 @@ class Instantiate(Function):
                     except:
                         return IRCResponse(ResponseType.Say, "I don't think that's a number.", message.ReplyTo)
                     
-            if numberOfDice > 129:
-                return IRCResponse(ResponseType.Say, "I can't roll that many dice, silly!", message.ReplyTo)
-            elif sides > 201:
-                return IRCResponse(ResponseType.Say, "I can't roll dice that big, silly!", message.ReplyTo)
-            else:
-                results = []
-                for i in range(numberOfDice):
-                    results.append(random.randint(1,sides))
+#            if numberOfDice > 129:
+#                return IRCResponse(ResponseType.Say, "I can't roll that many dice, silly!", message.ReplyTo)
+#            elif sides > 201:
+#                return IRCResponse(ResponseType.Say, "I can't roll dice that big, silly!", message.ReplyTo)
+#            else:
+            results = []
+            for i in range(numberOfDice):
+                results.append(random.randint(1,sides))
 
-            if modifier > 1000:
-                return IRCResponse(ResponseType.Say, "That modifier is too big, silly!", message.ReplyTo)
-            if modifier < -1000:
-                return IRCResponse(ResponseType.Say, "That modifier is too big, silly!", message.ReplyTo)
+#            if modifier > 1000:
+#                return IRCResponse(ResponseType.Say, "That modifier is too big, silly!", message.ReplyTo)
+#            if modifier < -1000:
+#                return IRCResponse(ResponseType.Say, "That modifier is too big, silly!", message.ReplyTo)
 
             if modifier == 0:
                 modString = ""
