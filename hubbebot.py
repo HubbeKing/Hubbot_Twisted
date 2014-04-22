@@ -25,15 +25,9 @@ class HubbeBot(irc.IRCClient):
     
     responses = []
 
-    def __init__(self, server=None, channels=None):
-        if server is None:
-            self.server = sys.argv[1]
-        else:
-            self.server = server
-        if channels is None:
-            self.channels = sys.argv[2:]
-        else:
-            self.channels = channels
+    def __init__(self, server, channels):
+        self.server = server
+        self.channels = channels
 
     def signedOn(self):
         for channel in self.channels:
@@ -151,13 +145,3 @@ class HubbeBotFactory(protocol.ReconnectingClientFactory):
     def clientConnectionFailed(self, connector, reason):
         print "-!- Connection failed. Reason:", reason
         protocol.ReconnectingClientFactory.clientConnectionFailed(self, connector, reason)
-            
-		
-#if __name__ == "__main__":
-#    if len(sys.argv)< 3:
-#        print "Correct usage: hubbot.py <server> <channel> [channel]"
-#    else:
-#        AutoLoadFunctions()
-#        hubbot = HubbeBotFactory()
-#        reactor.connectTCP(sys.argv[1], GlobalVars.port, hubbot)
-#        reactor.run()
