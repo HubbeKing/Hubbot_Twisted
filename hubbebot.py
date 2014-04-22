@@ -130,11 +130,10 @@ class HubbeBot(irc.IRCClient):
         
 class HubbeBotFactory(protocol.ReconnectingClientFactory):
 
-    def __init__(self, protocol=None):
-        if protocol is None:
-            self.protocol = HubbeBot()
-        else:
-            self.protocol = protocol
+    def __init__(self, server, channels):
+        AutoLoadFunctions()
+        self.protocol = HubbeBot(server,channels)
+        reactor.connectTCP(server, GlobalVars.port, self)
             
     def startedConnecting(self, connector):
         print "-#- Started to connect."
@@ -154,11 +153,11 @@ class HubbeBotFactory(protocol.ReconnectingClientFactory):
         protocol.ReconnectingClientFactory.clientConnectionFailed(self, connector, reason)
             
 		
-if __name__ == "__main__":
-    if len(sys.argv)< 3:
-        print "Correct usage: hubbot.py <server> <channel> [channel]"
-    else:
-        AutoLoadFunctions()
-        hubbot = HubbeBotFactory()
-        reactor.connectTCP(sys.argv[1], GlobalVars.port, hubbot)
-        reactor.run()
+#if __name__ == "__main__":
+#    if len(sys.argv)< 3:
+#        print "Correct usage: hubbot.py <server> <channel> [channel]"
+#    else:
+#        AutoLoadFunctions()
+#        hubbot = HubbeBotFactory()
+#        reactor.connectTCP(sys.argv[1], GlobalVars.port, hubbot)
+#        reactor.run()
