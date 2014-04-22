@@ -25,13 +25,12 @@ class Hubbot(irc.IRCClient):
     sourceURL = GlobalVars.source
     
     responses = []
-    
-    Quitting = False
-    startTime = datetime.datetime.now()
 
     def __init__(self, server, channels):
         self.server = server
         self.channels = channels
+        self.Quitting = False
+        self.startTime = datetime.datetime.now()
 
     def signedOn(self):
         for channel in self.channels:
