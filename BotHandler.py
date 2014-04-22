@@ -1,5 +1,5 @@
 from twisted.internet import reactor
-from hubbebot import HubbeBot, HubbeBotFactory
+from Hubbot import Hubbot, HubbotFactory
 import GlobalVars
 
 class BotHandler:
@@ -18,7 +18,7 @@ class BotHandler:
 
         print "Joining server '{}'.".format(server)
 
-        botfactory = HubbeBotFactory(server,channels)
+        botfactory = HubbotFactory(server,channels)
         self.botfactories[server] = botfactory
         return True
 

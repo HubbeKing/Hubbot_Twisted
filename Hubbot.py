@@ -8,7 +8,7 @@ from IRCMessage import IRCMessage
 from FunctionHandler import AutoLoadFunctions
 import GlobalVars
 
-class HubbeBot(irc.IRCClient):
+class Hubbot(irc.IRCClient):
 
     nickname = GlobalVars.CurrentNick
     
@@ -122,11 +122,11 @@ class HubbeBot(irc.IRCClient):
         with codecs.open(filePath, 'a+', 'utf-8') as f:
             f.write(data + '\n')
         
-class HubbeBotFactory(protocol.ReconnectingClientFactory):
+class HubbotFactory(protocol.ReconnectingClientFactory):
 
     def __init__(self, server, channels):
         AutoLoadFunctions()
-        self.protocol = HubbeBot(server,channels)
+        self.protocol = Hubbot(server,channels)
         reactor.connectTCP(server, GlobalVars.port, self)
             
     def startedConnecting(self, connector):
