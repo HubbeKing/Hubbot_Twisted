@@ -93,20 +93,18 @@ class Instantiate(Function):
                         numberOfDice = int(paramList[0][0:dIndex])
                     except:
                         return IRCResponse(ResponseType.Say, "I don't think that's a number.", message.ReplyTo)
-                    
-#            if numberOfDice > 129:
-#                return IRCResponse(ResponseType.Say, "I can't roll that many dice, silly!", message.ReplyTo)
-#            elif sides > 201:
-#                return IRCResponse(ResponseType.Say, "I can't roll dice that big, silly!", message.ReplyTo)
-#            else:
-            results = []
-            for i in range(numberOfDice):
-                results.append(random.randint(1,sides))
+        
+            if numberOfDice > (2**16):
+                return IRCResponse(ResponseType.Say, "I can't roll that many dice, silly!", message.ReplyTo)
+            elif sides > (2**16):
+                return IRCResponse(ResponseType.Say, "I can't roll dice that big, silly!", message.ReplyTo)
+            elif sides==0:
+                return IRCResponse(ResponseType.Say, "You found 0-sided dice?! WHERE?!?", message.ReplyTo)
+            elif verbose and numberOfDice<=20:
+                results = (random.randint(1,sides) for x in xrange(numberOfDice))
+            else:
+                results = sum(random.randint(1,sides) for x in xrange(numberOfDice))
 
-#            if modifier > 1000:
-#                return IRCResponse(ResponseType.Say, "That modifier is too big, silly!", message.ReplyTo)
-#            if modifier < -1000:
-#                return IRCResponse(ResponseType.Say, "That modifier is too big, silly!", message.ReplyTo)
 
             if modifier == 0:
                 modString = ""
@@ -117,9 +115,10 @@ class Instantiate(Function):
             
             if verbose and numberOfDice <= 20:
                 # output entire list and sum
-                return IRCResponse(ResponseType.Say, message.User.Name + " rolled: " + str(results) + modString + " | " + str(sum(results)+modifier), message.ReplyTo)
+                resultList = list(results)
+                return IRCResponse(ResponseType.Say, "{} rolled: {}{} | {:,}".format(message.User.Name, resultList, modString, sum(resultList)+modifier), message.ReplyTo)
             elif verbose and numberOfDice > 20:
-                return IRCResponse(ResponseType.Say, message.User.Name + " rolled: " + "[LOTS]" + modString + " | " + str(sum(results)+modifier), message.ReplyTo)
+                return IRCResponse(ResponseType.Say, "{} rolled: [LOTS]{} | {:,}".format(message.User.Name, modString, results+modifier), message.ReplyTo)
             else:
                 # output sum
-                return IRCResponse(ResponseType.Say, message.User.Name + " rolled: " + str(sum(results)+modifier), message.ReplyTo)
+                return IRCResponse(ResponseType.Say, "{} rolled: {:,}".format(message.User.Name, results+modifier), message.ReplyTo)
