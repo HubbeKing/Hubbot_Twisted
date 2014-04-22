@@ -1,5 +1,5 @@
 from twisted.internet import reactor
-from hubbebot import HubbeBot, HubbeBotReactor
+from hubbebot import HubbeBot, HubbeBotFactory
 import GlobalVars
 
 class BotHandler:
