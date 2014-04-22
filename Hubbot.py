@@ -92,7 +92,7 @@ class Hubbot(irc.IRCClient):
 
     def handleMessage(self, message):
         self.responses = [] # in case earlier Function responses caused some weird errors
-        if message.Command == 'quit' and datetime.datetime.now() > startTime + datetime.timedelta(seconds=10) and message.User.Name in GlobalVars.admins:
+        if message.Command == 'quit' and datetime.datetime.now() > self.startTime + datetime.timedelta(seconds=10) and message.User.Name in GlobalVars.admins:
             self.Quitting = True
             quitMessage = "ohok".encode("utf-8")
             GlobalVars.bothandler.stopBotFactory(self.server, quitMessage)
