@@ -51,6 +51,8 @@ class BotHandler:
     def shutdown(self, quitmessage="Shutting down..."):
         quitmessage = quitmessage.encode("utf-8")
         for server, botfactory in self.botfactories.iteritems():
+            botfactory.protocol.Quitting = True
+            botfactory.protocol.restarting = False
             botfactory.protocol.quit(quitmessage)
         self.botfactories = {}
         reactor.callLater(4.0, reactor.stop)

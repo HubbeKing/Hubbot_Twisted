@@ -103,7 +103,8 @@ class Hubbot(irc.IRCClient):
         if message.Command == "restart" and datetime.datetime.now() > self.startTime + datetime.timedelta(seconds=10) and message.User.Name in GlobalVars.admins:
             self.Quitting = False
             self.restarting = True
-            self.quit(quitMessage = "Restarting...")
+            self.quit(message = "Restarting...")
+            return
         
         for (name, func) in GlobalVars.functions.items():
             try:
