@@ -20,7 +20,7 @@ def LoadFunction(path, loadAs=''):
     for comp in components[:1]:
         src = getattr(src, comp)
     
-    ModuleName = str(src).split("from")[0].lstrip("<").rstrip(" ")
+    ModuleName = str(src).split("from")[0].lstrip("<").rstrip(" ").capitalize()
     if loadType != 'rel':
         print "--- {} loaded.".format(ModuleName)
     else:
