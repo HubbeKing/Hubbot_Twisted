@@ -23,6 +23,8 @@ def LoadFunction(path, loadAs=''):
     ModuleName = str(src).split("from")[0].strip("(").rstrip(" ")
     if loadType != 'rel':
         print ModuleName + " loaded."
+    else:
+        print ModuleName + " reloaded."
         
     func = src.Instantiate()
     
