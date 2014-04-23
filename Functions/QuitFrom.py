@@ -13,7 +13,6 @@ class Instantiate(Function):
             if len(message.ParameterList)>=1:
                 for server in message.ParameterList:
                     if server in GlobalVars.bothandler.botfactories:
-                        GlobalVars.bothandler.botfactories[server].protocol.Quitting = True
                         GlobalVars.bothandler.stopBotFactory(server)
                         return IRCResponse(ResponseType.Say, "Successfully quit from server '{}'".format(server), message.ReplyTo)
                     else:

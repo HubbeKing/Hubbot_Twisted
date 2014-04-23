@@ -36,6 +36,8 @@ class BotHandler:
             print "ERROR: Bot for '{}' does not exist yet was asked to stop.".format(server)
         else:
             print "Shutting down bot for server '{}'".format(server)
+            self.botfactories[server].protocol.Quitting = True
+            self.botfactories[server].protocol.restarting = False
             self.botfactories[server].protocol.quit(quitmessage)
             self.unregisterFactory(server)
             print "Successfully shut down bot for server '{}'".format(server)
