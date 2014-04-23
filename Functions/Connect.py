@@ -14,6 +14,8 @@ class Instantiate(Function):
                 server_with_port = message.ParameterList[0]
                 server = server_with_port.split(":")[0]
                 port = int(server_with_port.split(":")[1])
-                channels = message.ParameterList[1:]
+                tmpChannels = message.ParameterList[1:]
+                channels = []
+                for chan in tmpChannels:
+                    channels.append(chan.encode("ascii","ignore"))
                 GlobalVars.bothandler.startBotFactory(server, port, channels)
-                
