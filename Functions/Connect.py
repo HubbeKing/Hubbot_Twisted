@@ -23,3 +23,7 @@ class Instantiate(Function):
                 for chan in tmpChannels:
                     channels.append(chan.encode("ascii","ignore"))
                 GlobalVars.bothandler.startBotFactory(server, port, channels)
+                if server in GlobalVars.bothandler.botfactories:
+                    return IRCResponse(ResponseType.Say, "Successfully connected to server '{}'".format(server), message.ReplyTo)
+                else:
+                    return IRCResponse(ResponseType.Say, "Could not connect to server '{}'".format(server), message.ReplyTo)
