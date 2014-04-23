@@ -32,16 +32,13 @@ class BotHandler:
             self.quitmessage = "ohok".encode("utf-8")
         else:
             self.quitmessage = quitmessage
-        restarting = self.botfactories[server].protocol.restarting
-        if server not in self.botfactories and not restarting:
+        if server not in self.botfactories:
             print "ERROR: Bot for '{}' does not exist yet was asked to stop.".format(server)
         else:
-            if not restarting:
-                print "Shutting down bot for server '{}'".format(server)
+            print "Shutting down bot for server '{}'".format(server)
             self.botfactories[server].protocol.quit(quitmessage)
             self.unregisterFactory(server)
-            if not restarting:
-                print "Successfully shut down bot for server '{}'".format(server)
+            print "Successfully shut down bot for server '{}'".format(server)
 
     def unregisterFactory(self, server):
         if server in self.botfactories:

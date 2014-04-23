@@ -25,11 +25,13 @@ class Hubbot(irc.IRCClient):
     
     responses = []
 
+    startTime = datetime.datetime.min
+
     def __init__(self, server, channels):
         self.server = server
         self.channels = channels
         self.Quitting = False
-        self.restarting = False
+        self.restarting = True
         self.startTime = datetime.datetime.now()
 
     def signedOn(self):
@@ -94,13 +96,14 @@ class Hubbot(irc.IRCClient):
         self.responses = [] # in case earlier Function responses caused some weird errors
         if message.Command == 'quit' and datetime.datetime.now() > self.startTime + datetime.timedelta(seconds=10) and message.User.Name in GlobalVars.admins:
             self.Quitting = True
+            self.restarting = False
             quitMessage = "ohok".encode("utf-8")
             GlobalVars.bothandler.stopBotFactory(self.server, quitMessage)
 
         if message.Command == "restart" and datetime.datetime.now() > self.startTime + datetime.timedelta(seconds=10) and message.User.Name in GlobalVars.admins:
+            self.Quitting = False
             self.restarting = True
-            quitMessage = "Restarting...".encode("utf-8")
-            GlobalVars.bothandler.stopBotFactory(self.server, quitMessage)
+            self.quit(quitMessage = "Restarting...")
         
         for (name, func) in GlobalVars.functions.items():
             try:
@@ -152,7 +155,7 @@ class HubbotFactory(protocol.ReconnectingClientFactory):
 
     def clientConnectionLost(self, connector, reason):
         if self.protocol.restarting:
-            print "--- Restarting..."
+            print "-!- Connection lost. Reason:", reason
             protocol.ReconnectingClientFactory.clientConnectionLost(self, connector, reason)
         elif not self.protocol.Quitting:
             print "-!- Connection lost. Reason:", reason
