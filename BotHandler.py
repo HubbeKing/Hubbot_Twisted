@@ -27,8 +27,11 @@ class BotHandler:
         self.botfactories[server] = botfactory
         return True
 
-    def stopBotFactory(self, server, quitmessage="ohok"):
-        quitmessage = quitmessage.encode("utf-8")
+    def stopBotFactory(self, server, quitmessage=None):
+        if quitmessage == None:
+            self.quitmessage = quitmessage.encode("utf-8")
+        else:
+            self.quitmessage = quitmessage
         if server not in self.botfactories:
             print "ERROR: Bot for '{}' does not exist yet was asked to stop.".format(server)
         else:
@@ -44,6 +47,13 @@ class BotHandler:
             if len(self.botfactories)==0:
                 print "No more running bots, shutting down."
                 reactor.callLater(2.0, reactor.stop)
+
+    def shutdown(self, quitmessage="Shutting down..."):
+        quitmessage = quitmessage.encode("utf-8")
+        for server, botfactory in self.botfactories.iteritems():
+            botfactory.protocol.quit(quitmessage)
+        self.botfactories = {}
+        reactor.callLater(4.0, reactor.stop)
 
 if __name__=="__main__":
     bothandler = BotHandler()
