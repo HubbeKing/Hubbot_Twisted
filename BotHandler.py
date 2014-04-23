@@ -1,5 +1,6 @@
 from twisted.internet import reactor
 from Hubbot import Hubbot, HubbotFactory
+from FunctionHandler import AutoLoadFunctions
 import GlobalVars
 
 class BotHandler:
@@ -10,6 +11,7 @@ class BotHandler:
             server = server_with_port.split(":")[0]
             port = int(server_with_port.split(":")[1])
             self.startBotFactory(server, port, channels)
+        AutoLoadFunctions()
         GlobalVars.bothandler = self
         reactor.run()
 

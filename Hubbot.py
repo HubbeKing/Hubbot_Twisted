@@ -5,7 +5,6 @@ import re
 
 from IRCResponse import IRCResponse, ResponseType
 from IRCMessage import IRCMessage
-from FunctionHandler import AutoLoadFunctions
 import GlobalVars
 
 
@@ -133,7 +132,6 @@ class Hubbot(irc.IRCClient):
 class HubbotFactory(protocol.ReconnectingClientFactory):
 
     def __init__(self, server, port, channels):
-        AutoLoadFunctions()
         self.protocol = Hubbot(server,channels)
         reactor.connectTCP(server, port, self)
             
