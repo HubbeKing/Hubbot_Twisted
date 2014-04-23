@@ -147,8 +147,8 @@ class HubbotFactory(protocol.ReconnectingClientFactory):
         return self.protocol
 
     def clientConnectionLost(self, connector, reason):
-        print "-!- Connection lost. Reason:", reason
         if not self.protocol.Quitting:
+            print "-!- Connection lost. Reason:", reason
             protocol.ReconnectingClientFactory.clientConnectionLost(self, connector, reason)
 
     def clientConnectionFailed(self, connector, reason):
