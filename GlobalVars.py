@@ -1,6 +1,7 @@
 import os
 
 functions = {}
+functionCaseMapping = {}
 
 CurrentNick = "Hubbot"
 connections = {"irc.desertbus.org:6667":["#desertbus", "#unmoderated"], "applejack.me:6667":["#survivors"]}
