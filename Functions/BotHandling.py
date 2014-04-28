@@ -10,6 +10,8 @@ class Instantiate(Function):
     def GetResponse(self, Hubbot, message):
         if message.Type != "PRIVMSG":
             return
+        if message.Command not in ["quit", "quitfrom", "restart", "shutdown"]:
+            return
         if message.User.Name not in GlobalVars.admins:
             return IRCResponse(ResponseType.Say, "You are not allowed to use '{}'".format(message.Command), message.ReplyTo)
         if message.Command == "quit":

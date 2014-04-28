@@ -9,7 +9,7 @@ from FunctionHandler import LoadFunction, UnloadFunction, AutoLoadFunctions
 class Instantiate(Function):
     Help = "load/reload <function>, unload <function> - handles loading/unloading/reloading of functions. Use 'all' with load/reload to reload all active functions"
 
-    def GetResponse(self, message):
+    def GetResponse(self, Hubbot, message):
         if message.Type != 'PRIVMSG':
             return
         

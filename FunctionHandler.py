@@ -6,7 +6,7 @@ def LoadFunction(name, loadAs=''):
     name = name.lower()
 
     funcList = GetFunctionDirList()
-    funcListCaseMap = {key.lower() :key  for key in funclist}
+    funcListCaseMap = {key.lower() :key  for key in funcList}
 
     if name not in funcListCaseMap:
         return False
