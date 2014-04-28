@@ -40,6 +40,6 @@ class Instantiate(Function):
                 return
 
         if message.Command == "shutdown":
-            if datetime.datetime.now() > Hubbot.starttime + datetime.timedelta(seconds = 10):
+            if datetime.datetime.now() > Hubbot.startTime + datetime.timedelta(seconds = 10):
                 GlobalVars.bothandler.shutdown()
                 return
