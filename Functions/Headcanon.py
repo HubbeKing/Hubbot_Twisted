@@ -1,13 +1,8 @@
 import random
 import re
-import urllib2
-import json
+import urllib
 import sqlite3
 import sys, platform, os, traceback, datetime, codecs
-from pastebin_python import PastebinPython
-from pastebin_python.pastebin_exceptions import *
-from pastebin_python.pastebin_constants import *
-from pastebin_python.pastebin_formats import *
 from string import find
 from IRCMessage import IRCMessage
 from IRCResponse import IRCResponse, ResponseType
@@ -32,9 +27,9 @@ class Instantiate(Function):
                                         headcanon.append(row[0])
 		
 			if len(message.ParameterList) == 0:
-				return IRCResponse(ResponseType.Say, self.Help, message.ReplyTo)
-			
-			subCommand = message.ParameterList[0]
+				subCommand = "list"
+			else:
+                                subCommand = message.ParameterList[0]
 			if subCommand.lower() == "help":
 				try:
 					helpCmd = message.ParameterList[1]
@@ -87,7 +82,6 @@ class Instantiate(Function):
 					return IRCResponse(ResponseType.Say, returnString, message.ReplyTo)
 				
 			elif subCommand.lower() == "list":
-                                pbin = PastebinPython(api_dev_key='cef9f4fcc03a220f47fcef895abe4cc1')
 				pasteBinString = ""
 				if len(headcanon) == 0:
 					return IRCResponse(ResponseType.Say, "The database is empty! D:", message.ReplyTo)
@@ -95,9 +89,11 @@ class Instantiate(Function):
 					for item in headcanon:
 						pasteBinString = pasteBinString + item + "\n"
 					try:
-						pbin.createAPIUserKey("HubbeKing", "hgllabf2142")
-						pasteBinStr = pbin.createPaste(pasteBinString, "headcanon", "text", 1, "10M")
-						return IRCResponse(ResponseType.Say, "Link posted! (Expires in 10 minutes) " + pasteBinStr, message.ReplyTo)
+                                                pastebin_vars = { "api_dev_key"    : "cef9f4fcc03a220f47fcef895abe4cc1",
+                                                                  "api_option"     : "paste",
+                                                                  "api_paste_code" : pasteBinString }
+						response = urllib.urlopen("http://pastebin.com/api/api_post.php", urllib.urlencode(pastebin_vars))
+						return IRCResponse(ResponseType.Say, "Link posted! (Expires in 10 minutes) " + response.read(), message.ReplyTo)
 					except Exception:
                                                 print "Python Execution Error in '%s': %s" % ("headcanon", str( sys.exc_info() ))
                                                 traceback.print_tb(sys.exc_info()[2])
