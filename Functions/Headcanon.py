@@ -89,9 +89,12 @@ class Instantiate(Function):
 					for item in headcanon:
 						pasteBinString = pasteBinString + item + "\n"
 					try:
-                                                pastebin_vars = { "api_dev_key"    : "cef9f4fcc03a220f47fcef895abe4cc1",
-                                                                  "api_option"     : "paste",
-                                                                  "api_paste_code" : pasteBinString }
+                                                pastebin_vars = { "api_dev_key"           : "cef9f4fcc03a220f47fcef895abe4cc1",
+                                                                  "api_option"            : "paste",
+                                                                  "api_paste_code"        : pasteBinString,
+                                                                  "api_paste_name"        : "Headcanon",
+                                                                  "api_paste_expire_date" : "10M",
+                                                                  "api_paste_private"     : "1"}
 						response = urllib.urlopen("http://pastebin.com/api/api_post.php", urllib.urlencode(pastebin_vars))
 						return IRCResponse(ResponseType.Say, "Link posted! (Expires in 10 minutes) " + response.read(), message.ReplyTo)
 					except Exception:
