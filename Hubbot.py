@@ -93,19 +93,7 @@ class Hubbot(irc.IRCClient):
             self.sendLine(response.Response.encode('utf-8'))
 
     def handleMessage(self, message):
-        self.responses = [] # in case earlier Function responses caused some weird errors
-        if message.Command == 'quit' and datetime.datetime.now() > self.startTime + datetime.timedelta(seconds=10) and message.User.Name in GlobalVars.admins:
-            self.Quitting = True
-            self.restarting = False
-            quitMessage = "ohok".encode("utf-8")
-            GlobalVars.bothandler.stopBotFactory(self.server, quitMessage)
-
-        if message.Command == "restart" and datetime.datetime.now() > self.startTime + datetime.timedelta(seconds=10) and message.User.Name in GlobalVars.admins:
-            self.Quitting = False
-            self.restarting = True
-            self.quit(message = "Restarting...")
-            return
-        
+        self.responses = [] # in case earlier Function responses caused some weird errors        
         for (name, func) in GlobalVars.functions.items():
             try:
                 response = func.GetResponse(self, message)
