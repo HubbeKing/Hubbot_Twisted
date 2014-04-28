@@ -4,8 +4,8 @@ from twisted.internet import protocol, reactor
 import re
 
 from IRCResponse import IRCResponse, ResponseType
-from IRCMessage import IRCMessage, IRCChannel, IRCUser
-import GlobalVars, ServerInfo
+from IRCMessage import IRCMessage
+import GlobalVars
 
 
 class Hubbot(irc.IRCClient):
