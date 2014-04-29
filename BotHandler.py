@@ -38,7 +38,10 @@ class BotHandler:
             print "Shutting down bot for server '{}'".format(server)
             self.botfactories[server].protocol.Quitting = True
             self.botfactories[server].protocol.restarting = False
-            self.botfactories[server].protocol.quit(quitmessage)
+            try:
+                self.botfactories[server].protocol.quit(quitmessage)
+            except:
+                self.botfactories[server].stopTrying()
             self.unregisterFactory(server)
             print "Successfully shut down bot for server '{}'".format(server)
 
