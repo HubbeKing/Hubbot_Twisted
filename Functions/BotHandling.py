@@ -5,7 +5,7 @@ import GlobalVars
 import datetime
 
 class Instantiate(Function):
-    Help = "quit, quitfrom <server>, restart, shutdown - Disconnect from servers, Restart current bot, Shut down all bots"
+    Help = "connect, <server> <channel>, quit, quitfrom <server>, restart, shutdown - Connect to / Disconnect from servers, Restart current bot, Shut down all bots"
 
     def GetResponse(self, Hubbot, message):
         if message.Type != "PRIVMSG":
@@ -14,6 +14,24 @@ class Instantiate(Function):
             return
         if message.User.Name not in GlobalVars.admins:
             return IRCResponse(ResponseType.Say, "You are not allowed to use '{}'".format(message.Command), message.ReplyTo)
+
+        if message.Command == "connect":
+            if len(message.ParameterList)>=2:
+                server_with_port = message.ParameterList[0]
+                if ":" in server_with_port:
+                    server = server_with_port.split(":")[0]
+                    port = int(server_with_port.split(":")[1])
+                else:
+                    server = server_with_port
+                    port = 6667
+                tmpChannels = message.ParameterList[1:]
+                channels = []
+                for chan in tmpChannels:
+                    channels.append(chan.encode("ascii","ignore"))
+                GlobalVars.bothandler.startBotFactory(server, port, channels)
+                if server not in GlobalVars.bothandler.botfactories:
+                    return IRCResponse(ResponseType.Say, "Could not connect to server '{}'".format(server), message.ReplyTo)
+
         if message.Command == "quit":
             if datetime.datetime.now() > Hubbot.startTime + datetime.timedelta(seconds = 10):
                 Hubbot.Quitting = True
