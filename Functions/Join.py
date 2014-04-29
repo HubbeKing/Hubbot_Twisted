@@ -29,6 +29,7 @@ class Instantiate(Function):
                 if not channel.startswith('#'):
                     channel = '#' + channel
                 responses.append(IRCResponse(ResponseType.Raw, 'JOIN %s' % channel, ''))
+                HubbeBot.channels.append(channel)
             return responses
         else:
             return IRCResponse(ResponseType.Raw, "%s, you didn't say where I should join" % message.User.Name, message.ReplyTo)
