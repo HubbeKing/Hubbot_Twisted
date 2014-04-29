@@ -5,7 +5,7 @@ import GlobalVars
 import datetime
 
 class Instantiate(Function):
-    Help = "connect, <server> <channel>, quit, quitfrom <server>, restart, shutdown - Connect to / Disconnect from servers, Restart current bot, Shut down all bots"
+    Help = "connect <server> <channel>, quit, quitfrom <server>, restart, shutdown - Connect to / Disconnect from servers, Restart current bot, Shut down all bots"
 
     def GetResponse(self, Hubbot, message):
         if message.Type != "PRIVMSG":
