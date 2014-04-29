@@ -26,7 +26,9 @@ class Instantiate(Function):
             return IRCResponse(ResponseType.Say, 'Only my admins can tell me to %s' % message.Command, message.ReplyTo)
         
         if len(message.ParameterList) > 0:
+            HubbeBot.channels.remove(message.ReplyTo)
             return IRCResponse(ResponseType.Raw, 'PART %s :%s' % (message.ReplyTo, message.Parameters), '')
         else:
+            HubbeBot.channels.remove(message.ReplyTo)
             return IRCResponse(ResponseType.Raw, 'PART %s :toodles!' % (message.ReplyTo), '')
 
