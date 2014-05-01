@@ -56,7 +56,7 @@ class Instantiate(Function):
                 port = Hubbot.port
                 channels = Hubbot.channels
                 GlobalVars.bothandler.stopBotFactory(Hubbot.server, "Restarting...")
-                GlobalVars.bothandler.startBotFactory(server, port, channels)
+                reactor.callLater(4.0, GlobalVars.bothandler.startBotFactory(server, port, channels))
                 return
 
         if message.Command == "shutdown":
