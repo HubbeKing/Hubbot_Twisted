@@ -45,7 +45,7 @@ def LoadFunction(name, loadAs=''):
         
 
 def UnloadFunction(name):
-    if name.lower in GlobalVars.functionCaseMapping.keys():
+    if name.lower() in GlobalVars.functionCaseMapping.keys():
         del GlobalVars.functions[GlobalVars.functionCaseMapping[name]]
         del GlobalVars.functionCaseMapping[name.lower()]
     else:
