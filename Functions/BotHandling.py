@@ -52,9 +52,11 @@ class Instantiate(Function):
 
         if message.Command == "restart":
             if datetime.datetime.now() > Hubbot.startTime + datetime.timedelta(seconds = 10):
-                Hubbot.Quitting = False
-                Hubbot.restarting = True
-                Hubbot.quit(message = "Restarting...")
+                server = Hubbot.server
+                port = Hubbot.port
+                channels = Hubbot.channels
+                GlobalVars.bothandler.stopBotFactory(Hubbot.server, "Restarting...")
+                GlobalVars.bothandler.startBotFactory(server, port, channels)
                 return
 
         if message.Command == "shutdown":
