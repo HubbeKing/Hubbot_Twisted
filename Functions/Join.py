@@ -1,9 +1,3 @@
-'''
-Created on Dec 20, 2011
-
-@author: Tyranic-Moron
-'''
-
 from IRCMessage import IRCMessage
 from IRCResponse import IRCResponse, ResponseType
 from Function import Function
@@ -28,8 +22,8 @@ class Instantiate(Function):
                 channel = param
                 if not channel.startswith('#'):
                     channel = '#' + channel
-                responses.append(IRCResponse(ResponseType.Raw, 'JOIN %s' % channel, ''))
+                responses.append(IRCResponse(ResponseType.Raw, 'JOIN {}'.format(channel), '')
                 HubbeBot.channels.append(channel)
             return responses
         else:
-            return IRCResponse(ResponseType.Raw, "%s, you didn't say where I should join" % message.User.Name, message.ReplyTo)
+            return IRCResponse(ResponseType.Say, "{}, you didn't say where I should join".format(message.User.Name), message.ReplyTo)

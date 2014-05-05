@@ -21,8 +21,6 @@ class BotHandler:
             return False
 
         print "Joining server '{}'.".format(server)
-        #for chan in channels:
-        #    print type(chan)
         botfactory = HubbotFactory(server, port, channels)
         self.botfactories[server] = botfactory
         return True

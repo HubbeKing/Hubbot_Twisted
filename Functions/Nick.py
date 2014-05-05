@@ -19,6 +19,6 @@ class Instantiate(Function):
             return IRCResponse(ResponseType.Say, "Only my admins can change my name!", message.ReplyTo)
         
         if len(message.ParameterList) > 0:
-            return IRCResponse(ResponseType.Raw, "NICK %s" % (message.ParameterList[0]), '')
+            return IRCResponse(ResponseType.Raw, "NICK {}".format(message.ParameterList[0]), '')
         else:
-            return IRCResponse(ResponseType.Say, "Change my %s to what?" % message.Command, message.ReplyTo)
+            return IRCResponse(ResponseType.Say, "Change my {} to what?".format(message.Command), message.ReplyTo)

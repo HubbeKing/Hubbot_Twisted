@@ -5,7 +5,7 @@ from Function import Function
 import GlobalVars
 
 class Instantiate(Function):
-	Help = "donotwant, yes, yup, store, goat, stupid, fixyou, heya, HNGH, PS, whoa, what, mybrand, both, no, disappoint -- Used to post silly things! Usage: %s<thing>" %GlobalVars.CommandChar
+	Help = "donotwant, yes, yup, store, goat, stupid, fixyou, heya, HNGH, PS, whoa, what, mybrand, both, no, disappoint -- Used to post silly things! Usage: {}<thing>".format(GlobalVars.CommandChar)
         seconds = 300
         lastTriggered = datetime.datetime.min
 	

@@ -6,7 +6,7 @@ import GlobalVars
 import re
 
 class Instantiate(Function):
-    Help = "source - returns a link to %s's source" % GlobalVars.CurrentNick
+    Help = "source - returns a link to {}'s source".format(GlobalVars.CurrentNick)
 
     def GetResponse(self, HubbeBot, message):
         if message.Type != 'PRIVMSG':

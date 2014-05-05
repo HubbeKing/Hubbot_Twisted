@@ -1,9 +1,3 @@
-'''
-Created on Dec 20, 2011
-
-@author: Tyranic-Moron
-'''
-
 from IRCMessage import IRCMessage
 from IRCResponse import IRCResponse, ResponseType
 from Function import Function
@@ -23,12 +17,12 @@ class Instantiate(Function):
             return
             
         if message.User.Name not in GlobalVars.admins:
-            return IRCResponse(ResponseType.Say, 'Only my admins can tell me to %s' % message.Command, message.ReplyTo)
+            return IRCResponse(ResponseType.Say, 'Only my admins can tell me to {}'.format(message.Command), message.ReplyTo)
         
         if len(message.ParameterList) > 0:
             HubbeBot.channels.remove(message.ReplyTo)
-            return IRCResponse(ResponseType.Raw, 'PART %s :%s' % (message.ReplyTo, message.Parameters), '')
+            return IRCResponse(ResponseType.Raw, 'PART {} :{}'.format(message.ReplyTo, message.Parameters), '')
         else:
             HubbeBot.channels.remove(message.ReplyTo)
-            return IRCResponse(ResponseType.Raw, 'PART %s :toodles!' % (message.ReplyTo), '')
+            return IRCResponse(ResponseType.Raw, 'PART {} :toodles!'.format(message.ReplyTo), '')
 
