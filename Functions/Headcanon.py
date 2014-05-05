@@ -13,9 +13,7 @@ class Instantiate(Function):
 	subCommands = ["add", "search", "list", "remove", "help"]
 	Help = "headcanon [function] -- used to store Symphony's headcanon!"
 	Help += "\nHeadcanon functions: {}".format(", ".join(subCommands))
-	Help += "\nSyntax is: "
-	Help += GlobalVars.CommandChar
-	Help += "headcanon help <command>"
+	Help += "\nSyntax is: {}headcanon help <command>".format(GlobalVars.CommandChar)
 	
 	def GetResponse(self, HubbeBot, message):
 		if message.Type == "PRIVMSG" and message.Command == "headcanon":
@@ -35,9 +33,7 @@ class Instantiate(Function):
 					helpCmd = message.ParameterList[1]
 					if helpCmd not in self.subCommands:
 						returnString = "Headcanon functions: {}".format(", ".join(self.subCommands))
-						returnString += "\nSyntax is: "
-						returnString += GlobalVars.CommandChar
-						returnString += "headcanon help <command>"
+						returnString += "\nSyntax is: {}headcanon help <command>".format(GlobalVars.CommandChar)
 					elif helpCmd == "add":
 						returnString = GlobalVars.CommandChar + "headcanon add <string> - used to add lines to headcanon."
 					elif helpCmd == "search":
@@ -48,9 +44,7 @@ class Instantiate(Function):
 						returnString = GlobalVars.CommandChar + "headcanon remove <string> - used to remove lines to the headcanon."
 				except:
 					returnString = "Headcanon functions: {}".format(", ".join(self.subCommands))
-					returnString += "\nSyntax is: "
-					returnString += GlobalVars.CommandChar
-					returnString += "headcanon help <command>"
+					returnString += "\nSyntax is: {}headcanon help <command>".format(GlobalVars.CommandChar)
 				return IRCResponse(ResponseType.Say, returnString, message.ReplyTo)
 			
 			elif subCommand.lower() == "add" and message.User.Name in GlobalVars.admins:
