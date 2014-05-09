@@ -22,7 +22,7 @@ class Instantiate(Function):
                 channel = param
                 if not channel.startswith('#'):
                     channel = '#' + channel
-                responses.append(IRCResponse(ResponseType.Raw, 'JOIN {}'.format(channel), '')
+                responses.append(IRCResponse(ResponseType.Raw, 'JOIN {}'.format(channel), ''))
                 HubbeBot.channels.append(channel)
             return responses
         else:
