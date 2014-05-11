@@ -2,6 +2,7 @@ from IRCResponse import IRCResponse, ResponseType
 from Function import Function
 import re
 
+
 class Instantiate(Function):
     Help = 'join <channel> - makes the bot join the specified channel(s)'
 

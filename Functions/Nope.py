@@ -2,6 +2,7 @@ import datetime
 from IRCResponse import IRCResponse, ResponseType
 from Function import Function
 
+
 class Instantiate(Function):
     Help = "nope - nope"
     seconds = 300

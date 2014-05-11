@@ -3,6 +3,7 @@ from IRCResponse import IRCResponse, ResponseType
 from Function import Function
 from timeparse import timeparse
 
+
 class Instantiate(Function):
     Help = "timer <time> - starts a countdown timer and notifies you when time's up. Max 1yrs0mths0w0d0h0m0s"
 
@@ -31,8 +32,7 @@ class Instantiate(Function):
                     return IRCResponse(ResponseType.Say, "{}: A {} second timer has been started!".format(message.User.Name, message.ParameterList[0]), message.ReplyTo)
                 else: 
                     return IRCResponse(ResponseType.Say, "{}: A {} timer has been started!".format(message.User.Name, message.ParameterList[0]), message.ReplyTo)
-                    
-            
+
     def notifyUser(self, HubbeBot, flag, message):
         if flag:
             HubbeBot.sendResponse(IRCResponse(ResponseType.Say, "{}: Your {} second timer is up!".format(message.User.Name, message.ParameterList[0]), message.ReplyTo))

@@ -1,11 +1,10 @@
-
 from IRCResponse import IRCResponse, ResponseType
 from Function import Function
 import GlobalVars
-
 import string
 import sqlite3
 import re
+
 
 class Instantiate(Function):
     Help = "hugs [nick] -- How many hugs has this person given and received?"

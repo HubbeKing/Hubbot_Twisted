@@ -2,6 +2,7 @@ from IRCResponse import IRCResponse, ResponseType
 from Function import Function
 import random
 
+
 class Instantiate(Function):
     Help = "roll <dice> - Roll up some polyhedral dice! Ex: 4d20v +8 - roll 4 20-sided dice, with a +8 modifier and verbose output"
 
@@ -61,7 +62,7 @@ class Instantiate(Function):
                 except:
                     return IRCResponse(ResponseType.Say, "I don't think that's a number.", message.ReplyTo)
 
-            if negIndex == False and posIndex == False:
+            if not negIndex and not posIndex:
                 # no modifier in ParameterList[0]
                 try:
                     sides = int(paramList[0][dIndex+1:])
@@ -72,7 +73,7 @@ class Instantiate(Function):
                 except:
                     return IRCResponse(ResponseType.Say, "I don't think that's a number.", message.ReplyTo)
             else:
-                if negIndex != False:
+                if negIndex:
                     # negative sign in ParameterList[0]
                     try:
                         sides = int(paramList[0][dIndex+1:negIndex])
@@ -103,7 +104,6 @@ class Instantiate(Function):
                 results = (random.randint(1,sides) for x in xrange(numberOfDice))
             else:
                 results = sum(random.randint(1,sides) for x in xrange(numberOfDice))
-
 
             if modifier == 0:
                 modString = ""

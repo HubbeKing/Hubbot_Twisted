@@ -1,7 +1,7 @@
 from IRCResponse import IRCResponse, ResponseType
 from Function import Function
-
 from FunctionHandler import LoadFunction, UnloadFunction
+
 
 class Instantiate(Function):
     Help = "RoBoBo joins, IdentCheck unloads. RoBoBo leaves, IdentCheck loads."

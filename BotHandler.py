@@ -1,13 +1,14 @@
 from twisted.internet import reactor
-from Hubbot import Hubbot, HubbotFactory
+from Hubbot import HubbotFactory
 from FunctionHandler import AutoLoadFunctions
 import GlobalVars
+
 
 class BotHandler:
     botfactories = {}
 
     def __init__(self):
-        for (server_with_port,channels) in GlobalVars.connections.items():
+        for (server_with_port, channels) in GlobalVars.connections.items():
             server = server_with_port.split(":")[0]
             port = int(server_with_port.split(":")[1])
             self.startBotFactory(server, port, channels)
@@ -47,7 +48,7 @@ class BotHandler:
         if server in self.botfactories:
             del self.botfactories[server]
 
-            if len(self.botfactories)==0:
+            if len(self.botfactories) == 0:
                 print "No more running bots, shutting down."
                 reactor.callLater(2.0, reactor.stop)
 
@@ -60,5 +61,6 @@ class BotHandler:
         self.botfactories = {}
         reactor.callLater(4.0, reactor.stop)
 
-if __name__=="__main__":
+
+if __name__ == "__main__":
     bothandler = BotHandler()

@@ -2,6 +2,7 @@ from IRCResponse import IRCResponse, ResponseType
 from Function import Function
 import GlobalVars
 
+
 class Instantiate(Function):
     Help = "mumble, gmod, starbound, starbound2, jcmp, tetri, cockatrice, kf -- Used to post server info for games! Usage: {}<server>".format(GlobalVars.CommandChar)
     mumbleIP = 'The mumble server is hosted at: mumble.dahou.se'
@@ -37,5 +38,3 @@ class Instantiate(Function):
             return IRCResponse(ResponseType.Say, self.killingfloorIP, message.ReplyTo)
         elif message.Command == "<server>":
             return IRCResponse(ResponseType.Say, "Seriously?", message.ReplyTo)
-            
-

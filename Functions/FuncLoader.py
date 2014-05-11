@@ -1,9 +1,8 @@
 from IRCResponse import IRCResponse, ResponseType
 from Function import Function
 import GlobalVars
+from FunctionHandler import LoadFunction, UnloadFunction
 
-import sys
-from FunctionHandler import LoadFunction, UnloadFunction, AutoLoadFunctions
 
 class Instantiate(Function):
     Help = "load/reload <function>, unload <function> - handles loading/unloading/reloading of functions. Use 'all' with load/reload to reload all active functions"

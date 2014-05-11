@@ -1,8 +1,8 @@
 from IRCResponse import IRCResponse, ResponseType
 from Function import Function
 import GlobalVars
-
 import re
+
 
 class Instantiate(Function):
     Help = "leave/gtfo - makes the bot leave the current channel"
@@ -24,4 +24,3 @@ class Instantiate(Function):
         else:
             HubbeBot.channels.remove(message.ReplyTo)
             return IRCResponse(ResponseType.Raw, 'PART {} :toodles!'.format(message.ReplyTo), '')
-

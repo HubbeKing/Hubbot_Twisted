@@ -1,8 +1,8 @@
 from enumType import enum
 import GlobalVars
-import re
 
 TargetTypes = enum('CHANNEL', 'USER')
+
 
 class UserStruct:
     Hostmask = None
@@ -17,6 +17,7 @@ class UserStruct:
             self.User = userArray[0]
             self.Hostmask = userArray[1]
 
+
 class IRCMessage:
     Type = None
     User = None
@@ -24,7 +25,7 @@ class IRCMessage:
     ReplyTo = None
     MessageList = []
     MessageString = None
-    
+
     Command = ''
     Parameters = ''
     ParameterList = []
@@ -39,11 +40,11 @@ class IRCMessage:
             self.ReplyTo = self.User.Name
         else:
             self.ReplyTo = channel
-        if (channel.startswith('#')):
+        if channel.startswith('#'):
             self.TargetType = TargetTypes.CHANNEL
         else:
             self.TargetType = TargetTypes.USER
-        
+
         if self.MessageList[0].startswith(GlobalVars.CommandChar):
             self.Command = self.MessageList[0][len(GlobalVars.CommandChar):].lower()
             if self.Command == "":
@@ -51,7 +52,7 @@ class IRCMessage:
                 self.Parameters = u' '.join(self.MessageList[2:])
             else:
                 self.Parameters = u' '.join(self.MessageList[1:])
-            
+
 
         elif self.MessageList[0].startswith(GlobalVars.CurrentNick) and len(self.MessageList) > 1:
             self.Command = self.MessageList[1].lower()

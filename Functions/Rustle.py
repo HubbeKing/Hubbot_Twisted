@@ -1,6 +1,8 @@
 from IRCResponse import IRCResponse, ResponseType
 from Function import Function
-import random, string
+import random
+import string
+
 
 class Instantiate(Function):
     Help = "rustle <rustlee> - There's no need to be upset."

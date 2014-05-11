@@ -2,11 +2,12 @@ import os, sys
 from glob import glob
 import GlobalVars
 
+
 def LoadFunction(name, loadAs=''):
     name = name.lower()
 
     funcList = GetFunctionDirList()
-    funcListCaseMap = {key.lower() :key  for key in funcList}
+    funcListCaseMap = {key.lower(): key for key in funcList}
 
     if name not in funcListCaseMap:
         return False
@@ -14,7 +15,7 @@ def LoadFunction(name, loadAs=''):
     alreadyExisted = False
 
     src = __import__('Functions.' + funcListCaseMap[name], globals(), locals(), [])
-    
+
     if loadAs != "":
         name = loadAs.lower()
 
@@ -22,14 +23,14 @@ def LoadFunction(name, loadAs=''):
         alreadyExisted = True
         properName = GlobalVars.functionCaseMapping[name]
         del sys.modules["Functions.{}".format(properName)]
-        for f in glob ("Functions/{}.pyc".format(properName)):
+        for f in glob("Functions/{}.pyc".format(properName)):
             os.remove(f)
 
     reload(src)
 
     components = funcListCaseMap[name].split(".")
     for comp in components[:1]:
-        src = getattr(src,comp)
+        src = getattr(src, comp)
 
     if alreadyExisted:
         print "--- {} reloaded.".format(src.__name__)
@@ -38,11 +39,11 @@ def LoadFunction(name, loadAs=''):
 
     func = src.Instantiate()
 
-    GlobalVars.functions.update({funcListCaseMap[name]:func})
-    GlobalVars.functionCaseMapping.update({name:funcListCaseMap[name]})
+    GlobalVars.functions.update({funcListCaseMap[name]: func})
+    GlobalVars.functionCaseMapping.update({name: funcListCaseMap[name]})
 
     return True
-        
+
 
 def UnloadFunction(name):
     if name.lower() in GlobalVars.functionCaseMapping.keys():
@@ -53,6 +54,7 @@ def UnloadFunction(name):
 
     return True
 
+
 def AutoLoadFunctions():
     for func in GetFunctionDirList():
         if func not in GlobalVars.nonDefaultModules:
@@ -60,6 +62,7 @@ def AutoLoadFunctions():
                 LoadFunction(func)
             except Exception, x:
                 print x.args
+
 
 def GetFunctionDirList():
     root = os.path.join('.', 'Functions')
@@ -72,4 +75,3 @@ def GetFunctionDirList():
             continue
 
         yield item[:-3]
-        

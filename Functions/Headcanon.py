@@ -2,7 +2,8 @@ import random
 import re
 import urllib
 import sqlite3
-import sys, traceback
+import sys
+import traceback
 from IRCResponse import IRCResponse, ResponseType
 from Function import Function
 import GlobalVars

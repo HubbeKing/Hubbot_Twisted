@@ -33,21 +33,21 @@ kinds of time expressions.
 
 import re
 
-YEARS      = r'(?P<years>\d+)\s*(?:ys?|yrs?.?|years?)'
-MONTHS     = r'(?P<months>\d+)\s*(?:mos?.?|mths?.?|months?)'
-WEEKS       = r'(?P<weeks>[\d.]+)\s*(?:w|wks?|weeks?)'
-DAYS        = r'(?P<days>[\d.]+)\s*(?:d|dys?|days?)'
-HOURS       = r'(?P<hours>[\d.]+)\s*(?:h|hrs?|hours?)'
-MINS        = r'(?P<mins>[\d.]+)\s*(?:m|(mins?)|(minutes?))'
-SECS        = r'(?P<secs>[\d.]+)\s*(?:s|secs?|seconds?)'
-SEPARATORS  = r'[,/]'
-MINCLOCK    = r'(?P<mins>\d{1,2}):(?P<secs>\d{2}(?:\.\d+)?)'
-HOURCLOCK   = r'(?P<hours>\d+):(?P<mins>\d{2}):(?P<secs>\d{2}(?:\.\d+)?)'
-DAYCLOCK    = (r'(?P<days>\d+):(?P<hours>\d{2}):'
-               r'(?P<mins>\d{2}):(?P<secs>\d{2}(?:\.\d+)?)')
+YEARS = r'(?P<years>\d+)\s*(?:ys?|yrs?.?|years?)'
+MONTHS = r'(?P<months>\d+)\s*(?:mos?.?|mths?.?|months?)'
+WEEKS = r'(?P<weeks>[\d.]+)\s*(?:w|wks?|weeks?)'
+DAYS = r'(?P<days>[\d.]+)\s*(?:d|dys?|days?)'
+HOURS = r'(?P<hours>[\d.]+)\s*(?:h|hrs?|hours?)'
+MINS = r'(?P<mins>[\d.]+)\s*(?:m|(mins?)|(minutes?))'
+SECS = r'(?P<secs>[\d.]+)\s*(?:s|secs?|seconds?)'
+SEPARATORS = r'[,/]'
+MINCLOCK = r'(?P<mins>\d{1,2}):(?P<secs>\d{2}(?:\.\d+)?)'
+HOURCLOCK = r'(?P<hours>\d+):(?P<mins>\d{2}):(?P<secs>\d{2}(?:\.\d+)?)'
+DAYCLOCK = (r'(?P<days>\d+):(?P<hours>\d{2}):'
+            r'(?P<mins>\d{2}):(?P<secs>\d{2}(?:\.\d+)?)')
 
-OPT         = lambda x: r'(?:{x})?'.format(x=x, SEPARATORS=SEPARATORS)
-OPTSEP      = lambda x: r'(?:{x}\s*(?:{SEPARATORS}\s*)?)?'.format(
+OPT = lambda x: r'(?:{x})?'.format(x=x, SEPARATORS=SEPARATORS)
+OPTSEP = lambda x: r'(?:{x}\s*(?:{SEPARATORS}\s*)?)?'.format(
     x=x, SEPARATORS=SEPARATORS)
 
 TIMEFORMATS = [
@@ -67,17 +67,18 @@ TIMEFORMATS = [
         HOURCLOCK=HOURCLOCK),
     r'{DAYCLOCK}'.format(
         DAYCLOCK=DAYCLOCK),
-    ]
+]
 
 MULTIPLIERS = dict([
-        ('years',  60 * 60 * 24 * 365),
-        ('months', 60 * 60 * 24 * 30),
-        ('weeks',   60 * 60 * 24 * 7),
-        ('days',    60 * 60 * 24),
-        ('hours',   60 * 60),
-        ('mins',    60),
-        ('secs',    1)
-        ])
+    ('years', 60 * 60 * 24 * 365),
+    ('months', 60 * 60 * 24 * 30),
+    ('weeks', 60 * 60 * 24 * 7),
+    ('days', 60 * 60 * 24),
+    ('hours', 60 * 60),
+    ('mins', 60),
+    ('secs', 1)
+])
+
 
 def timeparse(sval):
     '''
@@ -110,8 +111,8 @@ def timeparse(sval):
                             mdict.items() if v is not None])
             # if SECS is an integer number
             elif ('secs' not in mdict or
-                  mdict['secs'] is None or
-                  mdict['secs'].isdigit()):
+                          mdict['secs'] is None or
+                      mdict['secs'].isdigit()):
                 # we will return an integer
                 return (
                     int(sum([MULTIPLIERS[k] * float(v) for (k, v) in

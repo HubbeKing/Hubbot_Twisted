@@ -3,6 +3,7 @@ from Function import Function
 import GlobalVars
 import re
 
+
 class Instantiate(Function):
     Help = "nick <nick> - changes the bot's nick to the one specified"
     
