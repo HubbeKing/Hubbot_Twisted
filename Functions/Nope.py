@@ -1,5 +1,4 @@
 import datetime
-from IRCMessage import IRCMessage
 from IRCResponse import IRCResponse, ResponseType
 from Function import Function
 

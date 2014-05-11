@@ -1,8 +1,5 @@
-from IRCMessage import IRCMessage
 from IRCResponse import IRCResponse, ResponseType
 from Function import Function
-from GlobalVars import *
-
 import re
 
 class Instantiate(Function):

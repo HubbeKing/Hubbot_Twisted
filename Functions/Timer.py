@@ -1,9 +1,6 @@
 from twisted.internet import reactor
-from IRCMessage import IRCMessage
 from IRCResponse import IRCResponse, ResponseType
 from Function import Function
-import GlobalVars
-import re
 from timeparse import timeparse
 
 class Instantiate(Function):
