@@ -2,30 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b00a78b8-14fb-4d2e-b911-127595b98d6c" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BotHandler.py" afterPath="$PROJECT_DIR$/BotHandler.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Functions/BotHandling.py" afterPath="$PROJECT_DIR$/Functions/BotHandling.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Functions/FuncLoader.py" afterPath="$PROJECT_DIR$/Functions/FuncLoader.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Function.py" afterPath="$PROJECT_DIR$/Function.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/FunctionHandler.py" afterPath="$PROJECT_DIR$/FunctionHandler.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Functions/Headcanon.py" afterPath="$PROJECT_DIR$/Functions/Headcanon.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Functions/Help.py" afterPath="$PROJECT_DIR$/Functions/Help.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Hubbot.py" afterPath="$PROJECT_DIR$/Hubbot.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Functions/Hugs.py" afterPath="$PROJECT_DIR$/Functions/Hugs.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/IRCMessage.py" afterPath="$PROJECT_DIR$/IRCMessage.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/IRCResponse.py" afterPath="$PROJECT_DIR$/IRCResponse.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Functions/IdentCheck.py" afterPath="$PROJECT_DIR$/Functions/IdentCheck.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Functions/Join.py" afterPath="$PROJECT_DIR$/Functions/Join.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Functions/Leave.py" afterPath="$PROJECT_DIR$/Functions/Leave.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Functions/Nick.py" afterPath="$PROJECT_DIR$/Functions/Nick.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Functions/Nope.py" afterPath="$PROJECT_DIR$/Functions/Nope.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Functions/RoBoBo.py" afterPath="$PROJECT_DIR$/Functions/RoBoBo.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Functions/Roll.py" afterPath="$PROJECT_DIR$/Functions/Roll.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Functions/Rustle.py" afterPath="$PROJECT_DIR$/Functions/Rustle.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Functions/Servers.py" afterPath="$PROJECT_DIR$/Functions/Servers.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Functions/Silly.py" afterPath="$PROJECT_DIR$/Functions/Silly.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Functions/Source.py" afterPath="$PROJECT_DIR$/Functions/Source.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Functions/Timer.py" afterPath="$PROJECT_DIR$/Functions/Timer.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/timeparse.py" afterPath="$PROJECT_DIR$/timeparse.py" />
     </list>
     <ignored path="Hubbot_Twisted.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -47,7 +24,17 @@
     <favorites_list name="Hubbot_Twisted" />
   </component>
   <component name="FileEditorManager">
-    <leaf />
+    <leaf>
+      <file leaf-file-name="Hubbot.py" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Hubbot.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="2" column="46" selection-start="144" selection-end="144" vertical-scroll-proportion="-0.6926407" vertical-offset="674" max-vertical-offset="2669">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FindManager">
     <FindUsagesManager>
@@ -63,7 +50,6 @@
         <option value="$PROJECT_DIR$/Function.py" />
         <option value="$PROJECT_DIR$/FunctionHandler.py" />
         <option value="$PROJECT_DIR$/IRCMessage.py" />
-        <option value="$PROJECT_DIR$/Hubbot.py" />
         <option value="$PROJECT_DIR$/IRCResponse.py" />
         <option value="$PROJECT_DIR$/timeparse.py" />
         <option value="$PROJECT_DIR$/BotHandler.py" />
@@ -84,6 +70,7 @@
         <option value="$PROJECT_DIR$/Functions/Servers.py" />
         <option value="$PROJECT_DIR$/Functions/Source.py" />
         <option value="$PROJECT_DIR$/Functions/Timer.py" />
+        <option value="$PROJECT_DIR$/Hubbot.py" />
       </list>
     </option>
   </component>
@@ -119,7 +106,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -140,6 +126,7 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -311,13 +298,13 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18020834" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18020834" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -325,11 +312,11 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -360,25 +347,17 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/BotHandler.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1190">
-          <folding />
-        </state>
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1190" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Function.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="0" selection-start="39" selection-end="39" vertical-scroll-proportion="0.055194806" vertical-offset="0" max-vertical-offset="924">
-          <folding />
-        </state>
+        <state line="3" column="0" selection-start="39" selection-end="39" vertical-scroll-proportion="0.055194806" vertical-offset="0" max-vertical-offset="924" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/FunctionHandler.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="76" column="23" selection-start="1999" selection-end="1999" vertical-scroll-proportion="1.3982683" vertical-offset="0" max-vertical-offset="1411">
-          <folding>
-            <element signature="e#0#14#0" expanded="false" />
-          </folding>
-        </state>
+        <state line="76" column="23" selection-start="1999" selection-end="1999" vertical-scroll-proportion="1.3982683" vertical-offset="0" max-vertical-offset="1411" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/IRCMessage.py">
@@ -399,215 +378,137 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/timeparse.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="35" column="6" selection-start="1316" selection-end="1316" vertical-scroll-proportion="0.6439394" vertical-offset="0" max-vertical-offset="2210">
-          <folding />
-        </state>
+        <state line="35" column="6" selection-start="1316" selection-end="1316" vertical-scroll-proportion="0.6439394" vertical-offset="0" max-vertical-offset="2210" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/BotHandler.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="1" column="18" selection-start="55" selection-end="55" vertical-scroll-proportion="0.018398268" vertical-offset="0" max-vertical-offset="1224">
-          <folding />
-        </state>
+        <state line="1" column="18" selection-start="55" selection-end="55" vertical-scroll-proportion="0.018398268" vertical-offset="0" max-vertical-offset="1224" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/newDB.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="924">
-          <folding />
-        </state>
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="924" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/GlobalVars.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="748">
-          <folding />
-        </state>
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="748" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/enumType.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="924">
-          <folding />
-        </state>
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="924" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Functions/Silly.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="17" selection-start="361" selection-end="361" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1411">
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Hubbot.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="0" selection-start="94" selection-end="140" vertical-scroll-proportion="0.036796536" vertical-offset="0" max-vertical-offset="2703">
-          <folding />
-        </state>
+        <state line="8" column="17" selection-start="361" selection-end="361" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1411" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Functions/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="924">
-          <folding />
-        </state>
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="924" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Functions/BotHandling.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="0" selection-start="151" selection-end="151" vertical-scroll-proportion="0.09199134" vertical-offset="0" max-vertical-offset="1224">
-          <folding>
-            <element signature="e#0#36#0" expanded="true" />
-          </folding>
-        </state>
+        <state line="5" column="0" selection-start="151" selection-end="151" vertical-scroll-proportion="0.09199134" vertical-offset="0" max-vertical-offset="1224" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Functions/Headcanon.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="16" selection-start="80" selection-end="80" vertical-scroll-proportion="0.09199134" vertical-offset="0" max-vertical-offset="2091">
-          <folding />
-        </state>
+        <state line="5" column="16" selection-start="80" selection-end="80" vertical-scroll-proportion="0.09199134" vertical-offset="0" max-vertical-offset="2091" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Functions/FuncLoader.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="17" selection-start="97" selection-end="97" vertical-scroll-proportion="0.036796536" vertical-offset="0" max-vertical-offset="1717">
-          <folding />
-        </state>
+        <state line="2" column="17" selection-start="97" selection-end="97" vertical-scroll-proportion="0.036796536" vertical-offset="0" max-vertical-offset="1717" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Functions/Help.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="17" selection-start="97" selection-end="97" vertical-scroll-proportion="0.036796536" vertical-offset="0" max-vertical-offset="924">
-          <folding />
-        </state>
+        <state line="2" column="17" selection-start="97" selection-end="97" vertical-scroll-proportion="0.036796536" vertical-offset="0" max-vertical-offset="924" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Functions/Hugs.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="0" selection-start="138" selection-end="138" vertical-scroll-proportion="0.12878788" vertical-offset="0" max-vertical-offset="1887">
-          <folding>
-            <element signature="e#0#49#0" expanded="true" />
-          </folding>
-        </state>
+        <state line="7" column="0" selection-start="138" selection-end="138" vertical-scroll-proportion="0.12878788" vertical-offset="0" max-vertical-offset="1887" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Functions/IdentCheck.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="36" column="45" selection-start="2271" selection-end="2271" vertical-scroll-proportion="0.66233766" vertical-offset="0" max-vertical-offset="935">
-          <folding>
-            <element signature="e#0#49#0" expanded="true" />
-          </folding>
-        </state>
+        <state line="36" column="45" selection-start="2271" selection-end="2271" vertical-scroll-proportion="0.66233766" vertical-offset="0" max-vertical-offset="935" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Functions/Join.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="26" column="133" selection-start="989" selection-end="989" vertical-scroll-proportion="0.478355" vertical-offset="0" max-vertical-offset="924">
-          <folding>
-            <element signature="e#0#49#0" expanded="true" />
-          </folding>
-        </state>
+        <state line="26" column="133" selection-start="989" selection-end="989" vertical-scroll-proportion="0.478355" vertical-offset="0" max-vertical-offset="924" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Functions/Leave.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="25" column="97" selection-start="1010" selection-end="1010" vertical-scroll-proportion="0.4599567" vertical-offset="0" max-vertical-offset="924">
-          <folding>
-            <element signature="e#0#49#0" expanded="true" />
-          </folding>
-        </state>
+        <state line="25" column="97" selection-start="1010" selection-end="1010" vertical-scroll-proportion="0.4599567" vertical-offset="0" max-vertical-offset="924" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Functions/Nick.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="23" column="114" selection-start="897" selection-end="897" vertical-scroll-proportion="0.42316017" vertical-offset="0" max-vertical-offset="924">
-          <folding>
-            <element signature="e#0#49#0" expanded="true" />
-          </folding>
-        </state>
+        <state line="23" column="114" selection-start="897" selection-end="897" vertical-scroll-proportion="0.42316017" vertical-offset="0" max-vertical-offset="924" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Functions/Nope.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="97" selection-start="565" selection-end="565" vertical-scroll-proportion="0.25757575" vertical-offset="0" max-vertical-offset="924">
-          <folding>
-            <element signature="e#0#15#0" expanded="false" />
-          </folding>
-        </state>
+        <state line="14" column="97" selection-start="565" selection-end="565" vertical-scroll-proportion="0.25757575" vertical-offset="0" max-vertical-offset="924" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Functions/RoBoBo.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="91" selection-start="774" selection-end="774" vertical-scroll-proportion="0.2943723" vertical-offset="0" max-vertical-offset="924">
-          <folding>
-            <element signature="e#0#49#0" expanded="true" />
-          </folding>
-        </state>
+        <state line="16" column="91" selection-start="774" selection-end="774" vertical-scroll-proportion="0.2943723" vertical-offset="0" max-vertical-offset="924" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Functions/Rustle.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="25" column="156" selection-start="1318" selection-end="1318" vertical-scroll-proportion="0.4599567" vertical-offset="0" max-vertical-offset="924">
-          <folding>
-            <element signature="e#0#49#0" expanded="true" />
-          </folding>
-        </state>
+        <state line="25" column="156" selection-start="1318" selection-end="1318" vertical-scroll-proportion="0.4599567" vertical-offset="0" max-vertical-offset="924" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Functions/Roll.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="113" column="12" selection-start="5396" selection-end="5396" vertical-scroll-proportion="2.0790043" vertical-offset="0" max-vertical-offset="2176">
-          <folding>
-            <element signature="e#0#49#0" expanded="true" />
-          </folding>
-        </state>
+        <state line="113" column="12" selection-start="5396" selection-end="5396" vertical-scroll-proportion="2.0790043" vertical-offset="0" max-vertical-offset="2176" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Functions/Servers.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="39" column="79" selection-start="2366" selection-end="2366" vertical-scroll-proportion="0.71753246" vertical-offset="0" max-vertical-offset="924">
-          <folding>
-            <element signature="e#0#49#0" expanded="true" />
-          </folding>
-        </state>
+        <state line="39" column="79" selection-start="2366" selection-end="2366" vertical-scroll-proportion="0.71753246" vertical-offset="0" max-vertical-offset="924" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Functions/Source.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="80" selection-start="539" selection-end="539" vertical-scroll-proportion="0.31277058" vertical-offset="0" max-vertical-offset="924">
-          <folding>
-            <element signature="e#0#49#0" expanded="true" />
-          </folding>
-        </state>
+        <state line="17" column="80" selection-start="539" selection-end="539" vertical-scroll-proportion="0.31277058" vertical-offset="0" max-vertical-offset="924" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/twisted/internet/reactor.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="37" column="36" selection-start="1844" selection-end="1844" vertical-scroll-proportion="0.6439394" vertical-offset="0" max-vertical-offset="924">
-          <folding />
-        </state>
+        <state line="37" column="36" selection-start="1844" selection-end="1844" vertical-scroll-proportion="0.6439394" vertical-offset="0" max-vertical-offset="924" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/twisted/application/reactors.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="0" selection-start="374" selection-end="374" vertical-scroll-proportion="-0.41666666" vertical-offset="572" max-vertical-offset="1496">
-          <folding />
-        </state>
+        <state line="14" column="0" selection-start="374" selection-end="374" vertical-scroll-proportion="-0.41666666" vertical-offset="572" max-vertical-offset="1496" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/twisted/application/internet.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="6885">
-          <folding />
-        </state>
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="6885" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Functions/Timer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="29" selection-start="116" selection-end="116" vertical-scroll-proportion="0.036796536" vertical-offset="0" max-vertical-offset="924">
+        <state line="2" column="29" selection-start="116" selection-end="116" vertical-scroll-proportion="0.036796536" vertical-offset="0" max-vertical-offset="924" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Hubbot.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2" column="46" selection-start="144" selection-end="144" vertical-scroll-proportion="-0.6926407" vertical-offset="674" max-vertical-offset="2669">
           <folding />
         </state>
       </provider>

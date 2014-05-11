@@ -1,8 +1,6 @@
-import sys, platform, os, traceback, datetime, codecs
+import sys, platform, os, traceback, datetime, codecs, re
 from twisted.words.protocols import irc
 from twisted.internet import protocol, reactor
-import re
-
 from IRCResponse import ResponseType
 from IRCMessage import IRCMessage
 import GlobalVars
@@ -76,7 +74,7 @@ class Hubbot(irc.IRCClient):
         self.handleMessage(message)
 
     def sendResponse(self, response):
-        if response == None or response.Response == None:
+        if response is None or response.Response is None:
             return False
 
         if response.Type == ResponseType.Say:
