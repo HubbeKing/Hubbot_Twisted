@@ -4,7 +4,7 @@ from CommandInterface import CommandInterface
 
 
 class Command(CommandInterface):
-    Help = "nope - nope"
+    help = "Nope."
     seconds = 300
     lastTriggered = datetime.datetime.min
 

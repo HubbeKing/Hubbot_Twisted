@@ -6,7 +6,7 @@ import string
 
 class Command(CommandInterface):
     triggers = ["rustle"]
-    Help = "rustle <rustlee> - There's no need to be upset."
+    help = "rustle <rustlee> - There's no need to be upset."
 
     def execute(self, Hubbot, message):
         if len(message.ParameterList) < 1:

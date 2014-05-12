@@ -5,7 +5,7 @@ import random
 
 class Command(CommandInterface):
     triggers = ["roll"]
-    Help = "roll <dice> - Roll up some polyhedral dice! Ex: 4d20v +8 - roll 4 20-sided dice, with a +8 modifier and verbose output"
+    help = "roll <dice> - Roll up some polyhedral dice! Ex: 4d20v +8 - roll 4 20-sided dice, with a +8 modifier and verbose output"
 
     def execute(self, Hubbot, message):
         if len(message.ParameterList) > 1:

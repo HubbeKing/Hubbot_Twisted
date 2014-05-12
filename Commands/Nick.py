@@ -6,7 +6,7 @@ import re
 
 class Command(CommandInterface):
     triggers = ["nick"]
-    Help = "nick <nick> - changes the bot's nick to the one specified"
+    help = "nick <nick> - changes the bot's nick to the one specified"
     
     def execute(self, Hubbot, message):
         if message.User.Name not in GlobalVars.admins:

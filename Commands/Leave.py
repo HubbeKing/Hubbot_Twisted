@@ -5,7 +5,7 @@ import GlobalVars
 
 class Command(CommandInterface):
     triggers = ["leave", "gtfo"]
-    Help = "leave/gtfo - makes the bot leave the current channel"
+    help = "leave/gtfo - makes the bot leave the current channel"
 
     def execute(self, Hubbot, message):
         if message.User.Name not in GlobalVars.admins:

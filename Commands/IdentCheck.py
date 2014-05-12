@@ -4,7 +4,7 @@ import random
 
 
 class Command(CommandInterface):
-    Help = "IdentCheck - Find out your TRUE identity... WHAT ARE YOU?"
+    help = "IdentCheck - Find out your TRUE identity... WHAT ARE YOU?"
 
     def shouldExecute(self, message):
         return True

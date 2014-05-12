@@ -9,7 +9,7 @@ import re
 class Command(CommandInterface):
     triggers = ["hugs"]
     acceptedTypes = ["PRIVMSG", "ACTION"]
-    Help = "hugs [nick] -- How many hugs has this person given and received?"
+    help = "hugs [nick] -- How many hugs has this person given and received?"
     # hug_dict is : {"nick":[given, received]}
 
     def execute(self, Hubbot, message):

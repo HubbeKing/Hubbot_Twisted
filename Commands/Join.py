@@ -4,7 +4,7 @@ from CommandInterface import CommandInterface
 
 class Command(CommandInterface):
     triggers = ["join"]
-    Help = 'join <channel> - makes the bot join the specified channel(s)'
+    help = 'join <channel> - makes the bot join the specified channel(s)'
 
     def execute(self, Hubbot, message):
         if len(message.ParameterList) > 0:

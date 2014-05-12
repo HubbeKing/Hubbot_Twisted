@@ -12,9 +12,9 @@ import GlobalVars
 class Command(CommandInterface):
     triggers = ["headcanon"]
     subCommands = ["add", "search", "list", "remove", "help"]
-    Help = "headcanon [function] -- used to store Symphony's headcanon!"
-    Help += "\nHeadcanon functions: {}".format(", ".join(subCommands))
-    Help += "\nSyntax is: {}headcanon help <command>".format(GlobalVars.CommandChar)
+    help = "headcanon [function] -- used to store Symphony's headcanon!"
+    help += "\nHeadcanon functions: {}".format(", ".join(subCommands))
+    help += "\nSyntax is: {}headcanon help <command>".format(GlobalVars.CommandChar)
 
     def execute(self, Hubbot, message):
         filename = "data/data.db"

@@ -6,7 +6,7 @@ from timeparse import timeparse
 
 class Command(CommandInterface):
     triggers = ["timer"]
-    Help = "timer <time> - starts a countdown timer and notifies you when time's up. Max 1yrs0mths0w0d0h0m0s"
+    help = "timer <time> - starts a countdown timer and notifies you when time's up. Max 1yrs0mths0w0d0h0m0s"
 
     def execute(self, Hubbot, message):
         flag = False

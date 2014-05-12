@@ -5,7 +5,7 @@ from CommandHandler import LoadCommand, UnloadCommand
 
 class Command(CommandInterface):
     acceptedTypes = ["JOIN","QUIT"]
-    Help = "RoBoBo joins, IdentCheck unloads. RoBoBo leaves, IdentCheck loads."
+    help = "RoBoBo joins, IdentCheck unloads. RoBoBo leaves, IdentCheck loads."
 
     def execute(self, Hubbot, message):
         if message.Type == 'JOIN':

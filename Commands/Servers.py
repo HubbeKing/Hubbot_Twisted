@@ -4,7 +4,7 @@ import GlobalVars
 
 
 class Command(CommandInterface):
-    Help = "mumble, gmod, starbound, starbound2, jcmp, tetri, cockatrice, kf -- Used to post server info for games! Usage: {}<server>".format(GlobalVars.CommandChar)
+    help = "mumble, gmod, starbound, starbound2, jcmp, tetri, cockatrice, kf -- Used to post server info for games! Usage: {}<server>".format(GlobalVars.CommandChar)
     gmodMods = 'List of mods needed for GMOD: http://steamcommunity.com/sharedfiles/filedetails/?id=185811989'
     gmodIP = "The Garrys Mod server is hosted at: gmod.dahou.se"
 
@@ -32,7 +32,7 @@ class Command(CommandInterface):
 
     def execute(self, Hubbot, message):
         if message.Command == "servers":
-            return IRCResponse(ResponseType.Say, self.Help, message.ReplyTo)
+            return IRCResponse(ResponseType.Say, self.help, message.ReplyTo)
         elif message.Command == "gmod":
             return IRCResponse(ResponseType.Say, self.gmodMods, message.ReplyTo), IRCResponse(ResponseType.Say, self.gmodIP, message.ReplyTo)
         else:

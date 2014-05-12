@@ -4,7 +4,7 @@ import GlobalVars
 
 
 class Command(CommandInterface):
-    Help = "donotwant, yes, yup, store, goat, stupid, fixyou, heya, HNGH, PS, whoa, what, mybrand, both, no, disappoint -- Used to post silly things! Usage: {}<thing>".format(GlobalVars.CommandChar)
+    help = "donotwant, yes, yup, store, goat, stupid, fixyou, heya, HNGH, PS, whoa, what, mybrand, both, no, disappoint -- Used to post silly things! Usage: {}<thing>".format(GlobalVars.CommandChar)
 
     def onStart(self):
         self.linkDict = \
@@ -41,7 +41,7 @@ class Command(CommandInterface):
 
     def execute(self, Hubbot, message):
         if message.Command == "silly":
-            return IRCResponse(ResponseType.Say, self.Help, message.ReplyTo)
+            return IRCResponse(ResponseType.Say, self.help, message.ReplyTo)
         elif message.Command == "hunt":
             if message.User.Name in GlobalVars.admins:
                 line1 = "LAPTOP CHAT ENGAGE"
