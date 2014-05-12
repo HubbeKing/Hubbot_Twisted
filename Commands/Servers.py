@@ -19,7 +19,8 @@ class Command(CommandInterface):
                 "jcmp":"Ricin's Just Cause 2 MP server is hosted at: jcmp.117.me",
                 "tetri":"Ricin's Tetrinet server is hosted at: tn.ricin.us",
                 "cockatrice":"The Cockatrice server is hosted at: cockatrice.dahou.se:4747",
-                "kf":"The Killing Floor server is hosted at: kf.dahou.se"
+                "kf":"The Killing Floor server is hosted at: kf.dahou.se",
+                "<server>":"Seriously?"
             }
         self.triggers.extend(self.serverDict.keys())
 
