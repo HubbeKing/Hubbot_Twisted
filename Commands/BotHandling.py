@@ -1,4 +1,3 @@
-from twisted.internet import reactor
 from IRCResponse import IRCResponse, ResponseType
 from CommandInterface import CommandInterface
 import GlobalVars
@@ -7,7 +6,7 @@ import datetime
 
 class Command(CommandInterface):
     triggers = ["connect", "quit", "quitfrom", "restart", "shutdown"]
-    Help = "connect <server> <channel>, quit, quitfrom <server>, restart, shutdown - Connect to / Disconnect from servers, Restart current bot, Shut down all bots"
+    help = "connect <server> <channel>, quit, quitfrom <server>, restart, shutdown - Connect to / Disconnect from servers, Restart current bot, Shut down all bots"
 
     def execute(self, Hubbot, message):
         if message.User.Name not in GlobalVars.admins:
@@ -51,10 +50,10 @@ class Command(CommandInterface):
         if message.Command == "restart":
             if datetime.datetime.now() > Hubbot.startTime + datetime.timedelta(seconds=10):
                 server = Hubbot.server
-                port = Hubbot.port
+                port = GlobalVars.bothandler.botfactories[server].port
                 channels = Hubbot.channels
                 GlobalVars.bothandler.stopBotFactory(Hubbot.server, "Restarting...")
-                reactor.callLater(4.0, GlobalVars.bothandler.startBotFactory(server, port, channels))
+                GlobalVars.bothandler.startBotFactory(server, port, channels)
                 return
 
         if message.Command == "shutdown":

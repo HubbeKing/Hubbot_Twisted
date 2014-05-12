@@ -127,6 +127,7 @@ class Hubbot(irc.IRCClient):
 
 class HubbotFactory(protocol.ReconnectingClientFactory):
     def __init__(self, server, port, channels):
+        self.port = port
         self.protocol = Hubbot(server, channels)
         reactor.connectTCP(server, port, self)
 
