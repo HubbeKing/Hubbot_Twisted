@@ -1,18 +1,15 @@
 from twisted.internet import reactor
 from IRCResponse import IRCResponse, ResponseType
-from Function import Function
+from CommandInterface import CommandInterface
 import GlobalVars
 import datetime
 
 
-class Instantiate(Function):
+class Command(CommandInterface):
+    triggers = ["connect", "quit", "quitfrom", "restart", "shutdown"]
     Help = "connect <server> <channel>, quit, quitfrom <server>, restart, shutdown - Connect to / Disconnect from servers, Restart current bot, Shut down all bots"
 
-    def GetResponse(self, Hubbot, message):
-        if message.Type != "PRIVMSG":
-            return
-        if message.Command not in ["quit", "quitfrom", "restart", "shutdown"]:
-            return
+    def execute(self, Hubbot, message):
         if message.User.Name not in GlobalVars.admins:
             return IRCResponse(ResponseType.Say, "You are not allowed to use '{}'".format(message.Command), message.ReplyTo)
 

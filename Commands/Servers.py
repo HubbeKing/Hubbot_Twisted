@@ -1,9 +1,10 @@
 from IRCResponse import IRCResponse, ResponseType
-from Function import Function
+from CommandInterface import CommandInterface
 import GlobalVars
 
 
-class Instantiate(Function):
+class Command(CommandInterface):
+    triggers = ["servers", "mumble", "gmod", "starbound", "starbound2", "jcmp", "tetri", "cockatrice", "kf", "<server>"]
     Help = "mumble, gmod, starbound, starbound2, jcmp, tetri, cockatrice, kf -- Used to post server info for games! Usage: {}<server>".format(GlobalVars.CommandChar)
     mumbleIP = 'The mumble server is hosted at: mumble.dahou.se'
     gmodMods = 'List of mods needed for GMOD: http://steamcommunity.com/sharedfiles/filedetails/?id=185811989'
@@ -17,7 +18,7 @@ class Instantiate(Function):
 
     filename = "data/data.db"
 
-    def GetResponse(self, HubbeBot, message):
+    def execute(self, Hubbot, message):
         if message.Command == "servers":
             return IRCResponse(ResponseType.Say, self.Help, message.ReplyTo)
         if message.Command == "mumble":

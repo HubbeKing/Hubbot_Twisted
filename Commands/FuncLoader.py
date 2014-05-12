@@ -1,28 +1,23 @@
 from IRCResponse import IRCResponse, ResponseType
-from Function import Function
+from CommandInterface import CommandInterface
 import GlobalVars
-from FunctionHandler import LoadFunction, UnloadFunction
+from CommandHandler import LoadCommand, UnloadCommand
 
 
-class Instantiate(Function):
-    Help = "load/reload <function>, unload <function> - handles loading/unloading/reloading of functions. Use 'all' with load/reload to reload all active functions"
+class Command(CommandInterface):
+    triggers = ['load', 'reload', 'unload']
+    help = "load/reload <function>, unload <function> - handles loading/unloading/reloading of functions. Use 'all' with load/reload to reload all active functions"
 
-    def GetResponse(self, Hubbot, message):
-        if message.Type != 'PRIVMSG':
-            return
-        
-        if message.Command.lower() not in ['load', 'reload', 'unload']:
-            return
-
+    def execute(self, Hubbot, message):
         if message.User.Name not in GlobalVars.admins:
             return IRCResponse(ResponseType.Say, "Only my admins can use {0}".format(message.Command), message.ReplyTo)
 
         if len(message.ParameterList) == 0:
-            return IRCResponse(ResponseType.Say, "You didn't specify a function name! Usage: {0}".format(self.Help), message.ReplyTo)
+            return IRCResponse(ResponseType.Say, "You didn't specify a function name! Usage: {0}".format(self.help), message.ReplyTo)
 
         if message.Command.lower() in ['load', 'reload']:
             successes, failures, exceptions = self.load(message.ParameterList)
-            
+
         elif message.Command.lower() == "unload":
             successes, failures, exceptions = self.unload(message.ParameterList)
 
@@ -45,12 +40,12 @@ class Instantiate(Function):
         exceptions = []
 
         if len(funcNames) == 1 and 'all' in funcNameCaseMap:
-            for name, func in GlobalVars.functions.iteritems():
+            for name, func in GlobalVars.commands.iteritems():
                 if name == 'FuncLoader':
                     continue
 
-                LoadFunction(name)
-                LoadFunction(name)
+                LoadCommand(name)
+                LoadCommand(name)
 
             return ['all functions'], [], []
 
@@ -58,13 +53,13 @@ class Instantiate(Function):
 
             if funcName == 'funcloader':
                 failures.append("FuncLoader (I can't reload myself)")
-            
+
             else:
                 try:
-                    success = LoadFunction(funcName)
+                    success = LoadCommand(funcName)
                     if success:
-                        LoadFunction(funcName)
-                        successes.append(GlobalVars.functionCaseMapping[funcName])
+                        LoadCommand(funcName)
+                        successes.append(GlobalVars.commandCaseMapping[funcName])
                     else:
                         failures.append(funcNameCaseMap[funcName])
 
@@ -81,10 +76,10 @@ class Instantiate(Function):
         successes = []
         failures = []
         exceptions = []
-        
+
         for funcName in funcNameCaseMap.keys():
             try:
-                success = UnloadFunction(funcName)
+                success = UnloadCommand(funcName)
                 if success:
                     successes.append(funcNameCaseMap[funcName])
                 else:

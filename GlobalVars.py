@@ -1,7 +1,7 @@
 import os
 
-functions = {}
-functionCaseMapping = {}
+commands = {}
+commandCaseMapping = {}
 
 abspath = os.path.abspath(__file__)
 dname = os.path.dirname(abspath)

@@ -1,14 +1,15 @@
 from IRCResponse import IRCResponse, ResponseType
-from Function import Function
+from CommandInterface import CommandInterface
 import random
 
 
-class Instantiate(Function):
+class Command(CommandInterface):
     Help = "IdentCheck - Find out your TRUE identity... WHAT ARE YOU?"
 
-    def GetResponse(self, HubbeBot, message):
-        if message.Type != "PRIVMSG":
-            return
+    def shouldExecute(self, message):
+        return True
+
+    def execute(self, Hubbot, message):
         if message.MessageString.lower().startswith("meow"):
             roll = random.randint(1,20)
             if message.User.Name == "BillTheCat":

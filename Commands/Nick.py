@@ -1,23 +1,16 @@
 from IRCResponse import IRCResponse, ResponseType
-from Function import Function
+from CommandInterface import CommandInterface
 import GlobalVars
 import re
 
 
-class Instantiate(Function):
+class Command(CommandInterface):
+    triggers = ["nick"]
     Help = "nick <nick> - changes the bot's nick to the one specified"
     
-    def GetResponse(self, HubbeBot, message):
-        if message.Type != "PRIVMSG":
-            return
-        
-        match = re.search("^nick(name)?|name$", message.Command, re.IGNORECASE)
-        if not match:
-            return
-            
+    def execute(self, Hubbot, message):
         if message.User.Name not in GlobalVars.admins:
             return IRCResponse(ResponseType.Say, "Only my admins can change my name!", message.ReplyTo)
-        
         if len(message.ParameterList) > 0:
             return IRCResponse(ResponseType.Raw, "NICK {}".format(message.ParameterList[0]), '')
         else:

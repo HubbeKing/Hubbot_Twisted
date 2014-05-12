@@ -1,19 +1,12 @@
 from IRCResponse import IRCResponse, ResponseType
-from Function import Function
-import re
+from CommandInterface import CommandInterface
 
 
-class Instantiate(Function):
+class Command(CommandInterface):
+    triggers = ["join"]
     Help = 'join <channel> - makes the bot join the specified channel(s)'
 
-    def GetResponse(self, HubbeBot, message):
-        if message.Type != 'PRIVMSG':
-            return
-        
-        match = re.search('^join$', message.Command, re.IGNORECASE)
-        if not match:
-            return
-        
+    def execute(self, Hubbot, message):
         if len(message.ParameterList) > 0:
             responses = []
             for param in message.ParameterList:
@@ -21,7 +14,7 @@ class Instantiate(Function):
                 if not channel.startswith('#'):
                     channel = '#' + channel
                 responses.append(IRCResponse(ResponseType.Raw, 'JOIN {}'.format(channel), ''))
-                HubbeBot.channels.append(channel)
+                Hubbot.channels.append(channel)
             return responses
         else:
             return IRCResponse(ResponseType.Say, "{}, you didn't say where I should join".format(message.User.Name), message.ReplyTo)

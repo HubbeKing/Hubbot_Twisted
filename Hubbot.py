@@ -90,17 +90,18 @@ class Hubbot(irc.IRCClient):
             self.sendLine(response.Response.encode('utf-8'))
 
     def handleMessage(self, message):
-        self.responses = []  # in case earlier Function responses caused some weird errors
-        for (name, func) in GlobalVars.functions.items():
+        self.responses = []  # in case earlier command responses caused some weird errors
+        for (name, command) in GlobalVars.commands.items():
             try:
-                response = func.GetResponse(self, message)
-                if response is None:
-                    continue
-                if hasattr(response, '__iter__'):
-                    for r in response:
-                        self.responses.append(r)
-                else:
-                    self.responses.append(response)
+                if command.shouldExecute(message):
+                    response = command.execute(self, message)
+                    if response is None:
+                        continue
+                    if hasattr(response, "__iter__"):
+                        for r in response:
+                            self.responses.append(r)
+                    else:
+                        self.responses.append(response)
             except Exception:
                 print "Python Execution Error in '%s': %s" % (name, str(sys.exc_info()))
                 traceback.print_tb(sys.exc_info()[2])
