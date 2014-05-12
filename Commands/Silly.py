@@ -7,7 +7,7 @@ class Command(CommandInterface):
     Help = "donotwant, yes, yup, store, goat, stupid, fixyou, heya, HNGH, PS, whoa, what, mybrand, both, no, disappoint -- Used to post silly things! Usage: {}<thing>".format(GlobalVars.CommandChar)
 
     def onStart(self):
-        linkDict = \
+        self.linkDict = \
             {
                 "silly":"",
                 "nope":"http://www.youtube.com/watch?v=gvdf5n-zI14",
@@ -31,7 +31,7 @@ class Command(CommandInterface):
                 "<thing>":"Har Har.",
                 "dissapoint":"https://31.media.tumblr.com/cea6574a24b490ada8bec694e87b307b/tumblr_n3blu9k5CW1tsipf6o6_400.gif"
             }
-        self.triggers.extend(linkDict.keys())
+        self.triggers.extend(self.linkDict.keys())
 
     def shouldExecute(self, message):
         if message.Command in self.linkDict.keys and message.Type in self.acceptedTypes:

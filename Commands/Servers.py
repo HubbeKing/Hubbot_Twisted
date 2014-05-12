@@ -9,7 +9,7 @@ class Command(CommandInterface):
     gmodIP = "The Garrys Mod server is hosted at: gmod.dahou.se"
 
     def onStart(self):
-        serverDict = \
+        self.serverDict = \
             {
                 "servers":"",
                 "mumble":'The mumble server is hosted at: mumble.dahou.se',
@@ -21,7 +21,7 @@ class Command(CommandInterface):
                 "cockatrice":"The Cockatrice server is hosted at: cockatrice.dahou.se:4747",
                 "kf":"The Killing Floor server is hosted at: kf.dahou.se"
             }
-        self.triggers.extend(serverDict.keys())
+        self.triggers.extend(self.serverDict.keys())
 
     def shouldExecute(self, message):
         if message.Command in self.serverDict and message.Type in self.acceptedTypes:
