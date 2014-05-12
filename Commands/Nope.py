@@ -9,10 +9,12 @@ class Command(CommandInterface):
     lastTriggered = datetime.datetime.min
 
     def shouldExecute(self, message):
-        if datetime.datetime.now() - self.lastTriggered.seconds >= self.seconds:
-            self.lastTriggered = datetime.datetime.now()
-            return True
+        if message.MessageString.lower().startswith("nope"):
+            if (datetime.datetime.now() - self.lastTriggered).seconds >= self.seconds:
+                self.lastTriggered = datetime.datetime.now()
+                return True
+        else:
+            return False
 
     def execute(self, Hubbot, message):
-        if message.MessageString.lower().startswith("nope"):
-            return IRCResponse(ResponseType.Say, "I don't think so either.", message.ReplyTo)
+        return IRCResponse(ResponseType.Say, "I don't think so either.", message.ReplyTo)
