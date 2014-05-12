@@ -34,7 +34,7 @@ class Command(CommandInterface):
         self.triggers.extend(self.linkDict.keys())
 
     def shouldExecute(self, message):
-        if message.Command in self.linkDict.keys and message.Type in self.acceptedTypes:
+        if message.Command in self.linkDict.keys() and message.Type in self.acceptedTypes:
             return True
         else:
             return False

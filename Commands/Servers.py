@@ -24,7 +24,7 @@ class Command(CommandInterface):
         self.triggers.extend(self.serverDict.keys())
 
     def shouldExecute(self, message):
-        if message.Command in self.serverDict and message.Type in self.acceptedTypes:
+        if message.Command in self.serverDict.keys() and message.Type in self.acceptedTypes:
             return True
         else:
             return False
