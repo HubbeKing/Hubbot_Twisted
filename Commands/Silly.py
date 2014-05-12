@@ -4,7 +4,7 @@ import GlobalVars
 
 
 class Command(CommandInterface):
-    triggers = ["donotwant", "yes", "yup", "store", "goat", "stupid", "fixyou", "heya", "hngh", "ps", "psc", "whoa", "what", "mybrand", "both", "no", "disappoint"]
+    triggers = ["donotwant", "yes", "yup", "store", "goat", "stupid", "fixyou", "heya", "hngh", "ps", "psc", "whoa", "what", "mybrand", "both", "no", "<thing>", "disappoint"]
     Help = "donotwant, yes, yup, store, goat, stupid, fixyou, heya, HNGH, PS, whoa, what, mybrand, both, no, disappoint -- Used to post silly things! Usage: {}<thing>".format(GlobalVars.CommandChar)
 
     def execute(self, Hubbot, message):
