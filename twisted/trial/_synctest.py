@@ -594,7 +594,7 @@ class _Assertions(pyunit.TestCase, object):
     def successResultOf(self, deferred):
         """
         Return the current success result of C{deferred} or raise
-        C{self.failException}.
+        C{self.failureException}.
 
         @param deferred: A L{Deferred<twisted.internet.defer.Deferred>} which
             has a success result.  This means
@@ -629,7 +629,7 @@ class _Assertions(pyunit.TestCase, object):
     def failureResultOf(self, deferred, *expectedExceptionTypes):
         """
         Return the current failure result of C{deferred} or raise
-        C{self.failException}.
+        C{self.failureException}.
 
         @param deferred: A L{Deferred<twisted.internet.defer.Deferred>} which
             has a failure result.  This means
@@ -1207,6 +1207,12 @@ class SynchronousTestCase(_Assertions):
         @return: C{True} if the method fails and no further method/fixture calls
             should be made, C{False} otherwise.
         """
+        if inspect.isgeneratorfunction(method):
+            exc = TypeError(
+                '%r is a generator function and therefore will never run' % (
+                    method,))
+            result.addError(self, failure.Failure(exc))
+            return True
         try:
             runWithWarningsSuppressed(suppress, method)
         except SkipTest as e:

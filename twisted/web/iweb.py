@@ -326,6 +326,28 @@ class IRequest(Interface):
 
 
 
+class IAccessLogFormatter(Interface):
+    """
+    An object which can represent an HTTP request as a line of text for
+    inclusion in an access log file.
+    """
+    def __call__(timestamp, request):
+        """
+        Generate a line for the access log.
+
+        @param timestamp: The time at which the request was completed in the
+            standard format for access logs.
+        @type timestamp: L{unicode}
+
+        @param request: The request object about which to log.
+        @type request: L{twisted.web.server.Request}
+
+        @return: One line describing the request without a trailing newline.
+        @rtype: L{unicode}
+        """
+
+
+
 class ICredentialFactory(Interface):
     """
     A credential factory defines a way to generate a particular kind of
@@ -694,6 +716,36 @@ class IAgent(Interface):
             which prevents that response from being received (including
             problems that prevent the request from being sent).
         @rtype: L{Deferred}
+        """
+
+
+class IPolicyForHTTPS(Interface):
+    """
+    An L{IPolicyForHTTPS} provides a policy for verifying the certificates of
+    HTTPS connections, in the form of a L{client connection creator
+    <twisted.internet.interfaces.IOpenSSLClientConnectionCreator>} per network
+    location.
+
+    @since: 14.0
+    """
+
+    def creatorForNetloc(hostname, port):
+        """
+        Create a L{client connection creator
+        <twisted.internet.interfaces.IOpenSSLClientConnectionCreator>}
+        appropriate for the given URL "netloc"; i.e. hostname and port number
+        pair.
+
+        @param hostname: The name of the requested remote host.
+        @type hostname: L{unicode}
+
+        @param port: The number of the requested remote port.
+        @type port: L{int}
+
+        @return: A client connection creator expressing the security
+            requirements for the given remote host.
+        @rtype: L{client connection creator
+            <twisted.internet.interfaces.IOpenSSLClientConnectionCreator>}
         """
 
 

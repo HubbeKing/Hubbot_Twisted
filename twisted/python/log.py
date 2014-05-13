@@ -18,7 +18,7 @@ from zope.interface import Interface
 
 from twisted.python.compat import unicode, _PY3
 from twisted.python import context
-from twisted.python import _reflectpy3 as reflect
+from twisted.python import reflect
 from twisted.python import util
 from twisted.python import failure
 from twisted.python.threadable import synchronize
@@ -181,6 +181,18 @@ class LogPublisher:
         >>> log.msg('Hello ', 'world.')
 
         This form only works (sometimes) by accident.
+
+        Keyword arguments will be converted into items in the event
+        dict that is passed to L{ILogObserver} implementations.
+        Each implementation, in turn, can define keys that are used
+        by it specifically, in addition to common keys listed at
+        L{ILogObserver.__call__}.
+
+        For example, to set the C{system} parameter while logging
+        a message::
+
+        >>> log.msg('Started', system='Foo')
+
         """
         actualEventDict = (context.get(ILogContext) or {}).copy()
         actualEventDict.update(kw)

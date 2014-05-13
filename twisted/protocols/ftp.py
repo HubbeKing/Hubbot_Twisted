@@ -14,7 +14,6 @@ import operator
 import stat
 import errno
 import fnmatch
-import warnings
 
 try:
     import pwd, grp
@@ -29,7 +28,6 @@ from twisted.internet import reactor, interfaces, protocol, error, defer
 from twisted.protocols import basic, policies
 
 from twisted.python import log, failure, filepath
-from twisted.python.compat import reduce
 
 from twisted.cred import error as cred_error, portal, credentials, checkers
 
@@ -1793,7 +1791,7 @@ class FTPAnonymousShell(object):
 
 
     def _path(self, path):
-        return reduce(filepath.FilePath.child, path, self.filesystemRoot)
+        return self.filesystemRoot.descendant(path)
 
 
     def makeDirectory(self, path):
@@ -2872,36 +2870,11 @@ class FTPClient(FTPClientBasic):
 
     def cwd(self, path):
         """
-        Issues the CWD (Change Working Directory) command. It's also
-        available as changeDirectory, which parses the result.
+        Issues the CWD (Change Working Directory) command.
 
         @return: a L{Deferred} that will be called when done.
         """
         return self.queueStringCommand('CWD ' + self.escapePath(path))
-
-
-    def changeDirectory(self, path):
-        """
-        Change the directory on the server and parse the result to determine
-        if it was successful or not.
-
-        @type path: C{str}
-        @param path: The path to which to change.
-
-        @return: a L{Deferred} which will be called back when the directory
-            change has succeeded or errbacked if an error occurrs.
-        """
-        warnings.warn(
-            "FTPClient.changeDirectory is deprecated in Twisted 8.2 and "
-            "newer.  Use FTPClient.cwd instead.",
-            category=DeprecationWarning,
-            stacklevel=2)
-
-        def cbResult(result):
-            if result[-1][:3] != '250':
-                return failure.Failure(CommandFailed(result))
-            return True
-        return self.cwd(path).addCallback(cbResult)
 
 
     def makeDirectory(self, path):

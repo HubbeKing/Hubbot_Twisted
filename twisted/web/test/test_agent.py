@@ -26,18 +26,29 @@ from twisted.internet.error import ConnectionLost
 from twisted.internet.protocol import Protocol, Factory
 from twisted.internet.defer import Deferred, succeed, CancelledError
 from twisted.internet.endpoints import TCP4ClientEndpoint, SSL4ClientEndpoint
-from twisted.web.client import FileBodyProducer, Request, HTTPConnectionPool
-from twisted.web.client import _WebToNormalContextFactory, ResponseDone
-from twisted.web.client import WebClientContextFactory, _HTTP11ClientFactory
+
+from twisted.web.client import (FileBodyProducer, Request, HTTPConnectionPool,
+                                ResponseDone, _HTTP11ClientFactory)
+
 from twisted.web.iweb import UNKNOWN_LENGTH, IAgent, IBodyProducer, IResponse
 from twisted.web.http_headers import Headers
 from twisted.web._newclient import HTTP11ClientProtocol, Response
+
+from twisted.internet.interfaces import IOpenSSLClientConnectionCreator
+from zope.interface.declarations import implementer
+from twisted.web.iweb import IPolicyForHTTPS
+from twisted.python.deprecate import getDeprecationWarningString
+from twisted.python.versions import Version
+from twisted.web.client import BrowserLikePolicyForHTTPS
 from twisted.web.error import SchemeNotSupported
 
 try:
     from twisted.internet import ssl
-except:
+    from twisted.protocols.tls import TLSMemoryBIOFactory, TLSMemoryBIOProtocol
+except ImportError:
     ssl = None
+else:
+    from twisted.internet._sslverify import ClientTLSOptions
 
 
 
@@ -285,6 +296,21 @@ class FakeReactorAndConnectMixin:
     """
     Reactor = MemoryReactorClock
 
+    @implementer(IPolicyForHTTPS)
+    class StubPolicy(object):
+        """
+        A stub policy for HTTPS URIs which allows HTTPS tests to run even if
+        pyOpenSSL isn't installed.
+        """
+        def creatorForNetloc(self, hostname, port):
+            """
+            Don't actually do anything.
+
+            @param hostname: ignored
+
+            @param port: ignored
+            """
+
     class StubEndpoint(object):
         """
         Endpoint that wraps existing endpoint, substitutes StubHTTPProtocol, and
@@ -309,7 +335,7 @@ class FakeReactorAndConnectMixin:
         Return an Agent suitable for use in tests that wrap the Agent and want
         both a fake reactor and StubHTTPProtocol.
         """
-        agent = client.Agent(reactor)
+        agent = client.Agent(reactor, self.StubPolicy())
         _oldGetEndpoint = agent._getEndpoint
         agent._getEndpoint = lambda *args: (
             self.StubEndpoint(_oldGetEndpoint(*args), self))
@@ -813,26 +839,6 @@ class AgentTests(TestCase, FakeReactorAndConnectMixin, AgentTestsMixin):
         self.assertIsInstance(endpoint, TCP4ClientEndpoint)
 
 
-    def test_connectHTTPS(self):
-        """
-        L{Agent._getEndpoint} return a C{SSL4ClientEndpoint} when passed a
-        scheme of C{'https'}.
-        """
-        expectedHost = 'example.com'
-        expectedPort = 4321
-        endpoint = self.agent._getEndpoint('https', expectedHost, expectedPort)
-        self.assertIsInstance(endpoint, SSL4ClientEndpoint)
-        self.assertEqual(endpoint._host, expectedHost)
-        self.assertEqual(endpoint._port, expectedPort)
-        self.assertIsInstance(endpoint._sslContextFactory,
-                              _WebToNormalContextFactory)
-        # Default context factory was used:
-        self.assertIsInstance(endpoint._sslContextFactory._webContext,
-                              WebClientContextFactory)
-    if ssl is None:
-        test_connectHTTPS.skip = "OpenSSL not present"
-
-
     def test_connectHTTPSCustomContextFactory(self):
         """
         If a context factory is passed to L{Agent.__init__} it will be used to
@@ -998,7 +1004,7 @@ class AgentTests(TestCase, FakeReactorAndConnectMixin, AgentTestsMixin):
         L{Agent} takes a C{connectTimeout} argument which is forwarded to the
         following C{connectSSL} call.
         """
-        agent = client.Agent(self.reactor, connectTimeout=5)
+        agent = client.Agent(self.reactor, self.StubPolicy(), connectTimeout=5)
         agent.request('GET', 'https://foo/')
         timeout = self.reactor.sslClients.pop()[4]
         self.assertEqual(5, timeout)
@@ -1020,7 +1026,8 @@ class AgentTests(TestCase, FakeReactorAndConnectMixin, AgentTestsMixin):
         L{Agent} takes a C{bindAddress} argument which is forwarded to the
         following C{connectSSL} call.
         """
-        agent = client.Agent(self.reactor, bindAddress='192.168.0.1')
+        agent = client.Agent(self.reactor, self.StubPolicy(),
+                             bindAddress='192.168.0.1')
         agent.request('GET', 'https://foo/')
         address = self.reactor.sslClients.pop()[5]
         self.assertEqual('192.168.0.1', address)
@@ -1077,6 +1084,249 @@ class AgentTests(TestCase, FakeReactorAndConnectMixin, AgentTestsMixin):
         """
         request = client.Request(b'FOO', b'/', client.Headers(), None)
         self.assertIdentical(request.absoluteURI, None)
+
+
+
+class AgentHTTPSTests(TestCase, FakeReactorAndConnectMixin):
+    """
+    Tests for the new HTTP client API that depends on SSL.
+    """
+    if ssl is None:
+        skip = "SSL not present, cannot run SSL tests"
+
+
+    def makeEndpoint(self, host='example.com', port=443):
+        """
+        Create an L{Agent} with an https scheme and return its endpoint
+        created according to the arguments.
+
+        @param host: The host for the endpoint.
+        @type host: L{bytes}
+
+        @param port: The port for the endpoint.
+        @type port: L{int}
+
+        @return: An endpoint of an L{Agent} constructed according to args.
+        @rtype: L{SSL4ClientEndpoint}
+        """
+        return client.Agent(self.Reactor())._getEndpoint(b'https', host, port)
+
+
+    def test_endpointType(self):
+        """
+        L{Agent._getEndpoint} return a L{SSL4ClientEndpoint} when passed a
+        scheme of C{'https'}.
+        """
+        self.assertIsInstance(self.makeEndpoint(), SSL4ClientEndpoint)
+
+
+    def test_hostArgumentIsRespected(self):
+        """
+        If a host is passed, the endpoint respects it.
+        """
+        expectedHost = 'example.com'
+        endpoint = self.makeEndpoint(host=expectedHost)
+        self.assertEqual(endpoint._host, expectedHost)
+
+
+    def test_portArgumentIsRespected(self):
+        """
+        If a port is passed, the endpoint respects it.
+        """
+        expectedPort = 4321
+        endpoint = self.makeEndpoint(port=expectedPort)
+        self.assertEqual(endpoint._port, expectedPort)
+
+
+    def test_contextFactoryType(self):
+        """
+        L{Agent} wraps its connection creator creator and uses modern TLS APIs.
+        """
+        endpoint = self.makeEndpoint()
+        contextFactory = endpoint._sslContextFactory
+        self.assertIsInstance(contextFactory, ClientTLSOptions)
+        self.assertEqual(contextFactory._hostname, u"example.com")
+
+
+    def test_connectHTTPSCustomConnectionCreator(self):
+        """
+        If a custom L{WebClientConnectionCreator}-like object is passed to
+        L{Agent.__init__} it will be used to determine the SSL parameters for
+        HTTPS requests.  When an HTTPS request is made, the hostname and port
+        number of the request URL will be passed to the connection creator's
+        C{creatorForNetloc} method.  The resulting context object will be used
+        to establish the SSL connection.
+        """
+        expectedHost = 'example.org'
+        expectedPort = 20443
+        class JustEnoughConnection(object):
+            handshakeStarted = False
+            connectState = False
+            def do_handshake(self):
+                """
+                The handshake started.  Record that fact.
+                """
+                self.handshakeStarted = True
+            def set_connect_state(self):
+                """
+                The connection started.  Record that fact.
+                """
+                self.connectState = True
+
+        contextArgs = []
+
+        @implementer(IOpenSSLClientConnectionCreator)
+        class JustEnoughCreator(object):
+            def __init__(self, hostname, port):
+                self.hostname = hostname
+                self.port = port
+
+            def clientConnectionForTLS(self, tlsProtocol):
+                """
+                Implement L{IOpenSSLClientConnectionCreator}.
+
+                @param tlsProtocol: The TLS protocol.
+                @type tlsProtocol: L{TLSMemoryBIOProtocol}
+
+                @return: C{expectedConnection}
+                """
+                contextArgs.append((tlsProtocol, self.hostname, self.port))
+                return expectedConnection
+
+        expectedConnection = JustEnoughConnection()
+        @implementer(IPolicyForHTTPS)
+        class StubBrowserLikePolicyForHTTPS(object):
+            def creatorForNetloc(self, hostname, port):
+                """
+                Emulate L{BrowserLikePolicyForHTTPS}.
+
+                @param hostname: The hostname to verify.
+                @type hostname: L{unicode}
+
+                @param port: The port number.
+                @type port: L{int}
+
+                @return: a stub L{IOpenSSLClientConnectionCreator}
+                @rtype: L{JustEnoughCreator}
+                """
+                return JustEnoughCreator(hostname, port)
+
+        expectedCreatorCreator = StubBrowserLikePolicyForHTTPS()
+        reactor = self.Reactor()
+        agent = client.Agent(reactor, expectedCreatorCreator)
+        endpoint = agent._getEndpoint('https', expectedHost, expectedPort)
+        endpoint.connect(Factory.forProtocol(Protocol))
+        passedFactory = reactor.sslClients[-1][2]
+        passedContextFactory = reactor.sslClients[-1][3]
+        tlsFactory = TLSMemoryBIOFactory(
+            passedContextFactory, True, passedFactory
+        )
+        tlsProtocol = tlsFactory.buildProtocol(None)
+        tlsProtocol.makeConnection(StringTransport())
+        tls = contextArgs[0][0]
+        self.assertIsInstance(tls, TLSMemoryBIOProtocol)
+        self.assertEqual(contextArgs[0][1:], (expectedHost, expectedPort))
+        self.assertTrue(expectedConnection.handshakeStarted)
+        self.assertTrue(expectedConnection.connectState)
+
+
+    def test_deprecatedDuckPolicy(self):
+        """
+        Passing something that duck-types I{like} a L{web client context
+        factory <twisted.web.client.WebClientContextFactory>} - something that
+        does not provide L{IPolicyForHTTPS} - to L{Agent} emits a
+        L{DeprecationWarning} even if you don't actually C{import
+        WebClientContextFactory} to do it.
+        """
+        def warnMe():
+            client.Agent(MemoryReactorClock(),
+                         "does-not-provide-IPolicyForHTTPS")
+        warnMe()
+        warnings = self.flushWarnings([warnMe])
+        self.assertEqual(len(warnings), 1)
+        [warning] = warnings
+        self.assertEqual(warning['category'], DeprecationWarning)
+        self.assertEqual(
+            warning['message'],
+            "'does-not-provide-IPolicyForHTTPS' was passed as the HTTPS "
+            "policy for an Agent, but it does not provide IPolicyForHTTPS.  "
+            "Since Twisted 14.0, you must pass a provider of IPolicyForHTTPS."
+        )
+
+
+
+class WebClientContextFactoryTests(TestCase):
+    """
+    Tests for the context factory wrapper for web clients
+    L{twisted.web.client.WebClientContextFactory}.
+    """
+
+    def setUp(self):
+        """
+        Get WebClientContextFactory while quashing its deprecation warning.
+        """
+        from twisted.web.client import WebClientContextFactory
+        self.warned = self.flushWarnings([WebClientContextFactoryTests.setUp])
+        self.webClientContextFactory = WebClientContextFactory
+
+
+    def test_deprecated(self):
+        """
+        L{twisted.web.client.WebClientContextFactory} is deprecated.  Importing
+        it displays a warning.
+        """
+        self.assertEqual(len(self.warned), 1)
+        [warning] = self.warned
+        self.assertEqual(warning['category'], DeprecationWarning)
+        self.assertEqual(
+            warning['message'],
+            getDeprecationWarningString(
+                self.webClientContextFactory, Version("Twisted", 14, 0, 0),
+                replacement=BrowserLikePolicyForHTTPS,
+            )
+
+            # See https://twistedmatrix.com/trac/ticket/7242
+            .replace(";", ":")
+        )
+
+
+    def test_missingSSL(self):
+        """
+        If C{getContext} is called and SSL is not available, raise
+        L{NotImplementedError}.
+        """
+        self.assertRaises(
+            NotImplementedError,
+            self.webClientContextFactory().getContext,
+            'example.com', 443,
+        )
+
+
+    def test_returnsContext(self):
+        """
+        If SSL is present, C{getContext} returns a L{SSL.Context}.
+        """
+        ctx = self.webClientContextFactory().getContext('example.com', 443)
+        self.assertIsInstance(ctx, ssl.SSL.Context)
+
+
+    def test_setsTrustRootOnContextToDefaultTrustRoot(self):
+        """
+        The L{CertificateOptions} has C{trustRoot} set to the default trust
+        roots.
+        """
+        ctx = self.webClientContextFactory()
+        certificateOptions = ctx._getCertificateOptions('example.com', 443)
+        self.assertIsInstance(
+            certificateOptions.trustRoot, ssl.OpenSSLDefaultPaths)
+
+
+    if ssl is None:
+        test_returnsContext.skip = "SSL not present, cannot run SSL tests."
+        test_setsTrustRootOnContextToDefaultTrustRoot.skip = (
+            "SSL not present, cannot run SSL tests.")
+    else:
+        test_missingSSL.skip = "SSL present."
 
 
 
