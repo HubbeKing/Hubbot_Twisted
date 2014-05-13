@@ -36,9 +36,9 @@ def LoadModule(name, loadAs=''):
     else:
         print '-- {0} loaded'.format(src.__name__)
 
-    command = src.Command()
+    module = src.Module()
 
-    GlobalVars.modules.update({cmdListCaseMap[name]:command})
+    GlobalVars.modules.update({cmdListCaseMap[name]:module})
     GlobalVars.moduleCaseMapping.update({name : cmdListCaseMap[name]})
 
     return True
@@ -57,10 +57,10 @@ def UnloadModule(name):
 
 def AutoLoadModules():
 
-    for command in GetModuleDirList():
-        if command not in GlobalVars.nonDefaultModules:
+    for module in GetModuleDirList():
+        if module not in GlobalVars.nonDefaultModules:
             try:
-                LoadModule(command)
+                LoadModule(module)
             except Exception, x:
                 print x.args
 
