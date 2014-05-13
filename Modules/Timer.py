@@ -8,7 +8,7 @@ class Module(ModuleInterface):
     triggers = ["timer"]
     help = "timer <time> - starts a countdown timer and notifies you when time's up. Max 1yrs0mths0w0d0h0m0s"
 
-    def execute(self, Hubbot, message):
+    def trigger(self, Hubbot, message):
         flag = False
         if len(message.ParameterList) != 1:
             return IRCResponse(ResponseType.Say, "Please use only 1 argument.", message.ReplyTo)

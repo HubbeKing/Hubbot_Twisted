@@ -24,13 +24,13 @@ class Module(ModuleInterface):
             }
         self.triggers.extend(self.serverDict.keys())
 
-    def shouldExecute(self, message):
+    def shouldTrigger(self, message):
         if message.Command in self.serverDict.keys() and message.Type in self.acceptedTypes:
             return True
         else:
             return False
 
-    def execute(self, Hubbot, message):
+    def trigger(self, Hubbot, message):
         if message.Command == "servers":
             return IRCResponse(ResponseType.Say, self.help, message.ReplyTo)
         elif message.Command == "gmod":

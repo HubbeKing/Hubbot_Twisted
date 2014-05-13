@@ -93,8 +93,8 @@ class Hubbot(irc.IRCClient):
         self.responses = []  # in case earlier command responses caused some weird errors
         for (name, command) in GlobalVars.modules.items():
             try:
-                if command.shouldExecute(message):
-                    response = command.execute(self, message)
+                if command.shouldTrigger(message):
+                    response = command.trigger(self, message)
                     if response is None:
                         continue
                     if hasattr(response, "__iter__"):

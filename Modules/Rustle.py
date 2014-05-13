@@ -8,7 +8,7 @@ class Module(ModuleInterface):
     triggers = ["rustle"]
     help = "rustle <rustlee> - There's no need to be upset."
 
-    def execute(self, Hubbot, message):
+    def trigger(self, Hubbot, message):
         if len(message.ParameterList) < 1:
             return IRCResponse(ResponseType.Say, "Rustle who?", message.ReplyTo)
         else:

@@ -8,7 +8,7 @@ class Module(ModuleInterface):
     triggers = ["connect", "quit", "quitfrom", "restart", "shutdown"]
     help = "connect <server> <channel>, quit, quitfrom <server>, restart, shutdown - Connect to / Disconnect from servers, Restart current bot, Shut down all bots"
 
-    def execute(self, Hubbot, message):
+    def trigger(self, Hubbot, message):
         if message.User.Name not in GlobalVars.admins:
             return IRCResponse(ResponseType.Say, "You are not allowed to use '{}'".format(message.Command), message.ReplyTo)
 

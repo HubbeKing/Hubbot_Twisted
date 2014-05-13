@@ -7,15 +7,15 @@ def LoadModule(name, loadAs=''):
 
     name = name.lower()
 
-    cmdList = GetModuleDirList()
-    cmdListCaseMap = {key.lower(): key for key in cmdList}
+    moduleList = GetModuleDirList()
+    moduleListCaseMap = {key.lower(): key for key in moduleList}
 
-    if name not in cmdListCaseMap:
+    if name not in moduleListCaseMap:
         return False
 
     alreadyExisted = False
 
-    src = __import__('Modules.' + cmdListCaseMap[name], globals(), locals(), [])
+    src = __import__('Modules.' + moduleListCaseMap[name], globals(), locals(), [])
     if loadAs != '':
         name = loadAs.lower()
     if name in GlobalVars.moduleCaseMapping:
@@ -27,7 +27,7 @@ def LoadModule(name, loadAs=''):
 
     reload(src)
 
-    components = cmdListCaseMap[name].split('.')
+    components = moduleListCaseMap[name].split('.')
     for comp in components[:1]:
         src = getattr(src, comp)
 
@@ -38,8 +38,8 @@ def LoadModule(name, loadAs=''):
 
     module = src.Module()
 
-    GlobalVars.modules.update({cmdListCaseMap[name]:module})
-    GlobalVars.moduleCaseMapping.update({name : cmdListCaseMap[name]})
+    GlobalVars.modules.update({moduleListCaseMap[name]:module})
+    GlobalVars.moduleCaseMapping.update({name : moduleListCaseMap[name]})
 
     return True
 

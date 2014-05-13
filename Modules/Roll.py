@@ -7,7 +7,7 @@ class Module(ModuleInterface):
     triggers = ["roll"]
     help = "roll <dice> - Roll up some polyhedral dice! Ex: 4d20v +8 - roll 4 20-sided dice, with a +8 modifier and verbose output"
 
-    def execute(self, Hubbot, message):
+    def trigger(self, Hubbot, message):
         if len(message.ParameterList) > 1:
             if message.ParameterList[0].find("v") == -1 and message.ParameterList[1].find("v") == -1:
                 verbose = False

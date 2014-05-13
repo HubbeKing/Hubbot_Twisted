@@ -7,7 +7,7 @@ class Module(ModuleInterface):
     triggers = ["leave", "gtfo"]
     help = "leave/gtfo - makes the bot leave the current channel"
 
-    def execute(self, Hubbot, message):
+    def trigger(self, Hubbot, message):
         if message.User.Name not in GlobalVars.admins:
             return IRCResponse(ResponseType.Say, 'Only my admins can tell me to {}'.format(message.Command), message.ReplyTo)
         if len(message.ParameterList) > 0:

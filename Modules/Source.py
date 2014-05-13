@@ -7,5 +7,5 @@ class Module(ModuleInterface):
     triggers = ["source"]
     help = "source - returns a link to {}'s source".format(GlobalVars.CurrentNick)
 
-    def execute(self, Hubbot, message):
+    def trigger(self, Hubbot, message):
         return IRCResponse(ResponseType.Say, GlobalVars.source, message.ReplyTo)

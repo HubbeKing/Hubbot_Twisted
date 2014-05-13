@@ -9,7 +9,7 @@ class ModuleInterface(object):
     def onStart(self):
         pass
 
-    def shouldExecute(self, message):
+    def shouldTrigger(self, message):
         if message.Type not in self.acceptedTypes:
             return False
         if message.Command not in self.triggers:
@@ -17,5 +17,5 @@ class ModuleInterface(object):
 
         return True
 
-    def execute(self, Hubbot, message):
+    def trigger(self, Hubbot, message):
         pass

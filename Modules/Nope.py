@@ -8,7 +8,7 @@ class Module(ModuleInterface):
     seconds = 300
     lastTriggered = datetime.datetime.min
 
-    def shouldExecute(self, message):
+    def shouldTrigger(self, message):
         if message.MessageString.lower().startswith("nope"):
             if (datetime.datetime.now() - self.lastTriggered).seconds >= self.seconds:
                 self.lastTriggered = datetime.datetime.now()
@@ -16,5 +16,5 @@ class Module(ModuleInterface):
         else:
             return False
 
-    def execute(self, Hubbot, message):
+    def trigger(self, Hubbot, message):
         return IRCResponse(ResponseType.Say, "I don't think so either.", message.ReplyTo)

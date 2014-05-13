@@ -6,10 +6,10 @@ import random
 class Module(ModuleInterface):
     help = "IdentCheck - Find out your TRUE identity... WHAT ARE YOU?"
 
-    def shouldExecute(self, message):
+    def shouldTrigger(self, message):
         return True
 
-    def execute(self, Hubbot, message):
+    def trigger(self, Hubbot, message):
         if message.MessageString.lower().startswith("meow"):
             roll = random.randint(1,20)
             if message.User.Name == "BillTheCat":

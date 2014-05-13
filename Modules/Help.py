@@ -7,7 +7,7 @@ class Module(ModuleInterface):
     triggers = ['help','command','commands']
     help = 'command(s)/help (<function>) - returns a list of loaded modules, or the help text of a particular command if one is specified'
     
-    def execute(self, Hubbot, message):
+    def trigger(self, Hubbot, message):
         if len(message.ParameterList) > 0:
             if message.ParameterList[0].lower() in GlobalVars.moduleCaseMapping:
                 func = GlobalVars.modules[GlobalVars.moduleCaseMapping[message.ParameterList[0].lower()]]

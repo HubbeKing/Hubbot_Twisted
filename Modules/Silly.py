@@ -33,13 +33,13 @@ class Module(ModuleInterface):
             }
         self.triggers.extend(self.linkDict.keys())
 
-    def shouldExecute(self, message):
+    def shouldTrigger(self, message):
         if message.Command in self.linkDict.keys() and message.Type in self.acceptedTypes:
             return True
         else:
             return False
 
-    def execute(self, Hubbot, message):
+    def trigger(self, Hubbot, message):
         if message.Command == "silly":
             return IRCResponse(ResponseType.Say, self.help, message.ReplyTo)
         elif message.Command == "hunt":
