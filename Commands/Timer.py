@@ -25,15 +25,8 @@ class Command(CommandInterface):
             return IRCResponse(ResponseType.Say, "Less than a second? Really?", message.ReplyTo)
 
         else:
-            reactor.callLater(delay, self.notifyUser, Hubbot, flag, message)
+            reactor.callLater(delay, Hubbot.notifyUser, flag, message)
             if flag:
                 return IRCResponse(ResponseType.Say, "{}: A {} second timer has been started!".format(message.User.Name, message.ParameterList[0]), message.ReplyTo)
             else:
                 return IRCResponse(ResponseType.Say, "{}: A {} timer has been started!".format(message.User.Name,message.ParameterList[0]), message.ReplyTo)
-
-
-def notifyUser(self, Hubbot, flag, message):
-    if flag:
-        Hubbot.sendResponse(IRCResponse(ResponseType.Say, "{}: Your {} second timer is up!".format(message.User.Name, message.ParameterList[0]), message.ReplyTo))
-    else:
-        Hubbot.sendResponse(IRCResponse(ResponseType.Say, "{}: Your {} timer is up!".format(message.User.Name, message.ParameterList[0]), message.ReplyTo))

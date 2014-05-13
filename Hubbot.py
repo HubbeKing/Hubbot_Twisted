@@ -1,7 +1,7 @@
 import sys, platform, os, traceback, datetime, codecs, re
 from twisted.words.protocols import irc
 from twisted.internet import protocol, reactor
-from IRCResponse import ResponseType
+from IRCResponse import ResponseType, IRCResponse
 from IRCMessage import IRCMessage
 import GlobalVars
 
@@ -123,6 +123,12 @@ class Hubbot(irc.IRCClient):
 
         with codecs.open(filePath, 'a+', 'utf-8') as f:
             f.write(data + '\n')
+
+    def notifyUser(self, flag, message):
+        if flag:
+            self.sendResponse(IRCResponse(ResponseType.Say, "{}: Your {} second timer is up!".format(message.User.Name, message.ParameterList[0]), message.ReplyTo))
+        else:
+            self.sendResponse(IRCResponse(ResponseType.Say, "{}: Your {} timer is up!".format(message.User.Name, message.ParameterList[0]), message.ReplyTo))
 
 
 class HubbotFactory(protocol.ReconnectingClientFactory):
