@@ -39,7 +39,7 @@ class Module(ModuleInterface):
         else:
             return False
 
-    def trigger(self, Hubbot, message):
+    def onTrigger(self, Hubbot, message):
         if message.Command == "silly":
             return IRCResponse(ResponseType.Say, self.help, message.ReplyTo)
         elif message.Command == "hunt":

@@ -17,5 +17,5 @@ class ModuleInterface(object):
 
         return True
 
-    def trigger(self, Hubbot, message):
+    def onTrigger(self, Hubbot, message):
         pass

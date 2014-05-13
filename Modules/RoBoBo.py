@@ -7,7 +7,7 @@ class Module(ModuleInterface):
     acceptedTypes = ["JOIN","QUIT"]
     help = "RoBoBo joins, IdentCheck unloads. RoBoBo leaves, IdentCheck loads."
 
-    def trigger(self, Hubbot, message):
+    def onTrigger(self, Hubbot, message):
         if message.Type == 'JOIN':
             if message.User.Name.startswith("RoBoBo"):
                 FuncLoader.unload("IdentCheck")

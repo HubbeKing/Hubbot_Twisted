@@ -16,5 +16,5 @@ class Module(ModuleInterface):
         else:
             return False
 
-    def trigger(self, Hubbot, message):
+    def onTrigger(self, Hubbot, message):
         return IRCResponse(ResponseType.Say, "I don't think so either.", message.ReplyTo)

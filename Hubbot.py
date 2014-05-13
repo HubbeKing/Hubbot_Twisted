@@ -90,11 +90,11 @@ class Hubbot(irc.IRCClient):
             self.sendLine(response.Response.encode('utf-8'))
 
     def handleMessage(self, message):
-        self.responses = []  # in case earlier command responses caused some weird errors
-        for (name, command) in GlobalVars.modules.items():
+        self.responses = []  # in case earlier module responses caused some weird errors
+        for (name, module) in GlobalVars.modules.items():
             try:
-                if command.shouldTrigger(message):
-                    response = command.trigger(self, message)
+                if module.shouldTrigger(message):
+                    response = module.onTrigger(self, message)
                     if response is None:
                         continue
                     if hasattr(response, "__iter__"):

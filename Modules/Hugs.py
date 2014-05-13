@@ -12,7 +12,7 @@ class Module(ModuleInterface):
     help = "hugs [nick] -- How many hugs has this person given and received?"
     # hug_dict is : {"nick":[given, received]}
 
-    def trigger(self, Hubbot, message):
+    def onTrigger(self, Hubbot, message):
         if message.Type == "ACTION":
             pattern = "hu+g|cuddle|snu+ggle|snu+g|squeeze|glomp"
             match = re.search(pattern, message.MessageList[0], re.IGNORECASE)

@@ -9,7 +9,7 @@ class Module(ModuleInterface):
     def shouldTrigger(self, message):
         return True
 
-    def trigger(self, Hubbot, message):
+    def onTrigger(self, Hubbot, message):
         if message.MessageString.lower().startswith("meow"):
             roll = random.randint(1,20)
             if message.User.Name == "BillTheCat":

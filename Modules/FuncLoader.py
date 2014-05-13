@@ -8,7 +8,7 @@ class Module(ModuleInterface):
     triggers = ['load', 'reload', 'unload']
     help = "load/reload <function>, unload <function> - handles loading/unloading/reloading of functions. Use 'all' with load/reload to reload all active functions"
 
-    def trigger(self, Hubbot, message):
+    def onTrigger(self, Hubbot, message):
         if message.User.Name not in GlobalVars.admins:
             return IRCResponse(ResponseType.Say, "Only my admins can use {0}".format(message.Command), message.ReplyTo)
 

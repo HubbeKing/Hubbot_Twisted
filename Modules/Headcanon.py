@@ -16,7 +16,7 @@ class Module(ModuleInterface):
     help += "\nHeadcanon functions: {}".format(", ".join(subCommands))
     help += "\nSyntax is: {}headcanon help <command>".format(GlobalVars.CommandChar)
 
-    def trigger(self, Hubbot, message):
+    def onTrigger(self, Hubbot, message):
         filename = "data/data.db"
         headcanon = []
         with sqlite3.connect(filename) as conn:

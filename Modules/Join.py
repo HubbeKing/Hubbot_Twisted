@@ -6,7 +6,7 @@ class Module(ModuleInterface):
     triggers = ["join"]
     help = 'join <channel> - makes the bot join the specified channel(s)'
 
-    def trigger(self, Hubbot, message):
+    def onTrigger(self, Hubbot, message):
         if len(message.ParameterList) > 0:
             responses = []
             for param in message.ParameterList:

@@ -6,7 +6,7 @@ class Module(ModuleInterface):
     triggers = ["triggers"]
     help = "triggers -- returns a list of all command triggers, must be over PM"
 
-    def trigger(self, Hubbot, message):
+    def onTrigger(self, Hubbot, message):
         if message.User.Name != message.ReplyTo:
             return IRCResponse(ResponseType.Say, "{} must be used over PM!".format(message.Command), message.ReplyTo)
         else:
