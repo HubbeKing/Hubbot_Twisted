@@ -1,7 +1,7 @@
 import os
 
-commands = {}
-commandCaseMapping = {}
+modules = {}
+moduleCaseMapping = {}
 
 abspath = os.path.abspath(__file__)
 dname = os.path.dirname(abspath)

@@ -1,9 +1,9 @@
 from IRCResponse import IRCResponse, ResponseType
-from CommandInterface import CommandInterface
+from ModuleInterface import ModuleInterface
 import random
 
 
-class Command(CommandInterface):
+class Module(ModuleInterface):
     help = "IdentCheck - Find out your TRUE identity... WHAT ARE YOU?"
 
     def shouldExecute(self, message):

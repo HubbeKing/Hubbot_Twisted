@@ -1,9 +1,9 @@
 from IRCResponse import IRCResponse, ResponseType
-from CommandInterface import CommandInterface
+from ModuleInterface import ModuleInterface
 import GlobalVars
 
 
-class Command(CommandInterface):
+class Module(ModuleInterface):
     help = "donotwant, yes, yup, store, goat, stupid, fixyou, heya, HNGH, PS, whoa, what, mybrand, both, no, disappoint -- Used to post silly things! Usage: {}<thing>".format(GlobalVars.CommandChar)
 
     def onStart(self):

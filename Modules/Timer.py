@@ -1,10 +1,10 @@
 from twisted.internet import reactor
 from IRCResponse import IRCResponse, ResponseType
-from CommandInterface import CommandInterface
+from ModuleInterface import ModuleInterface
 from timeparse import timeparse
 
 
-class Command(CommandInterface):
+class Module(ModuleInterface):
     triggers = ["timer"]
     help = "timer <time> - starts a countdown timer and notifies you when time's up. Max 1yrs0mths0w0d0h0m0s"
 

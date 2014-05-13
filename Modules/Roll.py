@@ -1,9 +1,9 @@
 from IRCResponse import IRCResponse, ResponseType
-from CommandInterface import CommandInterface
+from ModuleInterface import ModuleInterface
 import random
 
 
-class Command(CommandInterface):
+class Module(ModuleInterface):
     triggers = ["roll"]
     help = "roll <dice> - Roll up some polyhedral dice! Ex: 4d20v +8 - roll 4 20-sided dice, with a +8 modifier and verbose output"
 

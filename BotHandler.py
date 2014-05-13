@@ -1,6 +1,6 @@
 from twisted.internet import reactor
 from Hubbot import HubbotFactory
-from CommandHandler import AutoLoadCommands
+from ModuleHandler import AutoLoadModules
 import GlobalVars
 
 
@@ -12,7 +12,7 @@ class BotHandler:
             server = server_with_port.split(":")[0]
             port = int(server_with_port.split(":")[1])
             self.startBotFactory(server, port, channels)
-        AutoLoadCommands()
+        AutoLoadModules()
         GlobalVars.bothandler = self
         reactor.run()
 

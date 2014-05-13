@@ -1,9 +1,9 @@
 from IRCResponse import IRCResponse, ResponseType
-from CommandInterface import CommandInterface
+from ModuleInterface import ModuleInterface
 import GlobalVars
 
 
-class Command(CommandInterface):
+class Module(ModuleInterface):
     triggers = ["source"]
     help = "source - returns a link to {}'s source".format(GlobalVars.CurrentNick)
 

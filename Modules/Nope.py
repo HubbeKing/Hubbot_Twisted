@@ -1,9 +1,9 @@
 import datetime
 from IRCResponse import IRCResponse, ResponseType
-from CommandInterface import CommandInterface
+from ModuleInterface import ModuleInterface
 
 
-class Command(CommandInterface):
+class Module(ModuleInterface):
     help = "Nope."
     seconds = 300
     lastTriggered = datetime.datetime.min

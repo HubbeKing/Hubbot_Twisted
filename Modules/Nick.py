@@ -1,10 +1,10 @@
 from IRCResponse import IRCResponse, ResponseType
-from CommandInterface import CommandInterface
+from ModuleInterface import ModuleInterface
 import GlobalVars
 import re
 
 
-class Command(CommandInterface):
+class Module(ModuleInterface):
     triggers = ["nick"]
     help = "nick <nick> - changes the bot's nick to the one specified"
     

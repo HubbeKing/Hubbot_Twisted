@@ -1,4 +1,4 @@
-class CommandInterface(object):
+class ModuleInterface(object):
     triggers = []
     acceptedTypes = ['PRIVMSG']
     help = '<no help defined (yet)>'

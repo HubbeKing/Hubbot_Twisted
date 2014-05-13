@@ -1,10 +1,10 @@
 from IRCResponse import IRCResponse, ResponseType
-from CommandInterface import CommandInterface
+from ModuleInterface import ModuleInterface
 import random
 import string
 
 
-class Command(CommandInterface):
+class Module(ModuleInterface):
     triggers = ["rustle"]
     help = "rustle <rustlee> - There's no need to be upset."
 

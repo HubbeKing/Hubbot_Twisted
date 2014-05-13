@@ -1,4 +1,4 @@
-from CommandInterface import CommandInterface
+from ModuleInterface import ModuleInterface
 from IRCResponse import IRCResponse, ResponseType
 import GlobalVars
 import string
@@ -6,7 +6,7 @@ import sqlite3
 import re
 
 
-class Command(CommandInterface):
+class Module(ModuleInterface):
     triggers = ["hugs"]
     acceptedTypes = ["PRIVMSG", "ACTION"]
     help = "hugs [nick] -- How many hugs has this person given and received?"

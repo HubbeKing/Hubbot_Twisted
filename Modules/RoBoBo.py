@@ -1,9 +1,9 @@
 from IRCResponse import IRCResponse, ResponseType
-from CommandInterface import CommandInterface
+from ModuleInterface import ModuleInterface
 import FuncLoader
 
 
-class Command(CommandInterface):
+class Module(ModuleInterface):
     acceptedTypes = ["JOIN","QUIT"]
     help = "RoBoBo joins, IdentCheck unloads. RoBoBo leaves, IdentCheck loads."
 

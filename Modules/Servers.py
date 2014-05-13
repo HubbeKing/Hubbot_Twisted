@@ -1,9 +1,9 @@
 from IRCResponse import IRCResponse, ResponseType
-from CommandInterface import CommandInterface
+from ModuleInterface import ModuleInterface
 import GlobalVars
 
 
-class Command(CommandInterface):
+class Module(ModuleInterface):
     help = "mumble, gmod, starbound, starbound2, jcmp, tetri, cockatrice, kf -- Used to post server info for games! Usage: {}<server>".format(GlobalVars.CommandChar)
     gmodMods = 'List of mods needed for GMOD: http://steamcommunity.com/sharedfiles/filedetails/?id=185811989'
     gmodIP = "The Garrys Mod server is hosted at: gmod.dahou.se"

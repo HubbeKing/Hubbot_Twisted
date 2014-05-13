@@ -5,11 +5,11 @@ import sqlite3
 import sys
 import traceback
 from IRCResponse import IRCResponse, ResponseType
-from CommandInterface import CommandInterface
+from ModuleInterface import ModuleInterface
 import GlobalVars
 
 
-class Command(CommandInterface):
+class Module(ModuleInterface):
     triggers = ["headcanon"]
     subCommands = ["add", "search", "list", "remove", "help"]
     help = "headcanon [function] -- used to store Symphony's headcanon!"

@@ -3,11 +3,11 @@ from glob import glob
 import GlobalVars
 
 
-def LoadCommand(name, loadAs=''):
+def LoadModule(name, loadAs=''):
 
     name = name.lower()
 
-    cmdList = GetCommandDirList()
+    cmdList = GetModuleDirList()
     cmdListCaseMap = {key.lower(): key for key in cmdList}
 
     if name not in cmdListCaseMap:
@@ -15,14 +15,14 @@ def LoadCommand(name, loadAs=''):
 
     alreadyExisted = False
 
-    src = __import__('Commands.' + cmdListCaseMap[name], globals(), locals(), [])
+    src = __import__('Modules.' + cmdListCaseMap[name], globals(), locals(), [])
     if loadAs != '':
         name = loadAs.lower()
-    if name in GlobalVars.commandCaseMapping:
+    if name in GlobalVars.moduleCaseMapping:
         alreadyExisted = True
-        properName = GlobalVars.commandCaseMapping[name]
-        del sys.modules['Commands.{0}'.format(properName)]
-        for f in glob ('Commands/{0}.pyc'.format(properName)):
+        properName = GlobalVars.moduleCaseMapping[name]
+        del sys.modules['Modules.{0}'.format(properName)]
+        for f in glob ('Modules/{0}.pyc'.format(properName)):
             os.remove(f)
 
     reload(src)
@@ -38,36 +38,36 @@ def LoadCommand(name, loadAs=''):
 
     command = src.Command()
 
-    GlobalVars.commands.update({cmdListCaseMap[name]:command})
-    GlobalVars.commandCaseMapping.update({name : cmdListCaseMap[name]})
+    GlobalVars.modules.update({cmdListCaseMap[name]:command})
+    GlobalVars.moduleCaseMapping.update({name : cmdListCaseMap[name]})
 
     return True
 
 
-def UnloadCommand(name):
+def UnloadModule(name):
 
-    if name.lower() in GlobalVars.commandCaseMapping.keys():
-        del GlobalVars.commands[GlobalVars.commandCaseMapping[name]]
-        del GlobalVars.commandCaseMapping[name.lower()]
+    if name.lower() in GlobalVars.moduleCaseMapping.keys():
+        del GlobalVars.modules[GlobalVars.moduleCaseMapping[name]]
+        del GlobalVars.moduleCaseMapping[name.lower()]
     else:
         return False
 
     return True
 
 
-def AutoLoadCommands():
+def AutoLoadModules():
 
-    for command in GetCommandDirList():
+    for command in GetModuleDirList():
         if command not in GlobalVars.nonDefaultModules:
             try:
-                LoadCommand(command)
+                LoadModule(command)
             except Exception, x:
                 print x.args
 
 
-def GetCommandDirList():
+def GetModuleDirList():
 
-    root = os.path.join('.', 'Commands')
+    root = os.path.join('.', 'Modules')
 
     for item in os.listdir(root):
         if not os.path.isfile(os.path.join(root, item)):

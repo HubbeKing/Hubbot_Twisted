@@ -1,10 +1,10 @@
 from IRCResponse import IRCResponse, ResponseType
-from CommandInterface import CommandInterface
+from ModuleInterface import ModuleInterface
 import GlobalVars
-from CommandHandler import LoadCommand, UnloadCommand
+from ModuleHandler import LoadModule, UnloadModule
 
 
-class Command(CommandInterface):
+class Module(ModuleInterface):
     triggers = ['load', 'reload', 'unload']
     help = "load/reload <function>, unload <function> - handles loading/unloading/reloading of functions. Use 'all' with load/reload to reload all active functions"
 
@@ -40,12 +40,12 @@ class Command(CommandInterface):
         exceptions = []
 
         if len(funcNames) == 1 and 'all' in funcNameCaseMap:
-            for name, func in GlobalVars.commands.iteritems():
+            for name, func in GlobalVars.modules.iteritems():
                 if name == 'FuncLoader':
                     continue
 
-                LoadCommand(name)
-                LoadCommand(name)
+                LoadModule(name)
+                LoadModule(name)
 
             return ['all functions'], [], []
 
@@ -56,10 +56,10 @@ class Command(CommandInterface):
 
             else:
                 try:
-                    success = LoadCommand(funcName)
+                    success = LoadModule(funcName)
                     if success:
-                        LoadCommand(funcName)
-                        successes.append(GlobalVars.commandCaseMapping[funcName])
+                        LoadModule(funcName)
+                        successes.append(GlobalVars.moduleCaseMapping[funcName])
                     else:
                         failures.append(funcNameCaseMap[funcName])
 
@@ -79,7 +79,7 @@ class Command(CommandInterface):
 
         for funcName in funcNameCaseMap.keys():
             try:
-                success = UnloadCommand(funcName)
+                success = UnloadModule(funcName)
                 if success:
                     successes.append(funcNameCaseMap[funcName])
                 else:

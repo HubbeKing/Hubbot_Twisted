@@ -1,10 +1,10 @@
 from IRCResponse import IRCResponse, ResponseType
-from CommandInterface import CommandInterface
+from ModuleInterface import ModuleInterface
 import GlobalVars
 import datetime
 
 
-class Command(CommandInterface):
+class Module(ModuleInterface):
     triggers = ["connect", "quit", "quitfrom", "restart", "shutdown"]
     help = "connect <server> <channel>, quit, quitfrom <server>, restart, shutdown - Connect to / Disconnect from servers, Restart current bot, Shut down all bots"
 

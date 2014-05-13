@@ -1,8 +1,8 @@
 from IRCResponse import IRCResponse, ResponseType
-from CommandInterface import CommandInterface
+from ModuleInterface import ModuleInterface
 
 
-class Command(CommandInterface):
+class Module(ModuleInterface):
     triggers = ["join"]
     help = 'join <channel> - makes the bot join the specified channel(s)'
 

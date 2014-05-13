@@ -91,7 +91,7 @@ class Hubbot(irc.IRCClient):
 
     def handleMessage(self, message):
         self.responses = []  # in case earlier command responses caused some weird errors
-        for (name, command) in GlobalVars.commands.items():
+        for (name, command) in GlobalVars.modules.items():
             try:
                 if command.shouldExecute(message):
                     response = command.execute(self, message)

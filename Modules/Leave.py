@@ -1,9 +1,9 @@
 from IRCResponse import IRCResponse, ResponseType
-from CommandInterface import CommandInterface
+from ModuleInterface import ModuleInterface
 import GlobalVars
 
 
-class Command(CommandInterface):
+class Module(ModuleInterface):
     triggers = ["leave", "gtfo"]
     help = "leave/gtfo - makes the bot leave the current channel"
 
