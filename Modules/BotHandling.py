@@ -1,9 +1,5 @@
-import os
-import sys
 import datetime
-import importlib
 from IRCResponse import IRCResponse, ResponseType
-from ModuleHandler import AutoLoadModules
 from ModuleInterface import ModuleInterface
 import GlobalVars
 
