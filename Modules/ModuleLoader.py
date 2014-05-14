@@ -45,7 +45,6 @@ class Module(ModuleInterface):
                     continue
 
                 LoadModule(name)
-                LoadModule(name)
 
             return ['all functions'], [], []
 
@@ -58,7 +57,6 @@ class Module(ModuleInterface):
                 try:
                     success = LoadModule(moduleName)
                     if success:
-                        LoadModule(moduleName)
                         successes.append(GlobalVars.moduleCaseMapping[moduleName])
                     else:
                         failures.append(moduleNameCaseMap[moduleName])
