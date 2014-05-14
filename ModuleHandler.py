@@ -1,3 +1,4 @@
+import importlib
 import os, sys
 from glob import glob
 import GlobalVars
@@ -15,28 +16,23 @@ def LoadModule(name, loadAs=''):
 
     alreadyExisted = False
 
-    src = __import__('Modules.' + moduleListCaseMap[name], globals(), locals(), [])
     if loadAs != '':
         name = loadAs.lower()
     if name in GlobalVars.moduleCaseMapping:
+        UnloadModule(name)
         alreadyExisted = True
-        properName = GlobalVars.moduleCaseMapping[name]
-        del sys.modules['Modules.{0}'.format(properName)]
-        for f in glob ('Modules/{0}.pyc'.format(properName)):
-            os.remove(f)
 
-    reload(src)
+    #src = __import__('Modules.' + moduleListCaseMap[name], globals(), locals(), [])
 
-    components = moduleListCaseMap[name].split('.')
-    for comp in components[:1]:
-        src = getattr(src, comp)
+    module = importlib.import_module("Modules." + moduleListCaseMap[name])
+
+    reload(module)
 
     if alreadyExisted:
-        print '-- {0} reloaded'.format(src.__name__)
+        print '-- {0} reloaded'.format(module.__name__)
     else:
-        print '-- {0} loaded'.format(src.__name__)
+        print '-- {0} loaded'.format(module.__name__)
 
-    module = src.Module()
 
     GlobalVars.modules.update({moduleListCaseMap[name]:module})
     GlobalVars.moduleCaseMapping.update({name : moduleListCaseMap[name]})
@@ -47,8 +43,12 @@ def LoadModule(name, loadAs=''):
 def UnloadModule(name):
 
     if name.lower() in GlobalVars.moduleCaseMapping.keys():
+        properName = GlobalVars.moduleCaseMapping[name.lower()]
         del GlobalVars.modules[GlobalVars.moduleCaseMapping[name]]
         del GlobalVars.moduleCaseMapping[name.lower()]
+        del sys.modules["{}.{}".format("Modules", properName)]
+        for f in glob("{}/{}.pyc".format("Modules", properName)):
+            os.remove(f)
     else:
         return False
 

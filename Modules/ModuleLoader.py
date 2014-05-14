@@ -31,17 +31,17 @@ class Module(ModuleInterface):
 
         return responses
 
-    def load(self, funcNames):
+    def load(self, moduleNames):
 
-        funcNameCaseMap = {f.lower(): f for f in funcNames}
+        moduleNameCaseMap = {f.lower(): f for f in moduleNames}
 
         successes = []
         failures = []
         exceptions = []
 
-        if len(funcNames) == 1 and 'all' in funcNameCaseMap:
-            for name, func in GlobalVars.modules.iteritems():
-                if name == 'FuncLoader':
+        if len(moduleNames) == 1 and 'all' in moduleNameCaseMap:
+            for name, module in GlobalVars.modules.iteritems():
+                if name == 'ModuleLoader':
                     continue
 
                 LoadModule(name)
@@ -49,43 +49,43 @@ class Module(ModuleInterface):
 
             return ['all functions'], [], []
 
-        for funcName in funcNameCaseMap.keys():
+        for moduleName in moduleNameCaseMap.keys():
 
-            if funcName == 'funcloader':
-                failures.append("FuncLoader (I can't reload myself)")
+            if moduleName == 'moduleloader':
+                failures.append("ModuleLoader (I can't reload myself)")
 
             else:
                 try:
-                    success = LoadModule(funcName)
+                    success = LoadModule(moduleName)
                     if success:
-                        LoadModule(funcName)
-                        successes.append(GlobalVars.moduleCaseMapping[funcName])
+                        LoadModule(moduleName)
+                        successes.append(GlobalVars.moduleCaseMapping[moduleName])
                     else:
-                        failures.append(funcNameCaseMap[funcName])
+                        failures.append(moduleNameCaseMap[moduleName])
 
                 except Exception, x:
-                    exceptions.append(funcNameCaseMap[funcName])
+                    exceptions.append(moduleNameCaseMap[moduleName])
                     print x.args
 
         return successes, failures, exceptions
 
-    def unload(self, funcNames):
+    def unload(self, moduleNames):
 
-        funcNameCaseMap = {f.lower(): f for f in funcNames}
+        moduleNameCaseMap = {f.lower(): f for f in moduleNames}
 
         successes = []
         failures = []
         exceptions = []
 
-        for funcName in funcNameCaseMap.keys():
+        for moduleName in moduleNameCaseMap.keys():
             try:
-                success = UnloadModule(funcName)
+                success = UnloadModule(moduleName)
                 if success:
-                    successes.append(funcNameCaseMap[funcName])
+                    successes.append(moduleNameCaseMap[moduleName])
                 else:
-                    failures.append(funcNameCaseMap[funcName])
+                    failures.append(moduleNameCaseMap[moduleName])
             except Exception, x:
-                exceptions.append(funcNameCaseMap[funcName])
+                exceptions.append(moduleNameCaseMap[moduleName])
                 print x.args
 
         return successes, failures, exceptions

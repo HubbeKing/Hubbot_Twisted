@@ -1,6 +1,6 @@
 from IRCResponse import IRCResponse, ResponseType
 from ModuleInterface import ModuleInterface
-import FuncLoader
+import ModuleLoader
 
 
 class Module(ModuleInterface):
@@ -10,9 +10,9 @@ class Module(ModuleInterface):
     def onTrigger(self, Hubbot, message):
         if message.Type == 'JOIN':
             if message.User.Name.startswith("RoBoBo"):
-                FuncLoader.unload("IdentCheck")
+                ModuleLoader.unload("IdentCheck")
                 return IRCResponse(ResponseType.Say, "IdentCheck unloaded.", message.ReplyTo)
         if message.Type == 'QUIT' or message.Type == 'PART':
             if message.User.Name.startswith("RoBoBo"):
-                FuncLoader.load("IdentCheck")
+                ModuleLoader.load("IdentCheck")
                 return IRCResponse(ResponseType.Say, "IdentCheck loaded.", message.ReplyTo)
