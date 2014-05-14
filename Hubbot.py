@@ -28,7 +28,6 @@ class Hubbot(irc.IRCClient):
         self.server = server
         self.channels = channels
         self.Quitting = False
-        self.restarting = True
         self.startTime = datetime.datetime.now()
 
     def signedOn(self):
@@ -148,10 +147,7 @@ class HubbotFactory(protocol.ReconnectingClientFactory):
         return self.protocol
 
     def clientConnectionLost(self, connector, reason):
-        if self.protocol.restarting:
-            print "-!- Connection lost. Reason:", reason
-            protocol.ReconnectingClientFactory.clientConnectionLost(self, connector, reason)
-        elif not self.protocol.Quitting:
+        if not self.protocol.Quitting:
             print "-!- Connection lost. Reason:", reason
             protocol.ReconnectingClientFactory.clientConnectionLost(self, connector, reason)
 
