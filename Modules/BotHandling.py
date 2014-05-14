@@ -56,13 +56,7 @@ class Module(ModuleInterface):
                 server = Hubbot.server
                 port = GlobalVars.bothandler.botfactories[server].port
                 channels = Hubbot.channels
-                GlobalVars.bothandler.stopBotFactory(Hubbot.server, "Restarting...")
-                del sys.modules["Hubbot"]
-                os.remove("Hubbot.pyc")
-                core = importlib.import_module("Hubbot")
-                reload(core)
-                AutoLoadModules()
-                GlobalVars.bothandler.startBotFactory(server, port, channels)
+                GlobalVars.bothandler.restartBotFactory(server, port, channels)
                 return
 
         if message.Command == "shutdown":
