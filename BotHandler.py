@@ -46,24 +46,6 @@ class BotHandler:
             self.unregisterFactory(server)
             print "Successfully shut down bot for server '{}'".format(server)
 
-    def restartBotFactory(self, server, port, channels, quitmessage="Restarting..."):
-        self.quitmessage = quitmessage
-        if server not in self.botfactories:
-            print "ERROR: Bot for '{}' does not exist yet was asked to restart.".format(server)
-        else:
-            print "Restarting bot for server '{}'".format(server)
-            self.botfactories[server].protocol.Quitting = True
-            self.botfactories[server].protocol.quit(quitmessage)
-            self.unregisterFactory(server)
-            del sys.modules["Hubbot"]
-            os.remove("Hubbot.pyc")
-            core = importlib.import_module("Hubbot")
-            reload(core)
-            AutoLoadModules()
-            self.startBotFactory(server, port, channels)
-            print "Successfully restarted bot for server '{}'".format(server)
-
-
     def unregisterFactory(self, server):
         if server in self.botfactories:
             del self.botfactories[server]
@@ -79,6 +61,17 @@ class BotHandler:
             botfactory.protocol.quit(quitmessage)
         self.botfactories = {}
         reactor.callLater(4.0, reactor.stop)
+
+    def restart(self, quitmessage="Restarting..."):
+        self.quitmessage = quitmessage.encode("utf-8")
+        for server, botfactory in self.botfactories.iteritems():
+            botfactory.protocol.Quitting = True
+            botfactory.protocol.quit(quitmessage)
+        self.botfactories = {}
+        reactor.callLater(4.0, reactor.stop)
+        python = sys.executable
+        os.execl(python, python, "BotHandler.py")
+
 
 
 if __name__ == "__main__":

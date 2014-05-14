@@ -53,10 +53,7 @@ class Module(ModuleInterface):
 
         if message.Command == "restart":
             if datetime.datetime.now() > Hubbot.startTime + datetime.timedelta(seconds=10):
-                server = Hubbot.server
-                port = GlobalVars.bothandler.botfactories[server].port
-                channels = Hubbot.channels
-                GlobalVars.bothandler.restartBotFactory(server, port, channels)
+                GlobalVars.bothandler.restart()
                 return
 
         if message.Command == "shutdown":
