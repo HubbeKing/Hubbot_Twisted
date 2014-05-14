@@ -68,10 +68,12 @@ class BotHandler:
             botfactory.protocol.Quitting = True
             botfactory.protocol.quit(quitmessage)
         self.botfactories = {}
-        reactor.callLater(4.0, reactor.stop)
+        reactor.callLater(2.0, self.replaceInstance)
+
+    def replaceInstance(self):
+        reactor.stop()
         python = sys.executable
         os.execl(python, python, "BotHandler.py")
-
 
 
 if __name__ == "__main__":
