@@ -37,8 +37,9 @@ class Hubbot(irc.IRCClient):
 
     def privmsg(self, user, channel, msg):
         message = IRCMessage('PRIVMSG', user, channel, msg)
-        if msg.startswith(GlobalVars.CommandChar):
-            self.log(u'<{0}> {1}'.format(message.User.Name, message.MessageString), message.ReplyTo)
+        for (name, module) in GlobalVars.modules.items():
+            if module.shouldTrigger(message):
+                self.log(u'<{0}> {1}'.format(message.User.Name, message.MessageString), message.ReplyTo)
         self.handleMessage(message)
 
     def action(self, user, channel, msg):
