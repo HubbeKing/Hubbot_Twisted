@@ -33,6 +33,7 @@ def LoadModule(name, loadAs=''):
     else:
         print '-- {0} loaded'.format(module.__name__)
 
+    module = module.Module()
 
     GlobalVars.modules.update({moduleListCaseMap[name]:module})
     GlobalVars.moduleCaseMapping.update({name : moduleListCaseMap[name]})
