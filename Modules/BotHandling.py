@@ -1,7 +1,11 @@
+import os
+import sys
+import datetime
+import importlib
 from IRCResponse import IRCResponse, ResponseType
+from ModuleHandler import AutoLoadModules
 from ModuleInterface import ModuleInterface
 import GlobalVars
-import datetime
 
 
 class Module(ModuleInterface):
@@ -53,6 +57,11 @@ class Module(ModuleInterface):
                 port = GlobalVars.bothandler.botfactories[server].port
                 channels = Hubbot.channels
                 GlobalVars.bothandler.stopBotFactory(Hubbot.server, "Restarting...")
+                del sys.modules["Hubbot"]
+                os.remove("Hubbot.pyc")
+                core = importlib.import_module("Hubbot")
+                reload(core)
+                AutoLoadModules()
                 GlobalVars.bothandler.startBotFactory(server, port, channels)
                 return
 
