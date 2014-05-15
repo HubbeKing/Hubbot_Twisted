@@ -4,7 +4,7 @@ import GlobalVars
 
 
 class Module(ModuleInterface):
-    help = "mumble, gmod, starbound, starbound2, jcmp, tetri, cockatrice, kf -- Used to post server info for games! Usage: {}<server>".format(GlobalVars.CommandChar)
+    help = "mumble, gmod, starbound, starbound2, jcmp, tetri, cockatrice, kf, tf2 -- Used to post server info for games! Usage: {}<server>".format(GlobalVars.CommandChar)
     gmodMods = 'List of mods needed for GMOD: http://steamcommunity.com/sharedfiles/filedetails/?id=185811989'
     gmodIP = "The Garrys Mod server is hosted at: gmod.dahou.se"
 
@@ -20,6 +20,7 @@ class Module(ModuleInterface):
                 "tetri":"Ricin's Tetrinet server is hosted at: tn.ricin.us",
                 "cockatrice":"The Cockatrice server is hosted at: cockatrice.dahou.se:4747",
                 "kf":"The Killing Floor server is hosted at: kf.dahou.se",
+                "tf2":"The Team Fortress 2 server is hosted at tf2.dahou.se",
                 "<server>":"Seriously?"
             }
         self.triggers.extend(self.serverDict.keys())
