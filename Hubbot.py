@@ -38,7 +38,13 @@ class Hubbot(irc.IRCClient):
 
     def privmsg(self, user, channel, msg):
         message = IRCMessage('PRIVMSG', user, channel, msg)
-        self.brain.learn(msg)
+        msgList = msg.split(" ")
+        msgToUse = ""
+        for msg in msgList:
+            if msg != GlobalVars.CurrentNick:
+                msgToUse += msg + " "
+        msgToUse.rstrip()
+        self.brain.learn(msgToUse)
         self.brain.sync()
         for (name, module) in GlobalVars.modules.items():
             if message.Command in module.triggers:
