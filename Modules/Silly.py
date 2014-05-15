@@ -4,7 +4,7 @@ import GlobalVars
 
 
 class Module(ModuleInterface):
-    help = "donotwant, yes, yup, store, goat, stupid, fixyou, heya, HNGH, PS, whoa, what, mybrand, both, no, disappoint -- Used to post silly things! Usage: {}<thing>".format(GlobalVars.CommandChar)
+    help = "donotwant, yes, yup, store, goat, stupid, fixyou, heya, HNGH, PS, whoa, what, mybrand, both, no, disappointed -- Used to post silly things! Usage: {}<thing>".format(GlobalVars.CommandChar)
 
     def onStart(self):
         self.linkDict = \
@@ -29,7 +29,7 @@ class Module(ModuleInterface):
                 "no":"http://www.youtube.com/watch?v=YKss2uYpih8",
                 "hunt":"",
                 "<thing>":"Har Har.",
-                "dissapoint":"https://31.media.tumblr.com/cea6574a24b490ada8bec694e87b307b/tumblr_n3blu9k5CW1tsipf6o6_400.gif"
+                "dissapointed":"https://31.media.tumblr.com/cea6574a24b490ada8bec694e87b307b/tumblr_n3blu9k5CW1tsipf6o6_400.gif"
             }
         self.triggers.extend(self.linkDict.keys())
 
