@@ -57,9 +57,9 @@ class IRCMessage:
                 self.Parameters = u' '.join(self.MessageList[1:])
 
 
-        elif self.MessageList[0].startswith(GlobalVars.CurrentNick) and len(self.MessageList) > 1:
-            self.Command = self.MessageList[1].lower()
-            self.Parameters = u' '.join(self.MessageList[2:])
+        #elif self.MessageList[0].startswith(GlobalVars.CurrentNick) and len(self.MessageList) > 1:
+            #self.Command = self.MessageList[1].lower()
+            #self.Parameters = u' '.join(self.MessageList[2:])
 
         if self.Parameters.strip():
             self.ParameterList = self.Parameters.split(' ')

@@ -1,6 +1,7 @@
 import sys, platform, os, traceback, datetime, codecs, re
 from twisted.words.protocols import irc
 from twisted.internet import protocol, reactor
+from megahal import *
 from IRCResponse import ResponseType, IRCResponse
 from IRCMessage import IRCMessage
 import GlobalVars
@@ -29,6 +30,7 @@ class Hubbot(irc.IRCClient):
         self.channels = channels
         self.Quitting = False
         self.startTime = datetime.datetime.now()
+        self.brain = MegaHAL(None,"data/{}.brain".format(server),None)
 
     def signedOn(self):
         for channel in self.channels:
@@ -36,6 +38,8 @@ class Hubbot(irc.IRCClient):
 
     def privmsg(self, user, channel, msg):
         message = IRCMessage('PRIVMSG', user, channel, msg)
+        self.brain.learn(msg)
+        self.brain.sync()
         for (name, module) in GlobalVars.modules.items():
             if message.Command in module.triggers:
                 self.log(u'<{0}> {1}'.format(message.User.Name, message.MessageString), message.ReplyTo)

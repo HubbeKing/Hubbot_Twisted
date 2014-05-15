@@ -18,7 +18,7 @@ bothandler = None
 
 CurrentNick = "Hubbot"
 connections = {"irc.desertbus.org:6667":["#desertbus", "#unmoderated"], "applejack.me:6667":["#survivors"]}
-nonDefaultModules = ["IdentCheck", "Roll"]
+nonDefaultModules = ["IdentCheck", "Roll", "Grapheme"]
 
 admins = ["HubbeKing", "HubbeWork", "HubbePhone", "DoctorGyarados",
           "DoctorGyaradroid", "DoctorGyarados|GAEM",
