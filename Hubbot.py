@@ -41,11 +41,12 @@ class Hubbot(irc.IRCClient):
         msgList = msg.split(" ")
         msgToUse = ""
         for msg in msgList:
-            if msg != GlobalVars.CurrentNick:
+            if GlobalVars.CurrentNick not in msg:
                 msgToUse += msg + " "
         msgToUse.rstrip()
-        self.brain.learn(msgToUse)
-        self.brain.sync()
+        if "http" not in msgToUse:
+            self.brain.learn(msgToUse)
+            self.brain.sync()
         for (name, module) in GlobalVars.modules.items():
             if message.Command in module.triggers:
                 self.log(u'<{0}> {1}'.format(message.User.Name, message.MessageString), message.ReplyTo)
