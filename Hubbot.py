@@ -39,6 +39,7 @@ class Hubbot(irc.IRCClient):
 
     def irc_RPL_NAMREPLY(self, prefix, params):
         channel = self.channels[params[2]]
+        modes = ["+", "@", "~"]
 
         if channel.NamesListComplete:
             channel.NamesListComplete = False
@@ -46,7 +47,12 @@ class Hubbot(irc.IRCClient):
 
         channelUsers = params[3].strip().split(" ")
         for channelUser in channelUsers:
-            user = IRCUser("{}!{}@{}".format(channelUser[1:], "none", "none"))
+            if channelUser[0] in modes:
+                channelUser = channelUser[1:]
+            try:
+                user = channel.Users[channelUser]
+            except:
+                user = IRCUser("{}!{}@{}".format(channelUser, "none", "none"))
 
         channel.Users[user.Name] = user
 
@@ -55,6 +61,15 @@ class Hubbot(irc.IRCClient):
         channel.NamesListComplete = True
         for user in channel.Users.keys():
             print user
+
+    def irc_RPL_WHOREPLY(self, prefix, params):
+        channel = self.channels[params[1]]
+        user = channel.Users[params[5]]
+        if not user:
+            user = IRCUser("{}!{}@{}".format(params[5], params[2], params[3]))
+        else:
+            user.User = params[2]
+            user.Hostmask = params[3]
 
     def privmsg(self, user, channel, msg):
         message = IRCMessage('PRIVMSG', user, self.channels[channel], msg)
