@@ -13,9 +13,6 @@ class IRCChannel(object):
         self.Ranks = {}
         self.Modes = {}
 
-    def __str__(self):
-        return self.Name
-
 
 class IRCUser(object):
     def __init__(self, user):

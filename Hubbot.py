@@ -3,7 +3,7 @@ from twisted.words.protocols import irc
 from twisted.internet import protocol, reactor
 from megahal import *
 from IRCResponse import ResponseType, IRCResponse
-from IRCMessage import IRCMessage
+from IRCMessage import IRCMessage, IRCUser
 import GlobalVars
 
 
@@ -33,11 +33,12 @@ class Hubbot(irc.IRCClient):
         self.brain = MegaHAL(None,"data/{}.brain".format(server),None)
 
     def signedOn(self):
-        for channel in self.channels:
-            self.join(channel.Name)
+        for channel in self.channels.keys():
+            if channel is not GlobalVars.CurrentNick or channel is not "Auth":
+                self.join(channel)
 
     def privmsg(self, user, channel, msg):
-        message = IRCMessage('PRIVMSG', user, channel, msg)
+        message = IRCMessage('PRIVMSG', user, self.channels[channel], msg)
         msgList = msg.split(" ")
         msgToUse = ""
         for msg in msgList:
@@ -53,7 +54,7 @@ class Hubbot(irc.IRCClient):
         self.handleMessage(message)
 
     def action(self, user, channel, msg):
-        message = IRCMessage('ACTION', user, channel, msg)
+        message = IRCMessage('ACTION', user, self.channels[channel], msg)
         pattern = "hu+g|cuddle|snu+ggle|snu+g|squeeze|glomp"
         match = re.search(pattern, msg, re.IGNORECASE)
         if match:
@@ -61,7 +62,7 @@ class Hubbot(irc.IRCClient):
         self.handleMessage(message)
 
     def noticed(self, user, channel, msg):
-        message = IRCMessage('NOTICE', user, channel, msg.upper())
+        message = IRCMessage('NOTICE', user, self.channels[channel], msg.upper())
         self.log(u'[{0}] {1}'.format(message.User.Name, message.MessageString), message.ReplyTo)
         self.handleMessage(message)
 
@@ -70,18 +71,24 @@ class Hubbot(irc.IRCClient):
         GlobalVars.CurrentNick = nick
 
     def irc_JOIN(self, prefix, params):
-        message = IRCMessage('JOIN', prefix, params[0], '')
+        user = IRCUser(prefix)
+        channel = self.channels[params[0]]
+        message = IRCMessage('JOIN', prefix, channel, '')
         self.handleMessage(message)
 
     def irc_PART(self, prefix, params):
         partMessage = u''
         if len(params) > 1:
             partMessage = u', message: ' + u' '.join(params[1:])
-        message = IRCMessage('PART', prefix, params[0], partMessage)
+        user = IRCUser(prefix)
+        channel = self.channels[params[0]]
+        message = IRCMessage('PART', prefix, channel, partMessage)
         self.handleMessage(message)
 
     def irc_QUIT(self, prefix, params):
-        message = IRCMessage('QUIT', prefix, params[0], '')
+        user = IRCUser(prefix)
+        channel = self.channels[params[0]]
+        message = IRCMessage('QUIT', prefix, channel, '')
         self.handleMessage(message)
 
     def sendResponse(self, response):

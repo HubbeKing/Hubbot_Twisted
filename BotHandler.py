@@ -14,9 +14,11 @@ class BotHandler:
         for (server_with_port, channels) in GlobalVars.connections.items():
             server = server_with_port.split(":")[0]
             port = int(server_with_port.split(":")[1])
-            chanObjects = []
+            chanObjects = {}
             for channel in channels:
-                chanObjects.append(IRCChannel(channel))
+                chanObjects[channel] = IRCChannel(channel)
+            chanObjects[GlobalVars.CurrentNick] = IRCChannel(GlobalVars.CurrentNick)
+            chanObjects["Auth"] = IRCChannel("Auth")
             self.startBotFactory(server, port, chanObjects)
         AutoLoadModules()
         GlobalVars.bothandler = self
