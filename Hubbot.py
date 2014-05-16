@@ -37,6 +37,23 @@ class Hubbot(irc.IRCClient):
             if channel is not GlobalVars.CurrentNick or channel is not "Auth":
                 self.join(channel)
 
+    def irc_RPL_NAMREPLY(self, prefix, params):
+        channel = self.channels[params[2]]
+
+        if channel.NamesListComplete:
+            channel.NamesListComplete = False
+            channel.Users.clear()
+
+        channelUsers = params[3].strip().split(" ")
+        for channelUser in channelUsers:
+            user = IRCUser("{}!{}@{}".format(channelUser, None, None))
+
+        channel.Users[user.Name] = user
+
+    def irc_RPL_ENDOFNAMES(self, prefix, params):
+        channel = self.channels[params[1]]
+        channel.NamesListComplete = True
+
     def privmsg(self, user, channel, msg):
         message = IRCMessage('PRIVMSG', user, self.channels[channel], msg)
         msgList = msg.split(" ")
@@ -71,25 +88,48 @@ class Hubbot(irc.IRCClient):
         GlobalVars.CurrentNick = nick
 
     def irc_JOIN(self, prefix, params):
-        user = IRCUser(prefix)
         channel = self.channels[params[0]]
         message = IRCMessage('JOIN', prefix, channel, '')
+
+        if message.User.Name != GlobalVars.CurrentNick:
+            channel.Users[message.User.Name] = message.User
         self.handleMessage(message)
 
     def irc_PART(self, prefix, params):
         partMessage = u''
         if len(params) > 1:
             partMessage = u', message: ' + u' '.join(params[1:])
-        user = IRCUser(prefix)
         channel = self.channels[params[0]]
         message = IRCMessage('PART', prefix, channel, partMessage)
+
+        if message.User.Name != GlobalVars.CurrentNick:
+            del channel.Users[message.User.Name]
+        self.handleMessage(message)
+
+    def irc_KICK(self, prefix, params):
+        kickMessage = u''
+        if len(params) > 2:
+            kickMessage = u', message: ' + u' '.join(params[2:])
+
+        channel = self.channels[params[0]]
+        message = IRCMessage('KICK', prefix, channel, kickMessage)
+        kickee = params[1]
+        if kickee == GlobalVars.CurrentNick:
+            del self.channels[message.ReplyTo]
+        else:
+            del channel.Users[kickee]
         self.handleMessage(message)
 
     def irc_QUIT(self, prefix, params):
-        quitMessage = params[0]
-        user = IRCUser(prefix)
-        message = IRCMessage('QUIT', prefix, None, quitMessage)
-        self.handleMessage(message)
+        quitMessage = u''
+        if len(params) > 0:
+            quitMessage = u', message: ' + u' '.join(params[0:])
+        for key in self.channels:
+            channel = self.channels[key]
+            message = IRCMessage('QUIT', prefix, channel, quitMessage)
+            if message.User.Name in channel.users:
+                del channel.Users[message.User.Name]
+            self.handleMessage(message)
 
     def sendResponse(self, response):
         if response is None or response.Response is None:

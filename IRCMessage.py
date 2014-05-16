@@ -7,11 +7,8 @@ TargetTypes = enum('CHANNEL', 'USER')
 class IRCChannel(object):
     def __init__(self, name):
         self.Name = name
-        self.Topic = ""
-        self.TopicSetBy = ""
         self.Users = {}
-        self.Ranks = {}
-        self.Modes = {}
+        self.NamesListComplete = True
 
 
 class IRCUser(object):
@@ -51,7 +48,7 @@ class IRCMessage(object):
         self.MessageList = unicodeMessage.strip().split(' ')
         self.MessageString = unicodeMessage
         self.User = IRCUser(user)
-        if not user and not channel:
+        if user is None or channel is None:
             self.ReplyTo = ""
         elif channel.Name == GlobalVars.CurrentNick:
             self.ReplyTo = self.User.Name
