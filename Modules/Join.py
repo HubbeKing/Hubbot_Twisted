@@ -1,3 +1,4 @@
+from IRCMessage import IRCChannel
 from IRCResponse import IRCResponse, ResponseType
 from ModuleInterface import ModuleInterface
 
@@ -14,7 +15,7 @@ class Module(ModuleInterface):
                 if not channel.startswith('#'):
                     channel = '#' + channel
                 responses.append(IRCResponse(ResponseType.Raw, 'JOIN {}'.format(channel), ''))
-                Hubbot.channels.append(channel)
+                Hubbot.channels[channel] = IRCChannel(channel)
             return responses
         else:
             return IRCResponse(ResponseType.Say, "{}, you didn't say where I should join".format(message.User.Name), message.ReplyTo)
