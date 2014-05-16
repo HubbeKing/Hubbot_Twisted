@@ -83,6 +83,21 @@ class Hubbot(irc.IRCClient):
         self.log(u'[{0}] {1}'.format(message.User.Name, message.MessageString), message.ReplyTo)
         self.handleMessage(message)
 
+    def irc_NICK(self, prefix, params):
+        userArray = prefix.split("!")
+        oldnick = userArray[0]
+        newnick = params[0]
+
+        for key in self.channels:
+            channel = self.channels[key]
+            for userKey in channel.Users:
+                user = channel.Users[userKey]
+                if userKey == oldnick:
+                    channel.Users[newnick] = IRCUser("{}!{}@{}".format(newnick, user.User, user.Hostmask))
+                    del channel.Users[oldnick]
+                    message = IRCMessage('NICK', prefix, channel, newnick)
+                    self.handleMessage(message)
+
     def nickChanged(self, nick):
         self.nickname = nick
         GlobalVars.CurrentNick = nick
@@ -127,7 +142,7 @@ class Hubbot(irc.IRCClient):
         for key in self.channels:
             channel = self.channels[key]
             message = IRCMessage('QUIT', prefix, channel, quitMessage)
-            if message.User.Name in channel.users:
+            if message.User.Name in channel.Users:
                 del channel.Users[message.User.Name]
             self.handleMessage(message)
 
