@@ -13,5 +13,7 @@ class Module(ModuleInterface):
             return False
 
     def onTrigger(self, Hubbot, message):
-        messageToUse = " ".join(message.MessageList[1:])
-        return IRCResponse(ResponseType.Say, Hubbot.brain.get_reply(messageToUse), message.ReplyTo)
+        stringToUse = " ".join(message.MessageList[1:])
+        messageToUse = u'{}'.format(stringToUse)
+        reply = u'{}'.format(Hubbot.brain.get_reply(messageToUse[:180].rsplit(".")[0]))
+        return IRCResponse(ResponseType.Say, reply, message.ReplyTo)
