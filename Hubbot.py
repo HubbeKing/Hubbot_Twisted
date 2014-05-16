@@ -46,31 +46,19 @@ class Hubbot(irc.IRCClient):
             channel.Users.clear()
 
         channelUsers = params[3].split(" ")
-        print channelUsers
         for channelUser in channelUsers:
-            if channelUser[0] in modes:
+            if channelUser != "" and channelUser[0] in modes:
                 channelUser = channelUser[1:]
 
-            user = self.getUser(channelUser)
+            user = self.getUser(channel, channelUser)
             if not user:
                 user = IRCUser("{}!{}@{}".format(channelUser, "none", "none"))
 
-        channel.Users[user.Name] = user
+            channel.Users[user.Name] = user
 
     def irc_RPL_ENDOFNAMES(self, prefix, params):
         channel = self.channels[params[1]]
         channel.NamesListComplete = True
-        for user in channel.Users.keys():
-            print user
-
-    def irc_RPL_WHOREPLY(self, prefix, params):
-        channel = self.channels[params[1]]
-        user = channel.Users[params[5]]
-        if not user:
-            user = IRCUser("{}!{}@{}".format(params[5], params[2], params[3]))
-        else:
-            user.User = params[2]
-            user.Hostmask = params[3]
 
     def privmsg(self, user, channel, msg):
         message = IRCMessage('PRIVMSG', user, self.channels[channel], msg)
@@ -224,10 +212,9 @@ class Hubbot(irc.IRCClient):
         else:
             self.sendResponse(IRCResponse(ResponseType.Say, "{}: Your {} timer is up!".format(message.User.Name, message.ParameterList[0]), message.ReplyTo))
 
-    def getUser(self, nickname):
-        for channel in self.channels.itervalues():
-            if nickname in channel.Users:
-                return channel.Users[nickname]
+    def getUser(self, channel, nickname):
+        if nickname in channel.Users:
+            return channel.Users[nickname]
         return None
 
 class HubbotFactory(protocol.ReconnectingClientFactory):
