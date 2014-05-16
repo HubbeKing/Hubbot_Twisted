@@ -46,13 +46,15 @@ class Hubbot(irc.IRCClient):
 
         channelUsers = params[3].strip().split(" ")
         for channelUser in channelUsers:
-            user = IRCUser("{}!{}@{}".format(channelUser, None, None))
+            user = IRCUser("{}!{}@{}".format(channelUser[1:], "none", "none"))
 
         channel.Users[user.Name] = user
 
     def irc_RPL_ENDOFNAMES(self, prefix, params):
         channel = self.channels[params[1]]
         channel.NamesListComplete = True
+        for user in channel.Users.keys():
+            print user
 
     def privmsg(self, user, channel, msg):
         message = IRCMessage('PRIVMSG', user, self.channels[channel], msg)
