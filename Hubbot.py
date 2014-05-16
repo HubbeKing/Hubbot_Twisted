@@ -86,9 +86,9 @@ class Hubbot(irc.IRCClient):
         self.handleMessage(message)
 
     def irc_QUIT(self, prefix, params):
+        quitMessage = params[0]
         user = IRCUser(prefix)
-        channel = self.channels[params[0]]
-        message = IRCMessage('QUIT', prefix, channel, '')
+        message = IRCMessage('QUIT', prefix, None, quitMessage)
         self.handleMessage(message)
 
     def sendResponse(self, response):

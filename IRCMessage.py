@@ -51,7 +51,9 @@ class IRCMessage(object):
         self.MessageList = unicodeMessage.strip().split(' ')
         self.MessageString = unicodeMessage
         self.User = IRCUser(user)
-        if channel.Name == GlobalVars.CurrentNick:
+        if not user and not channel:
+            self.ReplyTo = ""
+        elif channel.Name == GlobalVars.CurrentNick:
             self.ReplyTo = self.User.Name
         else:
             self.ReplyTo = channel.Name
