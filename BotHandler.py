@@ -3,6 +3,7 @@ import sys
 from twisted.internet import reactor
 from Hubbot import HubbotFactory
 from ModuleHandler import AutoLoadModules
+from IRCMessage import IRCChannel
 import GlobalVars
 
 
@@ -13,7 +14,10 @@ class BotHandler:
         for (server_with_port, channels) in GlobalVars.connections.items():
             server = server_with_port.split(":")[0]
             port = int(server_with_port.split(":")[1])
-            self.startBotFactory(server, port, channels)
+            chanObjects = []
+            for channel in channels:
+                chanObjects.append(IRCChannel(channel))
+            self.startBotFactory(server, port, chanObjects)
         AutoLoadModules()
         GlobalVars.bothandler = self
         reactor.run()

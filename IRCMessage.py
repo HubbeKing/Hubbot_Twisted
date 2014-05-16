@@ -54,11 +54,11 @@ class IRCMessage(object):
         self.MessageList = unicodeMessage.strip().split(' ')
         self.MessageString = unicodeMessage
         self.User = IRCUser(user)
-        if channel == GlobalVars.CurrentNick:
+        if channel.Name == GlobalVars.CurrentNick:
             self.ReplyTo = self.User.Name
         else:
-            self.ReplyTo = channel
-        if channel.startswith('#'):
+            self.ReplyTo = channel.Name
+        if channel.Name.startswith('#'):
             self.TargetType = TargetTypes.CHANNEL
         else:
             self.TargetType = TargetTypes.USER

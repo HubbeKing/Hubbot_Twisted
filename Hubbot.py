@@ -34,7 +34,7 @@ class Hubbot(irc.IRCClient):
 
     def signedOn(self):
         for channel in self.channels:
-            self.join(channel)
+            self.join(channel.Name)
 
     def privmsg(self, user, channel, msg):
         message = IRCMessage('PRIVMSG', user, channel, msg)
