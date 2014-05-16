@@ -45,13 +45,14 @@ class Hubbot(irc.IRCClient):
             channel.NamesListComplete = False
             channel.Users.clear()
 
-        channelUsers = params[3].strip().split(" ")
+        channelUsers = params[3].split(" ")
+        print channelUsers
         for channelUser in channelUsers:
             if channelUser[0] in modes:
                 channelUser = channelUser[1:]
-            try:
-                user = channel.Users[channelUser]
-            except:
+
+            user = self.getUser(channelUser)
+            if not user:
                 user = IRCUser("{}!{}@{}".format(channelUser, "none", "none"))
 
         channel.Users[user.Name] = user
@@ -223,6 +224,11 @@ class Hubbot(irc.IRCClient):
         else:
             self.sendResponse(IRCResponse(ResponseType.Say, "{}: Your {} timer is up!".format(message.User.Name, message.ParameterList[0]), message.ReplyTo))
 
+    def getUser(self, nickname):
+        for channel in self.channels.itervalues():
+            if nickname in channel.Users:
+                return channel.Users[nickname]
+        return None
 
 class HubbotFactory(protocol.ReconnectingClientFactory):
     def __init__(self, server, port, channels):
