@@ -4,21 +4,36 @@ import GlobalVars
 TargetTypes = enum('CHANNEL', 'USER')
 
 
-class UserStruct:
-    Hostmask = None
-    Name = None
-    User = None
+class IRCChannel(object):
+    def __init__(self, name):
+        self.Name = name
+        self.Topic = ""
+        self.TopicSetBy = ""
+        self.Users = {}
+        self.Ranks = {}
+        self.Modes = {}
 
+    def __str__(self):
+        return self.Name
+
+
+class IRCUser(object):
     def __init__(self, user):
-        userArray = user.split('!')
-        self.Name = userArray[0]
-        if len(userArray) > 1:
-            userArray = userArray[1].split('@')
-            self.User = userArray[0]
-            self.Hostmask = userArray[1]
+        self.User = None
+        self.Hostmask = None
+
+        if "!" in user:
+            userArray = user.split("!")
+            self.Name = userArray[0]
+            if len(userArray) > 1:
+                userArray = userArray[1].split("@")
+                self.User = userArray[0]
+                self.Hostmask = userArray[1]
+        else:
+            self.Name = user
 
 
-class IRCMessage:
+class IRCMessage(object):
     Type = None
     User = None
     TargetType = TargetTypes.CHANNEL
@@ -38,7 +53,7 @@ class IRCMessage:
         self.Type = type
         self.MessageList = unicodeMessage.strip().split(' ')
         self.MessageString = unicodeMessage
-        self.User = UserStruct(user)
+        self.User = IRCUser(user)
         if channel == GlobalVars.CurrentNick:
             self.ReplyTo = self.User.Name
         else:
