@@ -3,7 +3,7 @@ from twisted.words.protocols import irc
 from twisted.internet import protocol, reactor
 from megahal import *
 from IRCResponse import ResponseType, IRCResponse
-from IRCMessage import IRCMessage, IRCUser
+from IRCMessage import IRCMessage, IRCUser, IRCChannel
 import GlobalVars
 
 
@@ -114,7 +114,10 @@ class Hubbot(irc.IRCClient):
         partMessage = u''
         if len(params) > 1:
             partMessage = u', message: ' + u' '.join(params[1:])
-        channel = self.channels[params[0]]
+        if params[0] in self.channels.keys():
+            channel = self.channels[params[0]]
+        else:
+            channel = IRCChannel(params[0])
         message = IRCMessage('PART', prefix, channel, partMessage)
 
         if message.User.Name != GlobalVars.CurrentNick:
