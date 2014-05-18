@@ -31,15 +31,27 @@ class Hubbot(irc.IRCClient):
         self.Quitting = False
         self.startTime = datetime.datetime.now()
         self.brain = MegaHAL(None,"data/{}.brain".format(server),None)
+        self.prefixesCharToMode = {"+":"v", "@":"o"}
 
     def signedOn(self):
         for channel in self.channels.keys():
             if channel is not GlobalVars.CurrentNick and channel is not "Auth":
                 self.join(channel)
 
+    def isupport(self, options):
+        for item in options:
+            if "=" in item:
+                option = item.split("=")
+                if option[0] == "PREFIX":
+                    prefixes = option[1]
+                    statusModes = prefixes[:prefixes.find(")")]
+                    statusChars = prefixes[prefixes.find(")"):]
+                    for i in range(1, len(statusModes)):
+                        self.prefixesCharToMode[statusChars[i]] = statusModes[i]
+
+
     def irc_RPL_NAMREPLY(self, prefix, params):
         channel = self.channels[params[2]]
-        prefixesCharToMode = {"+":"v", "@":"o", "~":"~"}
 
         if channel.NamesListComplete:
             channel.NamesListComplete = False
@@ -49,8 +61,8 @@ class Hubbot(irc.IRCClient):
         channelUsers = params[3].split(" ")
         for channelUser in channelUsers:
             rank = ""
-            if channelUser != "" and channelUser[0] in prefixesCharToMode:
-                rank = prefixesCharToMode[channelUser[0]]
+            if channelUser != "" and channelUser[0] in self.prefixesCharToMode:
+                rank = self.prefixesCharToMode[channelUser[0]]
                 channelUser = channelUser[1:]
 
             user = self.getUser(channel, channelUser)
