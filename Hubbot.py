@@ -34,7 +34,7 @@ class Hubbot(irc.IRCClient):
 
     def signedOn(self):
         for channel in self.channels.keys():
-            if channel is not GlobalVars.CurrentNick or channel is not "Auth":
+            if channel is not GlobalVars.CurrentNick and channel is not "Auth":
                 self.join(channel)
 
     def irc_RPL_NAMREPLY(self, prefix, params):
