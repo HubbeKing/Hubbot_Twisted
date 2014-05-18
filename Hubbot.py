@@ -39,15 +39,18 @@ class Hubbot(irc.IRCClient):
 
     def irc_RPL_NAMREPLY(self, prefix, params):
         channel = self.channels[params[2]]
-        modes = ["+", "@", "~"]
+        prefixesCharToMode = {"+":"v", "@":"o", "~":"~"}
 
         if channel.NamesListComplete:
             channel.NamesListComplete = False
             channel.Users.clear()
+            channel.Ranks.clear()
 
         channelUsers = params[3].split(" ")
         for channelUser in channelUsers:
-            if channelUser != "" and channelUser[0] in modes:
+            rank = ""
+            if channelUser != "" and channelUser[0] in prefixesCharToMode:
+                rank = prefixesCharToMode[channelUser[0]]
                 channelUser = channelUser[1:]
 
             user = self.getUser(channel, channelUser)
@@ -55,6 +58,7 @@ class Hubbot(irc.IRCClient):
                 user = IRCUser("{}!{}@{}".format(channelUser, "none", "none"))
 
             channel.Users[user.Name] = user
+            channel.Ranks[user.Name] = rank
 
     def irc_RPL_ENDOFNAMES(self, prefix, params):
         channel = self.channels[params[1]]
