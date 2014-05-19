@@ -86,11 +86,11 @@ class Hubbot(irc.IRCClient):
         msgToUse.rstrip()
         if "http" not in msgToUse:
             self.brain.learn(msgToUse)
-            self.brain.sync()
         for (name, module) in GlobalVars.modules.items():
             if message.Command in module.triggers:
                 self.log(u'<{0}> {1}'.format(message.User.Name, message.MessageString), message.ReplyTo)
                 break
+        self.brain.sync()
         self.handleMessage(message)
 
     def action(self, user, channel, msg):
