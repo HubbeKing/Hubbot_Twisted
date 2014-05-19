@@ -12,7 +12,7 @@ class ModuleInterface(object):
     def onStart(self):
         pass
 
-    def aliased(self, message):
+    def hasAlias(self, message):
         if message.Type in self.acceptedTypes and message.Command in GlobalVars.commandAliases.keys():
             return True
 

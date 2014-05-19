@@ -192,8 +192,8 @@ class Hubbot(irc.IRCClient):
         self.responses = []  # in case earlier module responses caused some weird errors
         for (name, module) in GlobalVars.modules.items():
             try:
-                if module.aliased(message):
-                    message = message.alias()
+                if module.hasAlias(message):
+                    message = message.aliasedMessage()
                 if module.shouldTrigger(message):
                     response = module.onTrigger(self, message)
                     if response is None:

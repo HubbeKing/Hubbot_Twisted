@@ -81,7 +81,7 @@ class IRCMessage(object):
             if len(self.ParameterList) == 1 and not self.ParameterList[0]:
                 self.ParameterList = []
 
-    def alias(self):
+    def aliasedMessage(self):
         if self.Command in GlobalVars.commandAliases.keys():
             alias = GlobalVars.commandAliases[self.Command]
             newMsg = re.sub(self.Command, " ".join(alias), self.MessageString, count=1)
