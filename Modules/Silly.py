@@ -29,7 +29,7 @@ class Module(ModuleInterface):
                 "no":"http://www.youtube.com/watch?v=YKss2uYpih8",
                 "hunt":"",
                 "<thing>":"Har Har.",
-                "dissapointed":"https://31.media.tumblr.com/cea6574a24b490ada8bec694e87b307b/tumblr_n3blu9k5CW1tsipf6o6_400.gif"
+                "disappointed":"https://31.media.tumblr.com/cea6574a24b490ada8bec694e87b307b/tumblr_n3blu9k5CW1tsipf6o6_400.gif"
             }
         self.triggers.extend(self.linkDict.keys())
 
