@@ -12,9 +12,16 @@ class Module(ModuleInterface):
             return IRCResponse(ResponseType.Say, "Only my admins may create new aliases!", message.ReplyTo)
         if len(message.ParameterList) <= 1:
             return IRCResponse(ResponseType.Say, "Alias what?", message.ReplyTo)
+        triggerFound = False
         for (name, module) in GlobalVars.modules.items():
             if message.ParameterList[0] in module.triggers:
                 return IRCResponse(ResponseType.Say, "A new alias may not be the same as an existing command trigger!", message.ReplyTo)
+            if message.ParameterList[1] in module.triggers:
+                triggerFound = True
+        if not triggerFound:
+            return IRCResponse(ResponseType.Say, "The new alias must contain a valid command!", message.ReplyTo)
+        if message.ParameterList[0] in GlobalVars.commandAliases.keys():
+            return IRCResponse(ResponseType.Say, "A new alias may not match an existing alias!", message.ReplyTo)
         newAlias = []
         for word in message.ParameterList[1:]:
             newAlias.append(word.lower())
