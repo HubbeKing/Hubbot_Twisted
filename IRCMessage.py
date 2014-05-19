@@ -85,4 +85,10 @@ class IRCMessage(object):
         if self.Command in GlobalVars.commandAliases.keys():
             alias = GlobalVars.commandAliases[self.Command]
             newMsg = re.sub(self.Command, " ".join(alias), self.MessageString, count=1)
+            if "$sender" in newMsg:
+                newMsg.replace("$sender", self.User.Name)
+            if "%channel" in newMsg:
+                newMsg.replace("$channel", self.ChannelObj.Name)
+            if "%params" in newMsg:
+                newMsg.replace("$params", self.Parameters)
             return IRCMessage(self.Type, self.User.String, self.ChannelObj, newMsg)
