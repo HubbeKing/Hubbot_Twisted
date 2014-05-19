@@ -90,6 +90,7 @@ class Hubbot(irc.IRCClient):
         for (name, module) in GlobalVars.modules.items():
             if message.Command in module.triggers:
                 self.log(u'<{0}> {1}'.format(message.User.Name, message.MessageString), message.ReplyTo)
+                break
         self.handleMessage(message)
 
     def action(self, user, channel, msg):
@@ -191,6 +192,8 @@ class Hubbot(irc.IRCClient):
         self.responses = []  # in case earlier module responses caused some weird errors
         for (name, module) in GlobalVars.modules.items():
             try:
+                if module.aliased(message):
+                    message = message.alias()
                 if module.shouldTrigger(message):
                     response = module.onTrigger(self, message)
                     if response is None:

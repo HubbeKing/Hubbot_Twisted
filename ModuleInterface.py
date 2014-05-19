@@ -1,3 +1,6 @@
+import GlobalVars
+
+
 class ModuleInterface(object):
     triggers = []
     acceptedTypes = ['PRIVMSG']
@@ -8,6 +11,10 @@ class ModuleInterface(object):
 
     def onStart(self):
         pass
+
+    def aliased(self, message):
+        if message.Type in self.acceptedTypes and message.Command in GlobalVars.commandAliases.keys():
+            return True
 
     def shouldTrigger(self, message):
         if message.Type not in self.acceptedTypes:

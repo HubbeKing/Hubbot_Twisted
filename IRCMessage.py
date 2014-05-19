@@ -1,5 +1,6 @@
 from enumType import enum
 import GlobalVars
+import re
 
 TargetTypes = enum('CHANNEL', 'USER')
 
@@ -24,8 +25,10 @@ class IRCUser(object):
                 userArray = userArray[1].split("@")
                 self.User = userArray[0]
                 self.Hostmask = userArray[1]
+            self.String = "{}!{}@{}".format(self.Name, self.User, self.Hostmask)
         else:
             self.Name = user
+            self.String = "{}!{}@{}".format(self.Name, "a", "b")
 
 
 class IRCMessage(object):
@@ -35,12 +38,14 @@ class IRCMessage(object):
     ReplyTo = None
     MessageList = []
     MessageString = None
+    ChannelObj = None
 
     Command = ''
     Parameters = ''
     ParameterList = []
 
     def __init__(self, type, user, channel, message):
+        self.ChannelObj = channel
         try:
             unicodeMessage = message.decode('utf-8', 'ignore')
         except: # Already utf-8, probably.
@@ -68,11 +73,6 @@ class IRCMessage(object):
             else:
                 self.Parameters = u' '.join(self.MessageList[1:])
 
-
-        #elif self.MessageList[0].startswith(GlobalVars.CurrentNick) and len(self.MessageList) > 1:
-            #self.Command = self.MessageList[1].lower()
-            #self.Parameters = u' '.join(self.MessageList[2:])
-
         if self.Parameters.strip():
             self.ParameterList = self.Parameters.split(' ')
 
@@ -80,3 +80,9 @@ class IRCMessage(object):
 
             if len(self.ParameterList) == 1 and not self.ParameterList[0]:
                 self.ParameterList = []
+
+    def alias(self):
+        if self.Command in GlobalVars.commandAliases.keys():
+            alias = GlobalVars.commandAliases[self.Command]
+            newMsg = re.sub(self.Command, " ".join(alias), self.MessageString, count=1)
+            return IRCMessage(self.Type, self.User.String, self.ChannelObj, newMsg)
