@@ -2,7 +2,7 @@ import os
 
 modules = {}
 moduleCaseMapping = {}
-commandAliases = {"dissapointed":"disappointed"}
+commandAliases = {"dissapointed":["disappointed"]}
 
 abspath = os.path.abspath(__file__)
 dname = os.path.dirname(abspath)
