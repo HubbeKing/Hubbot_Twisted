@@ -15,13 +15,13 @@ class Module(ModuleInterface):
         triggerFound = False
         for (name, module) in GlobalVars.modules.items():
             if message.ParameterList[0] in module.triggers:
-                return IRCResponse(ResponseType.Say, "A new alias may not be the same as an existing command trigger!", message.ReplyTo)
+                return IRCResponse(ResponseType.Say, "'{}' is already a command!".format(message.ParameterList[0]), message.ReplyTo)
             if message.ParameterList[1] in module.triggers:
                 triggerFound = True
         if not triggerFound:
-            return IRCResponse(ResponseType.Say, "The new alias must contain a valid command!", message.ReplyTo)
+            return IRCResponse(ResponseType.Say, "'{}' is not a valid command!".format(message.ParameterList[1]), message.ReplyTo)
         if message.ParameterList[0] in GlobalVars.commandAliases.keys():
-            return IRCResponse(ResponseType.Say, "A new alias may not match an existing alias!", message.ReplyTo)
+            return IRCResponse(ResponseType.Say, "'{}' is already an alias!".format(message.ParameterList[0]), message.ReplyTo)
         newAlias = []
         for word in message.ParameterList[1:]:
             newAlias.append(word.lower())
