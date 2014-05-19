@@ -16,4 +16,6 @@ class Module(ModuleInterface):
         stringToUse = " ".join(message.MessageList[1:])
         messageToUse = stringToUse.encode("utf-8")
         reply = u'{}'.format(Hubbot.brain.get_reply(messageToUse[:180].rsplit(".")[0]))
+        if len(reply) > 180:
+            reply = reply[:181]
         return IRCResponse(ResponseType.Say, reply, message.ReplyTo)
