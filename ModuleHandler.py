@@ -40,7 +40,7 @@ class MessageHandler(object):
 
 
     def handleMessage(self, message):
-        for name, module in GlobalVars.modules.iteritems():
+        for (name, module) in GlobalVars.modules.items():
             try:
                 if module.hasAlias(message):
                     message = message.aliasedMessage()
