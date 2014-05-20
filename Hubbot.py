@@ -192,7 +192,7 @@ class Hubbot(irc.IRCClient):
         msgList = message.split(" ")
         msgToUse = ""
         for msg in msgList:
-            if GlobalVars.CurrentNick not in msg:
+            if GlobalVars.CurrentNick.lower() not in msg.lower():
                 msgToUse += msg + " "
         msgToUse.rstrip()
         if "http" not in msgToUse:
