@@ -1,11 +1,11 @@
-import sys, platform, os, traceback, datetime, codecs, re
+import platform, os, datetime, codecs, re
 from twisted.words.protocols import irc
 from twisted.internet import protocol, reactor
 from megahal import *
 from IRCResponse import ResponseType, IRCResponse
 from IRCMessage import IRCMessage, IRCUser, IRCChannel
 import GlobalVars
-from MessageHandler import MessageHandler
+from ModuleHandler import MessageHandler
 
 
 class Hubbot(irc.IRCClient):
