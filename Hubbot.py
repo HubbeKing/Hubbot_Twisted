@@ -5,6 +5,7 @@ from megahal import *
 from IRCResponse import ResponseType, IRCResponse
 from IRCMessage import IRCMessage, IRCUser, IRCChannel
 import GlobalVars
+from MessageHandler import MessageHandler
 
 
 class Hubbot(irc.IRCClient):
@@ -27,6 +28,7 @@ class Hubbot(irc.IRCClient):
 
     def __init__(self, server, channels):
         self.server = server
+        self.messageHandler = MessageHandler(self)
         self.channels = channels
         self.Quitting = False
         self.startTime = datetime.datetime.now()
@@ -173,42 +175,10 @@ class Hubbot(irc.IRCClient):
             self.handleMessage(message)
 
     def sendResponse(self, response):
-        if response is None or response.Response is None:
-            return False
-
-        if response.Type == ResponseType.Say:
-            self.msg(response.Target, response.Response.encode('utf-8'))
-            self.log(u'<{0}> {1}'.format(self.nickname, response.Response), response.Target)
-        elif response.Type == ResponseType.Do:
-            self.describe(response.Target, response.Response.encode('utf-8'))
-            self.log(u'*{0} {1}*'.format(self.nickname, response.Response), response.Target)
-        elif response.Type == ResponseType.Notice:
-            self.notice(response.Target, response.Response.encode('utf-8'))
-            self.log(u'[{0}] {1}'.format(self.nickname, response.Response), response.Target)
-        elif response.Type == ResponseType.Raw:
-            self.sendLine(response.Response.encode('utf-8'))
+        self.messageHandler.sendResponse(response)
 
     def handleMessage(self, message):
-        self.responses = []  # in case earlier module responses caused some weird errors
-        for (name, module) in GlobalVars.modules.items():
-            try:
-                if module.hasAlias(message):
-                    message = message.aliasedMessage()
-                if module.shouldTrigger(message):
-                    response = module.onTrigger(self, message)
-                    if response is None:
-                        continue
-                    if hasattr(response, "__iter__"):
-                        for r in response:
-                            self.responses.append(r)
-                    else:
-                        self.responses.append(response)
-            except Exception:
-                print "Python Execution Error in '%s': %s" % (name, str(sys.exc_info()))
-                traceback.print_tb(sys.exc_info()[2])
-        for response in self.responses:
-            self.sendResponse(response)
-        self.responses = []
+        self.messageHandler.handleMessage(message)
 
     def log(self, text, target):
         now = datetime.datetime.now()
