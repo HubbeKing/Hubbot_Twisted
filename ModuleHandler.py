@@ -54,7 +54,7 @@ class MessageHandler(object):
                     else:
                         self.sendResponse(response)
             except Exception:
-                print "Python Execution Error in '{}': {}".format(module.__name__, str(sys.exc_info()))
+                print "Python Execution Error in '{}': {}".format(name, str(sys.exc_info()))
                 traceback.print_tb(sys.exc_info()[2])
 
 def LoadModule(name, loadAs=''):
