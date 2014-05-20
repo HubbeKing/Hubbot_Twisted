@@ -1,7 +1,7 @@
 import platform, os, datetime, codecs, re
 from twisted.words.protocols import irc
 from twisted.internet import protocol, reactor
-from cobe.brain import Brain
+from megahal import *
 from IRCResponse import ResponseType, IRCResponse
 from IRCMessage import IRCMessage, IRCUser, IRCChannel
 import GlobalVars
@@ -32,7 +32,7 @@ class Hubbot(irc.IRCClient):
         self.channels = channels
         self.Quitting = False
         self.startTime = datetime.datetime.now()
-        self.brain = Brain("data/{}.brain".format(server))
+        self.brain = MegaHAL(None,"data/{}.brain".format(server),None)
         self.prefixesCharToMode = {"+":"v", "@":"o"}
 
     def signedOn(self):
@@ -195,6 +195,7 @@ class Hubbot(irc.IRCClient):
         msgToUse = msgToUse.replace(GlobalVars.CurrentNick.lower(), "")
         if "http" not in msgToUse:
             self.brain.learn(msgToUse)
+        self.brain.sync()
 
 class HubbotFactory(protocol.ReconnectingClientFactory):
     def __init__(self, server, port, channels):
