@@ -16,7 +16,7 @@ class Module(ModuleInterface):
         stringToUse = " ".join(message.MessageList[1:])
         messageToUse = stringToUse.encode("utf-8")
         Hubbot.learnMessage(messageToUse)
-        reply = Hubbot.brain.get_reply(messageToUse)
+        reply = Hubbot.brain.respond(messageToUse)
         if "." in reply:
             reply = reply[:180].rsplit(".", 1)[0]
         else:
