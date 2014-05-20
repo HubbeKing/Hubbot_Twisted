@@ -190,11 +190,9 @@ class Hubbot(irc.IRCClient):
 
     def learnMessage(self, message):
         msgList = message.split(" ")
-        msgToUse = ""
-        for msg in msgList:
-            if GlobalVars.CurrentNick.lower() not in msg.lower():
-                msgToUse += msg + " "
-        msgToUse.rstrip()
+        msgToUse = " ".join(msgList)
+        msgToUse = msgToUse.replace(GlobalVars.CurrentNick, "")
+        msgToUse = msgToUse.replace(GlobalVars.CurrentNick.lower(), "")
         if "http" not in msgToUse:
             self.brain.learn(msgToUse)
         self.brain.sync()
