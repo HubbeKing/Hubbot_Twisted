@@ -67,9 +67,10 @@ class Hubbot(irc.IRCClient):
                 rank = self.prefixesCharToMode[channelUser[0]]
                 channelUser = channelUser[1:]
 
-            user = self.getUser(channel, channelUser)
-            if not user:
+            if channelUser not in channel.Users:
                 user = IRCUser("{}!{}@{}".format(channelUser, "none", "none"))
+            else:
+                user = channel.Users[channelUser]
 
             channel.Users[user.Name] = user
             channel.Ranks[user.Name] = rank
@@ -77,36 +78,6 @@ class Hubbot(irc.IRCClient):
     def irc_RPL_ENDOFNAMES(self, prefix, params):
         channel = self.channels[params[1]]
         channel.NamesListComplete = True
-
-    def privmsg(self, user, channel, msg):
-        message = IRCMessage('PRIVMSG', user, self.channels[channel], msg)
-        msgList = msg.split(" ")
-        msgToUse = ""
-        for msg in msgList:
-            if GlobalVars.CurrentNick not in msg:
-                msgToUse += msg + " "
-        msgToUse.rstrip()
-        if "http" not in msgToUse:
-            self.brain.learn(msgToUse)
-        for (name, module) in GlobalVars.modules.items():
-            if message.Command in module.triggers:
-                self.log(u'<{0}> {1}'.format(message.User.Name, message.MessageString), message.ReplyTo)
-                break
-        self.brain.sync()
-        self.handleMessage(message)
-
-    def action(self, user, channel, msg):
-        message = IRCMessage('ACTION', user, self.channels[channel], msg)
-        pattern = "hu+g|cuddle|snu+ggle|snu+g|squeeze|glomp"
-        match = re.search(pattern, msg, re.IGNORECASE)
-        if match:
-            self.log(u'*{0} {1}*'.format(message.User.Name, message.MessageString), message.ReplyTo)
-        self.handleMessage(message)
-
-    def noticed(self, user, channel, msg):
-        message = IRCMessage('NOTICE', user, self.channels[channel], msg.upper())
-        self.log(u'[{0}] {1}'.format(message.User.Name, message.MessageString), message.ReplyTo)
-        self.handleMessage(message)
 
     def irc_NICK(self, prefix, params):
         userArray = prefix.split("!")
@@ -121,11 +92,7 @@ class Hubbot(irc.IRCClient):
                     channel.Users[newnick] = IRCUser("{}!{}@{}".format(newnick, user.User, user.Hostmask))
                     del channel.Users[oldnick]
                     message = IRCMessage('NICK', prefix, channel, newnick)
-                    self.handleMessage(message)
-
-    def nickChanged(self, nick):
-        self.nickname = nick
-        GlobalVars.CurrentNick = nick
+                    self.messageHandler.handleMessage(message)
 
     def irc_JOIN(self, prefix, params):
         channel = self.channels[params[0]]
@@ -133,7 +100,7 @@ class Hubbot(irc.IRCClient):
 
         if message.User.Name != GlobalVars.CurrentNick:
             channel.Users[message.User.Name] = message.User
-        self.handleMessage(message)
+        self.messageHandler.handleMessage(message)
 
     def irc_PART(self, prefix, params):
         partMessage = u''
@@ -147,7 +114,7 @@ class Hubbot(irc.IRCClient):
 
         if message.User.Name != GlobalVars.CurrentNick:
             del channel.Users[message.User.Name]
-        self.handleMessage(message)
+        self.messageHandler.handleMessage(message)
 
     def irc_KICK(self, prefix, params):
         kickMessage = u''
@@ -161,7 +128,7 @@ class Hubbot(irc.IRCClient):
             del self.channels[message.ReplyTo]
         else:
             del channel.Users[kickee]
-        self.handleMessage(message)
+        self.messageHandler.handleMessage(message)
 
     def irc_QUIT(self, prefix, params):
         quitMessage = u''
@@ -172,13 +139,33 @@ class Hubbot(irc.IRCClient):
             message = IRCMessage('QUIT', prefix, channel, quitMessage)
             if message.User.Name in channel.Users:
                 del channel.Users[message.User.Name]
-            self.handleMessage(message)
+            self.messageHandler.handleMessage(message)
 
-    def sendResponse(self, response):
-        self.messageHandler.sendResponse(response)
-
-    def handleMessage(self, message):
+    def privmsg(self, user, channel, msg):
+        message = IRCMessage('PRIVMSG', user, self.channels[channel], msg)
+        for (name, module) in GlobalVars.modules.items():
+            if message.Command in module.triggers:
+                self.log(u'<{0}> {1}'.format(message.User.Name, message.MessageString), message.ReplyTo)
+                break
+        self.learnMessage(msg)
         self.messageHandler.handleMessage(message)
+
+    def action(self, user, channel, msg):
+        message = IRCMessage('ACTION', user, self.channels[channel], msg)
+        pattern = "hu+g|cuddle|snu+ggle|snu+g|squeeze|glomp"
+        match = re.search(pattern, msg, re.IGNORECASE)
+        if match:
+            self.log(u'*{0} {1}*'.format(message.User.Name, message.MessageString), message.ReplyTo)
+        self.messageHandler.handleMessage(message)
+
+    def noticed(self, user, channel, msg):
+        message = IRCMessage('NOTICE', user, self.channels[channel], msg.upper())
+        self.log(u'[{0}] {1}'.format(message.User.Name, message.MessageString), message.ReplyTo)
+        self.messageHandler.handleMessage(message)
+
+    def nickChanged(self, nick):
+        self.nickname = nick
+        GlobalVars.CurrentNick = nick
 
     def log(self, text, target):
         now = datetime.datetime.now()
@@ -197,14 +184,20 @@ class Hubbot(irc.IRCClient):
 
     def notifyUser(self, flag, message):
         if flag:
-            self.sendResponse(IRCResponse(ResponseType.Say, "{}: Your {} second timer is up!".format(message.User.Name, message.ParameterList[0]), message.ReplyTo))
+            self.messageHandler.sendResponse(IRCResponse(ResponseType.Say, "{}: Your {} second timer is up!".format(message.User.Name, message.ParameterList[0]), message.ReplyTo))
         else:
-            self.sendResponse(IRCResponse(ResponseType.Say, "{}: Your {} timer is up!".format(message.User.Name, message.ParameterList[0]), message.ReplyTo))
+            self.messageHandler.sendResponse(IRCResponse(ResponseType.Say, "{}: Your {} timer is up!".format(message.User.Name, message.ParameterList[0]), message.ReplyTo))
 
-    def getUser(self, channel, nickname):
-        if nickname in channel.Users:
-            return channel.Users[nickname]
-        return None
+    def learnMessage(self, message):
+        msgList = message.split(" ")
+        msgToUse = ""
+        for msg in msgList:
+            if GlobalVars.CurrentNick not in msg:
+                msgToUse += msg + " "
+        msgToUse.rstrip()
+        if "http" not in msgToUse:
+            self.brain.learn(msgToUse)
+        self.brain.sync()
 
 class HubbotFactory(protocol.ReconnectingClientFactory):
     def __init__(self, server, port, channels):

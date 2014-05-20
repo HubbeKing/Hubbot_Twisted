@@ -15,6 +15,7 @@ class Module(ModuleInterface):
     def onTrigger(self, Hubbot, message):
         stringToUse = " ".join(message.MessageList[1:])
         messageToUse = stringToUse.encode("utf-8")
+        Hubbot.learnMessage(messageToUse)
         reply = Hubbot.brain.get_reply(messageToUse)
         if "." in reply:
             reply = reply[:180].rsplit(".", 1)[0]
