@@ -151,7 +151,7 @@ class Hubbot(irc.IRCClient):
             if message.Command in module.triggers:
                 self.log(u'<{0}> {1}'.format(message.User.Name, message.MessageString), message.ReplyTo)
                 break
-        if user.lower() not in self.ignores:
+        if user not in self.ignores:
             self.learnMessage(msg)
         self.messageHandler.handleMessage(message)
 

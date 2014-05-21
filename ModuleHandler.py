@@ -44,7 +44,7 @@ class MessageHandler(object):
             try:
                 if module.hasAlias(message):
                     message = message.aliasedMessage()
-                if module.shouldTrigger(message) and message.User.Name.lower() not in self.bot.ignores:
+                if module.shouldTrigger(message) and message.User.Name not in self.bot.ignores:
                     response = module.onTrigger(self.bot, message)
                     if response is None:
                         continue
