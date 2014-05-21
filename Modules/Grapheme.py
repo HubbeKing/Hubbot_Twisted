@@ -23,5 +23,5 @@ class Module(ModuleInterface):
             reply = reply[:180].rsplit(" ", 1)[0]
         if len(reply) > 180:
             reply = reply[:181]
-        reply = reply.encode("utf-8", "ignore")
+        reply = reply.decode("utf-8", "ignore")
         return IRCResponse(ResponseType.Say, reply, message.ReplyTo)
