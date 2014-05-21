@@ -11,7 +11,7 @@ class Module(ModuleInterface):
     def onTrigger(self, Hubbot, message):
         now = datetime.datetime.now()
         timeDelta = now - Hubbot.startTime
-        return IRCResponse(ResponseType.Say, "I have been running for {}".format(self.deltaTimeToString(timeDelta)), message.ReplyTo)
+        return IRCResponse(ResponseType.Say, "I have been running for {}!".format(self.deltaTimeToString(timeDelta)), message.ReplyTo)
 
     def deltaTimeToString(self, timeDelta):
         """
