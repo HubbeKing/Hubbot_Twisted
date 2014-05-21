@@ -15,6 +15,8 @@ class ModuleInterface(object):
     def hasAlias(self, message):
         if message.Type in self.acceptedTypes and message.Command in GlobalVars.commandAliases.keys():
             return True
+        else:
+            return False
 
     def shouldTrigger(self, message):
         if message.Type not in self.acceptedTypes:
