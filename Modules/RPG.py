@@ -36,7 +36,7 @@ class Module(ModuleInterface):
                 elif message.ParameterList[0] == "add":
                     with sqlite3.connect(filename) as conn:
                         c = conn.cursor()
-                        c.execute("SELECT max(number) FROM pathfinder")
+                        c.execute("SELECT max(id) FROM pathfinder")
                         maxNumber = c.fetchone()[0]
                         c.execute("INSERT INTO pathfinder VALUES (?,?)", (maxNumber+1, " ".join(message.ParameterList[1:])))
                         conn.commit()
@@ -76,7 +76,7 @@ class Module(ModuleInterface):
                 elif message.ParameterList[0] == "add":
                     with sqlite3.connect(filename) as conn:
                         c = conn.cursor()
-                        c.execute("SELECT max(number) FROM lp")
+                        c.execute("SELECT max(id) FROM lp")
                         maxNumber = c.fetchone()[0]
                         c.execute("INSERT INTO lp VALUES (?,?)", (maxNumber+1, " ".join(message.ParameterList[1:])))
                         conn.commit()
@@ -116,7 +116,7 @@ class Module(ModuleInterface):
                 elif message.ParameterList[0] == "add":
                     with sqlite3.connect(filename) as conn:
                         c = conn.cursor()
-                        c.execute("SELECT max(number) FROM mm")
+                        c.execute("SELECT max(id) FROM mm")
                         maxNumber = c.fetchone()[0]
                         c.execute("INSERT INTO mm VALUES (?,?)", (maxNumber+1, " ".join(message.ParameterList[1:])))
                         conn.commit()
@@ -156,7 +156,7 @@ class Module(ModuleInterface):
                 elif message.ParameterList[0] == "add":
                     with sqlite3.connect(filename) as conn:
                         c = conn.cursor()
-                        c.execute("SELECT max(number) FROM welch")
+                        c.execute("SELECT max(id) FROM welch")
                         maxNumber = c.fetchone()[0]
                         c.execute("INSERT INTO mm VALUES (?,?)", (maxNumber+1, " ".join(message.ParameterList[1:])))
                         conn.commit()
