@@ -75,8 +75,6 @@ def LoadModule(name, loadAs=''):
         UnloadModule(name)
         alreadyExisted = True
 
-    #src = __import__('Modules.' + moduleListCaseMap[name], globals(), locals(), [])
-
     module = importlib.import_module("Modules." + moduleListCaseMap[name])
 
     reload(module)
