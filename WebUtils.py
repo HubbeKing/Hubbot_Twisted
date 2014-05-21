@@ -81,6 +81,6 @@ def pasteEE(data, description, expire):
     if result:
         jsonResult = json.loads(result.body)
         if jsonResult["status"] == "success":
-            return jsonResult["paste"]["raw"]
+            return jsonResult["paste"]["link"]
         elif jsonResult["status"] == "error":
             return "An error occurred while posting to Paste.ee, code: {}, reason: {}".format(jsonResult["errorcode"], jsonResult["error"])
