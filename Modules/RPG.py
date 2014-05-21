@@ -1,13 +1,14 @@
-from ModuleInterface import ModuleInterface
-from IRCResponse import IRCResponse, ResponseType
+import re
 import sqlite3
 import random
+from ModuleInterface import ModuleInterface
+from IRCResponse import IRCResponse, ResponseType
 from WebUtils import pasteEE
 
 
 class Module(ModuleInterface):
     triggers = ["pf", "lp", "mm", "welch"]
-    help = 'pf/lp/mm/welch <number>/add <thing>/list -- "helpful" RPG advice and stuff'
+    help = 'pf/lp/mm/welch <number>/add <thing>/list/search <term> -- "helpful" RPG advice and stuff'
     filename = "data/data.db"
 
     def onTrigger(self, Hubbot, message):
@@ -21,6 +22,8 @@ class Module(ModuleInterface):
                     lineToAdd = " ".join(message.ParameterList[1:])
                     newIndex = self.addLine("pathfinder", lineToAdd)
                     return IRCResponse(ResponseType.Say, "Successfully added line '{}. {}'".format(newIndex, lineToAdd), message.ReplyTo)
+                elif message.ParameterList[0] == "search":
+                    return IRCResponse(ResponseType.Say, self.search("pathfinder", " ".join(message.ParameterList[1:])), message.ReplyTo)
                 else:
                     return IRCResponse(ResponseType.Say, self.getSpecific("pathfinder", message.ParameterList[0]), message.ReplyTo)
         elif message.Command == "lp":
@@ -33,6 +36,8 @@ class Module(ModuleInterface):
                     lineToAdd = " ".join(message.ParameterList[1:])
                     newIndex = self.addLine("lp", lineToAdd)
                     return IRCResponse(ResponseType.Say, "Successfully added line '{}. {}'".format(newIndex, lineToAdd), message.ReplyTo)
+                elif message.ParameterList[0] == "search":
+                    return IRCResponse(ResponseType.Say, self.search("lp", " ".join(message.ParameterList[1:])), message.ReplyTo)
                 else:
                     return IRCResponse(ResponseType.Say, self.getSpecific("lp", message.ParameterList[0]), message.ReplyTo)
         elif message.Command == "mm":
@@ -45,6 +50,8 @@ class Module(ModuleInterface):
                     lineToAdd = " ".join(message.ParameterList[1:])
                     newIndex = self.addLine("mm", lineToAdd)
                     return IRCResponse(ResponseType.Say, "Successfully added line '{}. {}'".format(newIndex, lineToAdd), message.ReplyTo)
+                elif message.ParameterList[0] == "search":
+                    return IRCResponse(ResponseType.Say, self.search("mm", " ".join(message.ParameterList[1:])), message.ReplyTo)
                 else:
                     return IRCResponse(ResponseType.Say, self.getSpecific("mm", message.ParameterList[0]), message.ReplyTo)
         elif message.Command == "welch":
@@ -53,6 +60,8 @@ class Module(ModuleInterface):
             else:
                 if message.ParameterList[0] == "list":
                     return IRCResponse(ResponseType.Say, self.getList("welch", "Welch"), message.ReplyTo)
+                elif message.ParameterList[0] == "search":
+                    return IRCResponse(ResponseType.Say, self.search("welch", " ".join(message.ParameterList[1:])), message.ReplyTo)
                 else:
                     return IRCResponse(ResponseType.Say, self.getSpecific("welch", message.ParameterList[0]), message.ReplyTo)
 
@@ -100,3 +109,23 @@ class Module(ModuleInterface):
             c.execute("INSERT INTO {} VALUES (?,?)".format(table), (maxNumber+1, line))
             conn.commit()
         return maxNumber + 1
+
+    def search(self, table, line):
+        messageDict = {}
+        matches = []
+        with sqlite3.connect(self.filename) as conn:
+            c = conn.cursor()
+            for row in c.execute("SELECT * FROM {}".format(table)):
+                messageDict[row[0]] = row[1]
+        for number, text in messageDict.iteritems():
+            match = re.search(line, text, re.IGNORECASE)
+            if match:
+                for number, text in messageDict.iteritems():
+                    if text == match.string:
+                        foundNumber = number
+                        matches.append("{}. {}".format(foundNumber, match.string))
+        if len(matches) > 0:
+            choice = random.choice(matches)
+            return "Match #{}/{} - {}".format(matches.index(choice)+1, len(matches), choice)
+        else:
+            return "Could not find '{}'!".format(line)
