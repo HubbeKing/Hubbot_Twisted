@@ -44,7 +44,6 @@ class BotHandler:
         else:
             print "Shutting down bot for server '{}'".format(server)
             self.botfactories[server].protocol.Quitting = True
-            self.botfactories[server].protocol.brain.close()
             try:
                 self.botfactories[server].protocol.quit(quitmessage)
             except:
@@ -64,7 +63,6 @@ class BotHandler:
         quitmessage = quitmessage.encode("utf-8")
         for server, botfactory in self.botfactories.iteritems():
             botfactory.protocol.Quitting = True
-            botfactory.protocol.brain.close()
             botfactory.protocol.quit(quitmessage)
         self.botfactories = {}
         reactor.callLater(4.0, reactor.stop)
@@ -73,7 +71,6 @@ class BotHandler:
         self.quitmessage = quitmessage.encode("utf-8")
         for server, botfactory in self.botfactories.iteritems():
             botfactory.protocol.Quitting = True
-            botfactory.protocol.brain.close()
             botfactory.protocol.quit(quitmessage)
         self.botfactories = {}
         reactor.callLater(2.0, self.replaceInstance)
