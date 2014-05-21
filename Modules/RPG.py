@@ -63,8 +63,7 @@ class Module(ModuleInterface):
             for row in c.execute("SELECT * FROM {}".format(table)):
                 messageDict[row[0]] = row[1]
         choice = random.choice(messageDict.keys())
-        string = "{}. {}".format(str(choice), messageDict[choice])
-        return string
+        return "{}. {}".format(str(choice), messageDict[choice])
 
     def getSpecific(self, table, number):
         messageDict = {}
