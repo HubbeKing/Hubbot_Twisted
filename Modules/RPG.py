@@ -29,8 +29,8 @@ class Module(ModuleInterface):
                         for row in c.execute("SELECT * FROM pathfinder"):
                             messageDict[row[0]] = row[1]
                     pasteString = ""
-                    for number, message in messageDict.iteritems():
-                        pasteString += str(number) + ". " + message
+                    for number, string in messageDict.iteritems():
+                        pasteString += str(number) + ". " + string +"\n"
                     pasteLink = pasteEE(pasteString, "Pathfinder", 10)
                     return IRCResponse(ResponseType.Say, "Link posted! {}".format(pasteLink), message.ReplyTo)
                 elif message.ParameterList[0] == "add":
@@ -46,11 +46,14 @@ class Module(ModuleInterface):
                         c = conn.cursor()
                         for row in c.execute("SELECT * FROM pathfinder"):
                             messageDict[row[0]] = row[1]
-                    if message.ParameterList[0] in messageDict.keys():
-                        choice = message.ParameterList[0]
+                    try:
+                        choice = int(message.ParameterList[0])
+                    except:
+                        return IRCResponse(ResponseType.Say, "I don't know what you mean by '{}'.".format(message.ParameterList[0]), message.ReplyTo)
+                    if choice in messageDict.keys():
                         return IRCResponse(ResponseType.Say, "{}. {}".format(str(choice), messageDict[choice]), message.ReplyTo)
                     else:
-                        return IRCResponse(ResponseType.Say, "Invalid number, valid numbers are <{}-{}>".format(messageDict.keys[0], messageDict.keys()[-1]), message.ReplyTo)
+                        return IRCResponse(ResponseType.Say, "Invalid number, valid numbers are <{}-{}>".format(messageDict.keys()[0], messageDict.keys()[-1]), message.ReplyTo)
         elif message.Command == "lp":
             if len(message.ParameterList) == 0:
                 messageDict = {}
@@ -69,8 +72,8 @@ class Module(ModuleInterface):
                         for row in c.execute("SELECT * FROM lp"):
                             messageDict[row[0]] = row[1]
                     pasteString = ""
-                    for number, message in messageDict.iteritems():
-                        pasteString += str(number) + ". " + message
+                    for number, string in messageDict.iteritems():
+                        pasteString += str(number) + ". " + string +"\n"
                     pasteLink = pasteEE(pasteString, "Let's Play", 10)
                     return IRCResponse(ResponseType.Say, "Link posted! {}".format(pasteLink), message.ReplyTo)
                 elif message.ParameterList[0] == "add":
@@ -86,11 +89,14 @@ class Module(ModuleInterface):
                         c = conn.cursor()
                         for row in c.execute("SELECT * FROM lp"):
                             messageDict[row[0]] = row[1]
-                    if message.ParameterList[0] in messageDict.keys():
-                        choice = message.ParameterList[0]
+                    try:
+                        choice = int(message.ParameterList[0])
+                    except:
+                        return IRCResponse(ResponseType.Say, "I don't know what you mean by '{}'.".format(message.ParameterList[0]), message.ReplyTo)
+                    if choice in messageDict.keys():
                         return IRCResponse(ResponseType.Say, "{}. {}".format(str(choice), messageDict[choice]), message.ReplyTo)
                     else:
-                        return IRCResponse(ResponseType.Say, "Invalid number, valid numbers are <{}-{}>".format(messageDict.keys[0], messageDict.keys()[-1]), message.ReplyTo)
+                        return IRCResponse(ResponseType.Say, "Invalid number, valid numbers are <{}-{}>".format(messageDict.keys()[0], messageDict.keys()[-1]), message.ReplyTo)
         elif message.Command == "mm":
             if len(message.ParameterList) == 0:
                 messageDict = {}
@@ -109,8 +115,8 @@ class Module(ModuleInterface):
                         for row in c.execute("SELECT * FROM mm"):
                             messageDict[row[0]] = row[1]
                     pasteString = ""
-                    for number, message in messageDict.iteritems():
-                        pasteString += str(number) + ". " + message
+                    for number, string in messageDict.iteritems():
+                        pasteString += str(number) + ". " + string +"\n"
                     pasteLink = pasteEE(pasteString, "Mutants & Masterminds", 10)
                     return IRCResponse(ResponseType.Say, "Link posted! {}".format(pasteLink), message.ReplyTo)
                 elif message.ParameterList[0] == "add":
@@ -126,11 +132,14 @@ class Module(ModuleInterface):
                         c = conn.cursor()
                         for row in c.execute("SELECT * FROM mm"):
                             messageDict[row[0]] = row[1]
-                    if message.ParameterList[0] in messageDict.keys():
-                        choice = message.ParameterList[0]
+                    try:
+                        choice = int(message.ParameterList[0])
+                    except:
+                        return IRCResponse(ResponseType.Say, "I don't know what you mean by '{}'.".format(message.ParameterList[0]), message.ReplyTo)
+                    if choice in messageDict.keys():
                         return IRCResponse(ResponseType.Say, "{}. {}".format(str(choice), messageDict[choice]), message.ReplyTo)
                     else:
-                        return IRCResponse(ResponseType.Say, "Invalid number, valid numbers are <{}-{}>".format(messageDict.keys[0], messageDict.keys()[-1]), message.ReplyTo)
+                        return IRCResponse(ResponseType.Say, "Invalid number, valid numbers are <{}-{}>".format(messageDict.keys()[0], messageDict.keys()[-1]), message.ReplyTo)
         elif message.Command == "welch":
             if len(message.ParameterList) == 0:
                 messageDict = {}
@@ -149,8 +158,8 @@ class Module(ModuleInterface):
                         for row in c.execute("SELECT * FROM welch"):
                             messageDict[row[0]] = row[1]
                     pasteString = ""
-                    for number, message in messageDict.iteritems():
-                        pasteString += str(number) + ". " + message
+                    for number, string in messageDict.iteritems():
+                        pasteString += str(number) + ". " + string +"\n"
                     pasteLink = pasteEE(pasteString, "Welch", 10)
                     return IRCResponse(ResponseType.Say, "Link posted! {}".format(pasteLink), message.ReplyTo)
                 elif message.ParameterList[0] == "add":
@@ -166,8 +175,11 @@ class Module(ModuleInterface):
                         c = conn.cursor()
                         for row in c.execute("SELECT * FROM welch"):
                             messageDict[row[0]] = row[1]
-                    if message.ParameterList[0] in messageDict.keys():
-                        choice = message.ParameterList[0]
+                    try:
+                        choice = int(message.ParameterList[0])
+                    except:
+                        return IRCResponse(ResponseType.Say, "I don't know what you mean by '{}'.".format(message.ParameterList[0]), message.ReplyTo)
+                    if choice in messageDict.keys():
                         return IRCResponse(ResponseType.Say, "{}. {}".format(str(choice), messageDict[choice]), message.ReplyTo)
                     else:
-                        return IRCResponse(ResponseType.Say, "Invalid number, valid numbers are <{}-{}>".format(messageDict.keys[0], messageDict.keys()[-1]), message.ReplyTo)
+                        return IRCResponse(ResponseType.Say, "Invalid number, valid numbers are <{}-{}>".format(messageDict.keys()[0], messageDict.keys()[-1]), message.ReplyTo)
