@@ -162,13 +162,6 @@ class Module(ModuleInterface):
                         pasteString += str(number) + ". " + string +"\n"
                     pasteLink = pasteEE(pasteString, "Welch", 10)
                     return IRCResponse(ResponseType.Say, "Link posted! {}".format(pasteLink), message.ReplyTo)
-                elif message.ParameterList[0] == "add":
-                    with sqlite3.connect(filename) as conn:
-                        c = conn.cursor()
-                        c.execute("SELECT max(id) FROM welch")
-                        maxNumber = c.fetchone()[0]
-                        c.execute("INSERT INTO mm VALUES (?,?)", (maxNumber+1, " ".join(message.ParameterList[1:])))
-                        conn.commit()
                 else:
                     messageDict = {}
                     with sqlite3.connect(filename) as conn:
