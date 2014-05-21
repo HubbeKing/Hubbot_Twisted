@@ -200,6 +200,8 @@ class Hubbot(irc.IRCClient):
         msgToUse = msgToUse.replace(GlobalVars.CurrentNick.lower(), "")
         if "www" not in msgToUse and "://" not in msgToUse:
             self.brain._learn(msgToUse)
+
+    def saveBrain(self):
         self.brain.save("data/{}.brain".format(self.server))
 
 class HubbotFactory(protocol.ReconnectingClientFactory):
