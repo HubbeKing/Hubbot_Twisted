@@ -1,6 +1,5 @@
 import random
 import re
-import urllib
 import sqlite3
 import sys
 import traceback
