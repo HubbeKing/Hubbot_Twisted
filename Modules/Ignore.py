@@ -18,6 +18,8 @@ class Module(ModuleInterface):
                     c = conn.cursor()
                     c.execute("SELECT max(id) FROM ignores")
                     maxID = c.fetchone()[0]
+                    if maxID is None:
+                        maxID = 0
                     c.execute("INSERT INTO ignores VALUES (?,?)", (maxID+1, message.ParameterList[0]))
                     conn.commit()
                 Hubbot.ignores.append(message.ParameterList[0])
