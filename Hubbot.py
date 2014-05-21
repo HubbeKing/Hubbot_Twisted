@@ -146,7 +146,8 @@ class Hubbot(irc.IRCClient):
             if message.Command in module.triggers:
                 self.log(u'<{0}> {1}'.format(message.User.Name, message.MessageString), message.ReplyTo)
                 break
-        self.learnMessage(msg)
+        if "bot" not in user.lower():
+            self.learnMessage(msg)
         self.messageHandler.handleMessage(message)
 
     def action(self, user, channel, msg):
