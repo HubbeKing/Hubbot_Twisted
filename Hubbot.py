@@ -95,6 +95,9 @@ class Hubbot(irc.IRCClient):
                 if userKey == oldnick:
                     channel.Users[newnick] = IRCUser("{}!{}@{}".format(newnick, user.User, user.Hostmask))
                     del channel.Users[oldnick]
+                    if oldnick in channel.Ranks:
+                        channel.Ranks[newnick] = channel.Ranks[oldnick]
+                        del channel.Ranks[oldnick]
                     message = IRCMessage('NICK', prefix, channel, newnick)
                     self.messageHandler.handleMessage(message)
 
@@ -118,6 +121,8 @@ class Hubbot(irc.IRCClient):
 
         if message.User.Name != GlobalVars.CurrentNick:
             del channel.Users[message.User.Name]
+            if message.User.Name in channel.Ranks:
+                del channel.Ranks[message.User.Name]
         self.messageHandler.handleMessage(message)
 
     def irc_KICK(self, prefix, params):
@@ -132,6 +137,8 @@ class Hubbot(irc.IRCClient):
             del self.channels[message.ReplyTo]
         else:
             del channel.Users[kickee]
+            if kickee in channel.Ranks:
+                del channel.Ranks[kickee]
         self.messageHandler.handleMessage(message)
 
     def irc_QUIT(self, prefix, params):
@@ -143,6 +150,8 @@ class Hubbot(irc.IRCClient):
             message = IRCMessage('QUIT', prefix, channel, quitMessage)
             if message.User.Name in channel.Users:
                 del channel.Users[message.User.Name]
+                if message.User.Name in channel.Ranks:
+                    del channel.Ranks[message.User.Name]
             self.messageHandler.handleMessage(message)
 
     def privmsg(self, user, channel, msg):
