@@ -17,7 +17,10 @@ class Module(ModuleInterface):
                 return IRCResponse(ResponseType.Say, self.getRandom("pathfinder"), message.ReplyTo)
             else:
                 if message.ParameterList[0] == "list":
-                    return IRCResponse(ResponseType.Say, self.getList("pathfinder", "Pathfinder"), message.ReplyTo)
+                    if len(message.ParameterList) == 1:
+                        return IRCResponse(ResponseType.Say, self.getList("pathfinder", "Pathfinder", ""), message.ReplyTo)
+                    else:
+                        return IRCResponse(ResponseType.Say, self.getList("pathfinder", "Pathfinder", " ".join(message.ParameterList[1:])), message.ReplyTo)
                 elif message.ParameterList[0] == "add":
                     lineToAdd = " ".join(message.ParameterList[1:])
                     newIndex = self.addLine("pathfinder", lineToAdd)
@@ -31,7 +34,10 @@ class Module(ModuleInterface):
                return IRCResponse(ResponseType.Say, self.getRandom("lp"), message.ReplyTo)
             else:
                 if message.ParameterList[0] == "list":
-                    return IRCResponse(ResponseType.Say, self.getList("lp", "Let's Play"), message.ReplyTo)
+                    if len(message.ParameterList) == 1:
+                        return IRCResponse(ResponseType.Say, self.getList("lp", "Let's Play", ""), message.ReplyTo)
+                    else:
+                        return IRCResponse(ResponseType.Say, self.getList("lp", "Let's Play", " ".join(message.ParameterList[1:])), message.ReplyTo)
                 elif message.ParameterList[0] == "add":
                     lineToAdd = " ".join(message.ParameterList[1:])
                     newIndex = self.addLine("lp", lineToAdd)
@@ -45,7 +51,10 @@ class Module(ModuleInterface):
                 return IRCResponse(ResponseType.Say, self.getRandom("mm"), message.ReplyTo)
             else:
                 if message.ParameterList[0] == "list":
-                    return IRCResponse(ResponseType.Say, self.getList("mm", "Mutants & Masterminds"), message.ReplyTo)
+                    if len(message.ParameterList) == 1:
+                        return IRCResponse(ResponseType.Say, self.getList("mm", "Mutants & Masterminds", ""), message.ReplyTo)
+                    else:
+                        return IRCResponse(ResponseType.Say, self.getList("mm", "Mutants & Masterminds", " ".join(message.ParameterList[1:])), message.ReplyTo)
                 elif message.ParameterList[0] == "add":
                     lineToAdd = " ".join(message.ParameterList[1:])
                     newIndex = self.addLine("mm", lineToAdd)
@@ -59,7 +68,10 @@ class Module(ModuleInterface):
                 return IRCResponse(ResponseType.Say, self.getRandom("welch"), message.ReplyTo)
             else:
                 if message.ParameterList[0] == "list":
-                    return IRCResponse(ResponseType.Say, self.getList("welch", "Welch"), message.ReplyTo)
+                    if len(message.ParameterList) == 1:
+                        return IRCResponse(ResponseType.Say, self.getList("welch", "Welch", ""), message.ReplyTo)
+                    else:
+                        return IRCResponse(ResponseType.Say, self.getList("welch", "Welch", " ".join(message.ParameterList[1:])), message.ReplyTo)
                 elif message.ParameterList[0] == "search":
                     return IRCResponse(ResponseType.Say, self.search("welch", " ".join(message.ParameterList[1:])), message.ReplyTo)
                 else:
@@ -89,15 +101,21 @@ class Module(ModuleInterface):
         else:
             return "Invalid number, valid numbers are <{}-{}>".format(messageDict.keys()[0], messageDict.keys()[-1])
 
-    def getList(self, table, name):
+    def getList(self, table, name, params):
         messageDict = {}
         with sqlite3.connect(self.filename) as conn:
             c = conn.cursor()
             for row in c.execute("SELECT * FROM {}".format(table)):
                 messageDict[row[0]] = row[1]
         pasteString = ""
-        for number, string in messageDict.iteritems():
-            pasteString += str(number) + ". " + string + "\n"
+        if len(params) == 0:
+            for number, string in messageDict.iteritems():
+                pasteString += str(number) + ". " + string + "\n"
+        else:
+            for number, string in messageDict.iteritems():
+                match = re.search(params, string, re.IGNORECASE)
+                if match:
+                    pasteString += str(number) + ". " + string + "\n"
         pasteLink = pasteEE(pasteString, name, 10)
         return "Link posted! {}".format(pasteLink)
 
