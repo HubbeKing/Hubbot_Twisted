@@ -22,8 +22,6 @@ class Hubbot(irc.IRCClient):
 
     sourceURL = GlobalVars.source
 
-    responses = []
-
     startTime = datetime.datetime.min
 
     def __init__(self, server, channels):
