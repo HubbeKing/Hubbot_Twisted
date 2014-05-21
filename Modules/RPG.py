@@ -66,15 +66,15 @@ class Module(ModuleInterface):
         return "{}. {}".format(str(choice), messageDict[choice])
 
     def getSpecific(self, table, number):
+        try:
+            choice = int(number)
+        except:
+            return "I don't know what you mean by '{}'.".format(number)
         messageDict = {}
         with sqlite3.connect(self.filename) as conn:
             c = conn.cursor()
             for row in c.execute("SELECT * FROM {}".format(table)):
                 messageDict[row[0]] = row[1]
-        try:
-            choice = int(number)
-        except:
-            return "I don't know what you mean by '{}'.".format(number)
         if choice in messageDict.keys():
             return "{}. {}".format(str(choice), messageDict[choice])
         else:
