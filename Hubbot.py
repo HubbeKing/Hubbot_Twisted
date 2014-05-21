@@ -1,4 +1,4 @@
-import platform, os, datetime, codecs, re
+import platform, os, datetime, codecs, re, sqlite3
 from twisted.words.protocols import irc
 from twisted.internet import protocol, reactor
 from SimpleHal import SimpleHAL
@@ -33,6 +33,11 @@ class Hubbot(irc.IRCClient):
         self.brain = SimpleHAL()
         self.brain.load("data/{}.brain".format(server))
         self.prefixesCharToMode = {"+":"v", "@":"o"}
+        self.ignores = []
+        with sqlite3.connect("data/data.db") as conn:
+            c = conn.cursor()
+            for row in c.execute("SELECT nick FROM ignores"):
+                self.ignores.append(row[0])
 
     def signedOn(self):
         for channel in self.channels.keys():
@@ -146,7 +151,7 @@ class Hubbot(irc.IRCClient):
             if message.Command in module.triggers:
                 self.log(u'<{0}> {1}'.format(message.User.Name, message.MessageString), message.ReplyTo)
                 break
-        if "bot" not in user.lower():
+        if user.lower() not in self.ignores:
             self.learnMessage(msg)
         self.messageHandler.handleMessage(message)
 
