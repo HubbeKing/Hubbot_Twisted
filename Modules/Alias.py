@@ -10,6 +10,9 @@ class Alias(ModuleInterface):
            'you can use $1+, $2+ for all parameters after the first, second one' \
            'The whole parameter string is $0. $sender and $channel can also be used.'
 
+    def onLoad(self):
+        self.bot.moduleHandler.commandAliases = self.bot.moduleHandler.loadAliases()
+        
     def onTrigger(self, message):
         if message.User.Name not in GlobalVars.admins:
             return IRCResponse(ResponseType.Say, "Only my admins may create new aliases!", message.ReplyTo)
