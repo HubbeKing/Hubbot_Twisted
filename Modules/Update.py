@@ -5,11 +5,11 @@ import re
 import subprocess
 
 
-class Module(ModuleInterface):
+class Update(ModuleInterface):
     triggers = ["update"]
     help = "update - pulls the latest code from GitHub"
 
-    def onTrigger(self, Hubbot, message):
+    def onTrigger(self, message):
         if message.User.Name not in GlobalVars.admins:
             return IRCResponse(ResponseType.Say, "Only my admins can update me!", message.ReplyTo)
 

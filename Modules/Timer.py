@@ -4,11 +4,11 @@ from ModuleInterface import ModuleInterface
 from timeparse import timeparse
 
 
-class Module(ModuleInterface):
+class Timer(ModuleInterface):
     triggers = ["timer"]
     help = "timer <time> - starts a countdown timer and notifies you when time's up. No decimals in months or years, max 1 year."
 
-    def onTrigger(self, Hubbot, message):
+    def onTrigger(self, message):
         flag = False
         if len(message.ParameterList) == 1:
             try:
@@ -18,7 +18,7 @@ class Module(ModuleInterface):
                 delay = timeparse(message.ParameterList[0])
         else:
             delay = timeparse(" ".join(message.ParameterList))
-        if delay <= 0 or delay == None:
+        if delay <= 0 or delay is None:
             return IRCResponse(ResponseType.Say, "I don't think I understand that...", message.ReplyTo)
         elif delay > (60 * 60 * 24 * 365):
             return IRCResponse(ResponseType.Say, "Do you really need a timer that long?", message.ReplyTo)
@@ -26,7 +26,7 @@ class Module(ModuleInterface):
             return IRCResponse(ResponseType.Say, "Less than a second? Really?", message.ReplyTo)
 
         else:
-            reactor.callLater(delay, Hubbot.notifyUser, flag, message)
+            reactor.callLater(delay, self.bot.notifyUser, flag, message)
             if flag:
                 return IRCResponse(ResponseType.Say, "{}: A {} second timer has been started!".format(message.User.Name, message.ParameterList[0]), message.ReplyTo)
             else:

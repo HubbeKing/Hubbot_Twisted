@@ -6,7 +6,8 @@ class ModuleInterface(object):
     acceptedTypes = ['PRIVMSG']
     help = '<no help defined (yet)>'
 
-    def __init__(self):
+    def __init__(self, bot):
+        self.bot = bot
         self.onStart()
 
     def onStart(self):
@@ -26,5 +27,5 @@ class ModuleInterface(object):
 
         return True
 
-    def onTrigger(self, Hubbot, message):
+    def onTrigger(self, message):
         pass

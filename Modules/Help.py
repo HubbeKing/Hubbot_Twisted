@@ -3,11 +3,11 @@ from ModuleInterface import ModuleInterface
 import GlobalVars
 
 
-class Module(ModuleInterface):
+class Help(ModuleInterface):
     triggers = ['help','command','commands']
     help = 'command(s)/help (<function>) - returns a list of loaded modules, or the help text of a particular command if one is specified'
     
-    def onTrigger(self, Hubbot, message):
+    def onTrigger(self, message):
         if len(message.ParameterList) > 0:
             if message.ParameterList[0].lower() in GlobalVars.moduleCaseMapping:
                 func = GlobalVars.modules[GlobalVars.moduleCaseMapping[message.ParameterList[0].lower()]]

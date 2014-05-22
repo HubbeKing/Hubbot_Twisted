@@ -4,11 +4,11 @@ from ModuleInterface import ModuleInterface
 import GlobalVars
 
 
-class Module(ModuleInterface):
+class BotHandling(ModuleInterface):
     triggers = ["connect", "quit", "quitfrom", "restart", "shutdown"]
     help = "connect <server> <channel>, quit, quitfrom <server>, restart, shutdown - Connect to / Disconnect from servers, Restart current bot, Shut down all bots"
 
-    def onTrigger(self, Hubbot, message):
+    def onTrigger(self, message):
         if message.User.Name not in GlobalVars.admins:
             return IRCResponse(ResponseType.Say, "You are not allowed to use '{}'".format(message.Command), message.ReplyTo)
 
@@ -30,29 +30,29 @@ class Module(ModuleInterface):
                     return IRCResponse(ResponseType.Say, "Could not connect to server '{}'".format(server), message.ReplyTo)
 
         if message.Command == "quit":
-            if datetime.datetime.now() > Hubbot.startTime + datetime.timedelta(seconds=10):
-                Hubbot.Quitting = True
-                Hubbot.restarting = False
+            if datetime.datetime.now() > self.bot.startTime + datetime.timedelta(seconds=10):
+                self.bot.Quitting = True
+                self.bot.restarting = False
                 quitMessage = "ohok".encode("utf-8")
-                GlobalVars.bothandler.stopBotFactory(Hubbot.server, quitMessage)
+                GlobalVars.bothandler.stopBotFactory(self.bot.server, quitMessage)
 
         if message.Command == "quitfrom":
             if len(message.ParameterList) >= 1:
                 for server in message.ParameterList:
-                    if server in GlobalVars.bothandler.botfactories and server != Hubbot.server:
+                    if server in GlobalVars.bothandler.botfactories and server != self.bot.server:
                         GlobalVars.bothandler.stopBotFactory(server)
                         return IRCResponse(ResponseType.Say, "Successfully quit from server '{}'".format(server), message.ReplyTo)
-                    elif server == Hubbot.server:
+                    elif server == self.bot.server:
                         return IRCResponse(ResponseType.Say, "Please use quit to quit from current server.", message.ReplyTo)
                     else:
                         return IRCResponse(ResponseType.Say, "I don't think I am on that server.", message.ReplyTo)
 
         if message.Command == "restart":
-            if datetime.datetime.now() > Hubbot.startTime + datetime.timedelta(seconds=10):
+            if datetime.datetime.now() > self.bot.startTime + datetime.timedelta(seconds=10):
                 GlobalVars.bothandler.restart()
                 return
 
         if message.Command == "shutdown":
-            if datetime.datetime.now() > Hubbot.startTime + datetime.timedelta(seconds=10):
+            if datetime.datetime.now() > self.bot.startTime + datetime.timedelta(seconds=10):
                 GlobalVars.bothandler.shutdown()
                 return

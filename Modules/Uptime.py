@@ -4,13 +4,13 @@ from IRCResponse import IRCResponse, ResponseType
 import datetime
 
 
-class Module(ModuleInterface):
+class Uptime(ModuleInterface):
     triggers = ["uptime"]
     help = "uptime -- returns the uptime for the bot"
 
-    def onTrigger(self, Hubbot, message):
+    def onTrigger(self, message):
         now = datetime.datetime.now()
-        timeDelta = now - Hubbot.startTime
+        timeDelta = now - self.bot.startTime
         return IRCResponse(ResponseType.Say, "I have been running for {}!".format(self.deltaTimeToString(timeDelta)), message.ReplyTo)
 
     def deltaTimeToString(self, timeDelta):

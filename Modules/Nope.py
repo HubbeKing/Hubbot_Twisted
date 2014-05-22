@@ -3,7 +3,7 @@ from IRCResponse import IRCResponse, ResponseType
 from ModuleInterface import ModuleInterface
 
 
-class Module(ModuleInterface):
+class Nope(ModuleInterface):
     help = "Nope."
     seconds = 300
     lastTriggered = datetime.datetime.min
@@ -16,5 +16,5 @@ class Module(ModuleInterface):
         else:
             return False
 
-    def onTrigger(self, Hubbot, message):
+    def onTrigger(self, message):
         return IRCResponse(ResponseType.Say, "I don't think so either.", message.ReplyTo)

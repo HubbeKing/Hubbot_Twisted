@@ -3,11 +3,11 @@ from IRCResponse import IRCResponse, ResponseType
 from ModuleInterface import ModuleInterface
 
 
-class Module(ModuleInterface):
+class Join(ModuleInterface):
     triggers = ["join"]
     help = 'join <channel> - makes the bot join the specified channel(s)'
 
-    def onTrigger(self, Hubbot, message):
+    def onTrigger(self, message):
         if len(message.ParameterList) > 0:
             responses = []
             for param in message.ParameterList:
@@ -15,7 +15,7 @@ class Module(ModuleInterface):
                 if not channel.startswith('#'):
                     channel = '#' + channel
                 responses.append(IRCResponse(ResponseType.Raw, 'JOIN {}'.format(channel), ''))
-                Hubbot.channels[channel] = IRCChannel(channel)
+                self.bot.channels[channel] = IRCChannel(channel)
             return responses
         else:
             return IRCResponse(ResponseType.Say, "{}, you didn't say where I should join".format(message.User.Name), message.ReplyTo)

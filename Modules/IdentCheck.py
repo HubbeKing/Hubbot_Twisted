@@ -3,15 +3,15 @@ from ModuleInterface import ModuleInterface
 import random
 
 
-class Module(ModuleInterface):
+class IdentCheck(ModuleInterface):
     help = "IdentCheck - Find out your TRUE identity... WHAT ARE YOU?"
 
     def shouldTrigger(self, message):
         return True
 
-    def onTrigger(self, Hubbot, message):
-        if message.ReplyTo in Hubbot.channels.keys():
-            if "RoBoBo" not in Hubbot.channels[message.ReplyTo].Users.keys():
+    def onTrigger(self, message):
+        if message.ReplyTo in self.bot.channels.keys():
+            if "RoBoBo" not in self.bot.channels[message.ReplyTo].Users.keys():
                 if message.MessageString.lower().startswith("meow"):
                     roll = random.randint(1,20)
                     if message.User.Name == "BillTheCat":

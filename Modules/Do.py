@@ -2,11 +2,11 @@ from ModuleInterface import ModuleInterface
 from IRCResponse import IRCResponse, ResponseType
 
 
-class Module(ModuleInterface):
+class Do(ModuleInterface):
     help = "do <thing> -- do a thing."
     triggers = ["do"]
 
-    def onTrigger(self, Hubbot, message):
+    def onTrigger(self, message):
         if len(message.ParameterList) == 0:
             return IRCResponse(ResponseType.Say, "Do what?", message.ReplyTo)
         else:

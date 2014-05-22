@@ -9,14 +9,14 @@ from WebUtils import pasteEE
 import GlobalVars
 
 
-class Module(ModuleInterface):
+class Headcanon(ModuleInterface):
     triggers = ["headcanon"]
     subCommands = ["add", "search", "list", "remove", "help"]
     help = "headcanon [function] -- used to store Symphony's headcanon!"
     help += "\nHeadcanon functions: {}".format(", ".join(subCommands))
     help += "\nSyntax is: {}headcanon help <command>".format(GlobalVars.CommandChar)
 
-    def onTrigger(self, Hubbot, message):
+    def onTrigger(self, message):
         filename = "data/data.db"
         headcanon = []
         with sqlite3.connect(filename) as conn:

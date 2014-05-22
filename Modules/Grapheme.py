@@ -3,7 +3,7 @@ from IRCResponse import IRCResponse, ResponseType
 import GlobalVars
 
 
-class Module(ModuleInterface):
+class Grapheme(ModuleInterface):
     help = "grapheme -- for when you need someone to talk to."
 
     def shouldTrigger(self, message):
@@ -12,11 +12,11 @@ class Module(ModuleInterface):
         else:
             return False
 
-    def onTrigger(self, Hubbot, message):
+    def onTrigger(self, message):
         stringToUse = " ".join(message.MessageList[1:])
         messageToUse = stringToUse.encode("utf-8")
-        Hubbot.learnMessage(messageToUse)
-        reply = Hubbot.brain.respond(messageToUse)
+        self.bot.learnMessage(messageToUse)
+        reply = self.bot.brain.respond(messageToUse)
         if "." in reply:
             reply = reply[:180].rsplit(".", 1)[0]
         else:

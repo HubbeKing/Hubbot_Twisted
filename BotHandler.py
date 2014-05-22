@@ -2,7 +2,6 @@ import os
 import sys
 from twisted.internet import reactor
 from Hubbot import HubbotFactory
-from ModuleHandler import AutoLoadModules
 from IRCMessage import IRCChannel
 import GlobalVars
 
@@ -20,7 +19,6 @@ class BotHandler:
             chanObjects[GlobalVars.CurrentNick] = IRCChannel(GlobalVars.CurrentNick)
             chanObjects["Auth"] = IRCChannel("Auth")
             self.startBotFactory(server, port, chanObjects)
-        AutoLoadModules()
         GlobalVars.bothandler = self
         reactor.run()
 

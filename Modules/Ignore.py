@@ -4,12 +4,12 @@ from IRCResponse import IRCResponse, ResponseType
 import GlobalVars
 
 
-class Module(ModuleInterface):
+class Ignore(ModuleInterface):
     triggers = ["ignore", "unignore"]
     help = "ignore/unignore <name> -- ignore <name> as much as possible, stop ignoring <name>"
     filename = "data/data.db"
 
-    def onTrigger(self, Hubbot, message):
+    def onTrigger(self, message):
         if message.User.Name not in GlobalVars.admins:
             return IRCResponse(ResponseType.Say, "Only my admins can use ignore!", message.ReplyTo)
         if message.Command == "ignore":
@@ -22,7 +22,7 @@ class Module(ModuleInterface):
                         maxID = 0
                     c.execute("INSERT INTO ignores VALUES (?,?)", (maxID+1, message.ParameterList[0]))
                     conn.commit()
-                Hubbot.ignores.append(message.ParameterList[0])
+                self.bot.ignores.append(message.ParameterList[0])
                 return IRCResponse(ResponseType.Say, "Successfully added '{}' to the ignores list.".format(message.ParameterList[0]), message.ReplyTo)
         elif message.Command == "unignore":
             if len(message.ParameterList) == 1:
@@ -30,5 +30,5 @@ class Module(ModuleInterface):
                     c = conn.cursor()
                     c.execute("DELETE FROM ignores WHERE nick=?", (message.ParameterList[0]))
                     conn.commit()
-                Hubbot.ignores.remove(message.ParameterList[0])
+                self.bot.ignores.remove(message.ParameterList[0])
                 return IRCResponse(ResponseType.Say, "Successfully removed '{}' from the ignores list.".format(message.ParameterList[0]), message.ReplyTo)

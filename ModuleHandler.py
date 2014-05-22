@@ -5,10 +5,11 @@ from IRCResponse import ResponseType
 import GlobalVars
 
 
-class MessageHandler(object):
+class ModuleHandler(object):
 
     def __init__(self, bot):
         self.bot = bot
+        self.AutoLoadModules()
 
     def sendResponse(self, response):
         responses = []
@@ -45,7 +46,7 @@ class MessageHandler(object):
                 if module.hasAlias(message):
                     message = message.aliasedMessage()
                 if module.shouldTrigger(message) and message.User.Name not in self.bot.ignores:
-                    response = module.onTrigger(self.bot, message)
+                    response = module.onTrigger(message)
                     if response is None:
                         continue
                     if hasattr(response, "__iter__"):
@@ -57,73 +58,75 @@ class MessageHandler(object):
                 print "Python Execution Error in '{}': {}".format(name, str(sys.exc_info()))
                 traceback.print_tb(sys.exc_info()[2])
 
-def LoadModule(name, loadAs=''):
+    def LoadModule(self, name, loadAs=''):
 
-    name = name.lower()
+        name = name.lower()
 
-    moduleList = GetModuleDirList()
-    moduleListCaseMap = {key.lower(): key for key in moduleList}
+        moduleList = self.GetModuleDirList()
+        moduleListCaseMap = {key.lower(): key for key in moduleList}
 
-    if name not in moduleListCaseMap:
-        return False
+        if name not in moduleListCaseMap:
+            return False
 
-    alreadyExisted = False
+        alreadyExisted = False
 
-    if loadAs != '':
-        name = loadAs.lower()
-    if name in GlobalVars.moduleCaseMapping:
-        UnloadModule(name)
-        alreadyExisted = True
+        if loadAs != '':
+            name = loadAs.lower()
+        if name in GlobalVars.moduleCaseMapping:
+            self.UnloadModule(name)
+            alreadyExisted = True
 
-    module = importlib.import_module("Modules." + moduleListCaseMap[name])
+        module = importlib.import_module("Modules." + moduleListCaseMap[name])
 
-    reload(module)
+        reload(module)
 
-    if alreadyExisted:
-        print '-- {0} reloaded'.format(module.__name__)
-    else:
-        print '-- {0} loaded'.format(module.__name__)
+        class_ = getattr(module, moduleListCaseMap[name])
 
-    module = module.Module()
+        if alreadyExisted:
+            print '-- {0} reloaded'.format(module.__name__)
+        else:
+            print '-- {0} loaded'.format(module.__name__)
 
-    GlobalVars.modules.update({moduleListCaseMap[name]:module})
-    GlobalVars.moduleCaseMapping.update({name : moduleListCaseMap[name]})
+        constructedModule = class_(self.bot)
 
-    return True
+        GlobalVars.modules.update({moduleListCaseMap[name]:constructedModule})
+        GlobalVars.moduleCaseMapping.update({name : moduleListCaseMap[name]})
 
-def UnloadModule(name):
+        return True
 
-    if name.lower() in GlobalVars.moduleCaseMapping.keys():
-        properName = GlobalVars.moduleCaseMapping[name.lower()]
-        del GlobalVars.modules[GlobalVars.moduleCaseMapping[name]]
-        del GlobalVars.moduleCaseMapping[name.lower()]
-        del sys.modules["{}.{}".format("Modules", properName)]
-        for f in glob("{}/{}.pyc".format("Modules", properName)):
-            os.remove(f)
-    else:
-        return False
+    def UnloadModule(self, name):
 
-    return True
+        if name.lower() in GlobalVars.moduleCaseMapping.keys():
+            properName = GlobalVars.moduleCaseMapping[name.lower()]
+            del GlobalVars.modules[GlobalVars.moduleCaseMapping[name]]
+            del GlobalVars.moduleCaseMapping[name.lower()]
+            del sys.modules["{}.{}".format("Modules", properName)]
+            for f in glob("{}/{}.pyc".format("Modules", properName)):
+                os.remove(f)
+        else:
+            return False
 
-def AutoLoadModules():
+        return True
 
-    for module in GetModuleDirList():
-        if module not in GlobalVars.nonDefaultModules:
-            try:
-                LoadModule(module)
-            except Exception, x:
-                print x.args
+    def AutoLoadModules(self):
 
-def GetModuleDirList():
+        for module in self.GetModuleDirList():
+            if module not in GlobalVars.nonDefaultModules:
+                try:
+                    self.LoadModule(module)
+                except Exception, x:
+                    print x.args
 
-    root = os.path.join('.', 'Modules')
+    def GetModuleDirList(self):
 
-    for item in os.listdir(root):
-        if not os.path.isfile(os.path.join(root, item)):
-            continue
-        if not item.endswith('.py'):
-            continue
-        if item.startswith('__init__'):
-            continue
+        root = os.path.join('.', 'Modules')
 
-        yield item[:-3]
+        for item in os.listdir(root):
+            if not os.path.isfile(os.path.join(root, item)):
+                continue
+            if not item.endswith('.py'):
+                continue
+            if item.startswith('__init__'):
+                continue
+
+            yield item[:-3]

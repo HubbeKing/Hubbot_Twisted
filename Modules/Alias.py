@@ -3,13 +3,13 @@ from IRCResponse import IRCResponse, ResponseType
 import GlobalVars
 
 
-class Module(ModuleInterface):
+class Alias(ModuleInterface):
     triggers = ["alias"]
     help = 'alias <alias> <command> <params> - aliases <alias> to the specified command and parameters\n' \
            'you can specify where parameters given to the alias should be inserted with $1, $2, $n. ' \
            'The whole parameter string is $0. $sender and $channel can also be used.'
 
-    def onTrigger(self, Hubbot, message):
+    def onTrigger(self, message):
         if message.User.Name not in GlobalVars.admins:
             return IRCResponse(ResponseType.Say, "Only my admins may create new aliases!", message.ReplyTo)
 

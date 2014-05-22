@@ -1,14 +1,13 @@
 from IRCResponse import IRCResponse, ResponseType
 from ModuleInterface import ModuleInterface
 import GlobalVars
-import re
 
 
-class Module(ModuleInterface):
+class Nick(ModuleInterface):
     triggers = ["nick"]
     help = "nick <nick> - changes the bot's nick to the one specified"
     
-    def onTrigger(self, Hubbot, message):
+    def onTrigger(self, message):
         if message.User.Name not in GlobalVars.admins:
             return IRCResponse(ResponseType.Say, "Only my admins can change my name!", message.ReplyTo)
         if len(message.ParameterList) > 0:

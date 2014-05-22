@@ -6,13 +6,13 @@ import sqlite3
 import re
 
 
-class Module(ModuleInterface):
+class Hugs(ModuleInterface):
     triggers = ["hugs"]
     acceptedTypes = ["PRIVMSG", "ACTION"]
     help = "hugs [nick] -- How many hugs has this person given and received?"
     # hug_dict is : {"nick":[given, received]}
 
-    def onTrigger(self, Hubbot, message):
+    def onTrigger(self, message):
         if message.Type == "ACTION":
             pattern = "hu+g|cuddle|snu+ggle|snu+g|squeeze|glomp"
             match = re.search(pattern, message.MessageList[0], re.IGNORECASE)
@@ -93,10 +93,10 @@ class Module(ModuleInterface):
             matchedNicksString = "Matches found: "
             numberOfMatches = 0
             for name in matches:
-                if (numberOfMatches > 9):
+                if numberOfMatches > 9:
                     matchedNicksString += "..."
                     break
-                elif (matches.index(name) == len(matches) - 1):
+                elif matches.index(name) == len(matches) - 1:
                     matchedNicksString += name
                     numberOfMatches += 1
                 else:

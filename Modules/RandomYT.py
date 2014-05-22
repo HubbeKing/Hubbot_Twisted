@@ -3,11 +3,11 @@ from IRCResponse import IRCResponse, ResponseType
 import urllib, json, random
 
 
-class Module(ModuleInterface):
+class RandomYT(ModuleInterface):
     triggers = ["randomyt"]
     help = "randomyt [channel] -- gets a random youtube video from the specified channel."
 
-    def onTrigger(self, Hubbot, message):
+    def onTrigger(self, message):
         if len(message.ParameterList) == 0:
             return IRCResponse(ResponseType.Say, "You didn't specify a channel!", message.ReplyTo)
         try:

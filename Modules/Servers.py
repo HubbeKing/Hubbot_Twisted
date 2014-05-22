@@ -3,7 +3,7 @@ from ModuleInterface import ModuleInterface
 import GlobalVars
 
 
-class Module(ModuleInterface):
+class Servers(ModuleInterface):
     help = "mumble, gmod, starbound, starbound2, jcmp, tetri, cockatrice, kf, tf2 -- Used to post server info for games! Usage: {}<server>".format(GlobalVars.CommandChar)
     gmodMods = 'List of mods needed for GMOD: http://steamcommunity.com/sharedfiles/filedetails/?id=185811989'
     gmodIP = "The Garrys Mod server is hosted at: gmod.dahou.se"
@@ -31,7 +31,7 @@ class Module(ModuleInterface):
         else:
             return False
 
-    def onTrigger(self, Hubbot, message):
+    def onTrigger(self, message):
         if message.Command == "servers":
             return IRCResponse(ResponseType.Say, self.help, message.ReplyTo)
         elif message.Command == "gmod":

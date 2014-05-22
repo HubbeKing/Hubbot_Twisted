@@ -3,7 +3,7 @@ from ModuleInterface import ModuleInterface
 import GlobalVars
 
 
-class Module(ModuleInterface):
+class Silly(ModuleInterface):
     help = "donotwant, yes, yup, store, goat, stupid, fixyou, heya, HNGH, PS, whoa, what, mybrand, both, no, disappointed -- Used to post silly things! Usage: {}<thing>".format(GlobalVars.CommandChar)
 
     def onStart(self):
@@ -39,7 +39,7 @@ class Module(ModuleInterface):
         else:
             return False
 
-    def onTrigger(self, Hubbot, message):
+    def onTrigger(self, message):
         if message.Command == "silly":
             return IRCResponse(ResponseType.Say, self.help, message.ReplyTo)
         elif message.Command == "hunt":

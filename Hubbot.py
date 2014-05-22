@@ -5,7 +5,7 @@ from SimpleHal import SimpleHAL
 from IRCResponse import ResponseType, IRCResponse
 from IRCMessage import IRCMessage, IRCUser, IRCChannel
 import GlobalVars
-from ModuleHandler import MessageHandler
+from ModuleHandler import ModuleHandler
 
 
 class Hubbot(irc.IRCClient):
@@ -26,7 +26,7 @@ class Hubbot(irc.IRCClient):
 
     def __init__(self, server, channels):
         self.server = server
-        self.messageHandler = MessageHandler(self)
+        self.moduleHandler = ModuleHandler(self)
         self.channels = channels
         self.Quitting = False
         self.startTime = datetime.datetime.now()
@@ -99,7 +99,7 @@ class Hubbot(irc.IRCClient):
                         channel.Ranks[newnick] = channel.Ranks[oldnick]
                         del channel.Ranks[oldnick]
                     message = IRCMessage('NICK', prefix, channel, newnick)
-                    self.messageHandler.handleMessage(message)
+                    self.moduleHandler.handleMessage(message)
 
     def irc_JOIN(self, prefix, params):
         channel = self.channels[params[0]]
@@ -107,7 +107,7 @@ class Hubbot(irc.IRCClient):
 
         if message.User.Name != GlobalVars.CurrentNick:
             channel.Users[message.User.Name] = message.User
-        self.messageHandler.handleMessage(message)
+        self.moduleHandler.handleMessage(message)
 
     def irc_PART(self, prefix, params):
         partMessage = u''
@@ -123,7 +123,7 @@ class Hubbot(irc.IRCClient):
             del channel.Users[message.User.Name]
             if message.User.Name in channel.Ranks:
                 del channel.Ranks[message.User.Name]
-        self.messageHandler.handleMessage(message)
+        self.moduleHandler.handleMessage(message)
 
     def irc_KICK(self, prefix, params):
         kickMessage = u''
@@ -139,7 +139,7 @@ class Hubbot(irc.IRCClient):
             del channel.Users[kickee]
             if kickee in channel.Ranks:
                 del channel.Ranks[kickee]
-        self.messageHandler.handleMessage(message)
+        self.moduleHandler.handleMessage(message)
 
     def irc_QUIT(self, prefix, params):
         quitMessage = u''
@@ -152,7 +152,7 @@ class Hubbot(irc.IRCClient):
                 del channel.Users[message.User.Name]
                 if message.User.Name in channel.Ranks:
                     del channel.Ranks[message.User.Name]
-            self.messageHandler.handleMessage(message)
+            self.moduleHandler.handleMessage(message)
 
     def privmsg(self, user, channel, msg):
         message = IRCMessage('PRIVMSG', user, self.channels[channel], msg)
@@ -162,7 +162,7 @@ class Hubbot(irc.IRCClient):
                 break
         if user not in self.ignores:
             self.learnMessage(msg)
-        self.messageHandler.handleMessage(message)
+        self.moduleHandler.handleMessage(message)
 
     def action(self, user, channel, msg):
         message = IRCMessage('ACTION', user, self.channels[channel], msg)
@@ -170,12 +170,12 @@ class Hubbot(irc.IRCClient):
         match = re.search(pattern, msg, re.IGNORECASE)
         if match:
             self.log(u'*{0} {1}*'.format(message.User.Name, message.MessageString), message.ReplyTo)
-        self.messageHandler.handleMessage(message)
+        self.moduleHandler.handleMessage(message)
 
     def noticed(self, user, channel, msg):
         message = IRCMessage('NOTICE', user, self.channels[channel], msg.upper())
         self.log(u'[{0}] {1}'.format(message.User.Name, message.MessageString), message.ReplyTo)
-        self.messageHandler.handleMessage(message)
+        self.moduleHandler.handleMessage(message)
 
     def nickChanged(self, nick):
         self.nickname = nick
@@ -198,9 +198,9 @@ class Hubbot(irc.IRCClient):
 
     def notifyUser(self, flag, message):
         if flag:
-            self.messageHandler.sendResponse(IRCResponse(ResponseType.Say, "{}: Your {} second timer is up!".format(message.User.Name, message.ParameterList[0]), message.ReplyTo))
+            self.moduleHandler.sendResponse(IRCResponse(ResponseType.Say, "{}: Your {} second timer is up!".format(message.User.Name, message.ParameterList[0]), message.ReplyTo))
         else:
-            self.messageHandler.sendResponse(IRCResponse(ResponseType.Say, "{}: Your {} timer is up!".format(message.User.Name, message.ParameterList[0]), message.ReplyTo))
+            self.moduleHandler.sendResponse(IRCResponse(ResponseType.Say, "{}: Your {} timer is up!".format(message.User.Name, message.ParameterList[0]), message.ReplyTo))
 
     def learnMessage(self, message):
         msgList = message.split(" ")

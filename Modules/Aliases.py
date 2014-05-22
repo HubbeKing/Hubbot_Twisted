@@ -3,11 +3,11 @@ from IRCResponse import IRCResponse, ResponseType
 import GlobalVars
 
 
-class Module(ModuleInterface):
+class Aliases(ModuleInterface):
     triggers = ["aliases"]
     help = "aliases [alias] -- show information about current aliases"
 
-    def onTrigger(self, Hubbot, message):
+    def onTrigger(self, message):
         if len(message.ParameterList) == 0:
             returnString = "Current aliases: "
             for alias, command in GlobalVars.commandAliases.iteritems():

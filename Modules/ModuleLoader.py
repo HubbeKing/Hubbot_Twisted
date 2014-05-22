@@ -1,14 +1,13 @@
 from IRCResponse import IRCResponse, ResponseType
 from ModuleInterface import ModuleInterface
 import GlobalVars
-from ModuleHandler import LoadModule, UnloadModule
 
 
-class Module(ModuleInterface):
+class ModuleLoader(ModuleInterface):
     triggers = ['load', 'reload', 'unload']
     help = "load/reload <function>, unload <function> - handles loading/unloading/reloading of functions. Use 'all' with load/reload to reload all active functions"
 
-    def onTrigger(self, Hubbot, message):
+    def onTrigger(self, message):
         if message.User.Name not in GlobalVars.admins and message.ParameterList[0].lower()!="nope":
             return IRCResponse(ResponseType.Say, "Only my admins can use {0}".format(message.Command), message.ReplyTo)
 
@@ -44,7 +43,7 @@ class Module(ModuleInterface):
                 if name == 'ModuleLoader':
                     continue
 
-                LoadModule(name)
+                self.bot.moduleHandler.LoadModule(name)
 
             return ['all functions'], [], []
 
@@ -55,7 +54,7 @@ class Module(ModuleInterface):
 
             else:
                 try:
-                    success = LoadModule(moduleName)
+                    success = self.bot.moduleHandler.LoadModule(moduleName)
                     if success:
                         successes.append(GlobalVars.moduleCaseMapping[moduleName])
                     else:
@@ -77,7 +76,7 @@ class Module(ModuleInterface):
 
         for moduleName in moduleNameCaseMap.keys():
             try:
-                success = UnloadModule(moduleName)
+                success = self.bot.moduleHandler.UnloadModule(moduleName)
                 if success:
                     successes.append(moduleNameCaseMap[moduleName])
                 else:

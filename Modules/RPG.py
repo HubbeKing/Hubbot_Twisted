@@ -6,12 +6,12 @@ from IRCResponse import IRCResponse, ResponseType
 from WebUtils import pasteEE
 
 
-class Module(ModuleInterface):
+class RPG(ModuleInterface):
     triggers = ["pf", "lp", "mm", "welch"]
     help = 'pf/lp/mm/welch <number>/add <thing>/list/search <term> -- "helpful" RPG advice and stuff'
     filename = "data/data.db"
 
-    def onTrigger(self, Hubbot, message):
+    def onTrigger(self, message):
         if message.Command == "pf":
             if len(message.ParameterList) == 0:
                 return IRCResponse(ResponseType.Say, self.getRandom("pathfinder"), message.ReplyTo)
