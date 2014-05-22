@@ -131,6 +131,12 @@ class RPG(ModuleInterface):
     def search(self, table, line):
         messageDict = {}
         matches = []
+        try:
+            choice = int(line.split(" ")[-1])
+            line = line.replace(line.split(" ")[-1], "", 1).strip()
+            specific = True
+        except:
+            specific = False
         with sqlite3.connect(self.filename) as conn:
             c = conn.cursor()
             for row in c.execute("SELECT * FROM {}".format(table)):
@@ -143,7 +149,12 @@ class RPG(ModuleInterface):
                         foundNumber = number
                         matches.append("{}. {}".format(foundNumber, match.string))
         if len(matches) > 0:
-            choice = random.choice(matches)
-            return "Match #{}/{} - {}".format(matches.index(choice)+1, len(matches), choice)
+            if not specific:
+                choice = random.choice(matches)
+                return "Match #{}/{} - {}".format(matches.index(choice)+1, len(matches), choice)
+            elif choice <= len(matches):
+                return "Match #{}/{} - {}".format(choice, len(matches), matches[choice - 1])
+            else:
+                return "There is no '#{}' entry of '{}'!".format(choice, line)
         else:
             return "Could not find '{}'!".format(line)
