@@ -24,6 +24,8 @@ class Ignore(ModuleInterface):
                     conn.commit()
                 self.bot.ignores.append(message.ParameterList[0])
                 return IRCResponse(ResponseType.Say, "Successfully added '{}' to the ignores list.".format(message.ParameterList[0]), message.ReplyTo)
+            else:
+                return IRCResponse(ResponseType.Say, "Currently ignoring: {}".format(", ".join(self.bot.ignores)), message.ReplyTo)
         elif message.Command == "unignore":
             if len(message.ParameterList) == 1:
                 with sqlite3.connect(self.filename) as conn:
