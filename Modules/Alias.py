@@ -33,5 +33,6 @@ class Alias(ModuleInterface):
         for word in message.ParameterList[1:]:
             newAlias.append(word.lower())
         self.bot.moduleHandler.commandAliases[message.ParameterList[0]] = newAlias
+        self.bot.moduleHandler.newAlias(message.ParameterList[0], newAlias)
 
         return IRCResponse(ResponseType.Say, "Created a new alias '{}' for '{}'.".format(message.ParameterList[0], " ".join(message.ParameterList[1:])), message.ReplyTo)

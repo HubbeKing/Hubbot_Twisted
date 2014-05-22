@@ -1,5 +1,5 @@
 import importlib
-import os, sys, traceback
+import os, sys, traceback, sqlite3
 from glob import glob
 from IRCResponse import ResponseType
 import GlobalVars
@@ -11,12 +11,21 @@ class ModuleHandler(object):
         self.bot = bot
         self.modules = {}
         self.moduleCaseMapping = {}
-        self.commandAliases = \
-        {
-        "dissapointed":["disappointed"],
-        "hug":["do", "hugs"],
-        "latehug":["say", "!tell", "$0", "$sender", "sends", "belated", "hugs!"]
-        }
+        self.commandAliases = self.loadAliases()
+
+    def loadAliases(self):
+        aliases = {}
+        with sqlite3.connect("data/data.db") as conn:
+            c = conn.cursor()
+            for row in c.execute("SELECT * FROM aliases"):
+                aliases[row[0]] = row[1].split(" ")
+        return aliases
+
+    def newAlias(self, alias, command):
+        with sqlite3.connect("data/data.db") as conn:
+            c = conn.cursor()
+            c.execute("INSERT INTO aliases VALUES (?,?)", (alias, " ".join(command)))
+            conn.commit()
 
     def sendResponse(self, response):
         responses = []
