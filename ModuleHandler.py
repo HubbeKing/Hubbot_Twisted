@@ -11,21 +11,6 @@ class ModuleHandler(object):
         self.bot = bot
         self.modules = {}
         self.moduleCaseMapping = {}
-        self.commandAliases = self.loadAliases()
-
-    def loadAliases(self):
-        aliases = {}
-        with sqlite3.connect("data/data.db") as conn:
-            c = conn.cursor()
-            for row in c.execute("SELECT * FROM aliases"):
-                aliases[row[0]] = row[1].split(" ")
-        return aliases
-
-    def newAlias(self, alias, command):
-        with sqlite3.connect("data/data.db") as conn:
-            c = conn.cursor()
-            c.execute("INSERT INTO aliases VALUES (?,?)", (alias, " ".join(command)))
-            conn.commit()
 
     def sendResponse(self, response):
         responses = []
@@ -59,8 +44,6 @@ class ModuleHandler(object):
     def handleMessage(self, message):
         for (name, module) in self.modules.items():
             try:
-                if module.hasAlias(message):
-                    message = message.aliasedMessage(self.bot)
                 if module.shouldTrigger(message) and message.User.Name not in self.bot.ignores:
                     response = module.onTrigger(message)
                     if response is None:

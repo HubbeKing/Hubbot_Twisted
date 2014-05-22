@@ -15,12 +15,6 @@ class ModuleInterface(object):
     def onUnload(self):
         pass
 
-    def hasAlias(self, message):
-        if message.Command in self.bot.moduleHandler.commandAliases.keys():
-            return True
-        else:
-            return False
-
     def shouldTrigger(self, message):
         if message.Type not in self.acceptedTypes:
             return False
