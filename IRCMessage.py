@@ -95,7 +95,7 @@ class IRCMessage(object):
             if len(self.ParameterList) >= 1:
                 newMsg = newMsg.replace(self.Parameters, "")
                 for i, param in enumerate(self.ParameterList):
-                    if newMsg[i:i+3].find("+") != -1:
+                    if newMsg.find("${}+".format(i+1)) != -1:
                         newMsg = newMsg.replace("${}+".format(i+1), " ".join(self.ParameterList[i:]))
                     else:
                         newMsg = newMsg.replace("${}".format(i+1), param)
