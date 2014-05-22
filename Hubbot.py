@@ -192,7 +192,7 @@ class Hubbot(irc.IRCClient):
         if flag:
             self.moduleHandler.sendResponse(IRCResponse(ResponseType.Say, "{}: Your {} second timer is up!".format(message.User.Name, message.ParameterList[0]), message.ReplyTo))
         else:
-            self.moduleHandler.sendResponse(IRCResponse(ResponseType.Say, "{}: Your {} timer is up!".format(message.User.Name, message.ParameterList[0]), message.ReplyTo))
+            self.moduleHandler.sendResponse(IRCResponse(ResponseType.Say, "{}: Your {} timer is up!".format(message.User.Name, " ".join(message.ParameterList)), message.ReplyTo))
 
     def loadIgnores(self):
         ignores = []
@@ -209,11 +209,11 @@ class HubbotFactory(protocol.ReconnectingClientFactory):
         reactor.connectTCP(server, port, self)
 
     def startedConnecting(self, connector):
-        print "-#- Started to connect."
+        print "-#- Started to connect to '{}'.".format(self.protocol.server)
 
     def buildProtocol(self, addr):
-        print "-#- Connected."
-        print "-#- Resetting reconnectiong delay"
+        print "-#- Connected to '{]'.".format(self.protocol.server)
+        print "-#- Resetting reconnection delay."
         self.resetDelay()
         return self.protocol
 

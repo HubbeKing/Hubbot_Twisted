@@ -27,7 +27,6 @@ class BotHandler:
             print "Already on server '{}'.".format(server)
             return False
 
-        print "Joining server '{}'.".format(server)
         botfactory = HubbotFactory(server, port, channels)
         self.botfactories[server] = botfactory
         return True
