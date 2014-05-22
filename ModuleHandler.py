@@ -51,7 +51,7 @@ class ModuleHandler(object):
         for (name, module) in self.modules.items():
             try:
                 if module.hasAlias(message):
-                    message = message.aliasedMessage()
+                    message = message.aliasedMessage(self.bot)
                 if module.shouldTrigger(message) and message.User.Name not in self.bot.ignores:
                     response = module.onTrigger(message)
                     if response is None:

@@ -7,6 +7,7 @@ class Alias(ModuleInterface):
     triggers = ["alias"]
     help = 'alias <alias> <command> <params> - aliases <alias> to the specified command and parameters\n' \
            'you can specify where parameters given to the alias should be inserted with $1, $2, $n. ' \
+           'you can use $1+, $2+ for all parameters after the first, second one' \
            'The whole parameter string is $0. $sender and $channel can also be used.'
 
     def onTrigger(self, message):
