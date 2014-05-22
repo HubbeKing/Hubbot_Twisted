@@ -6,7 +6,7 @@ commandAliases = \
     {
     "dissapointed":["disappointed"],
     "hug":["do", "hugs"],
-    "latehug":["say", "!tell", "$params", "$sender", "sends", "belated", "hugs!"]
+    "latehug":["say", "!tell", "$0", "$sender", "sends", "belated", "hugs!"]
     }
 
 abspath = os.path.abspath(__file__)

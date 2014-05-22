@@ -89,7 +89,11 @@ class IRCMessage(object):
                 newMsg = newMsg.replace("$sender", self.User.Name)
             if "$channel" in newMsg:
                 newMsg = newMsg.replace("$channel", self.ChannelObj.Name)
-            if "$params" in newMsg:
+            if len(self.ParameterList) == 1:
                 newMsg = newMsg.replace(self.Parameters, "")
-                newMsg = newMsg.replace("$params", self.Parameters)
+                newMsg = newMsg.replace("$0", self.Parameters)
+            elif len(self.ParameterList) > 1:
+                newMsg = newMsg.replace(self.Parameters, "")
+                for i in range(len(self.ParameterList)):
+                    newMsg = newMsg.replace("${}".format(i+1), self.ParameterList[i])
             return IRCMessage(self.Type, self.User.String, self.ChannelObj, newMsg)
