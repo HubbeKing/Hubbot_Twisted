@@ -22,32 +22,6 @@ class Alias(ModuleInterface):
             for row in c.execute("SELECT * FROM aliases"):
                 self.aliases[row[0]] = row[1].split(" ")
 
-    def newAlias(self, alias, command):
-        self.aliases[alias] = command
-        with sqlite3.connect("data/data.db") as conn:
-            c = conn.cursor()
-            c.execute("INSERT INTO aliases VALUES (?,?)", (alias, " ".join(command)))
-            conn.commit()
-
-    def aliasedMessage(self, message):
-        if message.Command in self.aliases.keys():
-            alias = self.aliases[message.Command]
-            newMsg = message.MessageString.replace(message.Command, " ".join(alias), 1)
-            if "$sender" in newMsg:
-                newMsg = newMsg.replace("$sender", message.User.Name)
-            if "$channel" in newMsg:
-                newMsg = newMsg.replace("$channel", message.ChannelObj.Name)
-            newMsg = newMsg.replace(message.Parameters, "")
-            if "$0" in newMsg:
-                newMsg = newMsg.replace("$0", " ".join(message.ParameterList))
-            if len(message.ParameterList) >= 1:
-                for i, param in enumerate(message.ParameterList):
-                    if newMsg.find("${}+".format(i+1)) != -1:
-                        newMsg = newMsg.replace("${}+".format(i+1), " ".join(message.ParameterList[i:]))
-                    else:
-                        newMsg = newMsg.replace("${}".format(i+1), param)
-            return IRCMessage(message.Type, message.User.String, message.ChannelObj, newMsg)
-
     def onTrigger(self, message):
         if message.Command in self.triggers:
             if message.User.Name not in GlobalVars.admins:
@@ -76,3 +50,29 @@ class Alias(ModuleInterface):
             return IRCResponse(ResponseType.Say, "Created a new alias '{}' for '{}'.".format(message.ParameterList[0], " ".join(message.ParameterList[1:])), message.ReplyTo)
         elif message.Command in self.aliases.keys():
             self.bot.moduleHandler.handleMessage(self.aliasedMessage(message))
+
+    def newAlias(self, alias, command):
+        self.aliases[alias] = command
+        with sqlite3.connect("data/data.db") as conn:
+            c = conn.cursor()
+            c.execute("INSERT INTO aliases VALUES (?,?)", (alias, " ".join(command)))
+            conn.commit()
+
+    def aliasedMessage(self, message):
+        if message.Command in self.aliases.keys():
+            alias = self.aliases[message.Command]
+            newMsg = message.MessageString.replace(message.Command, " ".join(alias), 1)
+            if "$sender" in newMsg:
+                newMsg = newMsg.replace("$sender", message.User.Name)
+            if "$channel" in newMsg:
+                newMsg = newMsg.replace("$channel", message.ChannelObj.Name)
+            newMsg = newMsg.replace(message.Parameters, "")
+            if "$0" in newMsg:
+                newMsg = newMsg.replace("$0", " ".join(message.ParameterList))
+            if len(message.ParameterList) >= 1:
+                for i, param in enumerate(message.ParameterList):
+                    if newMsg.find("${}+".format(i+1)) != -1:
+                        newMsg = newMsg.replace("${}+".format(i+1), " ".join(message.ParameterList[i:]))
+                    else:
+                        newMsg = newMsg.replace("${}".format(i+1), param)
+            return IRCMessage(message.Type, message.User.String, message.ChannelObj, newMsg)
