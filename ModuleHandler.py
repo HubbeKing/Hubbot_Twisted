@@ -9,7 +9,6 @@ class ModuleHandler(object):
 
     def __init__(self, bot):
         self.bot = bot
-        self.AutoLoadModules()
 
     def sendResponse(self, response):
         responses = []

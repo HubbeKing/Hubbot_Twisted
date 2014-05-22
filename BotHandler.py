@@ -10,6 +10,7 @@ class BotHandler:
     botfactories = {}
 
     def __init__(self):
+        self.modulesLoaded = False
         for (server_with_port, channels) in GlobalVars.connections.items():
             server = server_with_port.split(":")[0]
             port = int(server_with_port.split(":")[1])
@@ -29,6 +30,9 @@ class BotHandler:
 
         print "Joining server '{}'.".format(server)
         botfactory = HubbotFactory(server, port, channels)
+        if not self.modulesLoaded:
+            botfactory.protocol.moduleHandler.AutoLoadModules()
+            self.modulesLoaded = True
         self.botfactories[server] = botfactory
         return True
 
