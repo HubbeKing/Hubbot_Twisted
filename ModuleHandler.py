@@ -65,7 +65,7 @@ class ModuleHandler(object):
                 print "Python Execution Error in '{}': {}".format(name, str(sys.exc_info()))
                 traceback.print_tb(sys.exc_info()[2])
 
-    def LoadModule(self, name, loadAs=''):
+    def LoadModule(self, name):
         name = name.lower()
 
         moduleList = self.GetModuleDirList()
@@ -76,8 +76,6 @@ class ModuleHandler(object):
 
         alreadyExisted = False
 
-        if loadAs != '':
-            name = loadAs.lower()
         if name in self.moduleCaseMapping:
             self.UnloadModule(name)
             alreadyExisted = True
