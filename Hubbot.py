@@ -25,17 +25,13 @@ class Hubbot(irc.IRCClient):
 
     def __init__(self, server, channels):
         self.server = server
-        self.moduleHandler = ModuleHandler(self)
-        self.moduleHandler.AutoLoadModules()
         self.channels = channels
         self.Quitting = False
         self.startTime = datetime.datetime.now()
         self.prefixesCharToMode = {"+":"v", "@":"o"}
-        self.ignores = []
-        with sqlite3.connect("data/data.db") as conn:
-            c = conn.cursor()
-            for row in c.execute("SELECT nick FROM ignores"):
-                self.ignores.append(row[0])
+        self.ignores = self.loadIgnores()
+        self.moduleHandler = ModuleHandler(self)
+        self.moduleHandler.AutoLoadModules()
 
     def signedOn(self):
         for channel in self.channels.keys():
@@ -198,6 +194,13 @@ class Hubbot(irc.IRCClient):
         else:
             self.moduleHandler.sendResponse(IRCResponse(ResponseType.Say, "{}: Your {} timer is up!".format(message.User.Name, message.ParameterList[0]), message.ReplyTo))
 
+    def loadIgnores(self):
+        ignores = []
+        with sqlite3.connect("data/data.db") as conn:
+            c = conn.cursor()
+            for row in c.execute("SELECT nick FROM ignores"):
+                ignores.append(row[0])
+        return ignores
 
 class HubbotFactory(protocol.ReconnectingClientFactory):
     def __init__(self, server, port, channels):
