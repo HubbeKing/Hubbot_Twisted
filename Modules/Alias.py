@@ -6,7 +6,7 @@ import GlobalVars
 
 
 class Alias(ModuleInterface):
-    triggers = ["alias"]
+    triggers = ["alias", "unalias"]
     help = 'alias <alias> <command> <params> - aliases <alias> to the specified command and parameters\n' \
            'you can specify where parameters given to the alias should be inserted with $1, $2, $n. ' \
            'you can use $1+, $2+ for all parameters after the first, second one, etc. ' \
@@ -24,30 +24,44 @@ class Alias(ModuleInterface):
 
     def onTrigger(self, message):
         if message.Command in self.triggers:
-            if message.User.Name not in GlobalVars.admins:
-                return IRCResponse(ResponseType.Say, "Only my admins may create new aliases!", message.ReplyTo)
+            if message.Command == "alias":
+                if message.User.Name not in GlobalVars.admins:
+                    return IRCResponse(ResponseType.Say, "Only my admins may create new aliases!", message.ReplyTo)
 
-            if len(message.ParameterList) <= 1:
-                return IRCResponse(ResponseType.Say, "Alias what?", message.ReplyTo)
+                if len(message.ParameterList) <= 1:
+                    return IRCResponse(ResponseType.Say, "Alias what?", message.ReplyTo)
 
-            triggerFound = False
-            for (name, module) in self.bot.moduleHandler.modules.items():
-                if message.ParameterList[0] in module.triggers:
-                    return IRCResponse(ResponseType.Say, "'{}' is already a command!".format(message.ParameterList[0]), message.ReplyTo)
-                if message.ParameterList[1] in module.triggers:
-                    triggerFound = True
+                triggerFound = False
+                for (name, module) in self.bot.moduleHandler.modules.items():
+                    if message.ParameterList[0] in module.triggers:
+                        return IRCResponse(ResponseType.Say, "'{}' is already a command!".format(message.ParameterList[0]), message.ReplyTo)
+                    if message.ParameterList[1] in module.triggers:
+                        triggerFound = True
 
-            if not triggerFound:
-                return IRCResponse(ResponseType.Say, "'{}' is not a valid command!".format(message.ParameterList[1]), message.ReplyTo)
-            if message.ParameterList[0] in self.aliases.keys():
-                return IRCResponse(ResponseType.Say, "'{}' is already an alias!".format(message.ParameterList[0]), message.ReplyTo)
+                if not triggerFound:
+                    return IRCResponse(ResponseType.Say, "'{}' is not a valid command!".format(message.ParameterList[1]), message.ReplyTo)
+                if message.ParameterList[0] in self.aliases.keys():
+                    return IRCResponse(ResponseType.Say, "'{}' is already an alias!".format(message.ParameterList[0]), message.ReplyTo)
 
-            newAlias = []
-            for word in message.ParameterList[1:]:
-                newAlias.append(word.lower())
-            self.newAlias(message.ParameterList[0], newAlias)
+                newAlias = []
+                for word in message.ParameterList[1:]:
+                    newAlias.append(word.lower())
+                self.newAlias(message.ParameterList[0], newAlias)
 
-            return IRCResponse(ResponseType.Say, "Created a new alias '{}' for '{}'.".format(message.ParameterList[0], " ".join(message.ParameterList[1:])), message.ReplyTo)
+                return IRCResponse(ResponseType.Say, "Created a new alias '{}' for '{}'.".format(message.ParameterList[0], " ".join(message.ParameterList[1:])), message.ReplyTo)
+            elif message.Command == "unalias":
+                if message.User.Name not in GlobalVars.admins:
+                    return IRCResponse(ResponseType.Say, "Only my admins may remove aliases!", message.ReplyTo)
+
+                if len(message.ParameterList) == 0:
+                    return IRCResponse(ResponseType.Say, "Unalias what?", message.ReplyTo)
+
+                if message.ParameterList[0] in self.aliases.keys():
+                    self.deleteAlias(message.ParameterList[0])
+                    return IRCResponse(ResponseType.Say, "Deleted alias '{}'".format(message.ParameterList[0]), message.ReplyTo)
+                else:
+                    return IRCResponse(ResponseType.Say, "I don't have an alias '{}'".format(message.ParameterList[0]), message.ReplyTo)
+
         elif message.Command in self.aliases.keys():
             self.bot.moduleHandler.handleMessage(self.aliasedMessage(message))
 
@@ -56,6 +70,13 @@ class Alias(ModuleInterface):
         with sqlite3.connect("data/data.db") as conn:
             c = conn.cursor()
             c.execute("INSERT INTO aliases VALUES (?,?)", (alias, " ".join(command)))
+            conn.commit()
+
+    def deleteAlias(self, alias):
+        del self.aliases[alias]
+        with sqlite3.connect("data/data.db") as conn:
+            c = conn.cursor()
+            c.execute("DELETE FROM aliases WHERE alias=?", (alias,))
             conn.commit()
 
     def aliasedMessage(self, message):

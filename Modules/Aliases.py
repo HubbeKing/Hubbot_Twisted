@@ -9,6 +9,7 @@ class Aliases(ModuleInterface):
     aliases = {}
 
     def onTrigger(self, message):
+        self.aliases.clear()
         with sqlite3.connect("data/data.db") as conn:
             c = conn.cursor()
             for row in c.execute("SELECT * FROM aliases"):
