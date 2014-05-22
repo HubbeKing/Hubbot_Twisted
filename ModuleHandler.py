@@ -102,9 +102,9 @@ class ModuleHandler(object):
         if name.lower() in self.moduleCaseMapping.keys():
             properName = self.moduleCaseMapping[name.lower()]
 
-            self.moduleCaseMapping[properName].onUnload()
+            self.modules[properName].onUnload()
 
-            del self.modules[self.moduleCaseMapping[name]]
+            del self.modules[self.moduleCaseMapping[name.lower()]]
             del self.moduleCaseMapping[name.lower()]
             del sys.modules["{}.{}".format("Modules", properName)]
             for f in glob("{}/{}.pyc".format("Modules", properName)):
