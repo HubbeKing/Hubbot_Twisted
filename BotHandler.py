@@ -44,7 +44,8 @@ class BotHandler:
             self.botfactories[server].protocol.Quitting = True
             try:
                 self.botfactories[server].protocol.quit(quitmessage)
-                self.botfactories[server].protocol.saveBrain()
+                for (name, module) in self.botfactories[server].protocol.moduleHandler.modules.items():
+                    module.onUnload()
             except:
                 self.botfactories[server].stopTrying()
             self.unregisterFactory(server)
@@ -62,8 +63,9 @@ class BotHandler:
         quitmessage = quitmessage.encode("utf-8")
         for server, botfactory in self.botfactories.iteritems():
             botfactory.protocol.Quitting = True
-            self.botfactories[server].protocol.saveBrain()
             botfactory.protocol.quit(quitmessage)
+            for (name, module) in self.botfactories[server].protocol.moduleHandler.modules.items():
+                module.onUnload()
         self.botfactories = {}
         reactor.callLater(4.0, reactor.stop)
 
@@ -71,8 +73,9 @@ class BotHandler:
         self.quitmessage = quitmessage.encode("utf-8")
         for server, botfactory in self.botfactories.iteritems():
             botfactory.protocol.Quitting = True
-            self.botfactories[server].protocol.saveBrain()
             botfactory.protocol.quit(quitmessage)
+            for (name, module) in self.botfactories[server].protocol.moduleHandler.modules.items():
+                module.onUnload()
         self.botfactories = {}
         reactor.callLater(2.0, self.replaceInstance)
 

@@ -1,7 +1,6 @@
 import platform, os, datetime, codecs, re, sqlite3
 from twisted.words.protocols import irc
 from twisted.internet import protocol, reactor
-from SimpleHal import SimpleHAL
 from IRCResponse import ResponseType, IRCResponse
 from IRCMessage import IRCMessage, IRCUser, IRCChannel
 import GlobalVars
@@ -31,8 +30,6 @@ class Hubbot(irc.IRCClient):
         self.channels = channels
         self.Quitting = False
         self.startTime = datetime.datetime.now()
-        self.brain = SimpleHAL()
-        self.brain.load("data/{}.brain".format(server))
         self.prefixesCharToMode = {"+":"v", "@":"o"}
         self.ignores = []
         with sqlite3.connect("data/data.db") as conn:
@@ -161,8 +158,6 @@ class Hubbot(irc.IRCClient):
             if message.Command in module.triggers:
                 self.log(u'<{0}> {1}'.format(message.User.Name, message.MessageString), message.ReplyTo)
                 break
-        if user not in self.ignores:
-            self.learnMessage(msg)
         self.moduleHandler.handleMessage(message)
 
     def action(self, user, channel, msg):
@@ -203,16 +198,6 @@ class Hubbot(irc.IRCClient):
         else:
             self.moduleHandler.sendResponse(IRCResponse(ResponseType.Say, "{}: Your {} timer is up!".format(message.User.Name, message.ParameterList[0]), message.ReplyTo))
 
-    def learnMessage(self, message):
-        msgList = message.split(" ")
-        msgToUse = " ".join(msgList)
-        msgToUse = msgToUse.replace(GlobalVars.CurrentNick, "")
-        msgToUse = msgToUse.replace(GlobalVars.CurrentNick.lower(), "")
-        if "www" not in msgToUse and "://" not in msgToUse:
-            self.brain._learn(msgToUse)
-
-    def saveBrain(self):
-        self.brain.save("data/{}.brain".format(self.server))
 
 class HubbotFactory(protocol.ReconnectingClientFactory):
     def __init__(self, server, port, channels):

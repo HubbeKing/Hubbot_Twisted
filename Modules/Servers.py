@@ -8,7 +8,7 @@ class Servers(ModuleInterface):
     gmodMods = 'List of mods needed for GMOD: http://steamcommunity.com/sharedfiles/filedetails/?id=185811989'
     gmodIP = "The Garrys Mod server is hosted at: gmod.dahou.se"
 
-    def onStart(self):
+    def onLoad(self):
         self.serverDict = \
             {
                 "servers":"",

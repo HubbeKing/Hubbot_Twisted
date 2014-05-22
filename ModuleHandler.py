@@ -66,7 +66,6 @@ class ModuleHandler(object):
                 traceback.print_tb(sys.exc_info()[2])
 
     def LoadModule(self, name, loadAs=''):
-
         name = name.lower()
 
         moduleList = self.GetModuleDirList()
@@ -90,9 +89,9 @@ class ModuleHandler(object):
         class_ = getattr(module, moduleListCaseMap[name])
 
         if alreadyExisted:
-            print '-- {0} reloaded'.format(module.__name__)
+            print '-- {0} reloaded ({1})'.format(module.__name__, self.bot.server)
         else:
-            print '-- {0} loaded'.format(module.__name__)
+            print '-- {0} loaded ({1})'.format(module.__name__, self.bot.server)
 
         constructedModule = class_(self.bot)
 
@@ -102,9 +101,11 @@ class ModuleHandler(object):
         return True
 
     def UnloadModule(self, name):
-
         if name.lower() in self.moduleCaseMapping.keys():
             properName = self.moduleCaseMapping[name.lower()]
+
+            self.moduleCaseMapping[properName].onUnload()
+
             del self.modules[self.moduleCaseMapping[name]]
             del self.moduleCaseMapping[name.lower()]
             del sys.modules["{}.{}".format("Modules", properName)]
@@ -116,7 +117,6 @@ class ModuleHandler(object):
         return True
 
     def AutoLoadModules(self):
-
         for module in self.GetModuleDirList():
             if module not in GlobalVars.nonDefaultModules:
                 try:
@@ -125,7 +125,6 @@ class ModuleHandler(object):
                     print x.args
 
     def GetModuleDirList(self):
-
         root = os.path.join('.', 'Modules')
 
         for item in os.listdir(root):

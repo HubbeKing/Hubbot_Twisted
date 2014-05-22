@@ -6,7 +6,7 @@ import GlobalVars
 class Silly(ModuleInterface):
     help = "donotwant, yes, yup, store, goat, stupid, fixyou, heya, HNGH, PS, whoa, what, mybrand, both, no, disappointed -- Used to post silly things! Usage: {}<thing>".format(GlobalVars.CommandChar)
 
-    def onStart(self):
+    def onLoad(self):
         self.linkDict = \
             {
                 "silly":"",

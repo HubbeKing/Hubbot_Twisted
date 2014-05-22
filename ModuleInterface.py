@@ -7,9 +7,12 @@ class ModuleInterface(object):
 
     def __init__(self, bot):
         self.bot = bot
-        self.onStart()
+        self.onLoad()
 
-    def onStart(self):
+    def onLoad(self):
+        pass
+
+    def onUnload(self):
         pass
 
     def hasAlias(self, message):
