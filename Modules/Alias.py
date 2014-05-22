@@ -22,6 +22,7 @@ class Alias(ModuleInterface):
                 self.aliases[row[0]] = row[1].split(" ")
 
     def newAlias(self, alias, command):
+        self.aliases[alias] = command
         with sqlite3.connect("data/data.db") as conn:
             c = conn.cursor()
             c.execute("INSERT INTO aliases VALUES (?,?)", (alias, " ".join(command)))
@@ -70,7 +71,6 @@ class Alias(ModuleInterface):
             newAlias = []
             for word in message.ParameterList[1:]:
                 newAlias.append(word.lower())
-            self.aliases[message.ParameterList[0]] = newAlias
             self.newAlias(message.ParameterList[0], newAlias)
 
             return IRCResponse(ResponseType.Say, "Created a new alias '{}' for '{}'.".format(message.ParameterList[0], " ".join(message.ParameterList[1:])), message.ReplyTo)
