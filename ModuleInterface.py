@@ -1,4 +1,3 @@
-import GlobalVars
 
 
 class ModuleInterface(object):
@@ -14,7 +13,7 @@ class ModuleInterface(object):
         pass
 
     def hasAlias(self, message):
-        if message.Type in self.acceptedTypes and message.Command in GlobalVars.commandAliases.keys():
+        if message.Command in self.bot.moduleHandler.commandAliases.keys():
             return True
         else:
             return False

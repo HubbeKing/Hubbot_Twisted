@@ -1,6 +1,5 @@
 from IRCResponse import IRCResponse, ResponseType
 from ModuleInterface import ModuleInterface
-import GlobalVars
 
 class Triggers(ModuleInterface):
     triggers = ["triggers"]
@@ -11,7 +10,7 @@ class Triggers(ModuleInterface):
             return IRCResponse(ResponseType.Say, "{} must be used over PM!".format(message.Command), message.ReplyTo)
         else:
             response = ""
-            for name, command in GlobalVars.modules.iteritems():
+            for name, command in self.bot.moduleHandler.modules.iteritems():
                 if len(command.triggers)>0:
                     for trigger in command.triggers:
                         if "<" not in trigger and trigger not in response:

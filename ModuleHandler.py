@@ -9,6 +9,14 @@ class ModuleHandler(object):
 
     def __init__(self, bot):
         self.bot = bot
+        self.modules = {}
+        self.moduleCaseMapping = {}
+        self.commandAliases = \
+        {
+        "dissapointed":["disappointed"],
+        "hug":["do", "hugs"],
+        "latehug":["say", "!tell", "$0", "$sender", "sends", "belated", "hugs!"]
+        }
 
     def sendResponse(self, response):
         responses = []
@@ -40,7 +48,7 @@ class ModuleHandler(object):
 
 
     def handleMessage(self, message):
-        for (name, module) in GlobalVars.modules.items():
+        for (name, module) in self.modules.items():
             try:
                 if module.hasAlias(message):
                     message = message.aliasedMessage()
@@ -71,7 +79,7 @@ class ModuleHandler(object):
 
         if loadAs != '':
             name = loadAs.lower()
-        if name in GlobalVars.moduleCaseMapping:
+        if name in self.moduleCaseMapping:
             self.UnloadModule(name)
             alreadyExisted = True
 
@@ -88,17 +96,17 @@ class ModuleHandler(object):
 
         constructedModule = class_(self.bot)
 
-        GlobalVars.modules.update({moduleListCaseMap[name]:constructedModule})
-        GlobalVars.moduleCaseMapping.update({name : moduleListCaseMap[name]})
+        self.modules.update({moduleListCaseMap[name]:constructedModule})
+        self.moduleCaseMapping.update({name : moduleListCaseMap[name]})
 
         return True
 
     def UnloadModule(self, name):
 
-        if name.lower() in GlobalVars.moduleCaseMapping.keys():
-            properName = GlobalVars.moduleCaseMapping[name.lower()]
-            del GlobalVars.modules[GlobalVars.moduleCaseMapping[name]]
-            del GlobalVars.moduleCaseMapping[name.lower()]
+        if name.lower() in self.moduleCaseMapping.keys():
+            properName = self.moduleCaseMapping[name.lower()]
+            del self.modules[self.moduleCaseMapping[name]]
+            del self.moduleCaseMapping[name.lower()]
             del sys.modules["{}.{}".format("Modules", properName)]
             for f in glob("{}/{}.pyc".format("Modules", properName)):
                 os.remove(f)

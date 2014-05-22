@@ -39,7 +39,7 @@ class ModuleLoader(ModuleInterface):
         exceptions = []
 
         if len(moduleNames) == 1 and 'all' in moduleNameCaseMap:
-            for name, module in GlobalVars.modules.iteritems():
+            for name, module in self.bot.moduleHandler.modules.iteritems():
                 if name == 'ModuleLoader':
                     continue
 
@@ -56,7 +56,7 @@ class ModuleLoader(ModuleInterface):
                 try:
                     success = self.bot.moduleHandler.LoadModule(moduleName)
                     if success:
-                        successes.append(GlobalVars.moduleCaseMapping[moduleName])
+                        successes.append(self.bot.moduleHandler.moduleCaseMapping[moduleName])
                     else:
                         failures.append(moduleNameCaseMap[moduleName])
 

@@ -1,14 +1,5 @@
 import os
 
-modules = {}
-moduleCaseMapping = {}
-commandAliases = \
-    {
-    "dissapointed":["disappointed"],
-    "hug":["do", "hugs"],
-    "latehug":["say", "!tell", "$0", "$sender", "sends", "belated", "hugs!"]
-    }
-
 abspath = os.path.abspath(__file__)
 dname = os.path.dirname(abspath)
 os.chdir(dname)

@@ -27,6 +27,7 @@ class Hubbot(irc.IRCClient):
     def __init__(self, server, channels):
         self.server = server
         self.moduleHandler = ModuleHandler(self)
+        self.moduleHandler.AutoLoadModules()
         self.channels = channels
         self.Quitting = False
         self.startTime = datetime.datetime.now()
@@ -156,7 +157,7 @@ class Hubbot(irc.IRCClient):
 
     def privmsg(self, user, channel, msg):
         message = IRCMessage('PRIVMSG', user, self.channels[channel], msg)
-        for (name, module) in GlobalVars.modules.items():
+        for (name, module) in self.moduleHandler.modules.items():
             if message.Command in module.triggers:
                 self.log(u'<{0}> {1}'.format(message.User.Name, message.MessageString), message.ReplyTo)
                 break
