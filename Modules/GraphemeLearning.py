@@ -17,9 +17,7 @@ class GraphemeLearning(ModuleInterface):
         return True
 
     def onTrigger(self, message):
-        msgList = message.split(" ")
-        msgToUse = " ".join(msgList)
-        msgToUse = msgToUse.replace(GlobalVars.CurrentNick, "")
+        msgToUse = message.MessageString.replace(GlobalVars.CurrentNick, "")
         msgToUse = msgToUse.replace(GlobalVars.CurrentNick.lower(), "")
         if "www" not in msgToUse and "://" not in msgToUse:
             self.brain._learn(msgToUse)
