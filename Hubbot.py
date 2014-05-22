@@ -212,7 +212,7 @@ class HubbotFactory(protocol.ReconnectingClientFactory):
         print "-#- Started to connect to '{}'.".format(self.protocol.server)
 
     def buildProtocol(self, addr):
-        print "-#- Connected to '{]'.".format(self.protocol.server)
+        print "-#- Connected to '{}'.".format(self.protocol.server)
         print "-#- Resetting reconnection delay."
         self.resetDelay()
         return self.protocol
