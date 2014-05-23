@@ -13,27 +13,27 @@ class RPG(ModuleInterface):
     campaigns = {"pf": {"displayname": "Pathfinder", "tablename": "pathfinder", "isAddingAllowed": True},
                 "lp": {"displayname": "Let's Play", "tablename": "lp", "isAddingAllowed": True},
                 "mm": {"displayname": "Mutants & Masterminds", "tablename": "mm", "isAddingAllowed": True},
-                "welch": {"displayname": "welch", "tablename": "welch", "isAddingAllowed": False}}
+                "welch": {"displayname": "Welch", "tablename": "welch", "isAddingAllowed": False}}
     
     def onLoad(self):
-        triggers = campaigns.keys()
+        self.triggers = self.campaigns.keys()
         
     def onTrigger(self, message):
         if len(message.ParameterList) == 0:
-            return IRCResponse(ResponseType.Say, self.getRandom(campaigns[message.Command]["tablename"]), message.ReplyTo)
+            return IRCResponse(ResponseType.Say, self.getRandom(self.campaigns[message.Command]["tablename"]), message.ReplyTo)
         elif message.ParemeterList[0] == "list":
             params = ""
             if len(message.ParameterList) == 1:
                 params = " ".join(message.ParameterList[1:])
-            return IRCResponse(ResponseType.Say, self.getList(campaigns[message.Command]["tablename"], campaigns[message.Command]["displayname"], params), message.ReplyTo)
-        elif message.ParameterList[0] == "add" and campaigns[message.Command]["isAddingAllowed"]:
+            return IRCResponse(ResponseType.Say, self.getList(self.campaigns[message.Command]["tablename"], self.campaigns[message.Command]["displayname"], params), message.ReplyTo)
+        elif message.ParameterList[0] == "add" and self.campaigns[message.Command]["isAddingAllowed"]:
             lineToAdd = " ".join(message.ParameterList[1:])
-            newIndex = self.addLine(campaigns[message.Command]["tablename"], lineToAdd)
+            newIndex = self.addLine(self.campaigns[message.Command]["tablename"], lineToAdd)
             return IRCResponse(ResponseType.Say, "Successfully added line '{}. {}'".format(newIndex, lineToAdd), message.ReplyTo)
         elif message.ParameterList[0] == "search":
-            return IRCResponse(ResponseType.Say, self.search(campaigns[message.Command]["tablename"], " ".join(message.ParameterList[1:])), message.ReplyTo)
+            return IRCResponse(ResponseType.Say, self.search(self.campaigns[message.Command]["tablename"], " ".join(message.ParameterList[1:])), message.ReplyTo)
         else:
-            return IRCResponse(ResponseType.Say, self.getSpecific(campaigns[message.Command]["tablename"], message.ParameterList[0]), message.ReplyTo)
+            return IRCResponse(ResponseType.Say, self.getSpecific(self.campaigns[message.Command]["tablename"], message.ParameterList[0]), message.ReplyTo)
             
 
     def getRandom(self, table):
