@@ -7,75 +7,34 @@ from WebUtils import pasteEE
 
 
 class RPG(ModuleInterface):
-    triggers = ["pf", "lp", "mm", "welch"]
     help = 'pf/lp/mm/welch <number>/add <thing>/list/search <term> -- "helpful" RPG advice and stuff'
     filename = "data/data.db"
-
+    
+    campaigns = {"pf": {"displayname": "Pathfinder", "tablename": "pathfinder", "isAddingAllowed": True},
+                "lp": {"displayname": "Let's Play", "tablename": "lp", "isAddingAllowed": True},
+                "mm": {"displayname": "Mutants & Masterminds", "tablename": "mm", "isAddingAllowed": True},
+                "welch": {"displayname": "welch", "tablename": "welch", "isAddingAllowed": False}}
+    
+    def onLoad(self):
+        triggers = campaigns.keys()
+        
     def onTrigger(self, message):
-        if message.Command == "pf":
-            if len(message.ParameterList) == 0:
-                return IRCResponse(ResponseType.Say, self.getRandom("pathfinder"), message.ReplyTo)
-            else:
-                if message.ParameterList[0] == "list":
-                    if len(message.ParameterList) == 1:
-                        return IRCResponse(ResponseType.Say, self.getList("pathfinder", "Pathfinder", ""), message.ReplyTo)
-                    else:
-                        return IRCResponse(ResponseType.Say, self.getList("pathfinder", "Pathfinder", " ".join(message.ParameterList[1:])), message.ReplyTo)
-                elif message.ParameterList[0] == "add":
-                    lineToAdd = " ".join(message.ParameterList[1:])
-                    newIndex = self.addLine("pathfinder", lineToAdd)
-                    return IRCResponse(ResponseType.Say, "Successfully added line '{}. {}'".format(newIndex, lineToAdd), message.ReplyTo)
-                elif message.ParameterList[0] == "search":
-                    return IRCResponse(ResponseType.Say, self.search("pathfinder", " ".join(message.ParameterList[1:])), message.ReplyTo)
-                else:
-                    return IRCResponse(ResponseType.Say, self.getSpecific("pathfinder", message.ParameterList[0]), message.ReplyTo)
-        elif message.Command == "lp":
-            if len(message.ParameterList) == 0:
-               return IRCResponse(ResponseType.Say, self.getRandom("lp"), message.ReplyTo)
-            else:
-                if message.ParameterList[0] == "list":
-                    if len(message.ParameterList) == 1:
-                        return IRCResponse(ResponseType.Say, self.getList("lp", "Let's Play", ""), message.ReplyTo)
-                    else:
-                        return IRCResponse(ResponseType.Say, self.getList("lp", "Let's Play", " ".join(message.ParameterList[1:])), message.ReplyTo)
-                elif message.ParameterList[0] == "add":
-                    lineToAdd = " ".join(message.ParameterList[1:])
-                    newIndex = self.addLine("lp", lineToAdd)
-                    return IRCResponse(ResponseType.Say, "Successfully added line '{}. {}'".format(newIndex, lineToAdd), message.ReplyTo)
-                elif message.ParameterList[0] == "search":
-                    return IRCResponse(ResponseType.Say, self.search("lp", " ".join(message.ParameterList[1:])), message.ReplyTo)
-                else:
-                    return IRCResponse(ResponseType.Say, self.getSpecific("lp", message.ParameterList[0]), message.ReplyTo)
-        elif message.Command == "mm":
-            if len(message.ParameterList) == 0:
-                return IRCResponse(ResponseType.Say, self.getRandom("mm"), message.ReplyTo)
-            else:
-                if message.ParameterList[0] == "list":
-                    if len(message.ParameterList) == 1:
-                        return IRCResponse(ResponseType.Say, self.getList("mm", "Mutants & Masterminds", ""), message.ReplyTo)
-                    else:
-                        return IRCResponse(ResponseType.Say, self.getList("mm", "Mutants & Masterminds", " ".join(message.ParameterList[1:])), message.ReplyTo)
-                elif message.ParameterList[0] == "add":
-                    lineToAdd = " ".join(message.ParameterList[1:])
-                    newIndex = self.addLine("mm", lineToAdd)
-                    return IRCResponse(ResponseType.Say, "Successfully added line '{}. {}'".format(newIndex, lineToAdd), message.ReplyTo)
-                elif message.ParameterList[0] == "search":
-                    return IRCResponse(ResponseType.Say, self.search("mm", " ".join(message.ParameterList[1:])), message.ReplyTo)
-                else:
-                    return IRCResponse(ResponseType.Say, self.getSpecific("mm", message.ParameterList[0]), message.ReplyTo)
-        elif message.Command == "welch":
-            if len(message.ParameterList) == 0:
-                return IRCResponse(ResponseType.Say, self.getRandom("welch"), message.ReplyTo)
-            else:
-                if message.ParameterList[0] == "list":
-                    if len(message.ParameterList) == 1:
-                        return IRCResponse(ResponseType.Say, self.getList("welch", "Welch", ""), message.ReplyTo)
-                    else:
-                        return IRCResponse(ResponseType.Say, self.getList("welch", "Welch", " ".join(message.ParameterList[1:])), message.ReplyTo)
-                elif message.ParameterList[0] == "search":
-                    return IRCResponse(ResponseType.Say, self.search("welch", " ".join(message.ParameterList[1:])), message.ReplyTo)
-                else:
-                    return IRCResponse(ResponseType.Say, self.getSpecific("welch", message.ParameterList[0]), message.ReplyTo)
+        if len(message.ParameterList) == 0:
+            return IRCResponse(ResponseType.Say, self.getRandom(campaigns[message.Command]["tablename"]), message.ReplyTo)
+        elif message.ParemeterList[0] == "list":
+            params = ""
+            if len(message.ParameterList) == 1:
+                params = " ".join(message.ParameterList[1:])
+            return IRCResponse(ResponseType.Say, self.getList(campaigns[message.Command]["tablename"], campaigns[message.Command]["displayname"], params), message.ReplyTo)
+        elif message.ParameterList[0] == "add" and campaigns[message.Command]["isAddingAllowed"]:
+            lineToAdd = " ".join(message.ParameterList[1:])
+            newIndex = self.addLine(campaigns[message.Command]["tablename"], lineToAdd)
+            return IRCResponse(ResponseType.Say, "Successfully added line '{}. {}'".format(newIndex, lineToAdd), message.ReplyTo)
+        elif message.ParameterList[0] == "search":
+            return IRCResponse(ResponseType.Say, self.search(campaigns[message.Command]["tablename"], " ".join(message.ParameterList[1:])), message.ReplyTo)
+        else:
+            return IRCResponse(ResponseType.Say, self.getSpecific(campaigns[message.Command]["tablename"], message.ParameterList[0]), message.ReplyTo)
+            
 
     def getRandom(self, table):
         messageDict = {}
