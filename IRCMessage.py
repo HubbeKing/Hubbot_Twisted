@@ -1,4 +1,6 @@
 from enumType import enum
+import GlobalVars
+import re
 
 TargetTypes = enum('CHANNEL', 'USER')
 
@@ -42,7 +44,7 @@ class IRCMessage(object):
     Parameters = ''
     ParameterList = []
 
-    def __init__(self, type, user, channel, message, bot):
+    def __init__(self, type, user, channel, message):
         self.ChannelObj = channel
         try:
             unicodeMessage = message.decode('utf-8', 'ignore')
@@ -54,7 +56,7 @@ class IRCMessage(object):
         self.User = IRCUser(user)
         if user is None or channel is None:
             self.ReplyTo = ""
-        elif channel.Name == bot.nickname:
+        elif channel.Name == GlobalVars.CurrentNick:
             self.ReplyTo = self.User.Name
         else:
             self.ReplyTo = channel.Name
@@ -63,8 +65,8 @@ class IRCMessage(object):
         else:
             self.TargetType = TargetTypes.USER
 
-        if self.MessageList[0].startswith(bot.commandChar):
-            self.Command = self.MessageList[0][len(bot.commandChar):].lower()
+        if self.MessageList[0].startswith(GlobalVars.CommandChar):
+            self.Command = self.MessageList[0][len(GlobalVars.CommandChar):].lower()
             if self.Command == "":
                 self.Command = self.MessageList[1].lower()
                 self.Parameters = u' '.join(self.MessageList[2:])

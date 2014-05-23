@@ -8,8 +8,14 @@ from ModuleHandler import ModuleHandler
 
 
 class Hubbot(irc.IRCClient):
+    nickname = GlobalVars.CurrentNick
+
+    realname = GlobalVars.CurrentNick
+    username = GlobalVars.CurrentNick
+
     fingerReply = GlobalVars.finger
 
+    versionName = GlobalVars.CurrentNick
     versionNum = GlobalVars.version
     versionEnv = platform.platform()
 
@@ -18,18 +24,10 @@ class Hubbot(irc.IRCClient):
     startTime = datetime.datetime.min
 
     def __init__(self, server, channels):
-        self.nickname = "Hubbot"
-        self.realname = self.nickname
-        self.username = self.nickname
-        self.versionName = self.nickname
-        self.commandChar = "+"
-
         self.server = server
         self.channels = channels
-
         self.Quitting = False
         self.startTime = datetime.datetime.now()
-
         self.prefixesCharToMode = {"+":"v", "@":"o"}
         self.ignores = self.loadIgnores()
         self.moduleHandler = ModuleHandler(self)
@@ -37,7 +35,7 @@ class Hubbot(irc.IRCClient):
 
     def signedOn(self):
         for channel in self.channels.keys():
-            if channel is not self.nickname and channel is not "Auth":
+            if channel is not GlobalVars.CurrentNick and channel is not "Auth":
                 self.join(channel)
 
     def isupport(self, options):
@@ -94,14 +92,14 @@ class Hubbot(irc.IRCClient):
                     if oldnick in channel.Ranks:
                         channel.Ranks[newnick] = channel.Ranks[oldnick]
                         del channel.Ranks[oldnick]
-                    message = IRCMessage('NICK', prefix, channel, newnick, self)
+                    message = IRCMessage('NICK', prefix, channel, newnick)
                     self.moduleHandler.handleMessage(message)
 
     def irc_JOIN(self, prefix, params):
         channel = self.channels[params[0]]
-        message = IRCMessage('JOIN', prefix, channel, '', self)
+        message = IRCMessage('JOIN', prefix, channel, '')
 
-        if message.User.Name != self.nickname:
+        if message.User.Name != GlobalVars.CurrentNick:
             channel.Users[message.User.Name] = message.User
         self.moduleHandler.handleMessage(message)
 
@@ -113,9 +111,9 @@ class Hubbot(irc.IRCClient):
             channel = self.channels[params[0]]
         else:
             channel = IRCChannel(params[0])
-        message = IRCMessage('PART', prefix, channel, partMessage, self)
+        message = IRCMessage('PART', prefix, channel, partMessage)
 
-        if message.User.Name != self.nickname:
+        if message.User.Name != GlobalVars.CurrentNick:
             del channel.Users[message.User.Name]
             if message.User.Name in channel.Ranks:
                 del channel.Ranks[message.User.Name]
@@ -127,9 +125,9 @@ class Hubbot(irc.IRCClient):
             kickMessage = u', message: ' + u' '.join(params[2:])
 
         channel = self.channels[params[0]]
-        message = IRCMessage('KICK', prefix, channel, kickMessage, self)
+        message = IRCMessage('KICK', prefix, channel, kickMessage)
         kickee = params[1]
-        if kickee == self.nickname:
+        if kickee == GlobalVars.CurrentNick:
             del self.channels[message.ReplyTo]
         else:
             del channel.Users[kickee]
@@ -143,7 +141,7 @@ class Hubbot(irc.IRCClient):
             quitMessage = u', message: ' + u' '.join(params[0:])
         for key in self.channels:
             channel = self.channels[key]
-            message = IRCMessage('QUIT', prefix, channel, quitMessage, self)
+            message = IRCMessage('QUIT', prefix, channel, quitMessage)
             if message.User.Name in channel.Users:
                 del channel.Users[message.User.Name]
                 if message.User.Name in channel.Ranks:
@@ -151,7 +149,7 @@ class Hubbot(irc.IRCClient):
             self.moduleHandler.handleMessage(message)
 
     def privmsg(self, user, channel, msg):
-        message = IRCMessage('PRIVMSG', user, self.channels[channel], msg, self)
+        message = IRCMessage('PRIVMSG', user, self.channels[channel], msg)
         for (name, module) in self.moduleHandler.modules.items():
             if message.Command in module.triggers:
                 self.log(u'<{0}> {1}'.format(message.User.Name, message.MessageString), message.ReplyTo)
@@ -159,7 +157,7 @@ class Hubbot(irc.IRCClient):
         self.moduleHandler.handleMessage(message)
 
     def action(self, user, channel, msg):
-        message = IRCMessage('ACTION', user, self.channels[channel], msg, self)
+        message = IRCMessage('ACTION', user, self.channels[channel], msg)
         pattern = "hu+g|cuddle|snu+ggle|snu+g|squeeze|glomp"
         match = re.search(pattern, msg, re.IGNORECASE)
         if match:
@@ -167,7 +165,7 @@ class Hubbot(irc.IRCClient):
         self.moduleHandler.handleMessage(message)
 
     def noticed(self, user, channel, msg):
-        message = IRCMessage('NOTICE', user, self.channels[channel], msg.upper(), self)
+        message = IRCMessage('NOTICE', user, self.channels[channel], msg.upper())
         self.log(u'[{0}] {1}'.format(message.User.Name, message.MessageString), message.ReplyTo)
         self.moduleHandler.handleMessage(message)
 

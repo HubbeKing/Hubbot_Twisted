@@ -12,6 +12,8 @@ commonWords = ["and","of","all","to","the","both","back","again",
 
 bothandler = None
 
+
+CurrentNick = "Hubbot"
 connections = {"irc.desertbus.org:6667":["#desertbus", "#unmoderated"], "applejack.me:6667":["#survivors"]}
 
 nonDefaultModules = ["Roll", "Grapheme"]
@@ -27,4 +29,8 @@ admins = ["HubbeKing", "HubbeWork", "HubbePhone", "DoctorGyarados",
 finger = "Y U DO DIS"
 version = "1.0.0"
 source = "https://github.com/HubbeKing/Hubbot_Twisted/"
+
+CommandChar = "+"
+
+
 

@@ -11,12 +11,10 @@ import GlobalVars
 
 class Headcanon(ModuleInterface):
     triggers = ["headcanon"]
-
-    def onLoad(self):
-        self.subCommands = ["add", "search", "list", "remove", "help"]
-        self.help = "headcanon [function] -- used to store Symphony's headcanon!"
-        self.help += "\nHeadcanon functions: {}".format(", ".join(self.subCommands))
-        self.help += "\nSyntax is: {}headcanon help <command>".format(self.bot.commandChar)
+    subCommands = ["add", "search", "list", "remove", "help"]
+    help = "headcanon [function] -- used to store Symphony's headcanon!"
+    help += "\nHeadcanon functions: {}".format(", ".join(subCommands))
+    help += "\nSyntax is: {}headcanon help <command>".format(GlobalVars.CommandChar)
 
     def onTrigger(self, message):
         filename = "data/data.db"
@@ -35,18 +33,18 @@ class Headcanon(ModuleInterface):
                 helpCmd = message.ParameterList[1]
                 if helpCmd not in self.subCommands:
                     returnString = "Headcanon functions: {}".format(", ".join(self.subCommands))
-                    returnString += "\nSyntax is: {}headcanon help <command>".format(self.bot.commandChar)
+                    returnString += "\nSyntax is: {}headcanon help <command>".format(GlobalVars.CommandChar)
                 elif helpCmd == "add":
-                    returnString = self.bot.commandChar + "headcanon add <string> - used to add lines to headcanon."
+                    returnString = GlobalVars.CommandChar + "headcanon add <string> - used to add lines to headcanon."
                 elif helpCmd == "search":
-                    returnString = self.bot.commandChar + "headcanon search <string> - used to search within the headcanon."
+                    returnString = GlobalVars.CommandChar + "headcanon search <string> - used to search within the headcanon."
                 elif helpCmd == "list":
-                    returnString = self.bot.commandChar + "headcanon list - posts a list of all headcanon entires to pastebin"
+                    returnString = GlobalVars.CommandChar + "headcanon list - posts a list of all headcanon entires to pastebin"
                 elif helpCmd == "remove":
-                    returnString = self.bot.commandChar + "headcanon remove <string> - used to remove lines to the headcanon."
+                    returnString = GlobalVars.CommandChar + "headcanon remove <string> - used to remove lines to the headcanon."
             except:
                 returnString = "Headcanon functions: {}".format(", ".join(self.subCommands))
-                returnString += "\nSyntax is: {}headcanon help <command>".format(self.bot.commandChar)
+                returnString += "\nSyntax is: {}headcanon help <command>".format(GlobalVars.CommandChar)
             return IRCResponse(ResponseType.Say, returnString, message.ReplyTo)
 
         elif subCommand.lower() == "add" and message.User.Name in GlobalVars.admins:

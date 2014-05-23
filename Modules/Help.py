@@ -21,4 +21,4 @@ class Help(ModuleInterface):
             funcs = ', '.join(sorted(self.bot.moduleHandler.modules.iterkeys(), key=lambda s: s.lower()))
             return [IRCResponse(ResponseType.Say, "Modules loaded are:", message.ReplyTo),
                     IRCResponse(ResponseType.Say, funcs, message.ReplyTo),
-                    IRCResponse(ResponseType.Say, "Use {}help <module> for module commands.".format(self.bot.commandChar), message.ReplyTo)]
+                    IRCResponse(ResponseType.Say, "Use {}help <module> for module commands.".format(GlobalVars.CommandChar), message.ReplyTo)]
