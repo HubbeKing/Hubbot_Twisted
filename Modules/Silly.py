@@ -43,7 +43,7 @@ class Silly(ModuleInterface):
         if message.Command == "silly":
             return IRCResponse(ResponseType.Say, self.help, message.ReplyTo)
         elif message.Command == "hunt":
-            if message.User.Name in self.bot.admins:
+            if message.User.Name in GlobalVars.admins:
                 line1 = "LAPTOP CHAT ENGAGE"
                 line2 = "THRUSTERS TO MAXIMUM POWER"
                 line3 = "FLOOD TUBES THREE AND FOUR"

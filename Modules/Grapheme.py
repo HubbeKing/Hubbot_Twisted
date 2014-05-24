@@ -1,5 +1,6 @@
 from ModuleInterface import ModuleInterface
 from IRCResponse import IRCResponse, ResponseType
+import GlobalVars
 
 
 class Grapheme(ModuleInterface):
