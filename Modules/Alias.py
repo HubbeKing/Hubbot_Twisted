@@ -2,7 +2,6 @@ import sqlite3
 from ModuleInterface import ModuleInterface
 from IRCResponse import IRCResponse, ResponseType
 from IRCMessage import IRCMessage
-import GlobalVars
 
 
 class Alias(ModuleInterface):
@@ -25,7 +24,7 @@ class Alias(ModuleInterface):
     def onTrigger(self, message):
         if message.Command in self.triggers:
             if message.Command == "alias":
-                if message.User.Name not in GlobalVars.admins:
+                if message.User.Name not in self.bot.admins:
                     return IRCResponse(ResponseType.Say, "Only my admins may create new aliases!", message.ReplyTo)
 
                 if len(message.ParameterList) <= 1:
@@ -50,7 +49,7 @@ class Alias(ModuleInterface):
 
                 return IRCResponse(ResponseType.Say, "Created a new alias '{}' for '{}'.".format(message.ParameterList[0], " ".join(message.ParameterList[1:])), message.ReplyTo)
             elif message.Command == "unalias":
-                if message.User.Name not in GlobalVars.admins:
+                if message.User.Name not in self.bot.admins:
                     return IRCResponse(ResponseType.Say, "Only my admins may remove aliases!", message.ReplyTo)
 
                 if len(message.ParameterList) == 0:

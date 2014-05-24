@@ -1,7 +1,7 @@
 import importlib
-import os, sys, traceback, sqlite3
+import os, sys, traceback
 from glob import glob
-from IRCResponse import ResponseType
+from IRCResponse import IRCResponse, ResponseType
 import GlobalVars
 
 
@@ -44,15 +44,18 @@ class ModuleHandler(object):
     def handleMessage(self, message):
         for (name, module) in self.modules.items():
             try:
-                if module.shouldTrigger(message) and message.User.Name not in self.bot.ignores:
-                    response = module.onTrigger(message)
-                    if response is None:
-                        continue
-                    if hasattr(response, "__iter__"):
-                        for r in response:
-                            self.sendResponse(r)
-                    else:
-                        self.sendResponse(response)
+                if module.shouldTrigger(message):
+                    if module.accessLevel != 0 and message.User.Name not in self.bot.admins:
+                        self.sendResponse(IRCResponse(ResponseType.Say, "Only my admins can use {}!".format(module.__name__), message.ReplyTo))
+                    elif message.User.Name not in self.bot.ignores:
+                        response = module.onTrigger(message)
+                        if response is None:
+                            continue
+                        if hasattr(response, "__iter__"):
+                            for r in response:
+                                self.sendResponse(r)
+                        else:
+                            self.sendResponse(response)
             except Exception:
                 print "Python Execution Error in '{}': {}".format(name, str(sys.exc_info()))
                 traceback.print_tb(sys.exc_info()[2])

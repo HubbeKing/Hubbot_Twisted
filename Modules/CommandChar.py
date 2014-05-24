@@ -1,15 +1,13 @@
 from ModuleInterface import ModuleInterface
 from IRCResponse import IRCResponse, ResponseType
-import GlobalVars
 
 
 class CommandChar(ModuleInterface):
     triggers = ["commandchar"]
     help = "commandchar <char> -- changes the prefix for bot commands (admin-only)"
+    accessLevel = 1
 
     def onTrigger(self, message):
-        if message.User.Name not in GlobalVars.admins:
-            return IRCResponse(ResponseType.Say, "Only my admins can change my command character!", message.ReplyTo)
         if len(message.ParameterList) == 0:
             return IRCResponse(ResponseType.Say, "Change my command character to what?", message.ReplyTo)
         else:
