@@ -1,6 +1,5 @@
 from ModuleInterface import ModuleInterface
 from IRCResponse import IRCResponse, ResponseType
-import GlobalVars
 import string
 import sqlite3
 import re
@@ -11,6 +10,13 @@ class Hugs(ModuleInterface):
     acceptedTypes = ["PRIVMSG", "ACTION"]
     help = "hugs [nick] -- How many hugs has this person given and received?"
     # hug_dict is : {"nick":[given, received]}
+    commonWords = \
+    [
+       "and","of","all","to","the","both","back","again",
+        "any","one","<3","with","","<3s","so","hard","right",
+        "in","him","her","booper","up","on",":)","against","its",
+        "harder","teh","sneakgrabs","people",":3"
+    ]
 
     def onTrigger(self, message):
         if message.Type == "ACTION":
@@ -25,7 +31,7 @@ class Hugs(ModuleInterface):
                         hug_dict[row[0]] = [row[1], row[2]]
                 receivers = []
                 for nick in message.MessageList[1:]:
-                    if string.lower(nick) not in GlobalVars.commonWords:
+                    if string.lower(nick) not in self.commonWords:
                         nick = string.rstrip(nick, "\x01")
                         nick = string.rstrip(nick, ".")
                         nick = string.rstrip(nick, "!")
