@@ -23,7 +23,7 @@ class Hubbot(irc.IRCClient):
         self.username = self.nickname
         self.versionName = self.nickname
         self.CommandChar = "+"
-        self.admins = GlobalVars.admins
+        self.admins = self.loadAdmins()
 
         self.server = server
         self.channels = channels
