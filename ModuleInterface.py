@@ -4,7 +4,7 @@ class ModuleInterface(object):
     triggers = []
     acceptedTypes = ['PRIVMSG']
     help = '<no help defined (yet)>'
-    accessLevel = ModuleAccessLevels.ANYONE
+    accessLevel = 1
 
     def __init__(self, bot):
         self.bot = bot
