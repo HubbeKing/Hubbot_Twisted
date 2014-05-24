@@ -63,7 +63,7 @@ class BotHandler:
         for server, botfactory in self.botfactories.iteritems():
             botfactory.protocol.Quitting = True
             botfactory.protocol.quit(quitmessage)
-            for (name, module) in self.botfactories[server].protocol.moduleHandler.modules.items():
+            for (name, module) in botfactory.protocol.moduleHandler.modules.items():
                 module.onUnload()
         self.botfactories = {}
         reactor.callLater(4.0, reactor.stop)
@@ -73,7 +73,7 @@ class BotHandler:
         for server, botfactory in self.botfactories.iteritems():
             botfactory.protocol.Quitting = True
             botfactory.protocol.quit(quitmessage)
-            for (name, module) in self.botfactories[server].protocol.moduleHandler.modules.items():
+            for (name, module) in botfactory.protocol.moduleHandler.modules.items():
                 module.onUnload()
         self.botfactories = {}
         reactor.callLater(2.0, self.replaceInstance)

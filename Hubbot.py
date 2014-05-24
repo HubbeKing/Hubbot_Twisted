@@ -206,6 +206,14 @@ class Hubbot(irc.IRCClient):
                 ignores.append(row[0])
         return ignores
 
+    def loadAdmins(self):
+        admins = []
+        with sqlite3.connect("data/data.db") as conn:
+            c = conn.cursor()
+            for row in c.execute("SELECT nick FROM admins"):
+                admins.append(row[0])
+        return admins
+
 class HubbotFactory(protocol.ReconnectingClientFactory):
     def __init__(self, server, port, channels):
         self.port = port
