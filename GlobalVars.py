@@ -16,18 +16,6 @@ connections = {"irc.desertbus.org:6667":["#desertbus", "#unmoderated"], "appleja
 
 nonDefaultModules = ["Roll", "Grapheme"]
 
-admins = ["HubbeKing", "HubbeWork", "HubbePhone", "DoctorGyarados",
-          "DoctorGyaradroid", "DoctorGyarados|GAEM",
-          "DoctorGyarados|Away", "Docket", "Gyaradroid",
-          "Symphony", "Symphone", "Sympho|afk",
-          "Symphosewing", "Symphonom", "Symphonomnom",
-          "Heufy|Work", "HeufyDroid", "Heufneutje",
-          "T-M|Work", "T-M|Phone", "Tyranic-Moron"]
-
 finger = "Y U DO DIS"
 version = "1.0.0"
 source = "https://github.com/HubbeKing/Hubbot_Twisted/"
-
-
-
-
