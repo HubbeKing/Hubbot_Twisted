@@ -1,6 +1,5 @@
 from ModuleInterface import ModuleInterface
 from IRCResponse import IRCResponse, ResponseType
-import GlobalVars
 
 
 class Grapheme(ModuleInterface):
@@ -15,7 +14,7 @@ class Grapheme(ModuleInterface):
     def onTrigger(self, message):
         stringToUse = " ".join(message.MessageList[1:])
         messageToUse = stringToUse.encode("utf-8")
-        self.bot.learnMessage(messageToUse)
+        self.bot.brain._lean(messageToUse)
         reply = self.bot.brain.respond(messageToUse)
         if "." in reply:
             reply = reply[:180].rsplit(".", 1)[0]
