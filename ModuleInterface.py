@@ -5,6 +5,8 @@ class ModuleInterface(object):
     acceptedTypes = ['PRIVMSG']
     help = '<no help defined (yet)>'
     accessLevel = 0
+    # 0 = Anyone
+    # 1 = Admins only
 
     def __init__(self, bot):
         self.bot = bot
