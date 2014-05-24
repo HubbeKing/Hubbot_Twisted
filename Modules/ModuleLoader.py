@@ -1,16 +1,13 @@
 from IRCResponse import IRCResponse, ResponseType
-from ModuleInterface import ModuleInterface
-import GlobalVars
+from ModuleInterface import ModuleInterface, ModuleAccessLevels
 
 
 class ModuleLoader(ModuleInterface):
     triggers = ['load', 'reload', 'unload']
     help = "load/reload <function>, unload <function> - handles loading/unloading/reloading of functions. Use 'all' with load/reload to reload all active functions"
+    accessLevel = ModuleAccessLevels.ADMINS
 
     def onTrigger(self, message):
-        if message.User.Name not in GlobalVars.admins and message.ParameterList[0].lower()!="nope":
-            return IRCResponse(ResponseType.Say, "Only my admins can use {0}".format(message.Command), message.ReplyTo)
-
         if len(message.ParameterList) == 0:
             return IRCResponse(ResponseType.Say, "You didn't specify a function name! Usage: {0}".format(self.help), message.ReplyTo)
 

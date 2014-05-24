@@ -1,6 +1,5 @@
-from ModuleInterface import ModuleInterface
+from ModuleInterface import ModuleInterface, ModuleAccessLevels
 from IRCResponse import IRCResponse, ResponseType
-import GlobalVars
 import re
 import subprocess
 
@@ -8,10 +7,9 @@ import subprocess
 class Update(ModuleInterface):
     triggers = ["update"]
     help = "update - pulls the latest code from GitHub"
+    accessLevel = ModuleAccessLevels.ADMINS
 
     def onTrigger(self, message):
-        if message.User.Name not in GlobalVars.admins:
-            return IRCResponse(ResponseType.Say, "Only my admins can update me!", message.ReplyTo)
 
         subprocess.call(["git", "fetch"])
 

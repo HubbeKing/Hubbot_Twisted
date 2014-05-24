@@ -1,4 +1,3 @@
-import GlobalVars
 from ModuleInterface import ModuleInterface
 from SimpleHal import SimpleHAL
 

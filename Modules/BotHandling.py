@@ -1,17 +1,15 @@
 import datetime
 from IRCResponse import IRCResponse, ResponseType
-from ModuleInterface import ModuleInterface
+from ModuleInterface import ModuleInterface, ModuleAccessLevels
 import GlobalVars
 
 
 class BotHandling(ModuleInterface):
     triggers = ["connect", "quit", "quitfrom", "restart", "shutdown"]
     help = "connect <server> <channel>, quit, quitfrom <server>, restart, shutdown - Connect to / Disconnect from servers, Restart current bot, Shut down all bots"
+    accessLevel = ModuleAccessLevels.ADMINS
 
     def onTrigger(self, message):
-        if message.User.Name not in GlobalVars.admins:
-            return IRCResponse(ResponseType.Say, "You are not allowed to use '{}'".format(message.Command), message.ReplyTo)
-
         if message.Command == "connect":
             if len(message.ParameterList) >= 2:
                 server_with_port = message.ParameterList[0]

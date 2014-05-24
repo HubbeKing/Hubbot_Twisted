@@ -49,7 +49,7 @@ class Headcanon(ModuleInterface):
                 returnString += "\nSyntax is: {}headcanon help <command>".format(self.bot.CommandChar)
             return IRCResponse(ResponseType.Say, returnString, message.ReplyTo)
 
-        elif subCommand.lower() == "add" and message.User.Name in GlobalVars.admins:
+        elif subCommand.lower() == "add" and message.User.Name in self.bot.admins:
             if len(message.ParameterList) == 1:
                 return IRCResponse(ResponseType.Say, "Maybe you should read the help text?", message.ReplyTo)
             addString = ""
@@ -92,7 +92,7 @@ class Headcanon(ModuleInterface):
                     traceback.print_tb(sys.exc_info()[2])
                     return IRCResponse(ResponseType.Say, "Uh-oh, something broke!", message.ReplyTo)
 
-        elif subCommand.lower() == "remove" and message.User.Name in GlobalVars.admins:
+        elif subCommand.lower() == "remove" and message.User.Name in self.bot.admins:
             try:
                 re_string = "{}".format(" ".join(message.ParameterList[1:]))
                 for canon in headcanon:

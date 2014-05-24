@@ -1,17 +1,15 @@
 import sqlite3
-from ModuleInterface import ModuleInterface
+from ModuleInterface import ModuleInterface, ModuleAccessLevels
 from IRCResponse import IRCResponse, ResponseType
-import GlobalVars
 
 
 class Ignore(ModuleInterface):
     triggers = ["ignore", "unignore"]
     help = "ignore/unignore <name> -- ignore <name> as much as possible, stop ignoring <name>"
     filename = "data/data.db"
+    accessLevel = ModuleAccessLevels.ADMINS
 
     def onTrigger(self, message):
-        if message.User.Name not in GlobalVars.admins:
-            return IRCResponse(ResponseType.Say, "Only my admins can use ignore!", message.ReplyTo)
         if message.Command == "ignore":
             if len(message.ParameterList) == 1:
                 with sqlite3.connect(self.filename) as conn:
