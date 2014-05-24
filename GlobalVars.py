@@ -9,7 +9,7 @@ bothandler = None
 
 connections = {"irc.desertbus.org:6667":["#desertbus", "#unmoderated"], "applejack.me:6667":["#survivors"]}
 
-nonDefaultModules = ["Roll", "Grapheme"]
+nonDefaultModules = ["Roll", "Grapheme", "GraphemeLearning"]
 
 finger = "Y U DO DIS"
 version = "1.0.0"
