@@ -10,7 +10,7 @@ class Admin(ModuleInterface):
     accessLevel = 1
 
     def onTrigger(self, message):
-        if message.Command == "admin" and message.ParameterList[0] == "save":
+        if message.Command == "admin" and len(message.ParameterList) == 1 and message.ParameterList[0] == "save":
             self.saveAdmins()
         elif message.Command == "admin":
             if len(message.ParameterList) == 0:
