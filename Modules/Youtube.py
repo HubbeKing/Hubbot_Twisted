@@ -11,9 +11,9 @@ class Youtube(ModuleInterface):
         if message.Command == "randomyt":
             if len(message.ParameterList) == 0:
                 return IRCResponse(ResponseType.Say, "You didn't specify a channel!", message.ReplyTo)
-            try:
+            else:
                 author = " ".join(message.ParameterList)
-                feed = urllib.urlopen(r'https://gdata.youtube.com/feeds/api/users/{}?alt=json'.format(author))
+                feed = urllib.urlopen(r'https://gdata.youtube.com/feeds/api/users/{}?alt=json&v=2'.format(author))
                 numberOfVids = json.load(feed)
                 listOfDicts = numberOfVids['entry']['gd$feedLink']
                 for dict in listOfDicts:
@@ -25,8 +25,6 @@ class Youtube(ModuleInterface):
                 inp.close()
                 returnVid = random.choice(resp['feed']['entry'])
                 return IRCResponse(ResponseType.Say, "{} -- {}".format(returnVid['title']['$t'], returnVid['link'][0]['href'].split("&",1)[0]), message.ReplyTo)
-            except:
-                return IRCResponse(ResponseType.Say, "Yeah no. That ain't happening.", message.ReplyTo)
 
         if message.Command == "latestyt":
             if len(message.ParameterList) == 0:
