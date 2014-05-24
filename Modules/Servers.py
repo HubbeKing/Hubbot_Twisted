@@ -1,14 +1,13 @@
 from IRCResponse import IRCResponse, ResponseType
 from ModuleInterface import ModuleInterface
-import GlobalVars
 
 
 class Servers(ModuleInterface):
-    help = "mumble, gmod, starbound, starbound2, jcmp, tetri, cockatrice, kf, tf2 -- Used to post server info for games! Usage: {}<server>".format(GlobalVars.CommandChar)
     gmodMods = 'List of mods needed for GMOD: http://steamcommunity.com/sharedfiles/filedetails/?id=185811989'
     gmodIP = "The Garrys Mod server is hosted at: gmod.dahou.se"
 
     def onLoad(self):
+        self.help = "mumble, gmod, starbound, starbound2, jcmp, tetri, cockatrice, kf, tf2 -- Used to post server info for games! Usage: {}<server>".format(self.bot.CommandChar)
         self.serverDict = \
             {
                 "servers":"",

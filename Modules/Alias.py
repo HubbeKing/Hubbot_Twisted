@@ -96,4 +96,4 @@ class Alias(ModuleInterface):
                         newMsg = newMsg.replace("${}+".format(i+1), " ".join(message.ParameterList[i:]))
                     else:
                         newMsg = newMsg.replace("${}".format(i+1), param)
-            return IRCMessage(message.Type, message.User.String, message.ChannelObj, newMsg)
+            return IRCMessage(message.Type, message.User.String, message.ChannelObj, newMsg, self.bot)

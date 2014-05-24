@@ -13,12 +13,7 @@ class BotHandler:
         for (server_with_port, channels) in GlobalVars.connections.items():
             server = server_with_port.split(":")[0]
             port = int(server_with_port.split(":")[1])
-            chanObjects = {}
-            for channel in channels:
-                chanObjects[channel] = IRCChannel(channel)
-            chanObjects[GlobalVars.CurrentNick] = IRCChannel(GlobalVars.CurrentNick)
-            chanObjects["Auth"] = IRCChannel("Auth")
-            self.startBotFactory(server, port, chanObjects)
+            self.startBotFactory(server, port, channels)
         GlobalVars.bothandler = self
         reactor.run()
 
@@ -26,8 +21,13 @@ class BotHandler:
         if server in self.botfactories:
             print "Already on server '{}'.".format(server)
             return False
-
-        botfactory = HubbotFactory(server, port, channels)
+        if type(channels) == list:
+            chanObjects = {}
+            for channel in channels:
+                chanObjects[channel] = IRCChannel(channel)
+            botfactory = HubbotFactory(server, port, chanObjects)
+        else:
+            botfactory = HubbotFactory(server, port, channels)
         self.botfactories[server] = botfactory
         return True
 

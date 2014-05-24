@@ -7,7 +7,7 @@ class Grapheme(ModuleInterface):
     help = "grapheme -- for when you need someone to talk to."
 
     def shouldTrigger(self, message):
-        if message.Type == "PRIVMSG" and message.MessageList[0].lower().startswith(GlobalVars.CurrentNick.lower()) and len(message.MessageList) > 1:
+        if message.Type == "PRIVMSG" and message.MessageList[0].lower().startswith(self.bot.nickname.lower()) and len(message.MessageList) > 1:
             return True
         else:
             return False
