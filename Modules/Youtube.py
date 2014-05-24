@@ -13,7 +13,7 @@ class Youtube(ModuleInterface):
                 return IRCResponse(ResponseType.Say, "You didn't specify a channel!", message.ReplyTo)
             try:
                 author = " ".join(message.ParameterList)
-                inp = urllib.urlopen(r'http://gdata.youtube.com/feeds/api/videos?alt=json&orderby=published&author=' + author)
+                inp = urllib.urlopen(r'http://gdata.youtube.com/feeds/api/users/{}/uploads?alt=json'.format(author))
                 resp = json.load(inp)
                 inp.close()
                 returnVid = random.choice(resp['feed']['entry'])
