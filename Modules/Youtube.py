@@ -17,7 +17,7 @@ class Youtube(ModuleInterface):
                 numberOfVids = json.load(feed)
                 listOfDicts = numberOfVids['entry']['gd$feedLink']
                 for dict in listOfDicts:
-                    if dict["href"] == "https://gdata.youtube.com/feeds/api/users/{}/uploads".format(author):
+                    if dict['rel'] == "http://gdata.youtube.com/schemas/2007#user.uploads":
                         numberOfVids = dict["countHint"]
                 randomVid = random.randrange(1,numberOfVids)
                 inp = urllib.urlopen(r'http://gdata.youtube.com/feeds/api/videos?alt=json&start-index={}&max-results=1&author={}'.format(randomVid,author))
