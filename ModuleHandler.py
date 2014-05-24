@@ -46,7 +46,7 @@ class ModuleHandler(object):
             try:
                 if module.shouldTrigger(message):
                     if module.accessLevel != 0 and message.User.Name not in self.bot.admins:
-                        self.sendResponse(IRCResponse(ResponseType.Say, "Only my admins can use {}!".format(name), message.ReplyTo))
+                        self.sendResponse(IRCResponse(ResponseType.Say, "Only my admins can use {}!".format(message.Command), message.ReplyTo))
                     elif message.User.Name not in self.bot.ignores:
                         response = module.onTrigger(message)
                         if response is None:
