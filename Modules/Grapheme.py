@@ -14,7 +14,7 @@ class Grapheme(ModuleInterface):
     def onTrigger(self, message):
         stringToUse = " ".join(message.MessageList[1:])
         messageToUse = stringToUse.encode("utf-8")
-        self.bot.brain._lean(messageToUse)
+        self.bot.brain._learn(messageToUse)
         reply = self.bot.brain.respond(messageToUse)
         if "." in reply:
             reply = reply[:180].rsplit(".", 1)[0]
