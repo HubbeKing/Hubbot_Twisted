@@ -23,7 +23,7 @@ class RPG(ModuleInterface):
             return IRCResponse(ResponseType.Say, self.getRandom(self.campaigns[message.Command]["tablename"]), message.ReplyTo)
         elif message.ParameterList[0] == "list":
             params = ""
-            if len(message.ParameterList) == 1:
+            if len(message.ParameterList) > 1:
                 params = " ".join(message.ParameterList[1:])
             return IRCResponse(ResponseType.Say, self.getList(self.campaigns[message.Command]["tablename"], self.campaigns[message.Command]["displayname"], params), message.ReplyTo)
         elif message.ParameterList[0] == "add" and self.campaigns[message.Command]["isAddingAllowed"]:
