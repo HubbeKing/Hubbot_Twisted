@@ -86,10 +86,11 @@ class Alias(ModuleInterface):
                 newMsg = newMsg.replace("$sender", message.User.Name)
             if "$channel" in newMsg:
                 newMsg = newMsg.replace("$channel", message.ChannelObj.Name)
-            newMsg = newMsg.replace(message.Parameters, "")
             if "$0" in newMsg:
+                newMsg = newMsg.replace(message.Parameters, "")
                 newMsg = newMsg.replace("$0", " ".join(message.ParameterList))
-            if len(message.ParameterList) >= 1:
+            if len(message.ParameterList) >= 1 and "$" in newMsg:
+                newMsg = newMsg.replace(message.Parameters, "")
                 for i, param in enumerate(message.ParameterList):
                     if newMsg.find("${}+".format(i+1)) != -1:
                         newMsg = newMsg.replace("${}+".format(i+1), " ".join(message.ParameterList[i:]))
