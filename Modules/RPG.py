@@ -21,7 +21,7 @@ class RPG(ModuleInterface):
     def onTrigger(self, message):
         if len(message.ParameterList) == 0:
             return IRCResponse(ResponseType.Say, self.getRandom(self.campaigns[message.Command]["tablename"]), message.ReplyTo)
-        elif message.ParemeterList[0] == "list":
+        elif message.ParameterList[0] == "list":
             params = ""
             if len(message.ParameterList) == 1:
                 params = " ".join(message.ParameterList[1:])
