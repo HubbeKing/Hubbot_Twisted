@@ -61,7 +61,7 @@ class IdentCheck(ModuleInterface):
                     elif (roll > 1) and (roll < 8):
                         return IRCResponse(ResponseType.Say, "{} is NOT a ROBOT.".format(message.User.Name), message.ReplyTo)
                     elif (roll > 7) and (roll < 14):
-                        return IRCResponse(ResponseType.Say, "{] is PROBABLY a ROBOT.".format(message.User.Name), message.ReplyTo)
+                        return IRCResponse(ResponseType.Say, "{} is PROBABLY a ROBOT.".format(message.User.Name), message.ReplyTo)
                     elif (roll > 13) and (roll < 20):
                         return IRCResponse(ResponseType.Say, "{} is TOTALLY a ROBOT.".format(message.User.Name), message.ReplyTo)
                     else:
