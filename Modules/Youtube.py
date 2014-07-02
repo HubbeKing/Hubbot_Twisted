@@ -24,7 +24,7 @@ class Youtube(ModuleInterface):
                 resp = json.load(inp)
                 inp.close()
                 returnVid = random.choice(resp['feed']['entry'])
-                return IRCResponse(ResponseType.Say, "{} -- {}".format(returnVid['title']['$t'].decode("utf-8","ignore"), returnVid['link'][0]['href'].split("&",1)[0].decode("utf-8","ignore")), message.ReplyTo)
+                return IRCResponse(ResponseType.Say, "{} -- {}".format(returnVid['title']['$t'].encode("utf-8","ignore"), returnVid['link'][0]['href'].split("&",1)[0]), message.ReplyTo)
             except Exception, ex:
                 print ex.args
                 return IRCResponse(ResponseType.Say, "Something broke.", message.ReplyTo)
@@ -37,7 +37,7 @@ class Youtube(ModuleInterface):
                 resp = json.load(inp)
                 inp.close()
                 returnVid = resp['feed']['entry'][0]
-                return IRCResponse(ResponseType.Say, "{} -- {}".format(returnVid['title']['$t'].decode("utf-8","ignore"), returnVid['link'][0]['href'].split("&",1)[0].decode("utf-8","ignore")), message.ReplyTo)
+                return IRCResponse(ResponseType.Say, "{} -- {}".format(returnVid['title']['$t'].encode("utf-8","ignore"), returnVid['link'][0]['href'].split("&",1)[0]), message.ReplyTo)
             except Exception, ex:
                 print ex.args
                 return IRCResponse(ResponseType.Say, "Yeah no. That ain't happening.", message.ReplyTo)
