@@ -38,5 +38,6 @@ class Youtube(ModuleInterface):
                 inp.close()
                 returnVid = resp['feed']['entry'][0]
                 return IRCResponse(ResponseType.Say, "{} -- {}".format(returnVid['title']['$t'], returnVid['link'][0]['href'].split("&",1)[0]), message.ReplyTo)
-            except:
+            except Exception, ex:
+                print ex.args
                 return IRCResponse(ResponseType.Say, "Yeah no. That ain't happening.", message.ReplyTo)
