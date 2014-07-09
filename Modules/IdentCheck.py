@@ -39,7 +39,7 @@ class IdentCheck(ModuleInterface):
                     elif roll == 1:
                         reroll = random.randint(1,20)
                         if reroll == 20:
-                            return IRCResponse(ResponseType.Say, " is SECRETLY A DRAGON!".format(message.User.Name), message.ReplyTo)
+                            return IRCResponse(ResponseType.Say, "{} is SECRETLY A DRAGON!".format(message.User.Name), message.ReplyTo)
                         else:
                             return IRCResponse(ResponseType.Say, "{} is NOT a DINOSAUR.".format(message.User.Name), message.ReplyTo)
                     elif (roll > 1) and (roll < 8):
