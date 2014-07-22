@@ -1,6 +1,6 @@
 from IRCResponse import IRCResponse, ResponseType
 from ModuleInterface import ModuleInterface
-import random
+import random, datetime
 
 
 class IdentCheck(ModuleInterface):
@@ -13,7 +13,7 @@ class IdentCheck(ModuleInterface):
         if message.ReplyTo in self.bot.channels.keys():
             if "RoBoBo" not in self.bot.channels[message.ReplyTo].Users.keys():
                 if message.MessageString.lower().startswith("meow"):
-                    roll = random.randint(1,20)
+                    roll = hash((message.User.Name, datetime.datetime.now().day)) % 20 + 1
                     if message.User.Name == "BillTheCat":
                         return IRCResponse(ResponseType.Say, "Uhm... Hi?", message.ReplyTo)
                     if message.User.Name.startswith("Caitiri") or message.User.Name == "Caity":
