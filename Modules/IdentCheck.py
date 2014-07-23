@@ -1,6 +1,6 @@
 from IRCResponse import IRCResponse, ResponseType
 from ModuleInterface import ModuleInterface
-import datetime
+import time
 
 
 class IdentCheck(ModuleInterface):
@@ -13,13 +13,13 @@ class IdentCheck(ModuleInterface):
         if message.ReplyTo in self.bot.channels.keys():
             if "RoBoBo" not in self.bot.channels[message.ReplyTo].Users.keys():
                 if message.MessageString.lower().startswith("meow"):
-                    roll = hash((message.User.Name, datetime.datetime.utcnow().hour, "meow")) % 20 + 1
+                    roll = hash((message.User.Name, int(time.time())/3600, "meow")) % 20 + 1
                     if message.User.Name == "BillTheCat":
                         return IRCResponse(ResponseType.Say, "Uhm... Hi?", message.ReplyTo)
                     if message.User.Name.startswith("Caitiri") or message.User.Name == "Caity":
                         return IRCResponse(ResponseType.Do, 'points at {}, "KITTEH!"'.format(message.User.Name), message.ReplyTo)
                     elif roll == 1:
-                        reroll = hash((message.User.Name, datetime.datetime.utcnow().hour, "meow", 42)) % 20 + 1
+                        reroll = hash((message.User.Name, int(time.time())/3600, "meow", 42)) % 20 + 1
                         if reroll == 20:
                             return IRCResponse(ResponseType.Do, 'points at {}, "CRITICAL PUPPEH!"'.format(message.User.Name), message.ReplyTo), IRCResponse(ResponseType.Say, "Wait, what?", message.ReplyTo)
                         else:
@@ -33,11 +33,11 @@ class IdentCheck(ModuleInterface):
                     else:
                         return IRCResponse(ResponseType.Do, 'points at {}, "CRITICAL KITTEH!"'.format(message.User.Name), message.ReplyTo)
                 if message.MessageString.lower().startswith("rawr"):
-                    roll = hash((message.User.Name, datetime.datetime.utcnow().hour, "rawr")) % 20 + 1
+                    roll = hash((message.User.Name, int(time.time())/3600, "rawr")) % 20 + 1
                     if (message.User.Name == "Itazu") or (message.User.Name == "Trahsi") or (message.User.Name == "reptile"):
                         return IRCResponse(ResponseType.Say, "{} is a DRAGON!".format(message.User.Name) , message.ReplyTo)
                     elif roll == 1:
-                        reroll = hash((message.User.Name, datetime.datetime.utcnow().hour, "rawr", 42)) % 20 + 1
+                        reroll = hash((message.User.Name, int(time.time())/3600, "rawr", 42)) % 20 + 1
                         if reroll == 20:
                             return IRCResponse(ResponseType.Say, "{} is SECRETLY A DRAGON!".format(message.User.Name), message.ReplyTo)
                         else:
@@ -51,9 +51,9 @@ class IdentCheck(ModuleInterface):
                     else:
                         return IRCResponse(ResponseType.Say, "{} is a CRITICAL DINOSAUR!".format(message.User.Name), message.ReplyTo)
                 if message.MessageString.lower().startswith("bleep bloop"):
-                    roll = hash((message.User.Name, datetime.datetime.utcnow().hour, "bleep bloop")) % 20 + 1
+                    roll = hash((message.User.Name, int(time.time())/3600, "bleep bloop")) % 20 + 1
                     if roll == 1:
-                        reroll = hash((message.User.Name, datetime.datetime.utcnow().hour, "bleep bloop", 42)) % 20 + 1
+                        reroll = hash((message.User.Name, int(time.time())/3600, "bleep bloop", 42)) % 20 + 1
                         if reroll == 20:
                             return IRCResponse(ResponseType.Say, "{} is a CYBORG!".format(message.User.Name), message.ReplyTo)
                         else:
