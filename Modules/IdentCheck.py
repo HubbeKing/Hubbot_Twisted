@@ -50,19 +50,4 @@ class IdentCheck(ModuleInterface):
                         return IRCResponse(ResponseType.Say, "{} is a DINOSAUR.".format(message.User.Name), message.ReplyTo)
                     else:
                         return IRCResponse(ResponseType.Say, "{} is a CRITICAL DINOSAUR!".format(message.User.Name), message.ReplyTo)
-                if message.MessageString.lower().startswith("bleep bloop"):
-                    roll = hash((message.User.Name, int(time.time())/3600, "bleep bloop")) % 20 + 1
-                    if roll == 1:
-                        reroll = hash((message.User.Name, int(time.time())/3600, "bleep bloop", 42)) % 20 + 1
-                        if reroll == 20:
-                            return IRCResponse(ResponseType.Say, "{} is a CYBORG!".format(message.User.Name), message.ReplyTo)
-                        else:
-                            return IRCResponse(ResponseType.Say, "{} is NOT a ROBOT.".format(message.User.Name), message.ReplyTo)
-                    elif (roll > 1) and (roll < 8):
-                        return IRCResponse(ResponseType.Say, "{} is NOT a ROBOT.".format(message.User.Name), message.ReplyTo)
-                    elif (roll > 7) and (roll < 14):
-                        return IRCResponse(ResponseType.Say, "{} is PROBABLY a ROBOT.".format(message.User.Name), message.ReplyTo)
-                    elif (roll > 13) and (roll < 20):
-                        return IRCResponse(ResponseType.Say, "{} is TOTALLY a ROBOT.".format(message.User.Name), message.ReplyTo)
-                    else:
-                        return IRCResponse(ResponseType.Say, "{} is a CRITICAL ROBOT!".format(message.User.Name), message.ReplyTo)
+                
