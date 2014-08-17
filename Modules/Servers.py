@@ -10,7 +10,7 @@ class Servers(ModuleInterface):
             {
                 "servers":"",
                 "mumble":'The mumble server is hosted at: mumble.dahou.se',
-                "gmod":"List of mods needed for GMOD: http://bit.ly/dahousegmod\n The Garry's Mod server is hosted at: gmod.dahou.se",
+                "gmod":"List of mods needed for GMOD: http://bit.ly/dahousegmod\nThe Garry's Mod server is hosted at: gmod.dahou.se",
                 "starbound":"The Starbound server is hosted at: starbound.dahou.se",
                 "starbound2":"Ricin's Starbound server is hosted at: sb.117.me",
                 "jcmp":"Ricin's Just Cause 2 MP server is hosted at: jcmp.117.me",
