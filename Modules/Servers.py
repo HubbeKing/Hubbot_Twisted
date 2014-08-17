@@ -3,8 +3,6 @@ from ModuleInterface import ModuleInterface
 
 
 class Servers(ModuleInterface):
-    gmodMods = 'List of mods needed for GMOD: http://steamcommunity.com/sharedfiles/filedetails/?id=185811989'
-    gmodIP = "The Garrys Mod server is hosted at: gmod.dahou.se"
 
     def onLoad(self):
         self.help = "mumble, gmod, starbound, starbound2, jcmp, tetri, cockatrice, kf, tf2, minecraft -- Used to post server info for games! Usage: {}<server>".format(self.bot.CommandChar)
@@ -12,7 +10,7 @@ class Servers(ModuleInterface):
             {
                 "servers":"",
                 "mumble":'The mumble server is hosted at: mumble.dahou.se',
-                "gmod":"",
+                "gmod":"List of mods needed for GMOD: http://bit.ly/dahousegmod\n The Garry's Mod server is hosted at: gmod.dahou.se",
                 "starbound":"The Starbound server is hosted at: starbound.dahou.se",
                 "starbound2":"Ricin's Starbound server is hosted at: sb.117.me",
                 "jcmp":"Ricin's Just Cause 2 MP server is hosted at: jcmp.117.me",
@@ -34,7 +32,5 @@ class Servers(ModuleInterface):
     def onTrigger(self, message):
         if message.Command == "servers":
             return IRCResponse(ResponseType.Say, self.help, message.ReplyTo)
-        elif message.Command == "gmod":
-            return IRCResponse(ResponseType.Say, self.gmodMods, message.ReplyTo), IRCResponse(ResponseType.Say, self.gmodIP, message.ReplyTo)
         else:
             return IRCResponse(ResponseType.Say, self.serverDict[message.Command], message.ReplyTo)
