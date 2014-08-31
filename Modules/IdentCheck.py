@@ -16,7 +16,7 @@ class IdentCheck(ModuleInterface):
                     roll = hash((message.User.Name, int(time.time())/3600, "meow")) % 20 + 1
                     if message.User.Name == "BillTheCat":
                         return IRCResponse(ResponseType.Say, "Uhm... Hi?", message.ReplyTo)
-                    if message.User.Name.startswith("Caitiri") or message.User.Name == "Caity":
+                    if message.User.Name.startswith("Caitiri") or message.User.Name == "Caity" or message.User.Name.startswith("Heuf"):
                         return IRCResponse(ResponseType.Do, 'points at {}, "KITTEH!"'.format(message.User.Name), message.ReplyTo)
                     elif roll == 1:
                         reroll = hash((message.User.Name, int(time.time())/3600, "meow", 42)) % 20 + 1
