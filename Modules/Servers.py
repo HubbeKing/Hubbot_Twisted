@@ -18,7 +18,8 @@ class Servers(ModuleInterface):
                 "cockatrice":"The Cockatrice server is hosted at: cockatrice.dahou.se:4747",
                 "kf":"The Killing Floor server is hosted at: kf.dahou.se",
                 "tf2":"The Team Fortress 2 server is hosted at tf2.dahou.se",
-                "minecraft":"The FTB Monster server is hosted at craft.dahou.se (Contact a moderator to get build permissions)",
+                "ftb":"The FTB Monster server is hosted at craft.dahou.se (Contact a moderator to get whitelisted)",
+                "mc":"The vanilla Minecraft server is hosted at mc.dahou.se (Contact a moderator to get whitelisted)",
                 "<server>":"Seriously?"
             }
         self.triggers.extend(self.serverDict.keys())
