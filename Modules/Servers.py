@@ -5,7 +5,7 @@ from ModuleInterface import ModuleInterface
 class Servers(ModuleInterface):
 
     def onLoad(self):
-        self.help = "mumble, gmod, starbound, starbound2, jcmp, tetri, cockatrice, kf, tf2, minecraft -- Used to post server info for games! Usage: {}<server>".format(self.bot.CommandChar)
+        self.help = "mumble, gmod, starbound, starbound2, jcmp, tetri, cockatrice, kf, tf2, ftb, mc -- Used to post server info for games! Usage: {}<server>".format(self.bot.CommandChar)
         self.serverDict = \
             {
                 "servers":"",
