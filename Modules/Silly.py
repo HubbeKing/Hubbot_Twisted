@@ -5,7 +5,7 @@ from ModuleInterface import ModuleInterface
 class Silly(ModuleInterface):
 
     def onLoad(self):
-        self.help = "donotwant, yes, yup, store, goat, stupid, fixyou, heya, HNGH, PS, whoa, what, mybrand, both, no, disappointed -- Used to post silly things! Usage: {}<thing>".format(self.bot.CommandChar)
+        self.help = "donotwant, yes, yup, store, goat, stupid, fixyou, heya, HNGH, PS, whoa, what, mybrand, both, disappointed -- Used to post silly things! Usage: {}<thing>".format(self.bot.CommandChar)
         self.linkDict = \
             {
                 "silly":"",
@@ -25,7 +25,6 @@ class Silly(ModuleInterface):
                 "ps":"https://docs.google.com/document/d/1C4Maba3fXrLYMMIXK67OOn7C2c31V6nff5inGAZStsw/edit?pli=1",
                 "psc":"https://docs.google.com/document/d/1C4Maba3fXrLYMMIXK67OOn7C2c31V6nff5inGAZStsw/edit?pli=1",
                 "both":"http://www.youtube.com/watch?v=OawrlVoQqSs",
-                "no":"http://www.youtube.com/watch?v=YKss2uYpih8",
                 "hunt":"",
                 "<thing>":"Har Har.",
                 "disappointed":"https://31.media.tumblr.com/cea6574a24b490ada8bec694e87b307b/tumblr_n3blu9k5CW1tsipf6o6_400.gif"
