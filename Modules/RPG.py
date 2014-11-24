@@ -58,7 +58,7 @@ class RPG(ModuleInterface):
         if choice in messageDict.keys():
             return "{}. {}".format(str(choice), messageDict[choice])
         else:
-            return "Invalid number, valid numbers are <{}-{}>".format(messageDict.keys()[0], messageDict.keys()[-1])
+            return "Invalid number, valid numbers are <{}-{}>".format(min(messageDict.keys()), max(messageDict.keys()))
 
     def getList(self, table, name, params):
         messageDict = {}
