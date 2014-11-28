@@ -7,7 +7,7 @@ from IRCMessage import IRCChannel
 
 class BotHandler:
     botfactories = {}
-    connections = {"irc.chatspike:6667":["#DesertBusBunker"], "applejack.me:6667":["#survivors"]}
+    connections = {"irc.chatspike.net:6667":["#DesertBusBunker"], "applejack.me:6667":["#survivors"]}
 
     def __init__(self):
         for (server_with_port, channels) in self.connections.items():
