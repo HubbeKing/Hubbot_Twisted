@@ -3,6 +3,7 @@ from ModuleInterface import ModuleInterface
 
 
 class Servers(ModuleInterface):
+    serverDict = {}
 
     def onLoad(self):
         self.help = "mumble, gmod, starbound, starbound2, jcmp, tetri, cockatrice, kf, tf2, ftb, mc -- Used to post server info for games! Usage: {}<server>".format(self.bot.CommandChar)
@@ -23,12 +24,6 @@ class Servers(ModuleInterface):
                 "<server>":"Seriously?"
             }
         self.triggers.extend(self.serverDict.keys())
-
-    def shouldTrigger(self, message):
-        if message.Command in self.serverDict.keys() and message.Type in self.acceptedTypes:
-            return True
-        else:
-            return False
 
     def onTrigger(self, message):
         if message.Command == "servers":
