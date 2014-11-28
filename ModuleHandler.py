@@ -104,7 +104,7 @@ class ModuleHandler(object):
             properName = self.moduleCaseMapping[name.lower()]
 
             # unmap module triggers
-            for trigger in self.moduleCaseMapping[properName].triggers:
+            for trigger in self.modules[properName].triggers:
                 del self.mappedTriggers[trigger]
 
             self.modules[properName].onUnload()
