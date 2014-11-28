@@ -14,6 +14,12 @@ class Help(ModuleInterface):
                     return IRCResponse(ResponseType.Say, func.help, message.ReplyTo)
                 else:
                     return IRCResponse(ResponseType.Say, func.help(message), message.ReplyTo)
+            elif message.ParameterList[0].lower() in self.bot.moduleHandler.mappedTriggers:
+                func = self.bot.moduleHandler.mappedTriggers[message.ParameterList[0].lower()]
+                if isinstance(func.help, basestring):
+                    return IRCResponse(ResponseType.Say, func.help, message.ReplyTo)
+                else:
+                    return IRCResponse(ResponseType.Say, func.help(message), message.ReplyTo)
             else:
                 return IRCResponse(ResponseType.Say, '"{}" not found, try "{}" without parameters to see a list of loaded modules'.format(message.ParameterList[0],message.Command), message.ReplyTo)
         else:
