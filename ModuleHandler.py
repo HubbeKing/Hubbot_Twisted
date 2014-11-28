@@ -11,6 +11,7 @@ class ModuleHandler(object):
         self.bot = bot
         self.modules = {}
         self.moduleCaseMapping = {}
+        self.mappedTriggers = {}
 
     def sendResponse(self, response):
         responses = []
@@ -92,11 +93,21 @@ class ModuleHandler(object):
         self.moduleCaseMapping.update({name : moduleListCaseMap[name]})
         constructedModule.onLoad()
 
+        # map module triggers
+        if hasattr(constructedModule, "triggers"):
+            for trigger in constructedModule.triggers:
+                self.mappedTriggers[trigger] = constructedModule
+
         return True
 
     def UnloadModule(self, name):
         if name.lower() in self.moduleCaseMapping.keys():
             properName = self.moduleCaseMapping[name.lower()]
+
+            # unmap module triggers
+            if hasattr(self.moduleCaseMapping[properName], "triggers"):
+                for trigger in self.moduleCaseMapping[properName].triggers:
+                    del self.mappedTriggers[trigger]
 
             self.modules[properName].onUnload()
 
