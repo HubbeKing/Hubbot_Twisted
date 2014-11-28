@@ -3,7 +3,6 @@ from twisted.words.protocols import irc
 from twisted.internet import protocol, reactor
 from IRCResponse import ResponseType, IRCResponse
 from IRCMessage import IRCMessage, IRCUser, IRCChannel
-import GlobalVars
 from ModuleHandler import ModuleHandler
 
 
@@ -14,14 +13,15 @@ class Hubbot(irc.IRCClient):
     versionEnv = platform.platform()
 
     sourceURL = "https://github.com/HubbeKing/Hubbot_Twisted/"
-
+    bothandler = None
     startTime = datetime.datetime.min
 
-    def __init__(self, server, channels):
+    def __init__(self, server, channels, bothandler):
         abspath = os.path.abspath(__file__)
         dname = os.path.dirname(abspath)
         os.chdir(dname)
         self.logPath = os.path.join(dname, "logs")
+        self.bothandler = bothandler
         self.nickname = "Hubbot"
         self.realname = self.nickname
         self.username = self.nickname
@@ -219,9 +219,9 @@ class Hubbot(irc.IRCClient):
         return admins
 
 class HubbotFactory(protocol.ReconnectingClientFactory):
-    def __init__(self, server, port, channels):
+    def __init__(self, server, port, channels, bothandler):
         self.port = port
-        self.protocol = Hubbot(server, channels)
+        self.protocol = Hubbot(server, channels, bothandler)
         reactor.connectTCP(server, port, self)
 
     def startedConnecting(self, connector):

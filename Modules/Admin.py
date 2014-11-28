@@ -1,6 +1,5 @@
 from ModuleInterface import ModuleInterface
 from IRCResponse import IRCResponse, ResponseType
-import GlobalVars
 import sqlite3
 
 
@@ -28,7 +27,7 @@ class Admin(ModuleInterface):
                 return IRCResponse(ResponseType.Say, "Removed {} from the admin list.". format(", ".join(message.ParameterList)), message.ReplyTo)
 
     def newAdmin(self, admin):
-        for (server, botfactory) in GlobalVars.bothandler.botfactories.iteritems():
+        for (server, botfactory) in self.bot.bothandler.botfactories.iteritems():
             botfactory.protocol.admins.append(admin)
         with sqlite3.connect("data/data.db") as conn:
             c = conn.cursor()
@@ -36,7 +35,7 @@ class Admin(ModuleInterface):
             conn.commit()
 
     def deleteAdmin(self, admin):
-        for (server, botfactory) in GlobalVars.bothandler.botfactories.iteritems():
+        for (server, botfactory) in self.bot.bothandler.botfactories.iteritems():
             botfactory.protocol.admins.remove(admin)
         with sqlite3.connect("data/data.db") as conn:
             c = conn.cursor()

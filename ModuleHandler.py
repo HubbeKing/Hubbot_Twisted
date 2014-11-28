@@ -2,7 +2,6 @@ import importlib
 import os, sys, traceback
 from glob import glob
 from IRCResponse import IRCResponse, ResponseType
-import GlobalVars
 
 
 class ModuleHandler(object):

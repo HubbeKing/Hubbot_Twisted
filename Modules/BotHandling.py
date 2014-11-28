@@ -1,7 +1,6 @@
 import datetime
 from IRCResponse import IRCResponse, ResponseType
 from ModuleInterface import ModuleInterface
-import GlobalVars
 
 
 class BotHandling(ModuleInterface):
@@ -23,8 +22,8 @@ class BotHandling(ModuleInterface):
                 channels = []
                 for chan in tmpChannels:
                     channels.append(chan.encode("ascii", "ignore"))
-                GlobalVars.bothandler.startBotFactory(server, port, channels)
-                if server not in GlobalVars.bothandler.botfactories:
+                self.bot.bothandler.startBotFactory(server, port, channels)
+                if server not in self.bot.bothandler.botfactories:
                     return IRCResponse(ResponseType.Say, "Could not connect to server '{}'".format(server), message.ReplyTo)
                 else:
                     return IRCResponse(ResponseType.Say, "Connected to server '{]'".format(server), message.ReplyTo)
@@ -34,13 +33,13 @@ class BotHandling(ModuleInterface):
                 self.bot.Quitting = True
                 self.bot.restarting = False
                 quitMessage = "ohok".encode("utf-8")
-                GlobalVars.bothandler.stopBotFactory(self.bot.server, quitMessage)
+                self.bot.bothandler.stopBotFactory(self.bot.server, quitMessage)
 
         if message.Command == "quitfrom":
             if len(message.ParameterList) >= 1:
                 for server in message.ParameterList:
-                    if server in GlobalVars.bothandler.botfactories and server != self.bot.server:
-                        GlobalVars.bothandler.stopBotFactory(server)
+                    if server in self.bot.bothandler.botfactories and server != self.bot.server:
+                        self.bot.bothandler.stopBotFactory(server)
                         return IRCResponse(ResponseType.Say, "Successfully quit from server '{}'".format(server), message.ReplyTo)
                     elif server == self.bot.server:
                         return IRCResponse(ResponseType.Say, "Please use quit to quit from current server.", message.ReplyTo)
@@ -49,10 +48,10 @@ class BotHandling(ModuleInterface):
 
         if message.Command == "restart":
             if datetime.datetime.now() > self.bot.startTime + datetime.timedelta(seconds=10):
-                GlobalVars.bothandler.restart()
+                self.bot.bothandler.restart()
                 return
 
         if message.Command == "shutdown":
             if datetime.datetime.now() > self.bot.startTime + datetime.timedelta(seconds=10):
-                GlobalVars.bothandler.shutdown()
+                self.bot.bothandler.shutdown()
                 return

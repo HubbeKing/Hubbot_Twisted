@@ -3,7 +3,6 @@ import sys
 from twisted.internet import reactor
 from Hubbot import HubbotFactory
 from IRCMessage import IRCChannel
-import GlobalVars
 
 
 class BotHandler:
@@ -15,7 +14,6 @@ class BotHandler:
             server = server_with_port.split(":")[0]
             port = int(server_with_port.split(":")[1])
             self.startBotFactory(server, port, channels)
-        GlobalVars.bothandler = self
         reactor.run()
 
     def startBotFactory(self, server, port, channels):
@@ -26,9 +24,9 @@ class BotHandler:
             chanObjects = {}
             for channel in channels:
                 chanObjects[channel] = IRCChannel(channel)
-            botfactory = HubbotFactory(server, port, chanObjects)
+            botfactory = HubbotFactory(server, port, chanObjects, self)
         else:
-            botfactory = HubbotFactory(server, port, channels)
+            botfactory = HubbotFactory(server, port, channels, self)
         self.botfactories[server] = botfactory
         return True
 

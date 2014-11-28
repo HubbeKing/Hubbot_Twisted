@@ -1,7 +1,6 @@
 import sqlite3
 from ModuleInterface import ModuleInterface
 from IRCResponse import IRCResponse, ResponseType
-import GlobalVars
 
 
 class Ignore(ModuleInterface):
@@ -21,7 +20,7 @@ class Ignore(ModuleInterface):
                         maxID = 0
                     c.execute("INSERT INTO ignores VALUES (?,?)", (maxID+1, message.ParameterList[0]))
                     conn.commit()
-                for (server, botfactory) in GlobalVars.bothandler.botfactories.iteritems():
+                for (server, botfactory) in self.bot.bothandler.botfactories.iteritems():
                     botfactory.protocol.ignore.append(message.ParameterList[0])
                 return IRCResponse(ResponseType.Say, "Successfully added '{}' to the ignores list.".format(message.ParameterList[0]), message.ReplyTo)
             else:
@@ -32,6 +31,6 @@ class Ignore(ModuleInterface):
                     c = conn.cursor()
                     c.execute("DELETE FROM ignores WHERE nick=?", (message.ParameterList[0],))
                     conn.commit()
-                for (server, botfactory) in GlobalVars.bothandler.botfactories.iteritems():
+                for (server, botfactory) in self.bot.bothandler.botfactories.iteritems():
                     botfactory.ignores.remove(message.ParameterList[0])
                 return IRCResponse(ResponseType.Say, "Successfully removed '{}' from the ignores list.".format(message.ParameterList[0]), message.ReplyTo)
