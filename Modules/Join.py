@@ -1,4 +1,4 @@
-from IRCMessage import IRCChannel
+from IRCChannel import IRCChannel
 from IRCResponse import IRCResponse, ResponseType
 from ModuleInterface import ModuleInterface
 

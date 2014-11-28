@@ -2,7 +2,9 @@ import platform, os, datetime, codecs, re, sqlite3
 from twisted.words.protocols import irc
 from twisted.internet import protocol, reactor
 from IRCResponse import ResponseType, IRCResponse
-from IRCMessage import IRCMessage, IRCUser, IRCChannel
+from IRCMessage import IRCMessage
+from IRCChannel import IRCChannel
+from IRCUser import IRCUser
 from ModuleHandler import ModuleHandler
 
 

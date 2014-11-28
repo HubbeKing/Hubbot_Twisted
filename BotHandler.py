@@ -2,7 +2,7 @@ import os
 import sys
 from twisted.internet import reactor
 from Hubbot import HubbotFactory
-from IRCMessage import IRCChannel
+from IRCChannel import IRCChannel
 
 
 class BotHandler:
