@@ -11,7 +11,7 @@ class Triggers(ModuleInterface):
             return IRCResponse(ResponseType.Say, "{} must be used over PM!".format(message.Command), message.ReplyTo)
         else:
             response = ""
-            for trigger in self.bot.moduleHandler.mappedTriggers:
+            for trigger in sorted(self.bot.moduleHandler.mappedTriggers.keys()):
                 if "<" not in trigger and trigger not in response:
                     response += "{}, ".format(trigger)
             return IRCResponse(ResponseType.Say, response, message.ReplyTo)
