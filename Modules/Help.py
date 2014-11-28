@@ -8,7 +8,6 @@ class Help(ModuleInterface):
     
     def onTrigger(self, message):
         if len(message.ParameterList) > 0:
-            print repr(message.ParameterList[0].lower()), repr(self.bot.moduleHandler.mappedTriggers)
             if message.ParameterList[0].lower() in self.bot.moduleHandler.moduleCaseMapping:
                 func = self.bot.moduleHandler.modules[self.bot.moduleHandler.moduleCaseMapping[message.ParameterList[0].lower()]]
                 return IRCResponse(ResponseType.Say, func.help, message.ReplyTo)
