@@ -8,16 +8,20 @@ from ModuleHandler import ModuleHandler
 
 
 class Hubbot(irc.IRCClient):
-    fingerReply = GlobalVars.finger
+    fingerReply = "Sir. SIR. This is an IRC chatbot. SIR!"
 
-    versionNum = GlobalVars.version
+    versionNum = "1.0.0.derp"
     versionEnv = platform.platform()
 
-    sourceURL = GlobalVars.source
+    sourceURL = "https://github.com/HubbeKing/Hubbot_Twisted/"
 
     startTime = datetime.datetime.min
 
     def __init__(self, server, channels):
+        abspath = os.path.abspath(__file__)
+        dname = os.path.dirname(abspath)
+        os.chdir(dname)
+        self.logPath = os.path.join(dname, "logs")
         self.nickname = "Hubbot"
         self.realname = self.nickname
         self.username = self.nickname
@@ -184,7 +188,7 @@ class Hubbot(irc.IRCClient):
         print target, data
 
         fileName = "{0}{1}.txt".format(target, now.strftime("-%Y%m%d"))
-        fileDirs = os.path.join(GlobalVars.logPath, self.server)
+        fileDirs = os.path.join(self.logPath, self.server)
         if not os.path.exists(fileDirs):
             os.makedirs(fileDirs)
         filePath = os.path.join(fileDirs, fileName)

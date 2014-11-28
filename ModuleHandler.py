@@ -12,6 +12,7 @@ class ModuleHandler(object):
         self.modules = {}
         self.moduleCaseMapping = {}
         self.mappedTriggers = {}
+        self.nonDefaultModules = ["Roll", "Grapheme", "GraphemeLearning"]
 
     def sendResponse(self, response):
         responses = []
@@ -123,7 +124,7 @@ class ModuleHandler(object):
 
     def AutoLoadModules(self):
         for module in self.GetModuleDirList():
-            if module not in GlobalVars.nonDefaultModules:
+            if module not in self.nonDefaultModules:
                 try:
                     self.LoadModule(module)
                 except Exception, x:

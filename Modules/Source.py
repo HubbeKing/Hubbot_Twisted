@@ -1,6 +1,5 @@
 from IRCResponse import IRCResponse, ResponseType
 from ModuleInterface import ModuleInterface
-import GlobalVars
 
 
 class Source(ModuleInterface):
@@ -10,4 +9,4 @@ class Source(ModuleInterface):
         self.help = "source - returns a link to {}'s source".format(self.bot.nickname)
 
     def onTrigger(self, message):
-        return IRCResponse(ResponseType.Say, GlobalVars.source, message.ReplyTo)
+        return IRCResponse(ResponseType.Say, self.bot.sourceURL, message.ReplyTo)

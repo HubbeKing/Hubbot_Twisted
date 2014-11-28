@@ -8,9 +8,10 @@ import GlobalVars
 
 class BotHandler:
     botfactories = {}
+    connections = {"irc.desertbus.org:6667":["#desertbus", "#unmoderated"], "applejack.me:6667":["#survivors"]}
 
     def __init__(self):
-        for (server_with_port, channels) in GlobalVars.connections.items():
+        for (server_with_port, channels) in self.connections.items():
             server = server_with_port.split(":")[0]
             port = int(server_with_port.split(":")[1])
             self.startBotFactory(server, port, channels)
