@@ -90,6 +90,7 @@ class ModuleHandler(object):
 
         self.modules.update({moduleListCaseMap[name]:constructedModule})
         self.moduleCaseMapping.update({name : moduleListCaseMap[name]})
+        constructedModule.onLoad()
 
         return True
 

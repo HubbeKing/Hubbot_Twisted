@@ -10,7 +10,6 @@ class ModuleInterface(object):
 
     def __init__(self, bot):
         self.bot = bot
-        self.onLoad()
 
     def onLoad(self):
         pass
