@@ -94,9 +94,8 @@ class ModuleHandler(object):
         constructedModule.onLoad()
 
         # map module triggers
-        if hasattr(constructedModule, "triggers"):
-            for trigger in constructedModule.triggers:
-                self.mappedTriggers[trigger] = constructedModule
+        for trigger in constructedModule.triggers:
+            self.mappedTriggers[trigger] = constructedModule
 
         return True
 
@@ -105,9 +104,8 @@ class ModuleHandler(object):
             properName = self.moduleCaseMapping[name.lower()]
 
             # unmap module triggers
-            if hasattr(self.moduleCaseMapping[properName], "triggers"):
-                for trigger in self.moduleCaseMapping[properName].triggers:
-                    del self.mappedTriggers[trigger]
+            for trigger in self.moduleCaseMapping[properName].triggers:
+                del self.mappedTriggers[trigger]
 
             self.modules[properName].onUnload()
 
