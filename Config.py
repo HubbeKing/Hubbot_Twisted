@@ -13,7 +13,7 @@ class Config(object):
             with open(self.configFile, "r") as config:
                 configData = yaml.safe_load(config)
         except Exception as e:
-            raise ConfigError(self.configFile, e.args)
+            raise ConfigError(self.configFile, e)
         self._validateConfigData(configData)
         self._configData = configData
 
