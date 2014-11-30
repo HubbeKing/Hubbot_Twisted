@@ -1,7 +1,10 @@
-from enumType import enum
+from enum import Enum
 from IRCUser import IRCUser
 
-TargetTypes = enum('CHANNEL', 'USER')
+
+class TargetTypes(Enum):
+    CHANNEL = 1
+    USER = 2
 
 
 class IRCMessage(object):
