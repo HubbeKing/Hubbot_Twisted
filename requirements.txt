@@ -1,0 +1,2 @@
+PyYAML>=3.11
+Twisted>=14.0.2
