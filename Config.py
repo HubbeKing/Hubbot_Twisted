@@ -4,7 +4,7 @@ _required = ["servers"]
 
 
 class Config(object):
-    def _init_(self, configFile):
+    def __init__(self, configFile):
         self.configFile = configFile
         self._configData = {}
 
