@@ -7,6 +7,9 @@ class Triggers(ModuleInterface):
     help = "triggers -- returns a list of all command triggers, must be over PM"
 
     def onTrigger(self, message):
+        """
+        @type message: IRCMessage.IRCMessage
+        """
         if message.User.Name != message.ReplyTo:
             return IRCResponse(ResponseType.Say, "{} must be used over PM!".format(message.Command), message.ReplyTo)
         else:

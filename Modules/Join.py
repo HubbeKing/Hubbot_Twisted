@@ -8,6 +8,9 @@ class Join(ModuleInterface):
     help = 'join <channel> - makes the bot join the specified channel(s)'
 
     def onTrigger(self, message):
+        """
+        @type message: IRCMessage.IRCMessage
+        """
         if len(message.ParameterList) > 0:
             responses = []
             for param in message.ParameterList:

@@ -1,7 +1,6 @@
 import platform, os, datetime, codecs, re, sqlite3
 from twisted.words.protocols import irc
 from twisted.internet import protocol, reactor
-from IRCResponse import ResponseType, IRCResponse
 from IRCMessage import IRCMessage
 from IRCChannel import IRCChannel
 from IRCUser import IRCUser
@@ -14,6 +13,9 @@ class Hubbot(irc.IRCClient):
     startTime = datetime.datetime.min
 
     def __init__(self, server, channels, bothandler):
+        """
+        @type bothandler: BotHandler.BotHandler
+        """
         abspath = os.path.abspath(__file__)
         dname = os.path.dirname(abspath)
         os.chdir(dname)
@@ -198,12 +200,6 @@ class Hubbot(irc.IRCClient):
         with codecs.open(filePath, 'a+', 'utf-8') as f:
             f.write(data + '\n')
 
-    def notifyUser(self, flag, message):
-        if flag:
-            self.moduleHandler.sendResponse(IRCResponse(ResponseType.Say, "{}: Your {} second timer is up!".format(message.User.Name, message.ParameterList[0]), message.ReplyTo))
-        else:
-            self.moduleHandler.sendResponse(IRCResponse(ResponseType.Say, "{}: Your {} timer is up!".format(message.User.Name, " ".join(message.ParameterList)), message.ReplyTo))
-
     def loadIgnores(self):
         ignores = []
         with sqlite3.connect("data/data.db") as conn:
@@ -220,8 +216,12 @@ class Hubbot(irc.IRCClient):
                 admins.append(row[0])
         return admins
 
+
 class HubbotFactory(protocol.ReconnectingClientFactory):
     def __init__(self, server, port, channels, bothandler):
+        """
+        @type bothandler: BotHandler.BotHandler
+        """
         self.port = port
         self.protocol = Hubbot(server, channels, bothandler)
         reactor.connectTCP(server, port, self)

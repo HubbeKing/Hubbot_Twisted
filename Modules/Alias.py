@@ -13,6 +13,9 @@ class Alias(ModuleInterface):
     aliases = {}
 
     def shouldTrigger(self, message):
+        """
+        @type message: IRCMessage.IRCMessage
+        """
         return True
 
     def onLoad(self):
@@ -22,6 +25,9 @@ class Alias(ModuleInterface):
                 self.aliases[row[0]] = row[1].split(" ")
 
     def onTrigger(self, message):
+        """
+        @type message: IRCMessage.IRCMessage
+        """
         if message.Command in self.triggers:
             if message.Command == "alias":
                 if message.User.Name not in self.bot.admins:
@@ -79,6 +85,9 @@ class Alias(ModuleInterface):
             conn.commit()
 
     def aliasedMessage(self, message):
+        """
+        @type message: IRCMessage.IRCMessage
+        """
         if message.Command in self.aliases.keys():
             alias = self.aliases[message.Command]
             newMsg = message.MessageString.replace(message.Command, " ".join(alias), 1)

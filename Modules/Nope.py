@@ -9,6 +9,9 @@ class Nope(ModuleInterface):
     lastTriggered = datetime.datetime.min
 
     def shouldTrigger(self, message):
+        """
+        @type message: IRCMessage.IRCMessage
+        """
         if message.MessageString.lower().startswith("nope"):
             if (datetime.datetime.now() - self.lastTriggered).seconds >= self.seconds:
                 self.lastTriggered = datetime.datetime.now()
@@ -17,4 +20,7 @@ class Nope(ModuleInterface):
             return False
 
     def onTrigger(self, message):
+        """
+        @type message: IRCMessage.IRCMessage
+        """
         return IRCResponse(ResponseType.Say, "I don't think so either.", message.ReplyTo)

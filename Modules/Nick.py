@@ -8,6 +8,9 @@ class Nick(ModuleInterface):
     accessLevel = 1
     
     def onTrigger(self, message):
+        """
+        @type message: IRCMessage.IRCMessage
+        """
         if len(message.ParameterList) > 0:
             return IRCResponse(ResponseType.Raw, "NICK {}".format(message.ParameterList[0]), '')
         else:

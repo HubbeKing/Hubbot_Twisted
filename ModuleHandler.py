@@ -7,6 +7,9 @@ from IRCResponse import IRCResponse, ResponseType
 class ModuleHandler(object):
 
     def __init__(self, bot):
+        """
+        @type bot: Hubbot.Hubbot
+        """
         self.bot = bot
         self.modules = {}
         self.moduleCaseMapping = {}
@@ -14,6 +17,9 @@ class ModuleHandler(object):
         self.nonDefaultModules = bot.bothandler.config.serverItemWithDefault(bot.server, "nonDefaultModules", ["Roll"])
 
     def sendResponse(self, response):
+        """
+        @type response: IRCResponse.IRCResponse
+        """
         responses = []
 
         if hasattr(response, "__iter__"):
@@ -43,6 +49,9 @@ class ModuleHandler(object):
 
 
     def handleMessage(self, message):
+        """
+        @type message: IRCMessage.IRCMessage
+        """
         for (name, module) in self.modules.items():
             try:
                 if module.shouldTrigger(message):

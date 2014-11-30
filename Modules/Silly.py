@@ -32,12 +32,18 @@ class Silly(ModuleInterface):
         self.triggers.extend(self.linkDict.keys())
 
     def shouldTrigger(self, message):
+        """
+        @type message: IRCMessage.IRCMessage
+        """
         if message.Command in self.linkDict.keys() and message.Type in self.acceptedTypes:
             return True
         else:
             return False
 
     def onTrigger(self, message):
+        """
+        @type message: IRCMessage.IRCMessage
+        """
         if message.Command == "silly":
             return IRCResponse(ResponseType.Say, self.help, message.ReplyTo)
         elif message.Command == "hunt":

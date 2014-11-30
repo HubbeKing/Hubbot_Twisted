@@ -8,6 +8,9 @@ class Youtube(ModuleInterface):
     help = "randomyt/latestyt [channel] -- gets random/latest youtube video from the specified channel."
 
     def onTrigger(self, message):
+        """
+        @type message: IRCMessage.IRCMessage
+        """
         if message.Command == "randomyt":
             if len(message.ParameterList) == 0:
                 return IRCResponse(ResponseType.Say, "You didn't specify a channel!", message.ReplyTo)

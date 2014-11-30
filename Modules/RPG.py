@@ -19,6 +19,9 @@ class RPG(ModuleInterface):
         self.triggers = self.campaigns.keys()
         
     def onTrigger(self, message):
+        """
+        @type message: IRCMessage.IRCMessage
+        """
         if len(message.ParameterList) == 0:
             return IRCResponse(ResponseType.Say, self.getRandom(self.campaigns[message.Command]["tablename"]), message.ReplyTo)
         elif message.ParameterList[0] == "list":

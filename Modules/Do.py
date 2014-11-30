@@ -7,6 +7,9 @@ class Do(ModuleInterface):
     triggers = ["do"]
 
     def onTrigger(self, message):
+        """
+        @type message: IRCMessage.IRCMessage
+        """
         if len(message.ParameterList) == 0:
             return IRCResponse(ResponseType.Say, "Do what?", message.ReplyTo)
         else:

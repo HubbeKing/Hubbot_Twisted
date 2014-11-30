@@ -7,6 +7,9 @@ class Say(ModuleInterface):
     triggers = ["say"]
 
     def onTrigger(self, message):
+        """
+        @type message: IRCMessage.IRCMessage
+        """
         if len(message.ParameterList) == 0:
             return IRCResponse(ResponseType.Say, "Say what?", message.ReplyTo)
         else:

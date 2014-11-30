@@ -25,6 +25,9 @@ class Servers(ModuleInterface):
         self.triggers = self.serverDict.keys()
 
     def onTrigger(self, message):
+        """
+        @type message: IRCMessage.IRCMessage
+        """
         if message.Command == "servers":
             return IRCResponse(ResponseType.Say, self.help, message.ReplyTo)
         else:

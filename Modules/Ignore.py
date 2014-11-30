@@ -10,6 +10,9 @@ class Ignore(ModuleInterface):
     accessLevel = 1
 
     def onTrigger(self, message):
+        """
+        @type message: IRCMessage.IRCMessage
+        """
         if message.Command == "ignore":
             if len(message.ParameterList) == 1:
                 with sqlite3.connect(self.filename) as conn:

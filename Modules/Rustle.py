@@ -9,6 +9,9 @@ class Rustle(ModuleInterface):
     help = "rustle <rustlee> - There's no need to be upset."
 
     def onTrigger(self, message):
+        """
+        @type message: IRCMessage.IRCMessage
+        """
         if len(message.ParameterList) < 1:
             return IRCResponse(ResponseType.Say, "Rustle who?", message.ReplyTo)
         else:

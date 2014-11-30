@@ -9,6 +9,9 @@ class Admin(ModuleInterface):
     accessLevel = 1
 
     def onTrigger(self, message):
+        """
+        @type message: IRCMessage.IRCMessage
+        """
         if message.Command == "admin" and len(message.ParameterList) == 1 and message.ParameterList[0] == "save":
             self.saveAdmins()
         elif message.Command == "admin":

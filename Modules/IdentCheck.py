@@ -7,9 +7,15 @@ class IdentCheck(ModuleInterface):
     help = "IdentCheck - Find out your TRUE identity... WHAT ARE YOU?"
 
     def shouldTrigger(self, message):
+        """
+        @type message: IRCMessage.IRCMessage
+        """
         return True
 
     def onTrigger(self, message):
+        """
+        @type message: IRCMessage.IRCMessage
+        """
         if message.ReplyTo in self.bot.channels.keys():
             if "RoBoBo" not in self.bot.channels[message.ReplyTo].Users.keys():
                 if message.MessageString.lower().startswith("meow"):
@@ -53,4 +59,3 @@ class IdentCheck(ModuleInterface):
                         return IRCResponse(ResponseType.Say, "{} is a DINOSAUR.".format(message.User.Name), message.ReplyTo)
                     else:
                         return IRCResponse(ResponseType.Say, "{} is a CRITICAL DINOSAUR!".format(message.User.Name), message.ReplyTo)
-                

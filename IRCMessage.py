@@ -21,6 +21,10 @@ class IRCMessage(object):
     ParameterList = []
 
     def __init__(self, type, user, channel, message, bot):
+        """
+        @type channel: IRCChannel.IRCChannel
+        @type bot: Hubbot.Hubbot
+        """
         self.ChannelObj = channel
         try:
             unicodeMessage = message.decode('utf-8', 'ignore')

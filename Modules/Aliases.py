@@ -9,6 +9,9 @@ class Aliases(ModuleInterface):
     aliases = {}
 
     def onTrigger(self, message):
+        """
+        @type message: IRCMessage.IRCMessage
+        """
         self.aliases.clear()
         with sqlite3.connect("data/data.db") as conn:
             c = conn.cursor()

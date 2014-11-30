@@ -8,6 +8,9 @@ class Leave(ModuleInterface):
     accessLevel = 1
 
     def onTrigger(self, message):
+        """
+        @type message: IRCMessage.IRCMessage
+        """
         if len(message.ParameterList) > 0:
             del self.bot.channels[message.ReplyTo]
             return IRCResponse(ResponseType.Raw, 'PART {} :{}'.format(message.ReplyTo, message.Parameters), '')

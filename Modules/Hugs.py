@@ -19,6 +19,9 @@ class Hugs(ModuleInterface):
     ]
 
     def onTrigger(self, message):
+        """
+        @type message: IRCMessage.IRCMessage
+        """
         if message.Type == "ACTION":
             pattern = "hu+g|cuddle|snu+ggle|snu+g|squeeze|glomp"
             match = re.search(pattern, message.MessageList[0], re.IGNORECASE)

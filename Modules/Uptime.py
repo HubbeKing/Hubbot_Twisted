@@ -9,6 +9,9 @@ class Uptime(ModuleInterface):
     help = "uptime -- returns the uptime for the bot"
 
     def onTrigger(self, message):
+        """
+        @type message: IRCMessage.IRCMessage
+        """
         now = datetime.datetime.now()
         timeDelta = now - self.bot.startTime
         return IRCResponse(ResponseType.Say, "I have been running for {}!".format(self.deltaTimeToString(timeDelta)), message.ReplyTo)

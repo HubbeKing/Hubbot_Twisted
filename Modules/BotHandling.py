@@ -9,6 +9,9 @@ class BotHandling(ModuleInterface):
     accessLevel = 1
 
     def onTrigger(self, message):
+        """
+        @type message: IRCMessage.IRCMessage
+        """
         if message.Command == "connect":
             if len(message.ParameterList) >= 2:
                 server_with_port = message.ParameterList[0]

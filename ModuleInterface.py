@@ -9,6 +9,9 @@ class ModuleInterface(object):
     # 1 = Admins only
 
     def __init__(self, bot):
+        """
+        @type bot: Hubbot.Hubbot
+        """
         self.bot = bot
 
     def onLoad(self):
@@ -18,6 +21,9 @@ class ModuleInterface(object):
         pass
 
     def shouldTrigger(self, message):
+        """
+        @type message: IRCMessage.IRCMessage
+        """
         if message.Type not in self.acceptedTypes:
             return False
         if message.Command not in self.triggers:
@@ -26,4 +32,7 @@ class ModuleInterface(object):
         return True
 
     def onTrigger(self, message):
+        """
+        @type message: IRCMessage.IRCMessage
+        """
         pass

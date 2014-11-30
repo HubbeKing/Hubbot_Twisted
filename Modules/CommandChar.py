@@ -8,6 +8,9 @@ class CommandChar(ModuleInterface):
     accessLevel = 1
 
     def onTrigger(self, message):
+        """
+        @type message: IRCMessage.IRCMessage
+        """
         if len(message.ParameterList) == 0:
             return IRCResponse(ResponseType.Say, "Change my command character to what?", message.ReplyTo)
         else:

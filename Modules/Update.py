@@ -10,6 +10,9 @@ class Update(ModuleInterface):
     accessLevel = 1
 
     def onTrigger(self, message):
+        """
+        @type message: IRCMessage.IRCMessage
+        """
         subprocess.call(["git", "fetch"])
 
         output = subprocess.check_output(["git", "whatchanged", "..origin/master"])

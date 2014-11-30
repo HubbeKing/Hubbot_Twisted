@@ -18,6 +18,9 @@ class Headcanon(ModuleInterface):
         self.help += "\nSyntax is: {}headcanon help <command>".format(self.bot.CommandChar)
 
     def onTrigger(self, message):
+        """
+        @type message: IRCMessage.IRCMessage
+        """
         filename = "data/data.db"
         headcanon = []
         with sqlite3.connect(filename) as conn:

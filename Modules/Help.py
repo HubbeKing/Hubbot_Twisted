@@ -7,6 +7,9 @@ class Help(ModuleInterface):
     help = 'command(s)/help (<function>) - returns a list of loaded modules, or the help text of a particular command if one is specified'
     
     def onTrigger(self, message):
+        """
+        @type message: IRCMessage.IRCMessage
+        """
         if len(message.ParameterList) > 0:
             if message.ParameterList[0].lower() in self.bot.moduleHandler.moduleCaseMapping:
                 func = self.bot.moduleHandler.modules[self.bot.moduleHandler.moduleCaseMapping[message.ParameterList[0].lower()]]
