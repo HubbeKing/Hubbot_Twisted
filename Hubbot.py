@@ -26,7 +26,7 @@ class Hubbot(irc.IRCClient):
         self.versionName = self.nickname
         self.versionNum = bothandler.config.serverItemWithDefault(server, "versionNum", "1.0.0")
         self.versionEnv = platform.platform()
-        self.commandChar = bothandler.config.serverItemWithDefault(server, "commandchar", "+")
+        self.CommandChar = bothandler.config.serverItemWithDefault(server, "commandchar", "+")
         self.fingerReply = bothandler.config.serverItemWithDefault(server, "fingerReply", "")
 
         self.admins = self.loadAdmins()

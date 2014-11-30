@@ -38,8 +38,8 @@ class IRCMessage(object):
         else:
             self.TargetType = TargetTypes.USER
 
-        if self.MessageList[0].startswith(bot.commandChar):
-            self.Command = self.MessageList[0][len(bot.commandChar):].lower()
+        if self.MessageList[0].startswith(bot.CommandChar):
+            self.Command = self.MessageList[0][len(bot.CommandChar):].lower()
             if self.Command == "":
                 self.Command = self.MessageList[1].lower()
                 self.Parameters = u' '.join(self.MessageList[2:])
