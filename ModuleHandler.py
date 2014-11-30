@@ -11,7 +11,7 @@ class ModuleHandler(object):
         self.modules = {}
         self.moduleCaseMapping = {}
         self.mappedTriggers = {}
-        self.nonDefaultModules = ["Roll", "Grapheme", "GraphemeLearning"]
+        self.nonDefaultModules = ["Roll"]
 
     def sendResponse(self, response):
         responses = []

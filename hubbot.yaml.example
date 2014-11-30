@@ -1,0 +1,7 @@
+nickname: "Hubbot"
+realname: "Hubbot"
+username: "Hubbot"
+commandchar: "+"
+
+servers:
+    "irc.example.org:6667":["#example"]
