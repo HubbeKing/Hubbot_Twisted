@@ -1,6 +1,7 @@
 logs/
 data/
 .idea/
+env/
 
 #################
 ## Eclipse
