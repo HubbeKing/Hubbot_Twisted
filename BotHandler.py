@@ -9,14 +9,14 @@ import argparse
 
 class BotHandler:
     botfactories = {}
-    #connections = {"irc.chatspike.net:6667":["#DesertBusBunker"], "applejack.me:6667":["#survivors"]}
 
     def __init__(self, parsedArgs):
         self.config = Config(parsedArgs.config)
         self.config.readConfig()
-        for (server_with_port, channels) in self.config["servers"].items():
-            server = server_with_port.split(":")[0]
-            port = int(server_with_port.split(":")[1])
+        for (serverDict) in self.config["servers"]:
+            server = str(serverDict)
+            port = self.config.getServerItemWithDefault(serverDict, "port", 6667)
+            channels = serverDict.channels
             self.startBotFactory(server, port, channels)
         reactor.run()
 

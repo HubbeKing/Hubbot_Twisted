@@ -4,4 +4,6 @@ username: "Hubbot"
 commandchar: "+"
 
 servers:
-    "irc.example.org:6667":["#example"]
+    irc.example.org:
+        port: 6667
+        channels: ["#example"]
