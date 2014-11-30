@@ -8,5 +8,10 @@ versionNum: "1.0.0"
 
 servers:
     "irc.example.org":
+        commandchar: "~"
         port: 6667
         channels: ["#example"]
+        
+    "irc.butts.org":
+        nonDefaultModules: ["MemoryHungryModule"]
+        port: 6667
