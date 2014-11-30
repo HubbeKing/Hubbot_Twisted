@@ -3,14 +3,18 @@ import sys
 from twisted.internet import reactor
 from Hubbot import HubbotFactory
 from IRCChannel import IRCChannel
+from Config import Config
+import argparse
 
 
 class BotHandler:
     botfactories = {}
-    connections = {"irc.chatspike.net:6667":["#DesertBusBunker"], "applejack.me:6667":["#survivors"]}
+    #connections = {"irc.chatspike.net:6667":["#DesertBusBunker"], "applejack.me:6667":["#survivors"]}
 
-    def __init__(self):
-        for (server_with_port, channels) in self.connections.items():
+    def __init__(self, parsedArgs):
+        self.config = Config(parsedArgs.config)
+        self.config.readConfig()
+        for (server_with_port, channels) in self.config["servers"].items():
             server = server_with_port.split(":")[0]
             port = int(server_with_port.split(":")[1])
             self.startBotFactory(server, port, channels)
@@ -84,4 +88,7 @@ class BotHandler:
 
 
 if __name__ == "__main__":
-    bothandler = BotHandler()
+    parser = argparse.ArgumentParser(description="A derpy Twisted IRC bot.")
+    parser.add_argument("-c", "--config", help="The configuration file to use", type=str, default="hubbot.yaml")
+    options = parser.parse_args()
+    bothandler = BotHandler(options)

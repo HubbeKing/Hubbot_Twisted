@@ -28,7 +28,7 @@ class Config(object):
     def __iter__(self):
         return iter(self._configData)
 
-    def __getitem(self, item):
+    def __getitem__(self, item):
         return self._configData[item]
 
     def getItemWithDefault(self, item, default):
