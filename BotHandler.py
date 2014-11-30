@@ -13,8 +13,12 @@ class BotHandler:
     def __init__(self, parsedArgs):
         self.config = Config(parsedArgs.config)
         self.config.readConfig()
-        for (server) in self.config["servers"]:
-            port = self.config.getServerItemWithDefault(server, "port", 6667)
+        for serverDict in self.config["servers"]:
+            server = serverDict["address"]
+            try:
+                port = serverDict["port"]
+            except:
+                port = 6667
             channels = server["channels"]
             self.startBotFactory(server, port, channels)
         reactor.run()
