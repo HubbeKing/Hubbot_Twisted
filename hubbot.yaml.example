@@ -2,6 +2,9 @@ nickname: "Hubbot"
 realname: "Hubbot"
 username: "Hubbot"
 commandchar: "+"
+nonDefaultModules: ["ModuleName"]
+fingerReply: "Yay"
+versionNum: "1.0.0"
 
 servers:
     "irc.example.org":

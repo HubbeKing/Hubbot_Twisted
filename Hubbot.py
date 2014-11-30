@@ -9,11 +9,6 @@ from ModuleHandler import ModuleHandler
 
 
 class Hubbot(irc.IRCClient):
-    fingerReply = "Sir. SIR. This is an IRC chatbot. SIR!"
-
-    versionNum = "1.0.0.derp"
-    versionEnv = platform.platform()
-
     sourceURL = "https://github.com/HubbeKing/Hubbot_Twisted/"
     bothandler = None
     startTime = datetime.datetime.min
@@ -23,12 +18,17 @@ class Hubbot(irc.IRCClient):
         dname = os.path.dirname(abspath)
         os.chdir(dname)
         self.logPath = os.path.join(dname, "logs")
+
         self.bothandler = bothandler
-        self.nickname = "Hubbot"
-        self.realname = self.nickname
-        self.username = self.nickname
+        self.nickname = bothandler.config.serverItemWithDefault(server, "nickname", "Hubbot")
+        self.username = bothandler.config.serverItemWithDefault(server, "username", "Hubbot")
+        self.realname = bothandler.config.serverItemWithDefault(server, "realname", "Hubbot")
         self.versionName = self.nickname
-        self.CommandChar = "+"
+        self.versionNum = bothandler.config.serverItemWithDefault(server, "versionNum", "1.0.0")
+        self.versionEnv = platform.platform()
+        self.commandChar = bothandler.config.serverItemWithDefault(server, "commandchar", "+")
+        self.fingerReply = bothandler.config.serverItemWithDefault(server, "fingerReply", "")
+
         self.admins = self.loadAdmins()
 
         self.server = server
