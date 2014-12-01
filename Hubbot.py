@@ -117,9 +117,9 @@ class Hubbot(irc.IRCClient):
         self.moduleHandler.handleMessage(message)
 
     def irc_PART(self, prefix, params):
-        partMessage = u''
+        partMessage = ""
         if len(params) > 1:
-            partMessage = u', message: ' + u' '.join(params[1:])
+            partMessage = ", message: " + " ".join(params[1:])
         if params[0] in self.channels.keys():
             channel = self.channels[params[0]]
         else:
@@ -133,9 +133,9 @@ class Hubbot(irc.IRCClient):
         self.moduleHandler.handleMessage(message)
 
     def irc_KICK(self, prefix, params):
-        kickMessage = u''
+        kickMessage = ""
         if len(params) > 2:
-            kickMessage = u', message: ' + u' '.join(params[2:])
+            kickMessage = ", message: " + " ".join(params[2:])
 
         channel = self.channels[params[0]]
         message = IRCMessage('KICK', prefix, channel, kickMessage, self)
@@ -149,9 +149,9 @@ class Hubbot(irc.IRCClient):
         self.moduleHandler.handleMessage(message)
 
     def irc_QUIT(self, prefix, params):
-        quitMessage = u''
+        quitMessage = ""
         if len(params) > 0:
-            quitMessage = u', message: ' + u' '.join(params[0:])
+            quitMessage = ", message: " + " ".join(params[0:])
         for key in self.channels:
             channel = self.channels[key]
             message = IRCMessage('QUIT', prefix, channel, quitMessage, self)
