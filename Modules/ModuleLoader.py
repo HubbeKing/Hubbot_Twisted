@@ -1,11 +1,11 @@
 from IRCResponse import IRCResponse, ResponseType
-from ModuleInterface import ModuleInterface
+from ModuleInterface import ModuleInterface, ModuleAccessLevel
 
 
 class ModuleLoader(ModuleInterface):
     triggers = ['load', 'reload', 'unload']
     help = "load/reload <function>, unload <function> - handles loading/unloading/reloading of functions. Use 'all' with load/reload to reload all active functions"
-    accessLevel = 1
+    accessLevel = ModuleAccessLevel.ADMINS
 
     def onTrigger(self, message):
         """

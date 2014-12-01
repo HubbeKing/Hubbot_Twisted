@@ -1,6 +1,9 @@
 from ModuleInterface import ModuleInterface
 from IRCResponse import IRCResponse, ResponseType
-import urllib, json, random
+
+import urllib
+import json
+import random
 
 
 class Youtube(ModuleInterface):

@@ -1,7 +1,12 @@
 import importlib
-import os, sys, traceback
+import os
+import sys
+import traceback
 from glob import glob
+from twisted.internet import threads
+
 from IRCResponse import IRCResponse, ResponseType
+from ModuleInterface import ModuleAccessLevel
 
 
 class ModuleHandler(object):
@@ -47,7 +52,6 @@ class ModuleHandler(object):
                 print "Python Execution Error sending responses '{}': {}".format(responses, str(sys.exc_info()))
                 traceback.print_tb(sys.exc_info()[2])
 
-
     def handleMessage(self, message):
         """
         @type message: IRCMessage.IRCMessage
@@ -55,17 +59,15 @@ class ModuleHandler(object):
         for (name, module) in self.modules.items():
             try:
                 if module.shouldTrigger(message):
-                    if module.accessLevel != 0 and message.User.Name not in self.bot.admins:
+                    if module.accessLevel != ModuleAccessLevel.ANYONE and message.User.Name not in self.bot.admins:
                         self.sendResponse(IRCResponse(ResponseType.Say, "Only my admins can use {}!".format(message.Command), message.ReplyTo))
                     elif message.User.Name not in self.bot.ignores:
-                        response = module.onTrigger(message)
-                        if response is None:
-                            continue
-                        if hasattr(response, "__iter__"):
-                            for r in response:
-                                self.sendResponse(r)
-                        else:
+                        if not module.runInThread:
+                            response = module.onTrigger(message)
                             self.sendResponse(response)
+                        else:
+                            d = threads.deferToThread(module.onTrigger, message)
+                            d.addCallback(self.sendResponse)
             except Exception:
                 print "Python Execution Error in '{}': {}".format(name, str(sys.exc_info()))
                 traceback.print_tb(sys.exc_info()[2])

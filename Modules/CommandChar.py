@@ -1,11 +1,11 @@
-from ModuleInterface import ModuleInterface
+from ModuleInterface import ModuleInterface, ModuleAccessLevel
 from IRCResponse import IRCResponse, ResponseType
 
 
 class CommandChar(ModuleInterface):
     triggers = ["commandchar"]
     help = "commandchar <char> -- changes the prefix for bot commands (admin-only)"
-    accessLevel = 1
+    accessLevel = ModuleAccessLevel.ADMINS
 
     def onTrigger(self, message):
         """

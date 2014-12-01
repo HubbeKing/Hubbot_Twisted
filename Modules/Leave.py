@@ -1,11 +1,11 @@
 from IRCResponse import IRCResponse, ResponseType
-from ModuleInterface import ModuleInterface
+from ModuleInterface import ModuleInterface, ModuleAccessLevel
 
 
 class Leave(ModuleInterface):
     triggers = ["leave", "gtfo"]
     help = "leave/gtfo - makes the bot leave the current channel"
-    accessLevel = 1
+    accessLevel = ModuleAccessLevel.ADMINS
 
     def onTrigger(self, message):
         """

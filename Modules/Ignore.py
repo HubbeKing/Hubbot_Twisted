@@ -1,5 +1,5 @@
 import sqlite3
-from ModuleInterface import ModuleInterface
+from ModuleInterface import ModuleInterface, ModuleAccessLevel
 from IRCResponse import IRCResponse, ResponseType
 
 
@@ -7,7 +7,7 @@ class Ignore(ModuleInterface):
     triggers = ["ignore", "unignore"]
     help = "ignore/unignore <name> -- ignore <name> as much as possible, stop ignoring <name>"
     filename = "data/data.db"
-    accessLevel = 1
+    accessLevel = ModuleAccessLevel.ADMINS
 
     def onTrigger(self, message):
         """

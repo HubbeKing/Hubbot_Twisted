@@ -1,4 +1,4 @@
-from ModuleInterface import ModuleInterface
+from ModuleInterface import ModuleInterface, ModuleAccessLevel
 from IRCResponse import IRCResponse, ResponseType
 import re
 import subprocess
@@ -7,7 +7,7 @@ import subprocess
 class Update(ModuleInterface):
     triggers = ["update"]
     help = "update - pulls the latest code from GitHub"
-    accessLevel = 1
+    accessLevel = ModuleAccessLevel.ADMINS
 
     def onTrigger(self, message):
         """

@@ -1,11 +1,11 @@
 from IRCResponse import IRCResponse, ResponseType
-from ModuleInterface import ModuleInterface
+from ModuleInterface import ModuleInterface, ModuleAccessLevel
 
 
 class Nick(ModuleInterface):
     triggers = ["nick"]
     help = "nick <nick> - changes the bot's nick to the one specified"
-    accessLevel = 1
+    accessLevel = ModuleAccessLevel.ADMINS
     
     def onTrigger(self, message):
         """

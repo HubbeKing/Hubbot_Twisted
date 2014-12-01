@@ -1,12 +1,12 @@
 import datetime
 from IRCResponse import IRCResponse, ResponseType
-from ModuleInterface import ModuleInterface
+from ModuleInterface import ModuleInterface, ModuleAccessLevel
 
 
 class BotHandling(ModuleInterface):
     triggers = ["connect", "quit", "quitfrom", "restart", "shutdown"]
     help = "connect <server> <channel>, quit, quitfrom <server>, restart, shutdown - Connect to / Disconnect from servers, Restart current bot, Shut down all bots"
-    accessLevel = 1
+    accessLevel = ModuleAccessLevel.ADMINS
 
     def onTrigger(self, message):
         """

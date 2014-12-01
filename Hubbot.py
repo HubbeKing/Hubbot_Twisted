@@ -1,6 +1,13 @@
-import platform, os, datetime, codecs, re, sqlite3
+import platform
+import os
+import datetime
+import codecs
+import re
+import sqlite3
+
 from twisted.words.protocols import irc
 from twisted.internet import protocol, reactor
+
 from IRCMessage import IRCMessage
 from IRCChannel import IRCChannel
 from IRCUser import IRCUser
@@ -32,6 +39,7 @@ class Hubbot(irc.IRCClient):
         self.fingerReply = bothandler.config.serverItemWithDefault(server, "fingerReply", "")
 
         self.admins = self.loadAdmins()
+        self.ignores = self.loadIgnores()
 
         self.server = server
         self.channels = channels
@@ -42,7 +50,6 @@ class Hubbot(irc.IRCClient):
         self.startTime = datetime.datetime.now()
 
         self.prefixesCharToMode = {"+":"v", "@":"o"}
-        self.ignores = self.loadIgnores()
         self.moduleHandler = ModuleHandler(self)
         self.moduleHandler.AutoLoadModules()
 

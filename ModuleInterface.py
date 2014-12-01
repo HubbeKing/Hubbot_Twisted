@@ -1,12 +1,17 @@
+from enum import Enum
+
+
+class ModuleAccessLevel(Enum):
+    ANYONE = 0
+    ADMINS = 1
 
 
 class ModuleInterface(object):
     triggers = []
     acceptedTypes = ['PRIVMSG']
     help = '<no help defined (yet)>'
-    accessLevel = 0
-    # 0 = Anyone
-    # 1 = Admins only
+    runInThread = False
+    accessLevel = ModuleAccessLevel.ANYONE
 
     def __init__(self, bot):
         """

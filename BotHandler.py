@@ -1,10 +1,12 @@
 import os
 import sys
+import argparse
+
 from twisted.internet import reactor
+
 from Hubbot import HubbotFactory
 from IRCChannel import IRCChannel
 from Config import Config
-import argparse
 
 
 class BotHandler:
