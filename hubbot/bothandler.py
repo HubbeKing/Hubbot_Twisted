@@ -82,7 +82,7 @@ class BotHandler:
         reactor.callLater(2.0, self.replaceInstance)
 
     def replaceInstance(self):
-        reactor.stop()
         print sys.executable
         print sys.argv
         os.execl(sys.executable, sys.executable, *sys.argv)
+        reactor.stop()
