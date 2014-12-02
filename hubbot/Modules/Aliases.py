@@ -1,6 +1,6 @@
 import sqlite3
-from moduleinterface import ModuleInterface
-from response import IRCResponse, ResponseType
+from hubbot.moduleinterface import ModuleInterface
+from hubbot.response import IRCResponse, ResponseType
 
 
 class Aliases(ModuleInterface):
@@ -10,7 +10,7 @@ class Aliases(ModuleInterface):
 
     def onTrigger(self, message):
         """
-        @type message: IRCMessage.IRCMessage
+        @type message: hubbot.message.IRCMessage
         """
         self.aliases.clear()
         with sqlite3.connect("data/data.db") as conn:

@@ -1,6 +1,6 @@
 import sqlite3
-from moduleinterface import ModuleInterface, ModuleAccessLevel
-from response import IRCResponse, ResponseType
+from hubbot.moduleinterface import ModuleInterface, ModuleAccessLevel
+from hubbot.response import IRCResponse, ResponseType
 
 
 class Ignore(ModuleInterface):
@@ -11,7 +11,7 @@ class Ignore(ModuleInterface):
 
     def onTrigger(self, message):
         """
-        @type message: IRCMessage.IRCMessage
+        @type message: hubbot.message.IRCMessage
         """
         if message.Command == "ignore":
             if len(message.ParameterList) == 1:

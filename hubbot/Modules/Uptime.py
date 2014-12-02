@@ -1,6 +1,6 @@
 from collections import OrderedDict
-from moduleinterface import ModuleInterface
-from response import IRCResponse, ResponseType
+from hubbot.moduleinterface import ModuleInterface
+from hubbot.response import IRCResponse, ResponseType
 import datetime
 
 
@@ -10,7 +10,7 @@ class Uptime(ModuleInterface):
 
     def onTrigger(self, message):
         """
-        @type message: IRCMessage.IRCMessage
+        @type message: hubbot.message.IRCMessage
         """
         now = datetime.datetime.now()
         timeDelta = now - self.bot.startTime

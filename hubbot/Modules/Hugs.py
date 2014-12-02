@@ -1,5 +1,5 @@
-from moduleinterface import ModuleInterface
-from response import IRCResponse, ResponseType
+from hubbot.moduleinterface import ModuleInterface
+from hubbot.response import IRCResponse, ResponseType
 import string
 import sqlite3
 import re
@@ -20,7 +20,7 @@ class Hugs(ModuleInterface):
 
     def onTrigger(self, message):
         """
-        @type message: IRCMessage.IRCMessage
+        @type message: hubbot.message.IRCMessage
         """
         if message.Type == "ACTION":
             pattern = "hu+g|cuddle|snu+ggle|snu+g|squeeze|glomp"

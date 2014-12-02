@@ -1,5 +1,5 @@
-from response import IRCResponse, ResponseType
-from moduleinterface import ModuleInterface
+from hubbot.response import IRCResponse, ResponseType
+from hubbot.moduleinterface import ModuleInterface
 
 
 class Help(ModuleInterface):
@@ -8,7 +8,7 @@ class Help(ModuleInterface):
     
     def onTrigger(self, message):
         """
-        @type message: IRCMessage.IRCMessage
+        @type message: hubbot.message.IRCMessage
         """
         if len(message.ParameterList) > 0:
             if message.ParameterList[0].lower() in self.bot.moduleHandler.moduleCaseMapping:

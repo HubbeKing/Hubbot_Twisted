@@ -1,6 +1,6 @@
 import datetime
-from response import IRCResponse, ResponseType
-from moduleinterface import ModuleInterface
+from hubbot.response import IRCResponse, ResponseType
+from hubbot.moduleinterface import ModuleInterface
 
 
 class Nope(ModuleInterface):
@@ -10,7 +10,7 @@ class Nope(ModuleInterface):
 
     def shouldTrigger(self, message):
         """
-        @type message: IRCMessage.IRCMessage
+        @type message: hubbot.message.IRCMessage
         """
         if message.MessageString.lower().startswith("nope"):
             if (datetime.datetime.now() - self.lastTriggered).seconds >= self.seconds:
@@ -21,6 +21,6 @@ class Nope(ModuleInterface):
 
     def onTrigger(self, message):
         """
-        @type message: IRCMessage.IRCMessage
+        @type message: hubbot.message.IRCMessage
         """
         return IRCResponse(ResponseType.Say, "I don't think so either.", message.ReplyTo)

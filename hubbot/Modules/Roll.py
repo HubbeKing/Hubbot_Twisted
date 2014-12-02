@@ -1,5 +1,5 @@
-from response import IRCResponse, ResponseType
-from moduleinterface import ModuleInterface
+from hubbot.response import IRCResponse, ResponseType
+from hubbot.moduleinterface import ModuleInterface
 import random
 
 
@@ -9,7 +9,7 @@ class Roll(ModuleInterface):
 
     def onTrigger(self, message):
         """
-        @type message: IRCMessage.IRCMessage
+        @type message: hubbot.message.IRCMessage
         """
         if len(message.ParameterList) > 1:
             if message.ParameterList[0].find("v") == -1 and message.ParameterList[1].find("v") == -1:

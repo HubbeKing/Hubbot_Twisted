@@ -1,5 +1,5 @@
-from moduleinterface import ModuleInterface
-from response import IRCResponse, ResponseType
+from hubbot.moduleinterface import ModuleInterface
+from hubbot.response import IRCResponse, ResponseType
 
 
 class Say(ModuleInterface):
@@ -8,7 +8,7 @@ class Say(ModuleInterface):
 
     def onTrigger(self, message):
         """
-        @type message: IRCMessage.IRCMessage
+        @type message: hubbot.message.IRCMessage
         """
         if len(message.ParameterList) == 0:
             return IRCResponse(ResponseType.Say, "Say what?", message.ReplyTo)

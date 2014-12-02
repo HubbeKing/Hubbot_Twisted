@@ -1,5 +1,5 @@
-from response import IRCResponse, ResponseType
-from moduleinterface import ModuleInterface
+from hubbot.response import IRCResponse, ResponseType
+from hubbot.moduleinterface import ModuleInterface
 
 
 class Triggers(ModuleInterface):
@@ -8,7 +8,7 @@ class Triggers(ModuleInterface):
 
     def onTrigger(self, message):
         """
-        @type message: IRCMessage.IRCMessage
+        @type message: hubbot.message.IRCMessage
         """
         if message.User.Name != message.ReplyTo:
             return IRCResponse(ResponseType.Say, "{} must be used over PM!".format(message.Command), message.ReplyTo)

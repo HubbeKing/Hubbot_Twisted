@@ -8,10 +8,10 @@ import sqlite3
 from twisted.words.protocols import irc
 from twisted.internet import protocol, reactor
 
-from message import IRCMessage
-from channel import IRCChannel
-from user import IRCUser
-from modulehandler import ModuleHandler
+from hubbot.message import IRCMessage
+from hubbot.channel import IRCChannel
+from hubbot.user import IRCUser
+from hubbot.modulehandler import ModuleHandler
 
 
 class Hubbot(irc.IRCClient):
@@ -21,7 +21,7 @@ class Hubbot(irc.IRCClient):
 
     def __init__(self, server, channels, bothandler):
         """
-        @type bothandler: BotHandler.BotHandler
+        @type bothandler: hubbot.bothandler.BotHandler
         """
         abspath = os.path.abspath(__file__)
         dname = os.path.dirname(abspath)
@@ -227,7 +227,7 @@ class Hubbot(irc.IRCClient):
 class HubbotFactory(protocol.ReconnectingClientFactory):
     def __init__(self, server, port, channels, bothandler):
         """
-        @type bothandler: BotHandler.BotHandler
+        @type bothandler: hubbot.bothandler.BotHandler
         """
         self.port = port
         self.protocol = Hubbot(server, channels, bothandler)

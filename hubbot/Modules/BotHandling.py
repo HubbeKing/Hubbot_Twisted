@@ -1,6 +1,6 @@
 import datetime
-from response import IRCResponse, ResponseType
-from moduleinterface import ModuleInterface, ModuleAccessLevel
+from hubbot.response import IRCResponse, ResponseType
+from hubbot.moduleinterface import ModuleInterface, ModuleAccessLevel
 
 
 class BotHandling(ModuleInterface):
@@ -10,7 +10,7 @@ class BotHandling(ModuleInterface):
 
     def onTrigger(self, message):
         """
-        @type message: IRCMessage.IRCMessage
+        @type message: hubbot.message.IRCMessage
         """
         if message.Command == "connect":
             if len(message.ParameterList) >= 2:

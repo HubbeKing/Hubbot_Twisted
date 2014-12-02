@@ -1,5 +1,5 @@
-from moduleinterface import ModuleInterface, ModuleAccessLevel
-from response import IRCResponse, ResponseType
+from hubbot.moduleinterface import ModuleInterface, ModuleAccessLevel
+from hubbot.response import IRCResponse, ResponseType
 
 
 class CommandChar(ModuleInterface):
@@ -9,7 +9,7 @@ class CommandChar(ModuleInterface):
 
     def onTrigger(self, message):
         """
-        @type message: IRCMessage.IRCMessage
+        @type message: hubbot.message.IRCMessage
         """
         if len(message.ParameterList) == 0:
             return IRCResponse(ResponseType.Say, "Change my command character to what?", message.ReplyTo)

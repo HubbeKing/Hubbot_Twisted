@@ -1,6 +1,6 @@
-from channel import IRCChannel
-from response import IRCResponse, ResponseType
-from moduleinterface import ModuleInterface
+from hubbot.channel import IRCChannel
+from hubbot.response import IRCResponse, ResponseType
+from hubbot.moduleinterface import ModuleInterface
 
 
 class Join(ModuleInterface):
@@ -9,7 +9,7 @@ class Join(ModuleInterface):
 
     def onTrigger(self, message):
         """
-        @type message: IRCMessage.IRCMessage
+        @type message: hubbot.message.IRCMessage
         """
         if len(message.ParameterList) > 0:
             responses = []

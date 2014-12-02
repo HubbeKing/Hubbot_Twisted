@@ -1,5 +1,5 @@
-from moduleinterface import ModuleInterface, ModuleAccessLevel
-from response import IRCResponse, ResponseType
+from hubbot.moduleinterface import ModuleInterface, ModuleAccessLevel
+from hubbot.response import IRCResponse, ResponseType
 import sqlite3
 
 
@@ -10,7 +10,7 @@ class Admin(ModuleInterface):
 
     def onTrigger(self, message):
         """
-        @type message: IRCMessage.IRCMessage
+        @type message: hubbot.message.IRCMessage
         """
         if message.Command == "admin" and len(message.ParameterList) == 1 and message.ParameterList[0] == "save":
             self.saveAdmins()

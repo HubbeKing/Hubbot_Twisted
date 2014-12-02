@@ -1,7 +1,7 @@
 import sqlite3
-from moduleinterface import ModuleInterface
-from response import IRCResponse, ResponseType
-from IRCMessage import IRCMessage
+from hubbot.moduleinterface import ModuleInterface
+from hubbot.response import IRCResponse, ResponseType
+from hubbot.message import IRCMessage
 
 
 class Alias(ModuleInterface):
@@ -14,7 +14,7 @@ class Alias(ModuleInterface):
 
     def shouldTrigger(self, message):
         """
-        @type message: IRCMessage.IRCMessage
+        @type message: hubbot.message.IRCMessage
         """
         return True
 
@@ -26,7 +26,7 @@ class Alias(ModuleInterface):
 
     def onTrigger(self, message):
         """
-        @type message: IRCMessage.IRCMessage
+        @type message: hubbot.message.IRCMessage
         """
         if message.Command in self.triggers:
             if message.Command == "alias":
@@ -86,7 +86,7 @@ class Alias(ModuleInterface):
 
     def aliasedMessage(self, message):
         """
-        @type message: IRCMessage.IRCMessage
+        @type message: hubbot.message.IRCMessage
         """
         if message.Command in self.aliases.keys():
             alias = self.aliases[message.Command]

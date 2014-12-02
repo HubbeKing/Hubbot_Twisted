@@ -1,5 +1,5 @@
-from response import IRCResponse, ResponseType
-from moduleinterface import ModuleInterface, ModuleAccessLevel
+from hubbot.response import IRCResponse, ResponseType
+from hubbot.moduleinterface import ModuleInterface, ModuleAccessLevel
 
 
 class Leave(ModuleInterface):
@@ -9,7 +9,7 @@ class Leave(ModuleInterface):
 
     def onTrigger(self, message):
         """
-        @type message: IRCMessage.IRCMessage
+        @type message: hubbot.message.IRCMessage
         """
         if len(message.ParameterList) > 0:
             del self.bot.channels[message.ReplyTo]

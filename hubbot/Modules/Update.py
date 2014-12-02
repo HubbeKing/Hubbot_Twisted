@@ -1,5 +1,5 @@
-from moduleinterface import ModuleInterface, ModuleAccessLevel
-from response import IRCResponse, ResponseType
+from hubbot.moduleinterface import ModuleInterface, ModuleAccessLevel
+from hubbot.response import IRCResponse, ResponseType
 import re
 import subprocess
 
@@ -11,7 +11,7 @@ class Update(ModuleInterface):
 
     def onTrigger(self, message):
         """
-        @type message: IRCMessage.IRCMessage
+        @type message: hubbot.message.IRCMessage
         """
         subprocess.call(["git", "fetch"])
 

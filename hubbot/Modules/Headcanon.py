@@ -3,9 +3,9 @@ import re
 import sqlite3
 import sys
 import traceback
-from response import IRCResponse, ResponseType
-from moduleinterface import ModuleInterface
-from WebUtils import pasteEE
+from hubbot.response import IRCResponse, ResponseType
+from hubbot.moduleinterface import ModuleInterface
+from hubbot.webutils import pasteEE
 
 
 class Headcanon(ModuleInterface):
@@ -19,7 +19,7 @@ class Headcanon(ModuleInterface):
 
     def onTrigger(self, message):
         """
-        @type message: IRCMessage.IRCMessage
+        @type message: hubbot.message.IRCMessage
         """
         filename = "data/data.db"
         headcanon = []

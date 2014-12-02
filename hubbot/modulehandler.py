@@ -5,15 +5,15 @@ import traceback
 from glob import glob
 from twisted.internet import threads
 
-from response import IRCResponse, ResponseType
-from moduleinterface import ModuleAccessLevel
+from hubbot.response import IRCResponse, ResponseType
+from hubbot.moduleinterface import ModuleAccessLevel
 
 
 class ModuleHandler(object):
 
     def __init__(self, bot):
         """
-        @type bot: Hubbot.Hubbot
+        @type bot: hubbot.bot.Hubbot
         """
         self.bot = bot
         self.modules = {}
@@ -23,7 +23,7 @@ class ModuleHandler(object):
 
     def sendResponse(self, response):
         """
-        @type response: IRCResponse.IRCResponse
+        @type response: hubbot.response.IRCResponse
         """
         responses = []
 
@@ -54,7 +54,7 @@ class ModuleHandler(object):
 
     def handleMessage(self, message):
         """
-        @type message: IRCMessage.IRCMessage
+        @type message: hubbot.message.IRCMessage
         """
         for (name, module) in self.modules.items():
             try:
@@ -139,7 +139,7 @@ class ModuleHandler(object):
                     print x.args
 
     def GetModuleDirList(self):
-        root = os.path.join('.', 'Modules')
+        root = os.path.join('.', 'hubbot.Modules')
 
         for item in os.listdir(root):
             if not os.path.isfile(os.path.join(root, item)):

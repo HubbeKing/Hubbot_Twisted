@@ -1,5 +1,5 @@
-from response import IRCResponse, ResponseType
-from moduleinterface import ModuleInterface
+from hubbot.response import IRCResponse, ResponseType
+from hubbot.moduleinterface import ModuleInterface
 import time
 
 
@@ -8,13 +8,13 @@ class IdentCheck(ModuleInterface):
 
     def shouldTrigger(self, message):
         """
-        @type message: IRCMessage.IRCMessage
+        @type message: hubbot.message.IRCMessage
         """
         return True
 
     def onTrigger(self, message):
         """
-        @type message: IRCMessage.IRCMessage
+        @type message: hubbot.message.IRCMessage
         """
         if message.ReplyTo in self.bot.channels.keys():
             if "RoBoBo" not in self.bot.channels[message.ReplyTo].Users.keys():

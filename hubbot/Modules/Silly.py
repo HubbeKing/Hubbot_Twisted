@@ -1,5 +1,5 @@
-from response import IRCResponse, ResponseType
-from moduleinterface import ModuleInterface
+from hubbot.response import IRCResponse, ResponseType
+from hubbot.moduleinterface import ModuleInterface
 
 
 class Silly(ModuleInterface):
@@ -29,20 +29,11 @@ class Silly(ModuleInterface):
                 "<thing>":"Har Har.",
                 "disappointed":"https://31.media.tumblr.com/cea6574a24b490ada8bec694e87b307b/tumblr_n3blu9k5CW1tsipf6o6_400.gif"
             }
-        self.triggers.extend(self.linkDict.keys())
-
-    def shouldTrigger(self, message):
-        """
-        @type message: IRCMessage.IRCMessage
-        """
-        if message.Command in self.linkDict.keys() and message.Type in self.acceptedTypes:
-            return True
-        else:
-            return False
+        self.triggers = self.linkDict.keys()
 
     def onTrigger(self, message):
         """
-        @type message: IRCMessage.IRCMessage
+        @type message: hubbot.message.IRCMessage
         """
         if message.Command == "silly":
             return IRCResponse(ResponseType.Say, self.help, message.ReplyTo)

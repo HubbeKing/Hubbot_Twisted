@@ -1,5 +1,5 @@
-from moduleinterface import ModuleInterface
-from response import IRCResponse, ResponseType
+from hubbot.moduleinterface import ModuleInterface
+from hubbot.response import IRCResponse, ResponseType
 
 import urllib
 import json
@@ -12,7 +12,7 @@ class Youtube(ModuleInterface):
 
     def onTrigger(self, message):
         """
-        @type message: IRCMessage.IRCMessage
+        @type message: hubbot.message.IRCMessage
         """
         if message.Command == "randomyt":
             if len(message.ParameterList) == 0:

@@ -1,9 +1,9 @@
 import re
 import sqlite3
 import random
-from moduleinterface import ModuleInterface
-from response import IRCResponse, ResponseType
-from WebUtils import pasteEE
+from hubbot.moduleinterface import ModuleInterface
+from hubbot.response import IRCResponse, ResponseType
+from hubbot.webutils import pasteEE
 
 
 class RPG(ModuleInterface):
@@ -20,7 +20,7 @@ class RPG(ModuleInterface):
         
     def onTrigger(self, message):
         """
-        @type message: IRCMessage.IRCMessage
+        @type message: hubbot.message.IRCMessage
         """
         if len(message.ParameterList) == 0:
             return IRCResponse(ResponseType.Say, self.getRandom(self.campaigns[message.Command]["tablename"]), message.ReplyTo)

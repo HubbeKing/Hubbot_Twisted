@@ -1,7 +1,7 @@
 from twisted.internet import reactor
-from response import IRCResponse, ResponseType
-from moduleinterface import ModuleInterface
-from timeparse import timeparse
+from hubbot.response import IRCResponse, ResponseType
+from hubbot.moduleinterface import ModuleInterface
+from hubbot.timeparse import timeparse
 
 
 class Timer(ModuleInterface):
@@ -9,6 +9,9 @@ class Timer(ModuleInterface):
     help = "timer <time> - starts a countdown timer and notifies you when time's up. No decimals in months or years, max 1 year."
 
     def onTrigger(self, message):
+        """
+        @type message: hubbot.message.IRCMessage
+        """
         flag = False
         if len(message.ParameterList) == 1:
             try:

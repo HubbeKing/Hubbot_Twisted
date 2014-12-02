@@ -3,9 +3,9 @@ import sys
 
 from twisted.internet import reactor
 
-from bot import HubbotFactory
-from channel import IRCChannel
-from config import Config
+from hubbot.bot import HubbotFactory
+from hubbot.channel import IRCChannel
+from hubbot.config import Config
 
 
 class BotHandler:
