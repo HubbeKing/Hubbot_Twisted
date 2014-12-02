@@ -87,7 +87,7 @@ class ModuleHandler(object):
             self.UnloadModule(name)
             alreadyExisted = True
 
-        module = importlib.import_module("Modules." + moduleListCaseMap[name])
+        module = importlib.import_module("hubbot.Modules." + moduleListCaseMap[name])
 
         reload(module)
 
@@ -122,8 +122,8 @@ class ModuleHandler(object):
 
             del self.modules[self.moduleCaseMapping[name.lower()]]
             del self.moduleCaseMapping[name.lower()]
-            del sys.modules["{}.{}".format("Modules", properName)]
-            for f in glob("{}/{}.pyc".format("Modules", properName)):
+            del sys.modules["{}.{}".format("hubbot.Modules", properName)]
+            for f in glob("{}/{}.pyc".format("hubbot.Modules", properName)):
                 os.remove(f)
         else:
             return False
@@ -139,7 +139,7 @@ class ModuleHandler(object):
                     print x.args
 
     def GetModuleDirList(self):
-        root = os.path.join('hubbot', 'Modules')
+        root = os.path.join('.', 'Modules')
 
         for item in os.listdir(root):
             if not os.path.isfile(os.path.join(root, item)):
