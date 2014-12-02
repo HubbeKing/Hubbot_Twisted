@@ -12,4 +12,10 @@ The bot can be started using app.py, the default config file used is hubbot.yaml
 
 This can be easily created from hubbot.yaml.example, or another one can be used with the -c argument
 
-Some of the bot (the update module) relies on the bot being run from a virtualenv present in env/
+HOW TO USE:
+
+1: Install your preferred version of Python 2
+2: Install a virtualenv and activate it
+3: Run pip install -r requirements.txt inside said virtualenv
+4: Create a config file from hubbot.yaml.example
+5: Use said virtualenv to run app.py -c <configfilename>

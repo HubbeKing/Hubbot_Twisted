@@ -2,6 +2,7 @@ from hubbot.moduleinterface import ModuleInterface, ModuleAccessLevel
 from hubbot.response import IRCResponse, ResponseType
 import os
 import re
+import sys
 import subprocess
 
 
@@ -27,6 +28,6 @@ class Update(ModuleInterface):
 
         subprocess.check_call(["git", "pull"])
 
-        subprocess.check_call([os.path.join("env", "bin", "pip"), "install", "-r", "requirements.txt"])
+        subprocess.check_call([os.path.join(os.path.dirname(sys.executable), "pip"), "install", "-r", "requirements.txt"])
 
         return IRCResponse(ResponseType.Say, response, message.ReplyTo)
