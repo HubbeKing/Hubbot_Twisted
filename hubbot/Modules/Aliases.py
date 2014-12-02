@@ -13,7 +13,7 @@ class Aliases(ModuleInterface):
         @type message: hubbot.message.IRCMessage
         """
         self.aliases.clear()
-        with sqlite3.connect("data/data.db") as conn:
+        with sqlite3.connect(self.bot.databaseFile) as conn:
             c = conn.cursor()
             for row in c.execute("SELECT * FROM aliases"):
                 self.aliases[row[0]] = row[1].split(" ")

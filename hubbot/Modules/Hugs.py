@@ -74,9 +74,8 @@ class Hugs(ModuleInterface):
                             conn.commit()
 
         elif message.Type == "PRIVMSG":
-            filename = "data/data.db"
             hug_dict = {}
-            with sqlite3.connect(filename) as conn:
+            with sqlite3.connect(self.bot.databaseFile) as conn:
                 c = conn.cursor()
                 for row in c.execute("SELECT * FROM hugs"):
                     hug_dict[row[0]] = [row[1], row[2]]
