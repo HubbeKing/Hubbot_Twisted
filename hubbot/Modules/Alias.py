@@ -19,7 +19,7 @@ class Alias(ModuleInterface):
         return True
 
     def onLoad(self):
-        with sqlite3.connect(self.bot.filename) as conn:
+        with sqlite3.connect(self.bot.databaseFile) as conn:
             c = conn.cursor()
             for row in c.execute("SELECT * FROM aliases"):
                 self.aliases[row[0]] = row[1].split(" ")
@@ -72,14 +72,14 @@ class Alias(ModuleInterface):
 
     def newAlias(self, alias, command):
         self.aliases[alias] = command
-        with sqlite3.connect(self.bot.filename) as conn:
+        with sqlite3.connect(self.bot.databaseFile) as conn:
             c = conn.cursor()
             c.execute("INSERT INTO aliases VALUES (?,?)", (alias, " ".join(command)))
             conn.commit()
 
     def deleteAlias(self, alias):
         del self.aliases[alias]
-        with sqlite3.connect(self.bot.filename) as conn:
+        with sqlite3.connect(self.bot.databaseFile) as conn:
             c = conn.cursor()
             c.execute("DELETE FROM aliases WHERE alias=?", (alias,))
             conn.commit()

@@ -14,7 +14,7 @@ class Ignore(ModuleInterface):
         """
         if message.Command == "ignore":
             if len(message.ParameterList) == 1:
-                with sqlite3.connect(self.bot.filename) as conn:
+                with sqlite3.connect(self.bot.databaseFile) as conn:
                     c = conn.cursor()
                     c.execute("SELECT max(id) FROM ignores")
                     maxID = c.fetchone()[0]
@@ -29,7 +29,7 @@ class Ignore(ModuleInterface):
                 return IRCResponse(ResponseType.Say, "Currently ignoring: {}".format(", ".join(self.bot.ignores)), message.ReplyTo)
         elif message.Command == "unignore":
             if len(message.ParameterList) == 1:
-                with sqlite3.connect(self.bot.filename) as conn:
+                with sqlite3.connect(self.bot.databaseFile) as conn:
                     c = conn.cursor()
                     c.execute("DELETE FROM ignores WHERE nick=?", (message.ParameterList[0],))
                     conn.commit()

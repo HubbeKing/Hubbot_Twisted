@@ -22,7 +22,7 @@ class Headcanon(ModuleInterface):
         @type message: hubbot.message.IRCMessage
         """
         headcanon = []
-        with sqlite3.connect(self.bot.filename) as conn:
+        with sqlite3.connect(self.bot.databaseFile) as conn:
             c = conn.cursor()
             for row in c.execute("SELECT * FROM headcanon"):
                 headcanon.append(row[0])
@@ -57,7 +57,7 @@ class Headcanon(ModuleInterface):
             for word in message.ParameterList[1:]:
                 addString = addString + word + " "
             headcanon.append(addString)
-            with sqlite3.connect(self.bot.filename) as conn:
+            with sqlite3.connect(self.bot.databaseFile) as conn:
                 c = conn.cursor()
                 c.execute("INSERT INTO headcanon VALUES (?)", (addString,))
                 conn.commit()
@@ -100,7 +100,7 @@ class Headcanon(ModuleInterface):
                     match = re.search(re_string, canon, re.IGNORECASE)
                     if match:
                         headcanon.remove(match.string)
-                        with sqlite3.connect(self.bot.filename) as conn:
+                        with sqlite3.connect(self.bot.databaseFile) as conn:
                             c = conn.cursor()
                             c.execute("DELETE FROM headcanon WHERE canon=?", (match.string,))
                             conn.commit()
