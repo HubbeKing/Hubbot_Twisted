@@ -11,18 +11,16 @@ from hubbot.config import Config
 class BotHandler:
     botfactories = {}
 
-    def __init__(self, parsedArgs):
+    def __init__(self, parsedArgs, logPath):
         self.config = Config(parsedArgs.config)
         self.config.readConfig()
         for server in self.config["servers"]:
             port = self.config.serverItemWithDefault(server, "port", 6667)
             channels = self.config.serverItemWithDefault(server, "channels", [])
-            self.startBotFactory(server, port, channels)
-        print sys.executable
-        print sys.argv
+            self.startBotFactory(server, port, channels, logPath)
         reactor.run()
 
-    def startBotFactory(self, server, port, channels):
+    def startBotFactory(self, server, port, channels, logPath):
         if server in self.botfactories:
             print "Already on server '{}'.".format(server)
             return False
@@ -30,9 +28,9 @@ class BotHandler:
             chanObjects = {}
             for channel in channels:
                 chanObjects[channel] = IRCChannel(channel)
-            botfactory = HubbotFactory(server, port, chanObjects, self)
+            botfactory = HubbotFactory(server, port, chanObjects, self, logPath)
         else:
-            botfactory = HubbotFactory(server, port, channels, self)
+            botfactory = HubbotFactory(server, port, channels, self, logPath)
         self.botfactories[server] = botfactory
         return True
 
