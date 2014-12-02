@@ -1,9 +1,11 @@
+import os
 import sqlite3
 
 hugs = ["hubbeking",0,0]
 line = "Symphony is a cyborg."
 
-conn = sqlite3.connect("hubbot/data/data.db")
+filename = os.path.join("hubbot", "data", "data.db")
+conn = sqlite3.connect(filename)
 c = conn.cursor()
 
 c.execute("CREATE TABLE hugs (nick text, given int, received int)")

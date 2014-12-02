@@ -35,6 +35,7 @@ class Hubbot(irc.IRCClient):
         self.CommandChar = bothandler.config.serverItemWithDefault(server, "commandchar", "+")
         self.fingerReply = bothandler.config.serverItemWithDefault(server, "fingerReply", "")
 
+        self.databaseFile = os.path.join("hubbot", "data", "data.db")
         self.admins = self.loadAdmins()
         self.ignores = self.loadIgnores()
 
@@ -206,7 +207,7 @@ class Hubbot(irc.IRCClient):
 
     def loadIgnores(self):
         ignores = []
-        with sqlite3.connect("data/data.db") as conn:
+        with sqlite3.connect(self.databaseFile) as conn:
             c = conn.cursor()
             for row in c.execute("SELECT nick FROM ignores"):
                 ignores.append(row[0])
@@ -214,7 +215,7 @@ class Hubbot(irc.IRCClient):
 
     def loadAdmins(self):
         admins = []
-        with sqlite3.connect("data/data.db") as conn:
+        with sqlite3.connect(self.databaseFile) as conn:
             c = conn.cursor()
             for row in c.execute("SELECT nick FROM admins"):
                 admins.append(row[0])
