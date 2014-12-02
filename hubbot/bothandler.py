@@ -18,6 +18,8 @@ class BotHandler:
             port = self.config.serverItemWithDefault(server, "port", 6667)
             channels = self.config.serverItemWithDefault(server, "channels", [])
             self.startBotFactory(server, port, channels)
+        print sys.executable
+        print sys.argv
         reactor.run()
 
     def startBotFactory(self, server, port, channels):
@@ -59,7 +61,7 @@ class BotHandler:
 
             if len(self.botfactories) == 0:
                 print "No more running bots, shutting down."
-                reactor.callLater(2.0, reactor.stop)
+                reactor.callLater(5.0, reactor.stop)
 
     def shutdown(self, quitmessage="Shutting down..."):
         quitmessage = quitmessage.encode("utf-8")
@@ -82,7 +84,5 @@ class BotHandler:
         reactor.callLater(2.0, self.replaceInstance)
 
     def replaceInstance(self):
-        print sys.executable
-        print sys.argv
-        os.execl(sys.executable, sys.executable, *sys.argv)
         reactor.stop()
+        os.execl(sys.executable, sys.executable, *sys.argv)
