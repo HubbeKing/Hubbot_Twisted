@@ -74,6 +74,7 @@ class BotHandler:
         reactor.callLater(4.0, reactor.stop)
 
     def restart(self, quitmessage="Restarting..."):
+        reactor.addSystemEventTrigger("after", "shutdown", lambda: os.execl(sys.executable, sys.executable, *sys.argv))
         self.quitmessage = quitmessage.encode("utf-8")
         for server, botfactory in self.botfactories.iteritems():
             botfactory.protocol.Quitting = True
@@ -81,8 +82,4 @@ class BotHandler:
             for (name, module) in botfactory.protocol.moduleHandler.modules.items():
                 module.onUnload()
         self.botfactories = {}
-        reactor.callLater(2.0, self.replaceInstance)
-
-    def replaceInstance(self):
-        reactor.stop()
-        os.execl(sys.executable, sys.executable, *sys.argv)
+        reactor.callLater(2.0, reactor.stop)
