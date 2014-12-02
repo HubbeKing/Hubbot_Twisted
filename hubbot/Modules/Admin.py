@@ -31,7 +31,7 @@ class Admin(ModuleInterface):
 
     def newAdmin(self, admin):
         for (server, botfactory) in self.bot.bothandler.botfactories.iteritems():
-            botfactory.protocol.admins.append(admin)
+            botfactory.bot.admins.append(admin)
         with sqlite3.connect(self.bot.databaseFile) as conn:
             c = conn.cursor()
             c.execute("INSERT INTO admins VALUES (?)", (admin,))
@@ -39,7 +39,7 @@ class Admin(ModuleInterface):
 
     def deleteAdmin(self, admin):
         for (server, botfactory) in self.bot.bothandler.botfactories.iteritems():
-            botfactory.protocol.admins.remove(admin)
+            botfactory.bot.admins.remove(admin)
         with sqlite3.connect(self.bot.databaseFile) as conn:
             c = conn.cursor()
             c.execute("DELETE FROM admins WHERE nick=?", (admin,))

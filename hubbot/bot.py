@@ -6,7 +6,6 @@ import re
 import sqlite3
 
 from twisted.words.protocols import irc
-from twisted.internet import protocol, reactor
 
 from hubbot.message import IRCMessage
 from hubbot.channel import IRCChannel
@@ -223,31 +222,3 @@ class Hubbot(irc.IRCClient):
             for row in c.execute("SELECT nick FROM admins"):
                 admins.append(row[0])
         return admins
-
-
-class HubbotFactory(protocol.ReconnectingClientFactory):
-    def __init__(self, server, port, channels, bothandler):
-        """
-        @type bothandler: hubbot.bothandler.BotHandler
-        """
-        self.port = port
-        self.protocol = Hubbot(server, channels, bothandler)
-        reactor.connectTCP(server, port, self)
-
-    def startedConnecting(self, connector):
-        print "-#- Started to connect to '{}'.".format(self.protocol.server)
-
-    def buildProtocol(self, addr):
-        print "-#- Connected to '{}'.".format(self.protocol.server)
-        print "-#- Resetting reconnection delay."
-        self.resetDelay()
-        return self.protocol
-
-    def clientConnectionLost(self, connector, reason):
-        if not self.protocol.Quitting:
-            print "-!- Connection lost. Reason:", reason
-            protocol.ReconnectingClientFactory.clientConnectionLost(self, connector, reason)
-
-    def clientConnectionFailed(self, connector, reason):
-        print "-!- Connection failed. Reason:", reason
-        protocol.ReconnectingClientFactory.clientConnectionFailed(self, connector, reason)

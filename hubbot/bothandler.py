@@ -3,7 +3,7 @@ import sys
 
 from twisted.internet import reactor
 
-from hubbot.bot import HubbotFactory
+from hubbot.factory import HubbotFactory
 from hubbot.channel import IRCChannel
 from hubbot.config import Config
 
@@ -43,10 +43,10 @@ class BotHandler:
             print "ERROR: Bot for '{}' does not exist yet was asked to stop.".format(server)
         else:
             print "Shutting down bot for server '{}'".format(server)
-            self.botfactories[server].protocol.Quitting = True
+            self.botfactories[server].bot.Quitting = True
             try:
-                self.botfactories[server].protocol.quit(quitmessage)
-                for (name, module) in self.botfactories[server].protocol.moduleHandler.modules.items():
+                self.botfactories[server].bot.quit(quitmessage)
+                for (name, module) in self.botfactories[server].bot.moduleHandler.modules.items():
                     module.onUnload()
             except:
                 self.botfactories[server].stopTrying()
@@ -64,9 +64,9 @@ class BotHandler:
     def shutdown(self, quitmessage="Shutting down..."):
         quitmessage = quitmessage.encode("utf-8")
         for server, botfactory in self.botfactories.iteritems():
-            botfactory.protocol.Quitting = True
-            botfactory.protocol.quit(quitmessage)
-            for (name, module) in botfactory.protocol.moduleHandler.modules.items():
+            botfactory.bot.Quitting = True
+            botfactory.bot.quit(quitmessage)
+            for (name, module) in botfactory.bot.moduleHandler.modules.items():
                 module.onUnload()
         self.botfactories = {}
         reactor.callLater(4.0, reactor.stop)
@@ -75,9 +75,9 @@ class BotHandler:
         reactor.addSystemEventTrigger("after", "shutdown", lambda: os.execl(sys.executable, sys.executable, *sys.argv))
         self.quitmessage = quitmessage.encode("utf-8")
         for server, botfactory in self.botfactories.iteritems():
-            botfactory.protocol.Quitting = True
-            botfactory.protocol.quit(quitmessage)
-            for (name, module) in botfactory.protocol.moduleHandler.modules.items():
+            botfactory.bot.Quitting = True
+            botfactory.bot.quit(quitmessage)
+            for (name, module) in botfactory.bot.moduleHandler.modules.items():
                 module.onUnload()
         self.botfactories = {}
         reactor.callLater(2.0, reactor.stop)
