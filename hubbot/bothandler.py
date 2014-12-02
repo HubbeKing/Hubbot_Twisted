@@ -83,4 +83,6 @@ class BotHandler:
 
     def replaceInstance(self):
         reactor.stop()
-        os.execl(sys.executable, sys.executable, sys.argv)
+        print sys.executable
+        print sys.argv
+        os.execl(sys.executable, sys.executable, *sys.argv)
