@@ -26,4 +26,6 @@ class Update(ModuleInterface):
 
         subprocess.call(["git", "pull"])
 
+        subprocess.call(["env/bin/pip", "install", "-r", "requirements.txt"])
+
         return IRCResponse(ResponseType.Say, response, message.ReplyTo)
