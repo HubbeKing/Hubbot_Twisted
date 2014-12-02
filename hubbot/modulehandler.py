@@ -139,7 +139,7 @@ class ModuleHandler(object):
                     print x.args
 
     def GetModuleDirList(self):
-        root = os.path.join('.', "hubbot", 'Modules')
+        root = os.path.join('hubbot', 'Modules')
 
         for item in os.listdir(root):
             if not os.path.isfile(os.path.join(root, item)):
