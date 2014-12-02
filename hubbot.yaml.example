@@ -2,7 +2,13 @@ nickname: "Hubbot"
 realname: "Hubbot"
 username: "Hubbot"
 commandchar: "+"
+
+#any modules listed in the nonDefaultModules list will not be auto-loaded on startup
 nonDefaultModules: ["ModuleName"]
+
+# Setting moduleOverride to anything other than [] causes the bot to only load those modules on startup
+moduleOverride = []
+
 fingerReply: "Yay"
 versionNum: "1.0.0"
 
@@ -13,5 +19,5 @@ servers:
         channels: ["#example"]
         
     "irc.butts.org":
-        nonDefaultModules: ["MemoryHungryModule"]
+        moduleOverride = ["MemoryHeavyModule"]
         port: 6667
