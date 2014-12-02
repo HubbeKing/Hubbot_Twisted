@@ -8,7 +8,6 @@ from hubbot.webutils import pasteEE
 
 class RPG(ModuleInterface):
     help = 'pf/lp/mm/welch <number>/add <thing>/list/search <term> -- "helpful" RPG advice and stuff'
-    filename = "data/data.db"
     
     campaigns = {"pf": {"displayname": "Pathfinder", "tablename": "pathfinder", "isAddingAllowed": True},
                 "lp": {"displayname": "Let's Play", "tablename": "lp", "isAddingAllowed": True},
@@ -41,7 +40,7 @@ class RPG(ModuleInterface):
 
     def getRandom(self, table):
         messageDict = {}
-        with sqlite3.connect(self.filename) as conn:
+        with sqlite3.connect(self.bot.databaseFile) as conn:
             c = conn.cursor()
             for row in c.execute("SELECT * FROM {}".format(table)):
                 messageDict[row[0]] = row[1]
@@ -54,7 +53,7 @@ class RPG(ModuleInterface):
         except:
             return "I don't know what you mean by '{}'.".format(number)
         messageDict = {}
-        with sqlite3.connect(self.filename) as conn:
+        with sqlite3.connect(self.bot.databaseFile) as conn:
             c = conn.cursor()
             for row in c.execute("SELECT * FROM {}".format(table)):
                 messageDict[row[0]] = row[1]
@@ -65,7 +64,7 @@ class RPG(ModuleInterface):
 
     def getList(self, table, name, params):
         messageDict = {}
-        with sqlite3.connect(self.filename) as conn:
+        with sqlite3.connect(self.bot.databaseFile) as conn:
             c = conn.cursor()
             for row in c.execute("SELECT * FROM {}".format(table)):
                 messageDict[row[0]] = row[1]
@@ -82,7 +81,7 @@ class RPG(ModuleInterface):
         return "Link posted! {}".format(pasteLink)
 
     def addLine(self, table, line):
-        with sqlite3.connect(self.filename) as conn:
+        with sqlite3.connect(self.bot.databaseFile) as conn:
             c = conn.cursor()
             c.execute("SELECT max(id) FROM {}".format(table))
             maxNumber = c.fetchone()[0]
@@ -99,7 +98,7 @@ class RPG(ModuleInterface):
             specific = True
         except:
             specific = False
-        with sqlite3.connect(self.filename) as conn:
+        with sqlite3.connect(self.bot.databaseFile) as conn:
             c = conn.cursor()
             for row in c.execute("SELECT * FROM {}".format(table)):
                 messageDict[row[0]] = row[1]
