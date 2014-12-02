@@ -1,18 +1,22 @@
 import os
 import sqlite3
 
-hugs = ["hubbeking",0,0]
-line = "Symphony is a cyborg."
 
-filename = os.path.join("hubbot", "data", "data.db")
-conn = sqlite3.connect(filename)
-c = conn.cursor()
+def createDB():
+    hugs = ["hubbeking",0,0]
+    line = "Symphony is a cyborg."
 
-c.execute("CREATE TABLE hugs (nick text, given int, received int)")
-c.execute("CREATE TABLE headcanon (canon text)")
+    filename = os.path.join("hubbot", "data", "data.db")
+    conn = sqlite3.connect(filename)
+    c = conn.cursor()
 
-c.execute("INSERT INTO hugs VALUES (?, ?, ?)", (hugs[0], hugs[1], hugs[2]))
-c.execute("INSERT INTO headcanon VALUES (?)", (line,))
+    c.execute("CREATE TABLE hugs (nick text, given int, received int)")
+    c.execute("CREATE TABLE headcanon (canon text)")
+    c.execute("CREATE TABLE admins (nick text)")
+    c.execute("CREATE TABLE ignores (nick text)")
 
-conn.commit()
-conn.close()
+    c.execute("INSERT INTO hugs VALUES (?, ?, ?)", (hugs[0], hugs[1], hugs[2]))
+    c.execute("INSERT INTO headcanon VALUES (?)", (line,))
+
+    conn.commit()
+    conn.close()
