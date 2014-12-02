@@ -10,4 +10,3 @@ HOW TO USE:
 3. Run pip install -r requirements.txt inside said virtualenv
 4. Create a config file from hubbot.yaml.example
 5. Use said virtualenv to run app.py -c <configfilename>
-6. 
