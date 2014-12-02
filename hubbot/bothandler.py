@@ -12,8 +12,7 @@ class BotHandler:
     botfactories = {}
 
     def __init__(self, parsedArgs):
-        self.parsedArgs = parsedArgs
-        self.config = Config(self.parsedArgs.config)
+        self.config = Config(parsedArgs.config)
         self.config.readConfig()
         for server in self.config["servers"]:
             port = self.config.serverItemWithDefault(server, "port", 6667)
@@ -83,6 +82,5 @@ class BotHandler:
         reactor.callLater(2.0, self.replaceInstance)
 
     def replaceInstance(self):
+        reactor.addSystemEventTrigger("after", "shutdown", lambda: os.execl(sys.executable, sys.executable, *sys.argv))
         reactor.stop()
-        python = sys.executable
-        os.execl(python, python, "bothandler.py")
