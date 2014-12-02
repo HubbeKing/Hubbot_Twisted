@@ -19,10 +19,13 @@ class Hubbot(irc.IRCClient):
     bothandler = None
     startTime = datetime.datetime.min
 
-    def __init__(self, server, channels, bothandler, logPath):
+    def __init__(self, server, channels, bothandler):
         """
         @type bothandler: hubbot.bothandler.BotHandler
         """
+        abspath = os.path.abspath(__file__)
+        dname = os.path.dirname(abspath)
+        logPath = os.path.join(dname, "logs")
         self.logPath = logPath
 
         self.bothandler = bothandler
@@ -223,12 +226,12 @@ class Hubbot(irc.IRCClient):
 
 
 class HubbotFactory(protocol.ReconnectingClientFactory):
-    def __init__(self, server, port, channels, bothandler, logPath):
+    def __init__(self, server, port, channels, bothandler):
         """
         @type bothandler: hubbot.bothandler.BotHandler
         """
         self.port = port
-        self.protocol = Hubbot(server, channels, bothandler, logPath)
+        self.protocol = Hubbot(server, channels, bothandler)
         reactor.connectTCP(server, port, self)
 
     def startedConnecting(self, connector):
