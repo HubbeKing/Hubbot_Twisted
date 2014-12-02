@@ -8,7 +8,8 @@ Some of the functions (hugs/headcanon) rely on a sqlite3 data/data.db file.
 
 A function for generating a blank file for these is included (newDB.py)
 
+The bot can be started using app.py, the default config file used is hubbot.yaml
 
-GlobalVars.py contains the connection info, admins, and other general configuration for the bot.
+This can be easily created from hubbot.yaml.example, or another one can be used with the -c argument
 
-The bot can be started by running BotHandler.py
+Some of the bot (the update module) relies on the bot being run from a virtualenv present in env/
