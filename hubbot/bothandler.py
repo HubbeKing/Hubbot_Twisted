@@ -82,5 +82,5 @@ class BotHandler:
         reactor.callLater(2.0, self.replaceInstance)
 
     def replaceInstance(self):
-        reactor.addSystemEventTrigger("after", "shutdown", lambda: os.execl(sys.executable, sys.executable, *sys.argv))
         reactor.stop()
+        os.execl(sys.executable, sys.executable, *sys.argv)
