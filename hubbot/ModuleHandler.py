@@ -5,8 +5,8 @@ import traceback
 from glob import glob
 from twisted.internet import threads
 
-from IRCResponse import IRCResponse, ResponseType
-from ModuleInterface import ModuleAccessLevel
+from response import IRCResponse, ResponseType
+from moduleinterface import ModuleAccessLevel
 
 
 class ModuleHandler(object):

@@ -1,5 +1,5 @@
-from ModuleInterface import ModuleInterface
-from IRCResponse import IRCResponse, ResponseType
+from moduleinterface import ModuleInterface
+from response import IRCResponse, ResponseType
 
 import urllib
 import json

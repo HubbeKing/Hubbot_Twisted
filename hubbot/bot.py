@@ -8,10 +8,10 @@ import sqlite3
 from twisted.words.protocols import irc
 from twisted.internet import protocol, reactor
 
-from IRCMessage import IRCMessage
-from IRCChannel import IRCChannel
-from IRCUser import IRCUser
-from ModuleHandler import ModuleHandler
+from message import IRCMessage
+from channel import IRCChannel
+from user import IRCUser
+from modulehandler import ModuleHandler
 
 
 class Hubbot(irc.IRCClient):

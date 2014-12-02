@@ -1,6 +1,6 @@
 import sqlite3
-from ModuleInterface import ModuleInterface, ModuleAccessLevel
-from IRCResponse import IRCResponse, ResponseType
+from moduleinterface import ModuleInterface, ModuleAccessLevel
+from response import IRCResponse, ResponseType
 
 
 class Ignore(ModuleInterface):

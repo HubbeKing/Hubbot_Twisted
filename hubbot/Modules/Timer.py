@@ -1,6 +1,6 @@
 from twisted.internet import reactor
-from IRCResponse import IRCResponse, ResponseType
-from ModuleInterface import ModuleInterface
+from response import IRCResponse, ResponseType
+from moduleinterface import ModuleInterface
 from timeparse import timeparse
 
 

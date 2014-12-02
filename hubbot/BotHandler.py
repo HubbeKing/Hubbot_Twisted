@@ -1,19 +1,19 @@
 import os
 import sys
-import argparse
 
 from twisted.internet import reactor
 
-from Hubbot import HubbotFactory
-from IRCChannel import IRCChannel
-from Config import Config
+from bot import HubbotFactory
+from channel import IRCChannel
+from config import Config
 
 
 class BotHandler:
     botfactories = {}
 
     def __init__(self, parsedArgs):
-        self.config = Config(parsedArgs.config)
+        self.parsedArgs = parsedArgs
+        self.config = Config(self.parsedArgs.config)
         self.config.readConfig()
         for server in self.config["servers"]:
             port = self.config.serverItemWithDefault(server, "port", 6667)
@@ -85,11 +85,4 @@ class BotHandler:
     def replaceInstance(self):
         reactor.stop()
         python = sys.executable
-        os.execl(python, python, "BotHandler.py")
-
-
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="A derpy Twisted IRC bot.")
-    parser.add_argument("-c", "--config", help="The configuration file to use", type=str, default="hubbot.yaml")
-    options = parser.parse_args()
-    bothandler = BotHandler(options)
+        os.execl(python, python, "bothandler.py")

@@ -1,6 +1,6 @@
 import datetime
-from IRCResponse import IRCResponse, ResponseType
-from ModuleInterface import ModuleInterface
+from response import IRCResponse, ResponseType
+from moduleinterface import ModuleInterface
 
 
 class Nope(ModuleInterface):

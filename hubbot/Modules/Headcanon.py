@@ -3,8 +3,8 @@ import re
 import sqlite3
 import sys
 import traceback
-from IRCResponse import IRCResponse, ResponseType
-from ModuleInterface import ModuleInterface
+from response import IRCResponse, ResponseType
+from moduleinterface import ModuleInterface
 from WebUtils import pasteEE
 
 

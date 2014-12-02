@@ -1,8 +1,8 @@
 import re
 import sqlite3
 import random
-from ModuleInterface import ModuleInterface
-from IRCResponse import IRCResponse, ResponseType
+from moduleinterface import ModuleInterface
+from response import IRCResponse, ResponseType
 from WebUtils import pasteEE
 
 

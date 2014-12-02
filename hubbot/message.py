@@ -1,5 +1,5 @@
 from enum import Enum
-from IRCUser import IRCUser
+from user import IRCUser
 
 
 class TargetTypes(Enum):
@@ -22,7 +22,7 @@ class IRCMessage(object):
 
     def __init__(self, type, user, channel, message, bot):
         """
-        @type channel: IRCChannel.IRCChannel
+        @type channel: channel.IRCChannel
         @type bot: Hubbot.Hubbot
         """
         self.ChannelObj = channel

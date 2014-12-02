@@ -1,6 +1,6 @@
-from IRCChannel import IRCChannel
-from IRCResponse import IRCResponse, ResponseType
-from ModuleInterface import ModuleInterface
+from channel import IRCChannel
+from response import IRCResponse, ResponseType
+from moduleinterface import ModuleInterface
 
 
 class Join(ModuleInterface):
