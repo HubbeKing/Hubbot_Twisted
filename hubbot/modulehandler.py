@@ -20,7 +20,7 @@ class ModuleHandler(object):
         self.moduleCaseMapping = {}
         self.mappedTriggers = {}
         self.nonDefaultModules = bot.bothandler.config.serverItemWithDefault(bot.server, "nonDefaultModules", [])
-        self.moduleOverride = bot.bothandler.config.serverItemWithDefault(bot.server, "moduleOverride", [])
+        self.modulesToLoad = bot.bothandler.config.serverItemWithDefault(bot.server, "modulesToLoad", ["all"])
 
     def sendResponse(self, response):
         """
@@ -132,7 +132,7 @@ class ModuleHandler(object):
         return True
 
     def AutoLoadModules(self):
-        if self.moduleOverride == []:
+        if "all" in self.modulesToLoad:
             for module in self.GetModuleDirList():
                 if module not in self.nonDefaultModules:
                     try:
@@ -141,7 +141,7 @@ class ModuleHandler(object):
                         print x.args
         else:
             for module in self.GetModuleDirList():
-                if module in self.moduleOverride:
+                if module in self.modulesToLoad:
                     try:
                         self.LoadModule(module)
                     except Exception, x:

@@ -8,8 +8,8 @@ commandchar: "+"
 # any modules listed in the nonDefaultModules list will not be auto-loaded on startup
 nonDefaultModules: ["ModuleName"]
 
-# Setting moduleOverride to anything other than [] causes the bot to only load the listed modules on startup
-moduleOverride: []
+# Setting modulesToLoad to anything other than ["all"] causes the bot to only load the listed modules on startup
+modulesToLoad: ["all"]
 
 fingerReply: "Yay"
 versionNum: "1.0.0"
