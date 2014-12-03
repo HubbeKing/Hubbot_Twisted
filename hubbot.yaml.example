@@ -3,10 +3,12 @@ realname: "Hubbot"
 username: "Hubbot"
 commandchar: "+"
 
-#any modules listed in the nonDefaultModules list will not be auto-loaded on startup
+
+# The default behavior is to load all modules in the Modules folder on startup.
+# any modules listed in the nonDefaultModules list will not be auto-loaded on startup
 nonDefaultModules: ["ModuleName"]
 
-# Setting moduleOverride to anything other than [] causes the bot to only load those modules on startup
+# Setting moduleOverride to anything other than [] causes the bot to only load the listed modules on startup
 moduleOverride: []
 
 fingerReply: "Yay"
