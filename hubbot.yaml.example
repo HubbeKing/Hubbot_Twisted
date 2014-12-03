@@ -7,7 +7,7 @@ commandchar: "+"
 nonDefaultModules: ["ModuleName"]
 
 # Setting moduleOverride to anything other than [] causes the bot to only load those modules on startup
-moduleOverride = []
+moduleOverride: []
 
 fingerReply: "Yay"
 versionNum: "1.0.0"
@@ -19,5 +19,5 @@ servers:
         channels: ["#example"]
         
     "irc.butts.org":
-        moduleOverride = ["MemoryHeavyModule"]
+        moduleOverride: ["MemoryHeavyModule"]
         port: 6667
