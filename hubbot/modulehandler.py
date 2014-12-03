@@ -19,7 +19,7 @@ class ModuleHandler(object):
         self.modules = {}
         self.moduleCaseMapping = {}
         self.mappedTriggers = {}
-        self.nonDefaultModules = bot.bothandler.config.serverItemWithDefault(bot.server, "nonDefaultModules", ["Roll"])
+        self.nonDefaultModules = bot.bothandler.config.serverItemWithDefault(bot.server, "nonDefaultModules", [])
         self.moduleOverride = bot.bothandler.config.serverItemWithDefault(bot.server, "moduleOverride", [])
 
     def sendResponse(self, response):
