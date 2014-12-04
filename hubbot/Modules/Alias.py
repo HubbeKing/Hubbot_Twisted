@@ -48,10 +48,10 @@ class Alias(ModuleInterface):
                 if message.ParameterList[0] in self.aliases.keys():
                     return IRCResponse(ResponseType.Say, "'{}' is already an alias!".format(message.ParameterList[0]), message.ReplyTo)
 
-                newAlias = []
+                aliasParams = []
                 for word in message.ParameterList[1:]:
-                    newAlias.append(word.lower())
-                self.newAlias(message.ParameterList[0], newAlias)
+                    aliasParams.append(word)
+                self.newAlias(message.ParameterList[0], aliasParams)
 
                 return IRCResponse(ResponseType.Say, "Created a new alias '{}' for '{}'.".format(message.ParameterList[0], " ".join(message.ParameterList[1:])), message.ReplyTo)
             elif message.Command == "unalias":
