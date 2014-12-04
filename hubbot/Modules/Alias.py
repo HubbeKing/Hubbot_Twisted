@@ -29,7 +29,6 @@ class Alias(ModuleInterface):
                 self.aliases[row[0].lower()] = row[1].split(" ")
         for alias in self.aliases:
             self.bot.moduleHandler.mappedTriggers[alias.lower()] = self
-            print alias
 
     def onUnload(self):
         for alias in self.aliases:
@@ -52,7 +51,7 @@ class Alias(ModuleInterface):
 
                 if message.ParameterList[1].lower() not in self.bot.moduleHandler.mappedTriggers and message.ParameterList[1].lower() not in self.aliases:
                     return IRCResponse(ResponseType.Say, "'{}' is not a valid command or alias!".format(message.ParameterList[1].lower()), message.ReplyTo)
-                if message.ParameterList[0] in self.aliases:
+                if message.ParameterList[0].lower() in self.aliases:
                     return IRCResponse(ResponseType.Say, "'{}' is already an alias!".format(message.ParameterList[0].lower()), message.ReplyTo)
 
                 aliasParams = []
@@ -78,16 +77,15 @@ class Alias(ModuleInterface):
                     returnString = "Current aliases: {}".format(", ".join(sorted(self.aliases.keys())))
                     return IRCResponse(ResponseType.Say, returnString, message.ReplyTo)
                 elif message.ParameterList[0].lower() in self.aliases:
-                    return IRCResponse(ResponseType.Say, " ".join(self.aliases[message.ParameterList[0]].lower()), message.ReplyTo)
+                    return IRCResponse(ResponseType.Say, " ".join(self.aliases[message.ParameterList[0].lower()]), message.ReplyTo)
                 else:
                     return IRCResponse(ResponseType.Say, "'{}' does not match any known alias!".format(message.ParameterList[0].lower()), message.ReplyTo)
 
         elif message.Command in self.aliases:
             newMessage = self._aliasedMessage(message)
-            newCommand = newMessage.Command.lower()
-            if newCommand in self.bot.moduleHandler.mappedTriggers:
-                return self.bot.moduleHandler.mappedTriggers[newCommand].onTrigger(newMessage)
-            elif newCommand in self.aliases:
+            if newMessage.Command in self.bot.moduleHandler.mappedTriggers:
+                return self.bot.moduleHandler.mappedTriggers[newMessage.Command].onTrigger(newMessage)
+            elif newMessage.Command in self.aliases:
                 newMessage = self._aliasedMessage(message)
                 return self.onTrigger(newMessage)
 
