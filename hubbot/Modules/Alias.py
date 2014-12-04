@@ -30,6 +30,10 @@ class Alias(ModuleInterface):
         for alias in self.aliases:
             self.bot.moduleHandler.mappedTriggers[alias] = self
 
+    def onUnload(self):
+        for alias in self.aliases:
+            del self.bot.moduleHandler.mappedTriggers[alias]
+
     def onTrigger(self, message):
         """
         @type message: hubbot.message.IRCMessage
