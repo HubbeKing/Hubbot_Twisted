@@ -80,6 +80,7 @@ class Alias(ModuleInterface):
 
     def _newAlias(self, alias, command):
         self.aliases[alias] = command
+        self.bot.moduleHandler.mappedTriggers[alias] = self
         with sqlite3.connect(self.bot.databaseFile) as conn:
             c = conn.cursor()
             c.execute("INSERT INTO aliases VALUES (?,?)", (alias, " ".join(command)))
@@ -87,6 +88,7 @@ class Alias(ModuleInterface):
 
     def _deleteAlias(self, alias):
         del self.aliases[alias]
+        del self.bot.moduleHandler.mappedTriggers[alias]
         with sqlite3.connect(self.bot.databaseFile) as conn:
             c = conn.cursor()
             c.execute("DELETE FROM aliases WHERE alias=?", (alias,))
