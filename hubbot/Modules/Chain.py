@@ -49,7 +49,7 @@ class Chain(ModuleInterface):
             inputMessage.chained = True  # might be used at some point to tell commands they're being called from Chain
 
             if inputMessage.Command in self.bot.moduleHandler.mappedTriggers:
-                response = self.bot.moduleHandler.mappedTriggers[inputMessage.Command].execute(inputMessage)
+                response = self.bot.moduleHandler.mappedTriggers[inputMessage.Command].onTrigger(inputMessage)
             else:
                 return IRCResponse(ResponseType.Say,
                                    "'{0}' is not a recognized command trigger".format(inputMessage.Command),
