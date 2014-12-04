@@ -5,8 +5,18 @@ from hubbot.moduleinterface import ModuleInterface, ModuleAccessLevel
 
 class BotHandling(ModuleInterface):
     triggers = ["connect", "quit", "quitfrom", "restart", "shutdown"]
-    help = "connect <server> <channel>, quit, quitfrom <server>, restart, shutdown - Connect to / Disconnect from servers, Restart current bot, Shut down all bots"
     accessLevel = ModuleAccessLevel.ADMINS
+
+    def help(self, message):
+        helpDict = {
+            u"bothandling": u"connect <server> <channel>, quit, quitfrom <server>, restart, shutdown - Connect to / Disconnect from servers, Restart current bot, Shut down all bots",
+            u"connect": u"connect <server>[:port] <channel> - Connects to the specified server and channel.",
+            u"quit": u"quit - Quits from the current server.",
+            u"quitfrom": u"quitfrom <server> - Quits from the specified server.",
+            u"restart": u"restart - Restarts the entire bot, reconnecting using currently loaded config.",
+            u"shutdown": u"shutdown - Shuts the entire bot down."
+        }
+        return helpDict[message.ParameterList[0]]
 
     def onTrigger(self, message):
         """

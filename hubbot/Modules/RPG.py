@@ -7,13 +7,39 @@ from hubbot.webutils import pasteEE
 
 
 class RPG(ModuleInterface):
-    help = 'pf/lp/mm/welch <number>/add <thing>/list/search <term> -- "helpful" RPG advice and stuff'
-    
     campaigns = {"pf": {"displayname": "Pathfinder", "tablename": "pathfinder", "isAddingAllowed": True},
                 "lp": {"displayname": "Let's Play", "tablename": "lp", "isAddingAllowed": True},
                 "mm": {"displayname": "Mutants & Masterminds", "tablename": "mm", "isAddingAllowed": True},
                 "welch": {"displayname": "Welch", "tablename": "welch", "isAddingAllowed": False}}
-    
+
+    def help(self, message):
+        helpDict = {
+            u"RPG": u"pf/lp/mm/welch <number>/add <thing>/list/search <term> -- \"helpful\" RPG advice and stuff",
+
+            u"pf": u"pf [number] -- Fetches a random or given entry from the Pathfinder list.",
+            u"pf add": u"pf add <string> -- Adds the specified string as an entry in the Pathfinder list.",
+            u"pf list": u"pf list [searchterm] -- Posts the Pathfinder list to paste.ee, with optional searchterm matching.",
+            u"pf search": u"pf search <text> [number] -- Searches the Pathfinder list for the specified text, with optional numbered matching.",
+
+            u"lp": u"lp [number] -- Fetches a random or given entry from the Let's Play list.",
+            u"lp add": u"lp add <string> -- Adds the specified string as an entry in the Let's Play list.",
+            u"lp list": u"lp list [searchterm] -- Posts the Let's Play list to paste.ee, with optional searchterm matching.",
+            u"lp search": u"lp search <text> [number] -- Searches the Let's Play list for the specified text, with optional numbered matching.",
+
+            u"mm": u"mm [number] -- Fetches a random or given entry from the Mutants & Masterminds list.",
+            u"mm add": u"mm add <string> -- Adds the specified string as an entry in the Mutants & Masterminds list.",
+            u"mm list": u"mm list [searchterm] -- Posts the Mutants & Masterminds list to paste.ee, with optional searchterm matching.",
+            u"mm search": u"mm search <text> [number] -- Searches the Mutants & Masterminds list for the specified text, with optional numbered matching.",
+
+            u"welch": u"welch [number] -- Fetches a random or given entry from the Welch list.",
+            u"welch list": u"welch list [searchterm] -- Posts the Welch list to paste.ee, with optional searchterm matching.",
+            u"welch search": u"welch search <text> [number] -- Searches the Welch list for the specified text, with optional numbered matching."
+        }
+        if len(message.ParameterList) == 1:
+            return helpDict[message.ParameterList[0]]
+        else:
+            return helpDict[u"".join(message.ParameterList[:1])]
+
     def onLoad(self):
         self.triggers = self.campaigns.keys()
         

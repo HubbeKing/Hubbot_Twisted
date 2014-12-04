@@ -7,20 +7,21 @@ from hubbot.message import IRCMessage
 
 class Alias(ModuleInterface):
     triggers = ["alias", "unalias", "aliases"]
-    help = 'alias <alias> <command> <params> - aliases <alias> to the specified command and parameters\n' \
-           'you can specify where parameters given to the alias should be inserted with $1, $2, $n. ' \
-           'you can use $1+, $2+ for all parameters after the first, second one, etc. ' \
-           'The whole parameter string is $0. $sender and $channel can also be used.'
     runInThread = True
     aliases = {}
 
-    def shouldTrigger(self, message):
+    def help(self, message):
         """
-        @type message: hubbot.message.IRCMessage
+        @type message: IRCMessage
         """
-        if message.Command in self.bot.moduleHandler.mappedTriggers:
-            return True
-        return False
+        helpDict = {
+            u"alias":   u"alias <alias> <command/alias> <params> - aliases <alias> to the specified command/alias and parameters\n" \
+                        u"you can specify where parameters given to the alias should be inserted with $1, $2, $n. " \
+                        u"The whole parameter string is $0. $sender and $channel can also be used.",
+            u"unalias": u"unalias <alias> - deletes the alias <alias>",
+            u"aliases": u"aliases [<alias>] - lists all defined aliases, or the contents of the specified alias"
+        }
+        return helpDict[message.ParameterList[0]]
 
     def onLoad(self):
         with sqlite3.connect(self.bot.databaseFile) as conn:
@@ -33,6 +34,14 @@ class Alias(ModuleInterface):
     def onUnload(self):
         for alias in self.aliases:
             del self.bot.moduleHandler.mappedTriggers[alias.lower()]
+
+    def shouldTrigger(self, message):
+        """
+        @type message: hubbot.message.IRCMessage
+        """
+        if message.Command in self.bot.moduleHandler.mappedTriggers:
+            return True
+        return False
 
     def onTrigger(self, message):
         """

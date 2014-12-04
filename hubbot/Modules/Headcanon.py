@@ -10,12 +10,20 @@ from hubbot.webutils import pasteEE
 
 class Headcanon(ModuleInterface):
     triggers = ["headcanon"]
-    subCommands = ["add", "search", "list", "remove", "help"]
+    subCommands = ["add", "search", "list", "remove"]
 
-    def onLoad(self):
-        self.help = "headcanon [function] -- used to store Symphony's headcanon!"
-        self.help += "\nHeadcanon functions: {}".format(", ".join(self.subCommands))
-        self.help += "\nSyntax is: {}headcanon help <command>".format(self.bot.CommandChar)
+    def help(self, message):
+        helpDict = {
+            u"headcanon": u"headcanon [function] -- Used to store Symphony's headcanon!\nHeadcanon functions: {}".format(u", ".join(self.subCommands)),
+            u"headcanon add": u"headcanon add <string> -- Used to add lines to the headcanon.",
+            u"headcanon search": u"headcanon search <string> -- Used to search within the headcanon.",
+            u"headcanon list": u"headcanon list -- Posts a list of all headcanon entries to paste.ee",
+            u"headcanon remove": u"headcanon remove <string> -- Used to remove lines from the headcanon."
+        }
+        if len(message.ParameterList) == 1:
+            return helpDict[message.ParameterList[0]]
+        else:
+            return helpDict[u"".join(message.ParameterList[:1])]
 
     def onTrigger(self, message):
         """
@@ -31,26 +39,8 @@ class Headcanon(ModuleInterface):
             subCommand = "list"
         else:
             subCommand = message.ParameterList[0]
-        if subCommand.lower() == "help":
-            try:
-                helpCmd = message.ParameterList[1]
-                if helpCmd not in self.subCommands:
-                    returnString = "Headcanon functions: {}".format(", ".join(self.subCommands))
-                    returnString += "\nSyntax is: {}headcanon help <command>".format(self.bot.CommandChar)
-                elif helpCmd == "add":
-                    returnString = self.bot.CommandChar + "headcanon add <string> - used to add lines to headcanon."
-                elif helpCmd == "search":
-                    returnString = self.bot.CommandChar + "headcanon search <string> - used to search within the headcanon."
-                elif helpCmd == "list":
-                    returnString = self.bot.CommandChar + "headcanon list - posts a list of all headcanon entires to pastebin"
-                elif helpCmd == "remove":
-                    returnString = self.bot.CommandChar + "headcanon remove <string> - used to remove lines to the headcanon."
-            except:
-                returnString = "Headcanon functions: {}".format(", ".join(self.subCommands))
-                returnString += "\nSyntax is: {}headcanon help <command>".format(self.bot.CommandChar)
-            return IRCResponse(ResponseType.Say, returnString, message.ReplyTo)
 
-        elif subCommand.lower() == "add" and message.User.Name in self.bot.admins:
+        if subCommand.lower() == "add" and message.User.Name in self.bot.admins:
             if len(message.ParameterList) == 1:
                 return IRCResponse(ResponseType.Say, "Maybe you should read the help text?", message.ReplyTo)
             addString = ""
