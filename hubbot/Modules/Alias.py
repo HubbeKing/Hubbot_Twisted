@@ -11,6 +11,7 @@ class Alias(ModuleInterface):
            'you can specify where parameters given to the alias should be inserted with $1, $2, $n. ' \
            'you can use $1+, $2+ for all parameters after the first, second one, etc. ' \
            'The whole parameter string is $0. $sender and $channel can also be used.'
+    runInThread = True
     aliases = {}
 
     def shouldTrigger(self, message):
