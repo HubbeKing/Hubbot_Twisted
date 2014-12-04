@@ -23,7 +23,7 @@ class Headcanon(ModuleInterface):
         if len(message.ParameterList) == 1:
             return helpDict[message.ParameterList[0]]
         else:
-            return helpDict[u"".join(message.ParameterList[:1])]
+            return helpDict[u" ".join(message.ParameterList[:1])]
 
     def onTrigger(self, message):
         """
