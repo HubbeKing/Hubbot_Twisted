@@ -84,8 +84,7 @@ class Alias(ModuleInterface):
         elif message.Command in self.aliases:
             newMessage = self._aliasedMessage(message)
             if newMessage.Command in self.bot.moduleHandler.mappedTriggers:
-                # return self.bot.moduleHandler.mappedTriggers[newMessage.Command].onTrigger(newMessage)
-                self.bot.moduleHandler.handleMessage(newMessage)
+                return self.bot.moduleHandler.mappedTriggers[newMessage.Command].onTrigger(newMessage)
 
     def _newAlias(self, alias, command):
         self.aliases[alias] = command
@@ -109,7 +108,7 @@ class Alias(ModuleInterface):
         """
         if message.Command in self.aliases.keys():
             alias = self.aliases[message.Command]
-            newMsg = message.MessageString.replace(message.Command, " ".join(alias), 1)
+            newMsg = u'{}{}'.format(self.bot.CommandChar, ' '.join(alias))
             if "$sender" in newMsg:
                 newMsg = newMsg.replace("$sender", message.User.Name)
             if "$channel" in newMsg and message.ChannelObj is not None:
@@ -125,3 +124,4 @@ class Alias(ModuleInterface):
             else:  # if there are no numbered replacement points, append the full parameter list instead
                 newMsg += u' {}'.format(u' '.join(message.ParameterList))
             return IRCMessage(message.Type, message.User.String, message.ChannelObj, newMsg, self.bot)
+        return
