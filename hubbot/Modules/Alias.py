@@ -84,7 +84,8 @@ class Alias(ModuleInterface):
         elif message.Command in self.aliases:
             newMessage = self._aliasedMessage(message)
             if newMessage.Command in self.bot.moduleHandler.mappedTriggers:
-                return self.bot.moduleHandler.mappedTriggers[newMessage.Command].onTrigger(newMessage)
+                # return self.bot.moduleHandler.mappedTriggers[newMessage.Command].onTrigger(newMessage)
+                self.bot.moduleHandler.handleMessage(newMessage)
 
     def _newAlias(self, alias, command):
         self.aliases[alias] = command
