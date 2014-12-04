@@ -29,6 +29,7 @@ class Alias(ModuleInterface):
                 self.aliases[row[0].lower()] = row[1].split(" ")
         for alias in self.aliases:
             self.bot.moduleHandler.mappedTriggers[alias.lower()] = self
+            print alias
 
     def onUnload(self):
         for alias in self.aliases:
@@ -83,7 +84,7 @@ class Alias(ModuleInterface):
 
         elif message.Command in self.aliases:
             newMessage = self._aliasedMessage(message)
-            newCommand = newMessage.Command
+            newCommand = newMessage.Command.lower()
             if newCommand in self.bot.moduleHandler.mappedTriggers:
                 return self.bot.moduleHandler.mappedTriggers[newCommand].onTrigger(newMessage)
             elif newCommand in self.aliases:
