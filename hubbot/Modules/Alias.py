@@ -17,7 +17,9 @@ class Alias(ModuleInterface):
         """
         @type message: hubbot.message.IRCMessage
         """
-        return True
+        if message.Command in self.bot.moduleHandler.mappedTriggers:
+            return True
+        return False
 
     def onLoad(self):
         with sqlite3.connect(self.bot.databaseFile) as conn:
