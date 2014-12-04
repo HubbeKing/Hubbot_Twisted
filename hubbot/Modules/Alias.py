@@ -77,7 +77,7 @@ class Alias(ModuleInterface):
                     returnString = "Current aliases: {}".format(", ".join(sorted(self.aliases.keys())))
                     return IRCResponse(ResponseType.Say, returnString, message.ReplyTo)
                 elif message.ParameterList[0].lower() in self.aliases:
-                    return IRCResponse(ResponseType.Say, " ".join(self.aliases[message.ParameterList[0].lower()]), message.ReplyTo)
+                    return IRCResponse(ResponseType.Say, "{} is aliased to: {}".format(message.ParameterList[0].lower(), " ".join(self.aliases[message.ParameterList[0].lower()]), message.ReplyTo))
                 else:
                     return IRCResponse(ResponseType.Say, "'{}' does not match any known alias!".format(message.ParameterList[0].lower()), message.ReplyTo)
 
