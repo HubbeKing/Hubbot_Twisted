@@ -38,7 +38,7 @@ class RPG(ModuleInterface):
         if len(message.ParameterList) == 1:
             return helpDict[message.ParameterList[0]]
         else:
-            return helpDict[u" ".join(message.ParameterList[:1])]
+            return helpDict[u" ".join(message.ParameterList[:2])]
 
     def onLoad(self):
         self.triggers = self.campaigns.keys()
