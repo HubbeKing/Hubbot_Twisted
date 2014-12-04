@@ -24,6 +24,8 @@ class Alias(ModuleInterface):
             c = conn.cursor()
             for row in c.execute("SELECT * FROM aliases"):
                 self.aliases[row[0]] = row[1].split(" ")
+        for alias in self.aliases:
+            self.bot.moduleHandler.mappedTriggers[alias] = self
 
     def onTrigger(self, message):
         """
