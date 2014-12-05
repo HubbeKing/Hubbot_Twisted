@@ -72,17 +72,12 @@ class Hugs(ModuleInterface):
                             c = conn.cursor()
                             c.execute("UPDATE hugs SET received=? WHERE nick=?", (hug_dict[receiver][1], receiver))
                             conn.commit()
-                hug_dict.clear()
 
         elif message.Type == "PRIVMSG":
             hug_dict = {}
-            if len(message.ParameterList) == 0:
-                target = message.User.Name
-            else:
-                target = message.ParameterList[0]
             with sqlite3.connect(self.bot.databaseFile) as conn:
                 c = conn.cursor()
-                for row in c.execute("SELECT * FROM hugs WHERE nick REGEXP ?", (target,)):
+                for row in c.execute("SELECT * FROM hugs"):
                     hug_dict[row[0]] = [row[1], row[2]]
             if len(message.ParameterList) == 0:
                 target = message.User.Name
@@ -92,11 +87,16 @@ class Hugs(ModuleInterface):
             hugData = [0, 0]
             matches = []
             for (user, hugCounts) in hug_dict.items():
-                matches.append(user)
-                hugData[0] += hugCounts[0]
-                hugData[1] += hugCounts[1]
+                try:
+                    match = re.search(target, user, re.IGNORECASE)
+                except:
+                    match = False
+                if match:
+                    matches.append(match.string)
+                    hugData[0] += hugCounts[0]
+                    hugData[1] += hugCounts[1]
 
-            hugString = "{} has received {} hugs and given {} hugs.".format(target, hugData[1], hugData[0])
+            HugString = "{} has received {} hugs and given {} hugs.".format(target, hugData[1], hugData[0])
             matchedNicksString = "Matches found: "
             numberOfMatches = 0
             for name in matches:
@@ -111,4 +111,4 @@ class Hugs(ModuleInterface):
                     numberOfMatches += 1
             if len(matches) > 30:
                 matchedNicksString = "Matches found: LOTS."
-            return IRCResponse(ResponseType.Say, matchedNicksString, message.ReplyTo), IRCResponse(ResponseType.Say, hugString, message.ReplyTo)
+            return IRCResponse(ResponseType.Say, matchedNicksString, message.ReplyTo), IRCResponse(ResponseType.Say, HugString, message.ReplyTo)
