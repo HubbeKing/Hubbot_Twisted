@@ -25,6 +25,7 @@ class Servers(ModuleInterface):
         """
         helpDict = {
             "moddedmc": "In order to play on craft.dahou.se, you need Bevo's Tech Pack v11 Full.\n"
+                        "The easiest way to get it is with AT Launcher (http://www.atlauncher.com/downloads)\n"
                         "You also have to enable Biomes O' Plenty, Blood Magic and Thaumcraft when installing it."
         }
         command = message.ParameterList[0].lower()
