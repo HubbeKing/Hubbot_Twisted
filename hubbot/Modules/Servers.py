@@ -4,9 +4,10 @@ from hubbot.moduleinterface import ModuleInterface
 
 class Servers(ModuleInterface):
     serverDict = {
-        "servers": "mumble, gmod, starbound, starbound2, jcmp, tetri, cockatrice, kf, tf2, moddedmc, mc -- Used to post server info for games!",
+        "servers": "",
         "mumble": 'The mumble server is hosted at: mumble.dahou.se',
-        "gmod": "List of mods needed for GMOD: http://bit.ly/dahousegmod\nThe Garry's Mod server is hosted at: gmod.dahou.se",
+        "gmod": "List of mods needed for GMOD: http://bit.ly/dahousegmod\n"
+                "The Garry's Mod server is hosted at: gmod.dahou.se",
         "starbound": "The Starbound server is hosted at: starbound.dahou.se",
         "starbound2": "Ricin's Starbound server is hosted at: sb.117.me",
         "jcmp": "Ricin's Just Cause 2 MP server is hosted at: jcmp.117.me",
@@ -14,9 +15,8 @@ class Servers(ModuleInterface):
         "cockatrice": "The Cockatrice server is hosted at: cockatrice.dahou.se:4747",
         "kf": "The Killing Floor server is hosted at: kf.dahou.se",
         "tf2": "The Team Fortress 2 server is hosted at tf2.dahou.se",
-        "moddedmc": "The Bevo's Tech Pack v11 server is hosted at craft.dahou.se (Contact a moderator to get whitelisted)",
-        "mc": "The vanilla Minecraft server is hosted at mc.dahou.se (Contact a moderator to get whitelisted)",
-        "<server>": "Seriously?"
+        "moddedmc": "The Bevo's Tech Pack server is hosted at craft.dahou.se (Contact a moderator to get whitelisted)",
+        "mc": "The vanilla Minecraft server is hosted at mc.dahou.se (Contact a moderator to get whitelisted)"
     }
 
     def help(self, message):
@@ -26,7 +26,7 @@ class Servers(ModuleInterface):
         helpDict = {
             "moddedmc": "In order to play on craft.dahou.se, you need Bevo's Tech Pack v11 Full.\n"
                         "The easiest way to get it is with AT Launcher (http://www.atlauncher.com/downloads)\n"
-                        "You also have to enable Biomes O' Plenty, Blood Magic and Thaumcraft when installing it."
+                        "You also have to enable Biomes O' Plenty, Blood Magic and Thaumcraft when installing the pack."
         }
         command = message.ParameterList[0].lower()
         if command in helpDict:
@@ -36,6 +36,8 @@ class Servers(ModuleInterface):
 
     def onLoad(self):
         self.triggers = self.serverDict.keys()
+        serverList = [item for item in self.triggers if item != "servers"]
+        self.serverDict["servers"] = "{} -- Used to post server info for games!".format(", ".join(serverList))
 
     def onTrigger(self, message):
         """

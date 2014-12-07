@@ -7,10 +7,12 @@ from hubbot.webutils import pasteEE
 
 
 class RPG(ModuleInterface):
-    campaigns = {"pf": {"displayname": "Pathfinder", "tablename": "pathfinder", "isAddingAllowed": True},
-                "lp": {"displayname": "Let's Play", "tablename": "lp", "isAddingAllowed": True},
-                "mm": {"displayname": "Mutants & Masterminds", "tablename": "mm", "isAddingAllowed": True},
-                "welch": {"displayname": "Welch", "tablename": "welch", "isAddingAllowed": False}}
+    campaigns = {
+        "pf": {"displayname": "Pathfinder", "tablename": "pathfinder", "isAddingAllowed": True},
+        "lp": {"displayname": "Let's Play", "tablename": "lp", "isAddingAllowed": True},
+        "mm": {"displayname": "Mutants & Masterminds", "tablename": "mm", "isAddingAllowed": True},
+        "welch": {"displayname": "Welch", "tablename": "welch", "isAddingAllowed": False}
+    }
 
     def help(self, message):
         helpDict = {
@@ -42,27 +44,33 @@ class RPG(ModuleInterface):
 
     def onLoad(self):
         self.triggers = self.campaigns.keys()
-        
+
     def onTrigger(self, message):
         """
         @type message: hubbot.message.IRCMessage
         """
         if len(message.ParameterList) == 0:
-            return IRCResponse(ResponseType.Say, self.getRandom(self.campaigns[message.Command]["tablename"]), message.ReplyTo)
+            return IRCResponse(ResponseType.Say, self.getRandom(self.campaigns[message.Command]["tablename"]),
+                               message.ReplyTo)
         elif message.ParameterList[0] == "list":
             params = ""
             if len(message.ParameterList) > 1:
                 params = " ".join(message.ParameterList[1:])
-            return IRCResponse(ResponseType.Say, self.getList(self.campaigns[message.Command]["tablename"], self.campaigns[message.Command]["displayname"], params), message.ReplyTo)
+            return IRCResponse(ResponseType.Say, self.getList(self.campaigns[message.Command]["tablename"],
+                                                              self.campaigns[message.Command]["displayname"], params),
+                               message.ReplyTo)
         elif message.ParameterList[0] == "add" and self.campaigns[message.Command]["isAddingAllowed"]:
             lineToAdd = " ".join(message.ParameterList[1:])
             newIndex = self.addLine(self.campaigns[message.Command]["tablename"], lineToAdd)
-            return IRCResponse(ResponseType.Say, "Successfully added line '{}. {}'".format(newIndex, lineToAdd), message.ReplyTo)
+            return IRCResponse(ResponseType.Say, "Successfully added line '{}. {}'".format(newIndex, lineToAdd),
+                               message.ReplyTo)
         elif message.ParameterList[0] == "search":
-            return IRCResponse(ResponseType.Say, self.search(self.campaigns[message.Command]["tablename"], " ".join(message.ParameterList[1:])), message.ReplyTo)
+            return IRCResponse(ResponseType.Say, self.search(self.campaigns[message.Command]["tablename"],
+                                                             " ".join(message.ParameterList[1:])), message.ReplyTo)
         else:
-            return IRCResponse(ResponseType.Say, self.getSpecific(self.campaigns[message.Command]["tablename"], message.ParameterList[0]), message.ReplyTo)
-            
+            return IRCResponse(ResponseType.Say,
+                               self.getSpecific(self.campaigns[message.Command]["tablename"], message.ParameterList[0]),
+                               message.ReplyTo)
 
     def getRandom(self, table):
         messageDict = {}
@@ -111,7 +119,7 @@ class RPG(ModuleInterface):
             c = conn.cursor()
             c.execute("SELECT max(id) FROM {}".format(table))
             maxNumber = c.fetchone()[0]
-            c.execute("INSERT INTO {} VALUES (?,?)".format(table), (maxNumber+1, line))
+            c.execute("INSERT INTO {} VALUES (?,?)".format(table), (maxNumber + 1, line))
             conn.commit()
         return maxNumber + 1
 
@@ -138,7 +146,7 @@ class RPG(ModuleInterface):
         if len(matches) > 0:
             if not specific:
                 choice = random.choice(matches)
-                return "Match #{}/{} - {}".format(matches.index(choice)+1, len(matches), choice)
+                return "Match #{}/{} - {}".format(matches.index(choice) + 1, len(matches), choice)
             elif choice <= len(matches):
                 return "Match #{}/{} - {}".format(choice, len(matches), matches[choice - 1])
             else:
