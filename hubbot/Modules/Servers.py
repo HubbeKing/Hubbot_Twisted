@@ -23,7 +23,15 @@ class Servers(ModuleInterface):
         """
         @type message: hubbot.message.IRCMessage
         """
-        return self.serverDict[message.ParameterList[0].lower()]
+        helpDict = {
+            "ftb":"In order to play on craft.dahou.se, you need Bevo's Tech Pack v11 Full.\n"
+                  "You also need to have to enable Biomes O' Plenty, Blood Magic and Thaumcraft when installing it."
+        }
+        command = message.ParameterList[0].lower()
+        if command in helpDict:
+            return helpDict[command]
+        else:
+            return self.serverDict[command]
 
     def onLoad(self):
         self.triggers = self.serverDict.keys()
