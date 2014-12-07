@@ -25,7 +25,7 @@ class Servers(ModuleInterface):
         """
         helpDict = {
             "ftb":"In order to play on craft.dahou.se, you need Bevo's Tech Pack v11 Full.\n"
-                  "You also need to have to enable Biomes O' Plenty, Blood Magic and Thaumcraft when installing it."
+                  "You also have to enable Biomes O' Plenty, Blood Magic and Thaumcraft when installing it."
         }
         command = message.ParameterList[0].lower()
         if command in helpDict:
