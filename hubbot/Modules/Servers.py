@@ -37,7 +37,7 @@ class Servers(ModuleInterface):
     def onLoad(self):
         self.triggers = self.serverDict.keys()
         serverList = [item for item in self.triggers if item != "servers"]
-        self.serverDict["servers"] = "{} -- Used to post server info for games!".format(", ".join(serverList))
+        self.serverDict["servers"] = "{} -- Used to post server info for games!".format(", ".join(sorted(serverList)))
 
     def onTrigger(self, message):
         """
