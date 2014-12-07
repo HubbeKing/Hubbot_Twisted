@@ -23,7 +23,7 @@ class Servers(ModuleInterface):
         """
         @type message: hubbot.message.IRCMessage
         """
-        return self.serverDict[message.ParameterList[0]]
+        return self.serverDict[message.ParameterList[0].lower()]
 
     def onLoad(self):
         self.triggers = self.serverDict.keys()
@@ -32,7 +32,4 @@ class Servers(ModuleInterface):
         """
         @type message: hubbot.message.IRCMessage
         """
-        if message.Command == "servers":
-            return IRCResponse(ResponseType.Say, self.help, message.ReplyTo)
-        else:
-            return IRCResponse(ResponseType.Say, self.serverDict[message.Command], message.ReplyTo)
+        return IRCResponse(ResponseType.Say, self.serverDict[message.Command], message.ReplyTo)
