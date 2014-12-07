@@ -5,18 +5,18 @@ from hubbot.moduleinterface import ModuleInterface
 class Servers(ModuleInterface):
     serverDict = {
         "servers": "",
-        "mumble": 'The mumble server is hosted at: mumble.dahou.se',
+        "cockatrice": "The Cockatrice server is hosted at: cockatrice.dahou.se:4747",
         "gmod": "List of mods needed for GMOD: http://bit.ly/dahousegmod\n"
                 "The Garry's Mod server is hosted at: gmod.dahou.se",
+        "jcmp": "Ricin's Just Cause 2 MP server is hosted at: jcmp.117.me",
+        "kf": "The Killing Floor server is hosted at: kf.dahou.se",
+        "mc": "The vanilla Minecraft server is hosted at mc.dahou.se (Contact a moderator to get whitelisted)",
+        "moddedmc": "The Bevo's Tech Pack server is hosted at craft.dahou.se (Contact a moderator to get whitelisted)",
+        "mumble": 'The mumble server is hosted at: mumble.dahou.se',
         "starbound": "The Starbound server is hosted at: starbound.dahou.se",
         "starbound2": "Ricin's Starbound server is hosted at: sb.117.me",
-        "jcmp": "Ricin's Just Cause 2 MP server is hosted at: jcmp.117.me",
         "tetri": "Ricin's Tetrinet server is hosted at: tn.ricin.us",
-        "cockatrice": "The Cockatrice server is hosted at: cockatrice.dahou.se:4747",
-        "kf": "The Killing Floor server is hosted at: kf.dahou.se",
-        "tf2": "The Team Fortress 2 server is hosted at tf2.dahou.se",
-        "moddedmc": "The Bevo's Tech Pack server is hosted at craft.dahou.se (Contact a moderator to get whitelisted)",
-        "mc": "The vanilla Minecraft server is hosted at mc.dahou.se (Contact a moderator to get whitelisted)"
+        "tf2": "The Team Fortress 2 server is hosted at tf2.dahou.se"
     }
 
     def help(self, message):
