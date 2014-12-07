@@ -4,7 +4,7 @@ from hubbot.moduleinterface import ModuleInterface
 
 class Servers(ModuleInterface):
     serverDict = {
-        "servers": "mumble, gmod, starbound, starbound2, jcmp, tetri, cockatrice, kf, tf2, ftb, mc -- Used to post server info for games!",
+        "servers": "mumble, gmod, starbound, starbound2, jcmp, tetri, cockatrice, kf, tf2, moddedmc, mc -- Used to post server info for games!",
         "mumble": 'The mumble server is hosted at: mumble.dahou.se',
         "gmod": "List of mods needed for GMOD: http://bit.ly/dahousegmod\nThe Garry's Mod server is hosted at: gmod.dahou.se",
         "starbound": "The Starbound server is hosted at: starbound.dahou.se",
@@ -14,7 +14,7 @@ class Servers(ModuleInterface):
         "cockatrice": "The Cockatrice server is hosted at: cockatrice.dahou.se:4747",
         "kf": "The Killing Floor server is hosted at: kf.dahou.se",
         "tf2": "The Team Fortress 2 server is hosted at tf2.dahou.se",
-        "ftb": "The Bevo's Tech Pack v11 server is hosted at craft.dahou.se (Contact a moderator to get whitelisted)",
+        "moddedmc": "The Bevo's Tech Pack v11 server is hosted at craft.dahou.se (Contact a moderator to get whitelisted)",
         "mc": "The vanilla Minecraft server is hosted at mc.dahou.se (Contact a moderator to get whitelisted)",
         "<server>": "Seriously?"
     }
@@ -24,8 +24,8 @@ class Servers(ModuleInterface):
         @type message: hubbot.message.IRCMessage
         """
         helpDict = {
-            "ftb":"In order to play on craft.dahou.se, you need Bevo's Tech Pack v11 Full.\n"
-                  "You also have to enable Biomes O' Plenty, Blood Magic and Thaumcraft when installing it."
+            "moddedmc": "In order to play on craft.dahou.se, you need Bevo's Tech Pack v11 Full.\n"
+                        "You also have to enable Biomes O' Plenty, Blood Magic and Thaumcraft when installing it."
         }
         command = message.ParameterList[0].lower()
         if command in helpDict:
