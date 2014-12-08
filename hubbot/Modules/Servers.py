@@ -13,6 +13,7 @@ class Servers(ModuleInterface):
         "mc": "The vanilla Minecraft server is hosted at mc.dahou.se (Contact a moderator to get whitelisted)",
         "moddedmc": "The Bevo's Tech Pack server is hosted at craft.dahou.se (Contact a moderator to get whitelisted)",
         "mumble": 'The mumble server is hosted at: mumble.dahou.se',
+        "space": "The Space Engineers server is at space.dahou.se",
         "starbound": "The Starbound server is hosted at: starbound.dahou.se",
         "starbound2": "Ricin's Starbound server is hosted at: sb.117.me",
         "tetri": "Ricin's Tetrinet server is hosted at: tn.ricin.us",
