@@ -7,6 +7,7 @@ import sqlite3
 
 from twisted.words.protocols import irc
 
+from hubbot import __version__
 from hubbot.message import IRCMessage
 from hubbot.channel import IRCChannel
 from hubbot.user import IRCUser
@@ -31,8 +32,9 @@ class Hubbot(irc.IRCClient):
         self.nickname = bothandler.config.serverItemWithDefault(server, "nickname", "Hubbot")
         self.username = bothandler.config.serverItemWithDefault(server, "username", "Hubbot")
         self.realname = bothandler.config.serverItemWithDefault(server, "realname", "Hubbot")
+        self.password = bothandler.config.serverItemWithDefault(server, "password", None)
         self.versionName = self.nickname
-        self.versionNum = bothandler.config.serverItemWithDefault(server, "versionNum", "1.0.0")
+        self.versionNum = __version__
         self.versionEnv = platform.platform()
         self.CommandChar = bothandler.config.serverItemWithDefault(server, "commandchar", "+")
         self.fingerReply = bothandler.config.serverItemWithDefault(server, "fingerReply", "")

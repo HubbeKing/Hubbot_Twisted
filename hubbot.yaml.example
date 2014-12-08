@@ -12,13 +12,13 @@ nonDefaultModules: ["ModuleName"]
 modulesToLoad: ["all"]
 
 fingerReply: "Yay"
-versionNum: "1.0.0"
 
 servers:
     "irc.example.org":
         commandchar: "~"
         port: 6667
         channels: ["#example"]
+        password : "butts"
         
     "irc.butts.org":
         moduleOverride: ["MemoryHeavyModule"]
