@@ -10,6 +10,7 @@ class Servers(ModuleInterface):
                 "The Garry's Mod server is hosted at: gmod.dahou.se",
         "jcmp": "Ricin's Just Cause 2 MP server is hosted at: jcmp.117.me",
         "kf": "The Killing Floor server is hosted at: kf.dahou.se",
+        "ksp": "The Kerbal Space Program DMP server is hosted at: ksp.dahou.se",
         "mc": "The vanilla Minecraft server is hosted at mc.dahou.se (Contact a moderator to get whitelisted)",
         "moddedmc": "The Bevo's Tech Pack server is hosted at craft.dahou.se (Contact a moderator to get whitelisted)",
         "mumble": 'The mumble server is hosted at: mumble.dahou.se',
@@ -25,6 +26,7 @@ class Servers(ModuleInterface):
         @type message: hubbot.message.IRCMessage
         """
         helpDict = {
+            "ksp": "In order to play on ksp.dahou.se, you need MechJeb and Kerbal Engineer installed.",
             "moddedmc": "In order to play on craft.dahou.se, you need Bevo's Tech Pack v11 Full.\n"
                         "The easiest way to get it is with AT Launcher (http://www.atlauncher.com/downloads)\n"
                         "You also have to enable Biomes O' Plenty, Blood Magic and Thaumcraft when installing the pack."
