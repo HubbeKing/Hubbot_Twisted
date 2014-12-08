@@ -27,7 +27,7 @@ class Silly(ModuleInterface):
     def onLoad(self):
         self.triggers = self.sillyDict.keys()
         sillyList = [item for item in self.triggers if item != "silly"]
-        self.help = "{} -- Used to post silly things!".format(", ".join(sorted(sillyList)))
+        self.sillyDict["silly"] = "{} -- Used to post silly things!".format(", ".join(sorted(sillyList)))
 
     def help(self, message):
         command = message.ParameterList[0].lower()
