@@ -39,16 +39,10 @@ class ModuleHandler(object):
         for response in responses:
             try:
                 if response.Type == ResponseType.Say:
-                    try:
-                        self.bot.msg(response.Target, response.Response.encode("utf-8"))
-                    except TypeError:
-                        self.bot.msg(response.Target, response.Response)
+                    self.bot.msg(response.Target, response.Response.encode("utf-8"))
                     self.bot.log(u'<{0}> {1}'.format(self.bot.nickname, response.Response), response.Target)
                 elif response.Type == ResponseType.Do:
-                    try:
-                        self.bot.describe(response.Target, response.Response.encode("utf-8"))
-                    except TypeError:
-                        self.bot.describe(response.Target, response.Response)
+                    self.bot.describe(response.Target, response.Response.encode("utf-8"))
                     self.bot.log(u'*{0} {1}*'.format(self.bot.nickname, response.Response), response.Target)
                 elif response.Type == ResponseType.Notice:
                     self.bot.notice(response.Target, response.Response.encode("utf-8"))
