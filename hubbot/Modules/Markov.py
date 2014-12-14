@@ -15,7 +15,12 @@ class Markov(ModuleInterface):
             self.brain.learn(msg)
 
     def shouldTrigger(self, message):
-        return True
+        """
+        @type message: hubbot.message.IRCMessage
+        """
+        if message.Type in self.acceptedTypes:
+            return True
+        return False
 
     def onTrigger(self, message):
         """
