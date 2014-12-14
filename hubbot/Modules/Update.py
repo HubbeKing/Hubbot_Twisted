@@ -33,6 +33,8 @@ class Update(ModuleInterface):
                                'Merge after update failed, please merge manually',
                                message.ReplyTo)
 
-        subprocess.check_call([os.path.join(os.path.dirname(sys.executable), "pip"), "install", "-r", "requirements.txt"])
+        pip = os.path.join(os.path.dirname(sys.executable), "pip")
+
+        subprocess.check_call([pip, "install", "--upgrade", "-r", "requirements.txt"])
 
         return IRCResponse(ResponseType.Say, response, message.ReplyTo)
