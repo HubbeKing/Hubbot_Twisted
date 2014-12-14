@@ -14,5 +14,6 @@ class IRCResponse(object):
         try:
             self.Response = unicode(response, 'utf-8')
         except TypeError:  # Already utf-8?
+            print "Response \"{}\" already unicode".format(response)
             self.Response = response
         self.Target = target
