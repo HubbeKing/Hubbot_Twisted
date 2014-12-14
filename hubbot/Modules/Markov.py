@@ -14,7 +14,7 @@ class Markov(ModuleInterface):
     help = "Markov - Yeah I'm sentient, what of it?"
 
     def addToBrain(self, msg, write=True):
-        if "://" in msg:
+        if "://" in msg or len(msg) <= 1:
             return
         if write:
             with open(os.path.join("hubbot", "data", "{}.brain".format(self.bot.server)), "a") as brainFile:
