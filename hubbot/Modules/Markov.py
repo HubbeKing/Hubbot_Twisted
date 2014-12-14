@@ -68,3 +68,6 @@ class Markov(ModuleInterface):
                 sentence = self.generateSentence(msg)
                 if sentence:
                     return IRCResponse(ResponseType.Say, sentence, message.ReplyTo)
+        else:
+            msg = " ".join(message.MessageList)
+            self.addToBrain(msg)
