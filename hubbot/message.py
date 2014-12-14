@@ -38,7 +38,7 @@ class IRCMessage(object):
             self.TargetType = TargetTypes.USER
         else:
             self.Channel = channel
-            self.ReplyTo = channel.name
+            self.ReplyTo = channel.Name
             self.TargetType = TargetTypes.CHANNEL
 
 
