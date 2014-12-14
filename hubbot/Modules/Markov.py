@@ -10,11 +10,6 @@ class Markov(ModuleInterface):
     def onLoad(self):
         self.brain = Brain(os.path.join("hubbot", "data", "{}.brain".format(self.bot.server)))
 
-    def onUnload(self):
-        for channel in self.bot.channels:
-            response = IRCResponse(ResponseType.Say, "Fine, I'll shut up.", channel.Name)
-            self.bot.moduleHandler.sendResponse(response)
-
     def addToBrain(self, msg):
         if "://" not in msg and len(msg) > 1:
             self.brain.learn(msg)
