@@ -69,7 +69,6 @@ class Hubbot(irc.IRCClient):
                     for i in range(1, len(statusModes)):
                         self.prefixesCharToMode[statusChars[i]] = statusModes[i]
 
-
     def irc_RPL_NAMREPLY(self, prefix, params):
         channel = self.channels[params[2]]
 
@@ -169,7 +168,7 @@ class Hubbot(irc.IRCClient):
             self.moduleHandler.handleMessage(message)
 
     def privmsg(self, user, channel, msg):
-        message = IRCMessage('PRIVMSG', user, self.channels[channel], msg, self)
+        message = IRCMessage('PRIVMSG', user, self.getChannel(channel), msg, self)
         for (name, module) in self.moduleHandler.modules.items():
             if message.Command in module.triggers:
                 self.log(u'<{0}> {1}'.format(message.User.Name, message.MessageString), message.ReplyTo)
@@ -177,7 +176,7 @@ class Hubbot(irc.IRCClient):
         self.moduleHandler.handleMessage(message)
 
     def action(self, user, channel, msg):
-        message = IRCMessage('ACTION', user, self.channels[channel], msg, self)
+        message = IRCMessage('ACTION', user, self.getChannel(channel), msg, self)
         pattern = "hu+g|cuddle|snu+ggle|snu+g|squeeze|glomp"
         match = re.search(pattern, msg, re.IGNORECASE)
         if match:
@@ -185,7 +184,7 @@ class Hubbot(irc.IRCClient):
         self.moduleHandler.handleMessage(message)
 
     def noticed(self, user, channel, msg):
-        message = IRCMessage('NOTICE', user, self.channels[channel], msg.upper(), self)
+        message = IRCMessage('NOTICE', user, self.getChannel(channel), msg.upper(), self)
         self.log(u'[{0}] {1}'.format(message.User.Name, message.MessageString), message.ReplyTo)
         self.moduleHandler.handleMessage(message)
 
@@ -222,3 +221,9 @@ class Hubbot(irc.IRCClient):
             for row in c.execute("SELECT nick FROM admins"):
                 admins.append(row[0])
         return admins
+
+    def getChannel(self, channel):
+        if channel in self.channels:
+            return self.channels[channel]
+        else:
+            return None
