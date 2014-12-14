@@ -59,7 +59,7 @@ class Markov(ModuleInterface):
         """
         @type message: hubbot.message.IRCMessage
         """
-        if not message.User:
+        if message.User is None or message.Channel is None:
             return
         if message.MessageList[0].startswith(self.bot.nickname):
             msg = " ".join(message.MessageList[1:])
