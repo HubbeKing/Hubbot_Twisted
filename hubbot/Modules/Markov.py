@@ -26,7 +26,7 @@ class Markov(ModuleInterface):
         """
         @type message: hubbot.message.IRCMessage
         """
-        if message.User is None or message.Channel is None:
+        if message.User is None or message.Channel is None or message.User.Name == self.bot.nickname:
             return
         if message.MessageList[0].startswith(self.bot.nickname) and len(message.MessageList) > 1:
             reply = self.brain.reply(" ".join(message.MessageList[1:]), max_len=50)
