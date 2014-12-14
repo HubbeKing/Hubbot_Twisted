@@ -10,11 +10,9 @@ class TargetTypes(Enum):
 class IRCMessage(object):
     Type = None
     User = None
-    TargetType = TargetTypes.CHANNEL
     ReplyTo = None
     MessageList = []
     MessageString = None
-    ChannelObj = None
 
     Command = ''
     Parameters = ''
@@ -25,7 +23,6 @@ class IRCMessage(object):
         @type channel: hubbot.channel.IRCChannel
         @type bot: hubbot.bot.Hubbot
         """
-        self.ChannelObj = channel
         try:
             unicodeMessage = message.decode('utf-8', 'ignore')
         except:  # Already utf-8, probably.
@@ -34,16 +31,16 @@ class IRCMessage(object):
         self.MessageList = unicodeMessage.strip().split(' ')
         self.MessageString = unicodeMessage
         self.User = IRCUser(user)
-        if user is None or channel is None:
-            self.ReplyTo = ""
-        elif channel.Name == bot.nickname:
+
+        self.Channel = None
+        if channel is None:
             self.ReplyTo = self.User.Name
-        else:
-            self.ReplyTo = channel.Name
-        if channel.Name.startswith('#'):
-            self.TargetType = TargetTypes.CHANNEL
-        else:
             self.TargetType = TargetTypes.USER
+        else:
+            self.Channel = channel
+            self.ReplyTo = channel.name
+            self.TargetType = TargetTypes.CHANNEL
+
 
         if self.MessageList[0].startswith(bot.CommandChar):
             self.Command = self.MessageList[0][len(bot.CommandChar):].lower()

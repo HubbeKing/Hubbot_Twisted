@@ -149,8 +149,8 @@ class Alias(ModuleInterface):
             newMsg = u'{}{}'.format(self.bot.CommandChar, ' '.join(alias))
             if "$sender" in newMsg:
                 newMsg = newMsg.replace("$sender", message.User.Name)
-            if "$channel" in newMsg and message.ChannelObj is not None:
-                newMsg = newMsg.replace("$channel", message.ChannelObj.Name)
+            if "$channel" in newMsg and message.Channel is not None:
+                newMsg = newMsg.replace("$channel", message.Channel.Name)
 
             if re.search(r'\$[0-9]+', newMsg):  # if the alias contains numbered param replacement points, replace them
                 newMsg = newMsg.replace('$0',  u' '.join(message.ParameterList))
@@ -161,5 +161,5 @@ class Alias(ModuleInterface):
                         newMsg = newMsg.replace(u"${}".format(i+1), param)
             else:  # if there are no numbered replacement points, append the full parameter list instead
                 newMsg += u' {}'.format(u' '.join(message.ParameterList))
-            return IRCMessage(message.Type, message.User.String, message.ChannelObj, newMsg, self.bot)
+            return IRCMessage(message.Type, message.User.String, message.Channel, newMsg, self.bot)
         return

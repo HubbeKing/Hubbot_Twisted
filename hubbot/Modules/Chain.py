@@ -37,13 +37,13 @@ class Chain(ModuleInterface):
                 link = link.replace('$output', '')
             
             link = link.replace('$sender', message.User.Name)
-            if message.ChannelObj is not None:
-                link = link.replace('$channel', message.ChannelObj.Name)
+            if message.Channel is not None:
+                link = link.replace('$channel', message.Channel.Name)
             else:
                 link = link.replace('$channel', message.User.Name)
 
             # build a new message out of this 'link' in the chain
-            inputMessage = IRCMessage(message.Type, message.User.String, message.ChannelObj,
+            inputMessage = IRCMessage(message.Type, message.User.String, message.Channel,
                                       self.bot.commandChar + link.lstrip(),
                                       self.bot)
             inputMessage.chained = True  # might be used at some point to tell commands they're being called from Chain

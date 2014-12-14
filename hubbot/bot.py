@@ -45,8 +45,6 @@ class Hubbot(irc.IRCClient):
 
         self.server = server
         self.channels = channels
-        channels[self.nickname] = IRCChannel(self.nickname)
-        channels["Auth"] = IRCChannel("Auth")
 
         self.Quitting = False
         self.startTime = datetime.datetime.now()
