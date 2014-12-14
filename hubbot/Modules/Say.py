@@ -3,7 +3,7 @@ from hubbot.response import IRCResponse, ResponseType
 
 
 class Say(ModuleInterface):
-    help = "say <thing> -- say a thing."
+    help = "say [channel] <thing> -- say a thing."
     triggers = ["say"]
 
     def onTrigger(self, message):
@@ -13,4 +13,11 @@ class Say(ModuleInterface):
         if len(message.ParameterList) == 0:
             return IRCResponse(ResponseType.Say, "Say what?", message.ReplyTo)
         else:
-            return IRCResponse(ResponseType.Say, "{}".format(" ".join(message.ParameterList)), message.ReplyTo)
+            if message.ParameterList[0].startswith("#"):
+                channel = message.ParameterList[0]
+                if channel not in self.bot.channels:
+                    return IRCResponse(ResponseType.Say, "I am not in \"{}\".".format(channel), message.ReplyTo)
+                else:
+                    return IRCResponse(ResponseType.Say, "{}".format(" ".join(message.ParameterList[1:])), channel)
+            else:
+                return IRCResponse(ResponseType.Say, "{}".format(" ".join(message.ParameterList)), message.ReplyTo)
