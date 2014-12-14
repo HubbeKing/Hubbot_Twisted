@@ -28,7 +28,7 @@ class IRCMessage(object):
         self.ChannelObj = channel
         try:
             unicodeMessage = message.decode('utf-8', 'ignore')
-        except: # Already utf-8, probably.
+        except:  # Already utf-8, probably.
             unicodeMessage = message
         self.Type = type
         self.MessageList = unicodeMessage.strip().split(' ')
@@ -49,9 +49,9 @@ class IRCMessage(object):
             self.Command = self.MessageList[0][len(bot.CommandChar):].lower()
             if self.Command == "":
                 self.Command = self.MessageList[1].lower()
-                self.Parameters = u' '.join(self.MessageList[2:])
+                self.Parameters = ' '.join(self.MessageList[2:])
             else:
-                self.Parameters = u' '.join(self.MessageList[1:])
+                self.Parameters = ' '.join(self.MessageList[1:])
 
         if self.Parameters.strip():
             self.ParameterList = self.Parameters.split(' ')
