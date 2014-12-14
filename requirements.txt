@@ -2,4 +2,4 @@ PyYAML==3.11
 Twisted==14.0.2
 argparse==1.2.2
 enum34==1.0.4
-cobe=2.1.1
+cobe==2.1.1
