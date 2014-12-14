@@ -13,7 +13,6 @@ class Say(ModuleInterface):
         if len(message.ParameterList) == 0:
             return IRCResponse(ResponseType.Say, "Say what?", message.ReplyTo)
         else:
-            print message.ParameterList
             channel = message.ParameterList[0]
             if channel not in self.bot.channels:
                 return IRCResponse(ResponseType.Say, "{}".format(" ".join(message.ParameterList)), message.ReplyTo)
