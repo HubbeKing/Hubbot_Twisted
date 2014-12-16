@@ -28,7 +28,10 @@ class Markov(ModuleInterface):
         """
         if message.User.Name == self.bot.nickname:
             return
-        if self.bot.nickname.lower() in message.MessageString.lower() and len(message.MessageList) > 1:
+        elif message.ReplyTo == self.bot.nickname and not message.MessageString.startswith(self.bot.CommandChar):
+            reply = self.brain.reply(message.MessageString, max_len=100)
+            return IRCResponse(ResponseType.Say, reply.capitalize(), message.ReplyTo)
+        elif self.bot.nickname.lower() in message.MessageString.lower() and len(message.MessageList) > 1:
             messageList = [item for item in message.MessageList if item != self.bot.nickname]
             reply = self.brain.reply(" ".join(messageList), max_len=100)
             return IRCResponse(ResponseType.Say, reply.capitalize(), message.ReplyTo)
