@@ -37,4 +37,5 @@ class Markov(ModuleInterface):
             reply = self.brain.reply(" ".join(messageList), max_len=100)
             return IRCResponse(ResponseType.Say, reply.capitalize(), message.ReplyTo)
         else:
-            self.addToBrain(" ".join(message.MessageList))
+            messageList = [item.lower() for item in message.MessageList if item.lower() != self.bot.nickname.lower()]
+            self.addToBrain(" ".join(messageList))
