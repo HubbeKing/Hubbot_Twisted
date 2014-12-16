@@ -26,7 +26,7 @@ class Markov(ModuleInterface):
         """
         @type message: hubbot.message.IRCMessage
         """
-        if message.User is None or message.Channel is None or message.User.Name == self.bot.nickname:
+        if message.User.Name == self.bot.nickname:
             return
         if self.bot.nickname.lower() in message.MessageString.lower() and len(message.MessageList) > 1:
             messageList = [item for item in message.MessageList if item != self.bot.nickname]
