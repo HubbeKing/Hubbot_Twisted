@@ -28,7 +28,7 @@ class Markov(ModuleInterface):
         """
         if message.User is None or message.Channel is None or message.User.Name == self.bot.nickname:
             return
-        if self.bot.nickname in message.MessageList and len(message.MessageList) > 1:
+        if self.bot.nickname in message.MessageString and len(message.MessageList) > 1:
             messageList = [item for item in message.MessageList if item != self.bot.nickname]
             reply = self.brain.reply(" ".join(messageList), max_len=100)
             return IRCResponse(ResponseType.Say, reply.capitalize(), message.ReplyTo)
