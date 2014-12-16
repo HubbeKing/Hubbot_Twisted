@@ -1,3 +1,4 @@
+from hubbot.message import TargetTypes
 from hubbot.moduleinterface import ModuleInterface
 from hubbot.response import IRCResponse, ResponseType
 from cobe.brain import Brain
@@ -28,7 +29,7 @@ class Markov(ModuleInterface):
         """
         if message.User.Name == self.bot.nickname:
             return
-        elif message.ReplyTo == self.bot.nickname and not message.MessageString.startswith(self.bot.CommandChar):
+        elif message.TargetType is TargetTypes.USER and not message.MessageString.startswith(self.bot.CommandChar):
             reply = self.brain.reply(message.MessageString, max_len=100)
             return IRCResponse(ResponseType.Say, reply.capitalize(), message.ReplyTo)
         elif self.bot.nickname.lower() in message.MessageString.lower() and len(message.MessageList) > 1:
