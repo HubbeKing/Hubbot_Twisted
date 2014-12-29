@@ -1,3 +1,4 @@
+import logging
 import os
 import sys
 
@@ -22,7 +23,7 @@ class BotHandler:
 
     def startBotFactory(self, server, port, channels):
         if server in self.botfactories:
-            print "Already on server '{}'.".format(server)
+            logging.warning("A bot for server '{}' was requested but one is already running!".format(server))
             return False
         if type(channels) == list:
             chanObjects = {}
@@ -40,9 +41,9 @@ class BotHandler:
         else:
             self.quitmessage = quitmessage
         if server not in self.botfactories:
-            print "ERROR: Bot for '{}' does not exist yet was asked to stop.".format(server)
+            logging.error("Bot for '{}' does not exist yet was aked to stop.".format(server))
         else:
-            print "Shutting down bot for server '{}'".format(server)
+            logging.info("Shutting down bot for server '{}'".format(server))
             self.botfactories[server].bot.Quitting = True
             try:
                 self.botfactories[server].bot.quit(quitmessage)
@@ -51,7 +52,7 @@ class BotHandler:
             except:
                 self.botfactories[server].stopTrying()
             self.unregisterFactory(server)
-            print "Successfully shut down bot for server '{}'".format(server)
+            logging.info("Successfully shut down bot for server '{}'".format(server))
 
     def unregisterFactory(self, server):
         if server in self.botfactories:

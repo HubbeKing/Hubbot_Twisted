@@ -1,6 +1,6 @@
 import datetime
 import logging
-import logging.handlers
+from logging.handlers import TimedRotatingFileHandler
 import os
 import platform
 import re
@@ -30,7 +30,7 @@ class Hubbot(irc.IRCClient):
         self.logPath = logPath
         # set up logging
         self.logger = logging.getLogger(server)
-        handler = logging.handlers.TimedRotatingFileHandler(os.path.join(logPath, "{}.log".format(server)), when="midnight")
+        handler = TimedRotatingFileHandler(os.path.join(logPath, "{}.log".format(server)), when="midnight")
         handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s', '%H:%M:%S'))
         handler.setLevel(logging.INFO)
         self.logger.addHandler(handler)
