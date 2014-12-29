@@ -11,6 +11,10 @@ if __name__ == "__main__":
     options = parser.parse_args()
     if not os.path.exists(os.path.join("hubbot", "data", "data.db")):
         createDB()
-    logging.basicConfig(stream=sys.stdout, level=logging.INFO)
+    # set up console output for logging
+    handler = logging.StreamHandler(stream=sys.stdout)
+    handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s', '%H:%M:%S'))
+    handler.setLevel(logging.INFO)
+    logging.getLogger().addHandler(handler)
 
     bothandler = BotHandler(options)
