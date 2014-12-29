@@ -12,9 +12,10 @@ if __name__ == "__main__":
     if not os.path.exists(os.path.join("hubbot", "data", "data.db")):
         createDB()
     # set up console output for logging
+    rootLogger = logging.getLogger()
+    rootLogger.setLevel(logging.INFO)
     handler = logging.StreamHandler(stream=sys.stdout)
     handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s', '%H:%M:%S'))
-    handler.setLevel(logging.INFO)
-    logging.getLogger().addHandler(handler)
+    rootLogger.addHandler(handler)
 
     bothandler = BotHandler(options)
