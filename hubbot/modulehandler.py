@@ -1,7 +1,6 @@
 import importlib
 import os
 import sys
-import traceback
 from glob import glob
 from twisted.internet import threads
 
@@ -40,18 +39,17 @@ class ModuleHandler(object):
             try:
                 if response.Type == ResponseType.Say:
                     self.bot.msg(response.Target.encode("utf-8"), response.Response.encode("utf-8"))
-                    self.bot.log(u'<{0}> {1}'.format(self.bot.nickname, response.Response), response.Target)
+                    self.bot.logger.info(u'{} <{}> {}'.format(response.Target, self.bot.nickname, response.Response))
                 elif response.Type == ResponseType.Do:
                     self.bot.describe(response.Target.encode("utf-8"), response.Response.encode("utf-8"))
-                    self.bot.log(u'*{0} {1}*'.format(self.bot.nickname, response.Response), response.Target)
+                    self.bot.logger.info(u'{} *{} {}*'.format(response.Target, self.bot.nickname, response.Response))
                 elif response.Type == ResponseType.Notice:
                     self.bot.notice(response.Target.encode("utf-8"), response.Response.encode("utf-8"))
-                    self.bot.log(u'[{0}] {1}'.format(self.bot.nickname, response.Response), response.Target)
+                    self.bot.logger.info(u'{} [{}] {}'.format(response.Target, self.bot.nickname, response.Response))
                 elif response.Type == ResponseType.Raw:
                     self.bot.sendLine(response.Response.encode("utf-8"))
             except Exception:
-                print "Python Execution Error sending responses '{}': {}".format(responses, str(sys.exc_info()))
-                traceback.print_tb(sys.exc_info()[2])
+                self.bot.logger.exception("Python Execution Error sending responses '{}'".format(responses))
 
     def handleMessage(self, message):
         """
@@ -70,8 +68,7 @@ class ModuleHandler(object):
                             d = threads.deferToThread(module.onTrigger, message)
                             d.addCallback(self.sendResponse)
             except Exception:
-                print "Python Execution Error in '{}': {}".format(name, str(sys.exc_info()))
-                traceback.print_tb(sys.exc_info()[2])
+                self.bot.logger.exception("Python Execution Error in '{}'".format(name))
 
     def LoadModule(self, name):
         name = name.lower()

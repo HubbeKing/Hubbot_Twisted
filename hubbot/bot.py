@@ -1,7 +1,8 @@
-import platform
-import os
 import datetime
-import codecs
+import logging
+import logging.handlers
+import os
+import platform
 import re
 import sqlite3
 
@@ -16,8 +17,6 @@ from hubbot.modulehandler import ModuleHandler
 
 class Hubbot(irc.IRCClient):
     sourceURL = "https://github.com/HubbeKing/Hubbot_Twisted/"
-    bothandler = None
-    startTime = datetime.datetime.min
 
     def __init__(self, server, channels, bothandler):
         """
@@ -26,7 +25,15 @@ class Hubbot(irc.IRCClient):
         abspath = os.path.abspath(__file__)
         dname = os.path.dirname(abspath)
         logPath = os.path.join(dname, "logs")
+        if not os.path.exists(logPath):
+            os.makedirs(logPath)
         self.logPath = logPath
+        # set up logging
+        self.logger = logging.getLogger(server)
+        handler = logging.handlers.TimedRotatingFileHandler(os.path.join(logPath, "{}.log".format(server)), when="midnight")
+        handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s', '%H:%M:%S'))
+        handler.setLevel(logging.INFO)
+        self.logger.addHandler(handler)
 
         self.bothandler = bothandler
         self.nickname = bothandler.config.serverItemWithDefault(server, "nickname", "Hubbot")
@@ -171,7 +178,7 @@ class Hubbot(irc.IRCClient):
         message = IRCMessage('PRIVMSG', user, self.getChannel(channel), msg, self)
         for (name, module) in self.moduleHandler.modules.items():
             if message.Command in module.triggers:
-                self.log(u'<{0}> {1}'.format(message.User.Name, message.MessageString), message.ReplyTo)
+                self.logger.info(u'{} <{}> {}'.format(message.ReplyTo, message.User.Name, message.MessageString))
                 break
         self.moduleHandler.handleMessage(message)
 
@@ -180,31 +187,16 @@ class Hubbot(irc.IRCClient):
         pattern = "hu+g|cuddle|snu+ggle|snu+g|squeeze|glomp"
         match = re.search(pattern, msg, re.IGNORECASE)
         if match:
-            self.log(u'*{0} {1}*'.format(message.User.Name, message.MessageString), message.ReplyTo)
+            self.logger.info(u'{} *{} {}*'.format(message.ReplyTo, message.User.Name, message.MessageString))
         self.moduleHandler.handleMessage(message)
 
     def noticed(self, user, channel, msg):
         message = IRCMessage('NOTICE', user, self.getChannel(channel), msg.upper(), self)
-        self.log(u'[{0}] {1}'.format(message.User.Name, message.MessageString), message.ReplyTo)
+        self.logger.info(u'{} [{}] {}'.format(message.ReplyTo, message.User.Name, message.MessageString))
         self.moduleHandler.handleMessage(message)
 
     def nickChanged(self, nick):
         self.nickname = nick
-
-    def log(self, text, target):
-        now = datetime.datetime.now()
-        time = now.strftime("[%H:%M]")
-        data = u'{0} {1}'.format(time, text)
-        print target, data
-
-        fileName = "{0}{1}.txt".format(target, now.strftime("-%Y%m%d"))
-        fileDirs = os.path.join(self.logPath, self.server)
-        if not os.path.exists(fileDirs):
-            os.makedirs(fileDirs)
-        filePath = os.path.join(fileDirs, fileName)
-
-        with codecs.open(filePath, 'a+', 'utf-8') as f:
-            f.write(data + '\n')
 
     def loadIgnores(self):
         ignores = []
