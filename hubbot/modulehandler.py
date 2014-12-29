@@ -135,14 +135,14 @@ class ModuleHandler(object):
                     try:
                         self.LoadModule(module)
                     except Exception:
-                        self.bot.logger.exception("Exception when loading '{}'".format(module.__name__))
+                        self.bot.logger.exception("Exception when loading '{}'".format(str(module)))
         else:
             for module in self.GetModuleDirList():
                 if module in self.modulesToLoad:
                     try:
                         self.LoadModule(module)
                     except Exception:
-                        self.bot.logger.exception("Exception when loading'{}'".format(module.__name__))
+                        self.bot.logger.exception("Exception when loading'{}'".format(str(module)))
 
     def GetModuleDirList(self):
         root = os.path.join('.', "hubbot", 'Modules')
