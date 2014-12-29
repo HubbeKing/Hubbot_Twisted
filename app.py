@@ -1,6 +1,5 @@
 import argparse
 import logging
-from logging.handlers import TimedRotatingFileHandler
 import os
 import sys
 from hubbot.bothandler import BotHandler
@@ -21,7 +20,7 @@ if __name__ == "__main__":
     streamHandler.setLevel(logging.INFO)
     rootLogger.addHandler(streamHandler)
     # set up file for error logging
-    fileHandler = TimedRotatingFileHandler(filename=options.logfile, when="midnight")
+    fileHandler = logging.FileHandler(filename=options.logfile)
     fileHandler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s', '%H:%M:%S'))
     fileHandler.setLevel(logging.WARNING)
     rootLogger.addHandler(fileHandler)
