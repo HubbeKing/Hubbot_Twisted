@@ -60,9 +60,9 @@ class ModuleLoader(ModuleInterface):
                     else:
                         failures.append(moduleNameCaseMap[moduleName])
 
-                except Exception, x:
+                except Exception:
                     exceptions.append(moduleNameCaseMap[moduleName])
-                    print x.args
+                    self.bot.logger.exception("Exception when loading module '{}'".format(moduleNameCaseMap[moduleName]))
 
         return successes, failures, exceptions
 
@@ -81,8 +81,8 @@ class ModuleLoader(ModuleInterface):
                     successes.append(moduleNameCaseMap[moduleName])
                 else:
                     failures.append(moduleNameCaseMap[moduleName])
-            except Exception, x:
+            except Exception:
                 exceptions.append(moduleNameCaseMap[moduleName])
-                print x.args
+                self.bot.logger.exception("Exception when loading module '{}'".format(moduleNameCaseMap[moduleName]))
 
         return successes, failures, exceptions

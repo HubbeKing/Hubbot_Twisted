@@ -92,9 +92,9 @@ class ModuleHandler(object):
         class_ = getattr(module, moduleListCaseMap[name])
 
         if alreadyExisted:
-            print '-- {0} reloaded ({1})'.format(module.__name__, self.bot.server)
+            self.bot.logger.info('-- {0} reloaded ({1})'.format(module.__name__, self.bot.server))
         else:
-            print '-- {0} loaded ({1})'.format(module.__name__, self.bot.server)
+            self.bot.logger.info('-- {0} loaded ({1})'.format(module.__name__, self.bot.server))
 
         constructedModule = class_(self.bot)
 
@@ -134,15 +134,15 @@ class ModuleHandler(object):
                 if module not in self.nonDefaultModules:
                     try:
                         self.LoadModule(module)
-                    except Exception, x:
-                        print x.args
+                    except Exception:
+                        self.bot.logger.exception("Exception when loading '{}'".format(module.__name__))
         else:
             for module in self.GetModuleDirList():
                 if module in self.modulesToLoad:
                     try:
                         self.LoadModule(module)
-                    except Exception, x:
-                        print x.args
+                    except Exception:
+                        self.bot.logger.exception("Exception when loading'{}'".format(module.__name__))
 
     def GetModuleDirList(self):
         root = os.path.join('.', "hubbot", 'Modules')
