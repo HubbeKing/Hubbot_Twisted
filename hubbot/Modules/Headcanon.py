@@ -3,9 +3,10 @@ import re
 import sqlite3
 import sys
 import traceback
+
 from hubbot.response import IRCResponse, ResponseType
 from hubbot.moduleinterface import ModuleInterface
-from hubbot.webutils import pasteEE
+from hubbot.Utils.webutils import pasteEE
 
 
 class Headcanon(ModuleInterface):

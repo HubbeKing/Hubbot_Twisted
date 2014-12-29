@@ -1,9 +1,9 @@
+import re
+
 from hubbot.moduleinterface import ModuleInterface
 from hubbot.message import IRCMessage
 from hubbot.response import IRCResponse, ResponseType
-from hubbot import stringutils
-
-import re
+from hubbot.Utils import stringutils
 
 
 class Chain(ModuleInterface):

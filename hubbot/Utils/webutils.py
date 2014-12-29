@@ -5,11 +5,13 @@ from urllib import urlencode
 from urllib2 import build_opener, Request, urlopen, URLError
 from urlparse import urlparse
 
+
 class URLResponse(object):
     def __init__(self, body, domain, responseHeaders):
         self.body = body
         self.domain = domain
         self.responseHeaders = responseHeaders
+
 
 def fetchURL(url, extraHeaders=None):
     headers = [( "User-agent", "Mozilla/5.0" )]
@@ -42,6 +44,7 @@ def fetchURL(url, extraHeaders=None):
             reason = "The server couldn't fulfill the request, code: {}".format(e.code)
         print "{} *** ERROR: Fetch from \"{} \" failed: {}".format(today, url, reason)
 
+
 def postURL(url, values, extraHeaders=None):
     headers = { "User-agent" : "Mozilla/5.0" }
     if extraHeaders:
@@ -72,6 +75,7 @@ def postURL(url, values, extraHeaders=None):
         elif hasattr(e, "code"):
             reason = "The server couldn't fulfill the request, code: {}".format(e.code)
         print "{} *** ERROR: Post to \"{} \" failed: {}".format(today, url, reason)
+
 
 def pasteEE(data, description, expire):
     values = { "key" : "public",

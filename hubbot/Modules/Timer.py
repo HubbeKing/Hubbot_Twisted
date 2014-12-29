@@ -1,7 +1,7 @@
 from twisted.internet import reactor
 from hubbot.response import IRCResponse, ResponseType
 from hubbot.moduleinterface import ModuleInterface
-from hubbot.timeparse import timeparse
+from pytimeparse.timeparse import timeparse
 
 
 class Timer(ModuleInterface):

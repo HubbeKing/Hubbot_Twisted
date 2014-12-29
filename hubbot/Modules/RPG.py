@@ -1,9 +1,10 @@
 import re
 import sqlite3
 import random
+
 from hubbot.moduleinterface import ModuleInterface
 from hubbot.response import IRCResponse, ResponseType
-from hubbot.webutils import pasteEE
+from hubbot.Utils.webutils import pasteEE
 
 
 class RPG(ModuleInterface):
