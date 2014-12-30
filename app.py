@@ -8,7 +8,7 @@ from newDB import createDB
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="A derpy Twisted IRC bot.")
     parser.add_argument("-c", "--config", help="The configuration file to use", type=str, default="hubbot.yaml")
-    parser.add_argument("-l", "--logfile", help="The file for global error logging", type=str, default="hubbot.log")
+    parser.add_argument("-l", "--logfile", help="The file used for global error logging", type=str, default="hubbot.log")
     options = parser.parse_args()
     if not os.path.exists(os.path.join("hubbot", "data", "data.db")):
         createDB()
@@ -21,7 +21,7 @@ if __name__ == "__main__":
     rootLogger.addHandler(streamHandler)
     # set up file for error logging
     fileHandler = logging.FileHandler(filename=options.logfile)
-    fileHandler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s', '%H:%M:%S'))
+    fileHandler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s', '%Y/%m/%d-%H:%M:%S'))
     fileHandler.setLevel(logging.WARNING)
     rootLogger.addHandler(fileHandler)
 
