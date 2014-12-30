@@ -14,7 +14,10 @@ class BotHandler:
 
     def __init__(self, parsedArgs):
         self.config = Config(parsedArgs.config)
-        self.config.readConfig()
+        try:
+            self.config.readConfig()
+        except Exception:
+            logging.exception("An error occured when trying to read config file \"{}\".".format(parsedArgs.config))
         for server in self.config["servers"]:
             port = self.config.serverItemWithDefault(server, "port", 6667)
             channels = self.config.serverItemWithDefault(server, "channels", [])
@@ -23,7 +26,7 @@ class BotHandler:
 
     def startBotFactory(self, server, port, channels):
         if server in self.botfactories:
-            logging.warning("A bot for server '{}' was requested but one is already running!".format(server))
+            logging.warning("Bot for server \"{}\" was requested but one is already running!".format(server))
             return False
         if type(channels) == list:
             chanObjects = {}
@@ -37,13 +40,13 @@ class BotHandler:
 
     def stopBotFactory(self, server, quitmessage=None):
         if quitmessage is None:
-            self.quitmessage = "ohok".encode("utf-8")
+            quitmessage = "ohok".encode("utf-8")
         else:
-            self.quitmessage = quitmessage
+            quitmessage = quitmessage
         if server not in self.botfactories:
-            logging.error("Bot for '{}' does not exist yet was aked to stop.".format(server))
+            logging.warning("Bot for \"{}\" does not exist yet was asked to stop.".format(server))
         else:
-            logging.info("Shutting down bot for server '{}'".format(server))
+            logging.info("Shutting down bot for server \"{}\"".format(server))
             self.botfactories[server].bot.Quitting = True
             try:
                 self.botfactories[server].bot.quit(quitmessage)
@@ -52,14 +55,14 @@ class BotHandler:
             except:
                 self.botfactories[server].stopTrying()
             self.unregisterFactory(server)
-            logging.info("Successfully shut down bot for server '{}'".format(server))
+            logging.info("Successfully shut down bot for server \"{}\"".format(server))
 
     def unregisterFactory(self, server):
         if server in self.botfactories:
             del self.botfactories[server]
 
             if len(self.botfactories) == 0:
-                print "No more running bots, shutting down."
+                logging.info("No more running bots, shutting down.")
                 reactor.callLater(5.0, reactor.stop)
 
     def shutdown(self, quitmessage="Shutting down..."):
@@ -74,7 +77,7 @@ class BotHandler:
 
     def restart(self, quitmessage="Restarting..."):
         reactor.addSystemEventTrigger("after", "shutdown", lambda: os.execl(sys.executable, sys.executable, *sys.argv))
-        self.quitmessage = quitmessage.encode("utf-8")
+        quitmessage = quitmessage.encode("utf-8")
         for server, botfactory in self.botfactories.iteritems():
             botfactory.bot.Quitting = True
             botfactory.bot.quit(quitmessage)
