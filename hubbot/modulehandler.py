@@ -18,7 +18,6 @@ class ModuleHandler(object):
         self.modules = {}
         self.moduleCaseMapping = {}
         self.mappedTriggers = {}
-        self.nonDefaultModules = bot.bothandler.config.serverItemWithDefault(bot.server, "nonDefaultModules", [])
         self.modulesToLoad = bot.bothandler.config.serverItemWithDefault(bot.server, "modulesToLoad", ["all"])
 
     def sendResponse(self, response):
@@ -129,20 +128,21 @@ class ModuleHandler(object):
         return True
 
     def AutoLoadModules(self):
-        if "all" in self.modulesToLoad:
-            for module in self.GetModuleDirList():
-                if module not in self.nonDefaultModules:
-                    try:
-                        self.LoadModule(module)
-                    except Exception:
-                        self.bot.logger.exception("Exception when loading '{}'".format(str(module)))
-        else:
-            for module in self.GetModuleDirList():
-                if module in self.modulesToLoad:
-                    try:
-                        self.LoadModule(module)
-                    except Exception:
-                        self.bot.logger.exception("Exception when loading'{}'".format(str(module)))
+        modulesToLoad = []
+        for moduleName in self.modulesToLoad:
+            if moduleName.lower() == "all":
+                for module in self.GetModuleDirList():
+                    modulesToLoad.append(module)
+            elif moduleName[0] != "-":
+                modulesToLoad.append(moduleName)
+            else:
+                modulesToLoad.remove(moduleName[1:])
+
+        for module in modulesToLoad:
+            try:
+                self.LoadModule(module)
+            except Exception:
+                self.bot.logger.exception("Exception when loading\"{}\"".format(str(module)))
 
     def GetModuleDirList(self):
         root = os.path.join('.', "hubbot", 'Modules')
