@@ -23,10 +23,15 @@ class HubbotFactory(protocol.ReconnectingClientFactory):
 
     def clientConnectionLost(self, connector, reason):
         if not self.bot.Quitting:
-            self.bot.logger.info("-!- Connection lost. Reason:", reason)
+            self.bot.logger.info("-!- Connection lost. Reason: {}".format(reason))
             protocol.ReconnectingClientFactory.clientConnectionLost(self, connector, reason)
 
     def clientConnectionFailed(self, connector, reason):
-        self.bot.logger.info("-!- Connection failed. Reason:", reason)
+        """
+        @type connector: twisted.internet.tcp.Connector
+        @type reason: twisted.python.failure.Failure
+        """
+        # self.bot.logger.info("-!- Connection failed. Reason: {}".format(reason))
+        self.bot.logger.info("-!- Connection to \"{}\" failed ({}), retrying in {} seconds.".format(self.bot.server, reason, connector.timeout))
         protocol.ReconnectingClientFactory.clientConnectionFailed(self, connector, reason)
 
