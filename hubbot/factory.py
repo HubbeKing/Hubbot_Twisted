@@ -10,7 +10,8 @@ class HubbotFactory(protocol.ReconnectingClientFactory):
         self.port = port
         self.bot = Hubbot(server, channels, bothandler)
         self.protocol = self.bot
-        self.initialDelay = 15
+        self.initialDelay = 15.0
+        self.delay = self.initialDelay
         reactor.connectTCP(server, port, self)
 
     def startedConnecting(self, connector):
