@@ -80,7 +80,10 @@ class BotHandler:
         quitmessage = quitmessage.encode("utf-8")
         for server, botfactory in self.botfactories.iteritems():
             botfactory.bot.Quitting = True
-            botfactory.bot.quit(quitmessage)
+            try:
+                botfactory.bot.quit(quitmessage)
+            except:
+                botfactory.stopTrying()
             for (name, module) in botfactory.bot.moduleHandler.modules.items():
                 module.onUnload()
         self.botfactories = {}
