@@ -61,7 +61,7 @@ class BotHandler:
         if server in self.botfactories:
             del self.botfactories[server]
 
-        reactor.callLater(15.0, self.checkConnection())
+        reactor.callLater(15.0, self.checkConnection)
 
     def checkConnection(self):
         if len(self.botfactories) == 0:
