@@ -67,24 +67,13 @@ class BotHandler:
 
     def shutdown(self, quitmessage="Shutting down..."):
         quitmessage = quitmessage.encode("utf-8")
-        for server, botfactory in self.botfactories.iteritems():
-            botfactory.bot.Quitting = True
-            botfactory.bot.quit(quitmessage)
-            for (name, module) in botfactory.bot.moduleHandler.modules.items():
-                module.onUnload()
-        self.botfactories = {}
-        reactor.callLater(4.0, reactor.stop)
+        for server in self.botfactories:
+            self.stopBotFactory(server, quitmessage)
+        reactor.callLater(2.0, reactor.stop)
 
     def restart(self, quitmessage="Restarting..."):
         reactor.addSystemEventTrigger("after", "shutdown", lambda: os.execl(sys.executable, sys.executable, *sys.argv))
         quitmessage = quitmessage.encode("utf-8")
-        for server, botfactory in self.botfactories.iteritems():
-            botfactory.bot.Quitting = True
-            try:
-                botfactory.bot.quit(quitmessage)
-            except:
-                botfactory.stopTrying()
-            for (name, module) in botfactory.bot.moduleHandler.modules.items():
-                module.onUnload()
-        self.botfactories = {}
+        for server in self.botfactories:
+            self.stopBotFactory(server, quitmessage)
         reactor.callLater(2.0, reactor.stop)
