@@ -10,6 +10,7 @@ class HubbotFactory(protocol.ReconnectingClientFactory):
         self.port = port
         self.bot = Hubbot(server, channels, bothandler)
         self.protocol = self.bot
+        self.initialDelay = 15
         reactor.connectTCP(server, port, self)
 
     def startedConnecting(self, connector):
@@ -27,7 +28,7 @@ class HubbotFactory(protocol.ReconnectingClientFactory):
         @type reason: twisted.python.failure.Failure
         """
         if not self.bot.Quitting:
-            self.bot.logger.warning("-!- Connection to \"{}\" lost, reason: {}, retrying in {} seconds.".format(self.bot.server, reason.getErrorMessage(), self.delay))
+            self.bot.logger.warning("-!- Connection to \"{}\" lost, reason: \"{}\" Retrying in {} seconds.".format(self.bot.server, reason.getErrorMessage(), self.delay))
             protocol.ReconnectingClientFactory.clientConnectionLost(self, connector, reason)
 
     def clientConnectionFailed(self, connector, reason):
@@ -35,6 +36,6 @@ class HubbotFactory(protocol.ReconnectingClientFactory):
         @type connector: twisted.internet.tcp.Connector
         @type reason: twisted.python.failure.Failure
         """
-        self.bot.logger.warning("-!- Connection to \"{}\" failed, reason: {}, retrying in {} seconds.".format(self.bot.server, reason.getErrorMessage(), self.delay))
+        self.bot.logger.warning("-!- Connection to \"{}\" failed, reason: \"{}\" Retrying in {} seconds.".format(self.bot.server, reason.getErrorMessage(), self.delay))
         protocol.ReconnectingClientFactory.clientConnectionFailed(self, connector, reason)
 
