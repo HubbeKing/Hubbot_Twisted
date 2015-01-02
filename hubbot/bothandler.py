@@ -61,9 +61,12 @@ class BotHandler:
         if server in self.botfactories:
             del self.botfactories[server]
 
-            if len(self.botfactories) == 0:
-                logging.info("No more running bots, shutting down.")
-                reactor.callLater(5.0, reactor.stop)
+        reactor.callLater(15.0, self.checkConnection())
+
+    def checkConnection(self):
+        if len(self.botfactories) == 0:
+            logging.info("No bot are running, shutting down.")
+            reactor.callLater(5.0, reactor.stop)
 
     def shutdown(self, quitmessage="Shutting down..."):
         quitmessage = quitmessage.encode("utf-8")
