@@ -22,7 +22,7 @@ class ModuleHandler(object):
 
     def sendResponse(self, response):
         """
-        @type response: hubbot.response.IRCResponse
+        @type response: hubbot.response.IRCResponse || list
         """
         responses = []
 
@@ -48,7 +48,7 @@ class ModuleHandler(object):
                 elif response.Type == ResponseType.Raw:
                     self.bot.sendLine(response.Response.encode("utf-8"))
             except Exception:
-                self.bot.logger.exception("Python Execution Error sending responses '{}'".format(responses))
+                self.bot.logger.exception("Python Execution Error sending responses \"{}\"".format(responses))
 
     def handleMessage(self, message):
         """
@@ -67,7 +67,7 @@ class ModuleHandler(object):
                             d = threads.deferToThread(module.onTrigger, message)
                             d.addCallback(self.sendResponse)
             except Exception:
-                self.bot.logger.exception("Python Execution Error in '{}'".format(name))
+                self.bot.logger.exception("Python Execution Error in \"{}\"".format(name))
 
     def LoadModule(self, name):
         name = name.lower()
@@ -91,14 +91,14 @@ class ModuleHandler(object):
         class_ = getattr(module, moduleListCaseMap[name])
 
         if alreadyExisted:
-            self.bot.logger.info('-- {0} reloaded ({1})'.format(module.__name__, self.bot.server))
+            self.bot.logger.info('-- {0} reloaded ({1})'.format(module.__name__.split(".")[-1], self.bot.server))
         else:
-            self.bot.logger.info('-- {0} loaded ({1})'.format(module.__name__, self.bot.server))
+            self.bot.logger.info('-- {0} loaded ({1})'.format(module.__name__.split(".")[-1], self.bot.server))
 
         constructedModule = class_(self.bot)
 
-        self.modules.update({moduleListCaseMap[name]:constructedModule})
-        self.moduleCaseMapping.update({name : moduleListCaseMap[name]})
+        self.modules.update({moduleListCaseMap[name]: constructedModule})
+        self.moduleCaseMapping.update({name: moduleListCaseMap[name]})
         constructedModule.onLoad()
 
         # map module triggers
