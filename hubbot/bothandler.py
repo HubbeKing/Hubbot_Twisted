@@ -6,7 +6,7 @@ from twisted.internet import reactor
 
 from hubbot.factory import HubbotFactory
 from hubbot.channel import IRCChannel
-from hubbot.config import Config
+from hubbot.config import Config, ConfigError
 
 
 class BotHandler:
@@ -16,7 +16,7 @@ class BotHandler:
         self.config = Config(parsedArgs.config)
         try:
             self.config.readConfig()
-        except Exception:
+        except ConfigError:
             logging.exception("An error occured when trying to read config file \"{}\".".format(parsedArgs.config))
         for server in self.config["servers"]:
             port = self.config.serverItemWithDefault(server, "port", 6667)
@@ -28,21 +28,24 @@ class BotHandler:
         if server in self.botfactories:
             logging.warning("Bot for server \"{}\" was requested but one is already running!".format(server))
             return False
-        if type(channels) == list:
-            chanObjects = {}
-            for channel in channels:
-                chanObjects[channel] = IRCChannel(channel)
-            botfactory = HubbotFactory(server, port, chanObjects, self)
         else:
-            botfactory = HubbotFactory(server, port, channels, self)
-        self.botfactories[server] = botfactory
-        return True
+            logging.info("New bot for server \"{}\" requested, starting...".format(server))
+            if type(channels) == list:
+                chanObjects = {}
+                for channel in channels:
+                    chanObjects[channel] = IRCChannel(channel)
+                botfactory = HubbotFactory(server, port, chanObjects, self)
+            else:
+                botfactory = HubbotFactory(server, port, channels, self)
+            self.botfactories[server] = botfactory
+            return True
 
     def stopBotFactory(self, server, quitmessage=None):
         if quitmessage is None:
             quitmessage = "ohok".encode("utf-8")
-        else:
-            quitmessage = quitmessage
+        if not isinstance(quitmessage, unicode):
+            logging.warning("Invalid quitmessage type in quitmessage \"{}\"".format(quitmessage))
+            quitmessage = "ohok".encode("utf-8")
         if server not in self.botfactories:
             logging.warning("Bot for \"{}\" does not exist yet was asked to stop.".format(server))
         else:
@@ -53,6 +56,9 @@ class BotHandler:
                 for (name, module) in self.botfactories[server].bot.moduleHandler.modules.items():
                     module.onUnload()
             except:
+                # this most likely means the bot in question has yet to establish a connection for whatever reason
+                # TODO should probably figure out and specify what kind of exception this is
+                logging.exception("Bot for server \"{}\" could not quit properly!".format(server))
                 self.botfactories[server].stopTrying()
             self.unregisterFactory(server)
             logging.info("Successfully shut down bot for server \"{}\"".format(server))
@@ -61,22 +67,16 @@ class BotHandler:
         if server in self.botfactories:
             del self.botfactories[server]
 
-        reactor.callLater(15.0, self.checkConnection)
-
-    def checkConnection(self):
         if len(self.botfactories) == 0:
-            logging.info("No bot are running, shutting down.")
-            reactor.callLater(5.0, reactor.stop)
+            logging.info("No more bots are running, stopping reactor.")
+            reactor.callLater(2.0, reactor.stop)
 
     def shutdown(self, quitmessage="Shutting down..."):
-        quitmessage = quitmessage.encode("utf-8")
+        logging.info("Shutdown command received, shutting down EVERYTHING.")
         for server in self.botfactories.keys():
-            self.stopBotFactory(server, quitmessage)
-        reactor.callLater(2.0, reactor.stop)
+            self.stopBotFactory(server, quitmessage.encode("utf-8"))
 
     def restart(self, quitmessage="Restarting..."):
+        logging.info("Restart command received, going down for restart.")
         reactor.addSystemEventTrigger("after", "shutdown", lambda: os.execl(sys.executable, sys.executable, *sys.argv))
-        quitmessage = quitmessage.encode("utf-8")
-        for server in self.botfactories.keys():
-            self.stopBotFactory(server, quitmessage)
-        reactor.callLater(2.0, reactor.stop)
+        self.shutdown(quitmessage.encode("utf-8"))
