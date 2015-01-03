@@ -91,9 +91,9 @@ class ModuleHandler(object):
         class_ = getattr(module, moduleListCaseMap[name])
 
         if alreadyExisted:
-            self.bot.logger.info('-- {} reloaded'.format(module.__name__.split(".")[-1]))
+            self.bot.logger.info('-- {} reloaded.'.format(module.__name__.split(".")[-1]))
         else:
-            self.bot.logger.info('-- {} loaded'.format(module.__name__.split(".")[-1]))
+            self.bot.logger.info('-- {} loaded.'.format(module.__name__.split(".")[-1]))
 
         constructedModule = class_(self.bot)
 
