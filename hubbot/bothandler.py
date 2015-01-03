@@ -43,9 +43,6 @@ class BotHandler:
     def stopBotFactory(self, server, quitmessage=None):
         if quitmessage is None:
             quitmessage = "ohok".encode("utf-8")
-        if not isinstance(quitmessage, unicode):
-            logging.warning("Invalid quitmessage type in quitmessage \"{}\"".format(quitmessage))
-            quitmessage = "ohok".encode("utf-8")
         if server not in self.botfactories:
             logging.warning("Bot for \"{}\" does not exist yet was asked to stop.".format(server))
         else:
