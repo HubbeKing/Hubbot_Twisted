@@ -3,7 +3,6 @@ import logging
 from logging.handlers import TimedRotatingFileHandler
 import os
 import platform
-import re
 import sqlite3
 
 from twisted.words.protocols import irc
@@ -176,18 +175,10 @@ class Hubbot(irc.IRCClient):
 
     def privmsg(self, user, channel, msg):
         message = IRCMessage('PRIVMSG', user, self.getChannel(channel), msg, self)
-        for (name, module) in self.moduleHandler.modules.items():
-            if message.Command in module.triggers:
-                self.logger.info(u'{} <{}> {}'.format(message.ReplyTo, message.User.Name, message.MessageString))
-                break
         self.moduleHandler.handleMessage(message)
 
     def action(self, user, channel, msg):
         message = IRCMessage('ACTION', user, self.getChannel(channel), msg, self)
-        pattern = "hu+g|cuddle|snu+ggle|snu+g|squeeze|glomp"
-        match = re.search(pattern, msg, re.IGNORECASE)
-        if match:
-            self.logger.info(u'{} *{} {}*'.format(message.ReplyTo, message.User.Name, message.MessageString))
         self.moduleHandler.handleMessage(message)
 
     def noticed(self, user, channel, msg):
@@ -195,15 +186,13 @@ class Hubbot(irc.IRCClient):
         self.logger.info(u'{} [{}] {}'.format(message.ReplyTo, message.User.Name, message.MessageString))
         self.moduleHandler.handleMessage(message)
 
-    def nickChanged(self, nick):
-        self.nickname = nick
-
     def loadIgnores(self):
         ignores = []
         with sqlite3.connect(self.databaseFile) as conn:
             c = conn.cursor()
             for row in c.execute("SELECT nick FROM ignores"):
                 ignores.append(row[0])
+        self.logger.info("Loaded \"{}\" into ignores list.".format(", ".join(ignores)))
         return ignores
 
     def loadAdmins(self):
@@ -212,6 +201,7 @@ class Hubbot(irc.IRCClient):
             c = conn.cursor()
             for row in c.execute("SELECT nick FROM admins"):
                 admins.append(row[0])
+        self.logger.info("Loaded \"{}\" into admins list.".format(", ".join(admins)))
         return admins
 
     def getChannel(self, channel):

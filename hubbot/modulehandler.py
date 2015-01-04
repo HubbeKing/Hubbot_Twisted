@@ -46,6 +46,7 @@ class ModuleHandler(object):
                     self.bot.notice(response.Target.encode("utf-8"), response.Response.encode("utf-8"))
                     self.bot.logger.info(u'{} [{}] {}'.format(response.Target, self.bot.nickname, response.Response))
                 elif response.Type == ResponseType.Raw:
+                    self.bot.logger.info(u"Sent raw \"{}\"".format(response.Response))
                     self.bot.sendLine(response.Response.encode("utf-8"))
             except Exception:
                 self.bot.logger.exception("Python Execution Error sending responses \"{}\"".format(responses))
@@ -58,12 +59,15 @@ class ModuleHandler(object):
             try:
                 if module.shouldTrigger(message):
                     if module.accessLevel != ModuleAccessLevel.ANYONE and len(self.bot.admins) != 0 and message.User.Name not in self.bot.admins:
+                        self.bot.logger.info("User {} tried to use {} but was denied access.".format(message.User.Name, message.Command))
                         self.sendResponse(IRCResponse(ResponseType.Say, "Only my admins can use {}!".format(message.Command), message.ReplyTo))
                     elif message.User.Name not in self.bot.ignores:
                         if not module.runInThread:
+                            self.bot.logger.info(u'{} <{}> {}'.format(message.ReplyTo, message.User.Name, message.MessageString))
                             response = module.onTrigger(message)
                             self.sendResponse(response)
                         else:
+                            self.bot.logger.info(u'{} <{}> {}'.format(message.ReplyTo, message.User.Name, message.MessageString))
                             d = threads.deferToThread(module.onTrigger, message)
                             d.addCallback(self.sendResponse)
             except Exception:
@@ -76,6 +80,7 @@ class ModuleHandler(object):
         moduleListCaseMap = {key.lower(): key for key in moduleList}
 
         if name not in moduleListCaseMap:
+            self.bot.logger.warning("Module \"{}\" was requested to load but it does not exist!".format(name))
             return False
 
         alreadyExisted = False
@@ -122,7 +127,9 @@ class ModuleHandler(object):
             del sys.modules["{}.{}".format("hubbot.Modules", properName)]
             for f in glob("{}/{}.pyc".format("hubbot.Modules", properName)):
                 os.remove(f)
+            self.bot.logger.info("-- {} unloaded.".format(properName))
         else:
+            self.bot.logger.warning("Module \"{}\" was requested to unload but it is not loaded!".format(name))
             return False
 
         return True
