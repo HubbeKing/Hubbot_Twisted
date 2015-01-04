@@ -10,6 +10,8 @@ logFuncs = {
 
 
 class Log(ModuleInterface):
+    triggers = ["log"]
+    help = "This module will eventually be used to retrieve latest exception and other such niceties."
     priority = -1
 
     def shouldTrigger(self, message):
@@ -32,3 +34,8 @@ class Log(ModuleInterface):
             else:
                 self.bot.logger.info(logString)
                 return None
+
+        if message.Type in self.acceptedTypes and message.Command in self.triggers:
+            # TODO Log trawling for latest exception and so on
+            pass
+
