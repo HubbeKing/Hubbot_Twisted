@@ -35,7 +35,7 @@ class Log(ModuleInterface):
     def onLoad(self):
         logger = logging.getLogger()
         self.handler = CustomHandler()
-        self.handler.setFormatter(logging.Formatter('%(asctime)s - %(message)s', '%H:%M:%S'))
+        self.handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s', '%H:%M:%S'))
         logger.addHandler(self.handler)
 
     def onUnload(self):
@@ -52,6 +52,10 @@ class Log(ModuleInterface):
         """
         @type message: hubbot.message.IRCMessage
         """
+        if message.Type in self.acceptedTypes and message.Command in self.triggers:
+            if len(message.ParameterList) == 1:
+                handlerMsg = self.handler.getLatest((message.ParameterList[0]))
+                return IRCResponse(ResponseType.Say, handlerMsg, message.ReplyTo)
         if message.Type in logFuncs:
             logString = logFuncs[message.Type](message)
             if message.Type == "PRIVMSG":
@@ -62,8 +66,3 @@ class Log(ModuleInterface):
             else:
                 self.bot.logger.info(logString)
                 return None
-
-        if message.Type in self.acceptedTypes and message.Command in self.triggers:
-            if len(message.ParameterList) == 1:
-                handlerMsg = self.handler.getLatest((message.ParameterList[0]))
-                return IRCResponse(ResponseType.Say, handlerMsg, message.ReplyTo)
