@@ -174,14 +174,6 @@ class Hubbot(irc.IRCClient):
                     del channel.Ranks[message.User.Name]
             self.moduleHandler.handleMessage(message)
 
-    def modeChanged(self, user, channel, set, modes, args):
-        message = IRCMessage("MODE", user, self.getChannel(channel), u"", self)
-        message.ModeArgs = [arg for arg in args if arg is not None]
-        message.Modes = modes
-        message.ModeOperator = "+" if set else "-"
-        message.ReplyTo = message.ReplyTo if message.Channel else ""
-        self.moduleHandler.handleMessage(message)
-
     def nickChanged(self, nick):
         self.logger.info("Nick changed from \"{}\" to \"{}\".".format(self.nickname, nick))
         self.nickname = nick
