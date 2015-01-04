@@ -13,6 +13,8 @@ class ModuleInterface(object):
     runInThread = False
     accessLevel = ModuleAccessLevel.ANYONE
 
+    priority = 0
+
     def __init__(self, bot):
         """
         @type bot: hubbot.bot.Hubbot

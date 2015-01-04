@@ -1,4 +1,5 @@
 import importlib
+import operator
 import os
 import sys
 from glob import glob
@@ -55,7 +56,7 @@ class ModuleHandler(object):
         """
         @type message: hubbot.message.IRCMessage
         """
-        for (name, module) in self.modules.items():
+        for module in sorted(self.modules.values(), key=operator.attrgetter("priority")):
             try:
                 if module.shouldTrigger(message):
                     if module.accessLevel != ModuleAccessLevel.ANYONE and len(self.bot.admins) != 0 and message.User.Name not in self.bot.admins:
@@ -63,11 +64,9 @@ class ModuleHandler(object):
                         self.sendResponse(IRCResponse(ResponseType.Say, "Only my admins can use {}!".format(message.Command), message.ReplyTo))
                     elif message.User.Name not in self.bot.ignores:
                         if not module.runInThread:
-                            self.bot.logger.info(u'{} <{}> {}'.format(message.ReplyTo, message.User.Name, message.MessageString))
                             response = module.onTrigger(message)
                             self.sendResponse(response)
                         else:
-                            self.bot.logger.info(u'{} <{}> {}'.format(message.ReplyTo, message.User.Name, message.MessageString))
                             d = threads.deferToThread(module.onTrigger, message)
                             d.addCallback(self.sendResponse)
             except Exception:
