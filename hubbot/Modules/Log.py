@@ -39,8 +39,7 @@ class Log(ModuleInterface):
         logger.addHandler(self.handler)
 
     def onUnload(self):
-        logger = logging.getLogger()
-        logger.removeHandler(self.handler)
+        logging.getLogger().removeHandler(self.handler)
 
     def shouldTrigger(self, message):
         """
