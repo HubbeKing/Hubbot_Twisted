@@ -56,6 +56,8 @@ class Log(ModuleInterface):
                 handlerMsg = self.handler.getLatest((message.ParameterList[0]))
                 return IRCResponse(ResponseType.Say, handlerMsg, message.ReplyTo)
         if message.Type is not None and message.Type in logFuncs:
+            print message.Type
+            print message is None
             logString = logFuncs[message.Type](message)
             if message.Type == "PRIVMSG":
                 for trigger in self.bot.moduleHandler.mappedTriggers.keys():
