@@ -83,6 +83,6 @@ class ModuleLoader(ModuleInterface):
                     failures.append(moduleNameCaseMap[moduleName])
             except Exception:
                 exceptions.append(moduleNameCaseMap[moduleName])
-                self.bot.logger.exception("Exception when loading module '{}'".format(moduleNameCaseMap[moduleName]))
+                self.bot.logger.exception("Exception when unloading module '{}'".format(moduleNameCaseMap[moduleName]))
 
         return successes, failures, exceptions
