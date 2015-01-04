@@ -53,7 +53,7 @@ class Log(ModuleInterface):
         @type message: hubbot.message.IRCMessage
         """
         if message.Type in self.acceptedTypes and message.Command in self.triggers:
-            if len(message.ParameterList) == 1:
+            if len(message.ParameterList) == 1 and message.User.Name in self.bot.admins:
                 handlerMsg = self.handler.getLatest((message.ParameterList[0]))
                 return IRCResponse(ResponseType.Say, handlerMsg, message.ReplyTo)
         if message.Type in logFuncs and message.Type is not None:
