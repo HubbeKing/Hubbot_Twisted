@@ -26,6 +26,7 @@ class Hugs(ModuleInterface):
             pattern = "hu+g|cuddle|snu+ggle|snu+g|squeeze|glomp"
             match = re.search(pattern, message.MessageList[0], re.IGNORECASE)
             if match:
+                self.bot.logger.info(u'{} *{} {}*'.format(message.ReplyTo, message.User.Name, message.MessageString))
                 hug_dict = {}
                 with sqlite3.connect(self.bot.databaseFile) as conn:
                     c = conn.cursor()

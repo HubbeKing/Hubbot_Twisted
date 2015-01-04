@@ -56,6 +56,7 @@ class Hubbot(irc.IRCClient):
         self.startTime = datetime.datetime.now()
 
         self.prefixesCharToMode = {"+":"v", "@":"o"}
+        self.userModes = {}
         self.moduleHandler = ModuleHandler(self)
         self.moduleHandler.AutoLoadModules()
 
@@ -172,6 +173,14 @@ class Hubbot(irc.IRCClient):
                 if message.User.Name in channel.Ranks:
                     del channel.Ranks[message.User.Name]
             self.moduleHandler.handleMessage(message)
+
+    def modeChanged(self, user, channel, set, modes, args):
+        message = IRCMessage("MODE", user, self.getChannel(channel), u"", self)
+        message.ModeArgs = [arg for arg in args if arg is not None]
+        message.Modes = modes
+        message.ModeOperator = "+" if set else "-"
+        message.ReplyTo = message.ReplyTo if message.Channel else ""
+        self.moduleHandler.handleMessage(message)
 
     def privmsg(self, user, channel, msg):
         message = IRCMessage('PRIVMSG', user, self.getChannel(channel), msg, self)
