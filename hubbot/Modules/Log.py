@@ -2,14 +2,6 @@ from hubbot.moduleinterface import ModuleInterface
 from hubbot.response import IRCResponse, ResponseType
 import logging
 
-logFuncs = {
-    'PRIVMSG': lambda m: u'<{0}> {1}'.format(m.User.Name, m.MessageString),
-    'NOTICE': lambda m: u'[{0}] {1}'.format(m.User.Name, m.MessageString),
-    'NICK': lambda m: u'{0} is now known as {1}'.format(m.User.Name, m.MessageString),
-    'KICK': lambda m: u'!<< {0} was kicked by {1}{2}'.format(m.Kickee, m.User.Name, m.MessageString),
-    'TOPIC': lambda m: u'# {0} set the topic to: {1}'.format(m.User.Name, m.MessageString)
-}
-
 
 class CustomHandler(logging.Handler):
     def __init__(self):
@@ -31,6 +23,14 @@ class Log(ModuleInterface):
     triggers = ["log"]
     help = "log <level> - Used to retrieve the latest record the specified log level. Also handles most server logging."
     priority = -1
+
+    logFuncs = {
+    'PRIVMSG': lambda m: u'<{0}> {1}'.format(m.User.Name, m.MessageString),
+    'NOTICE': lambda m: u'[{0}] {1}'.format(m.User.Name, m.MessageString),
+    'NICK': lambda m: u'{0} is now known as {1}'.format(m.User.Name, m.MessageString),
+    'KICK': lambda m: u'!<< {0} was kicked by {1}{2}'.format(m.Kickee, m.User.Name, m.MessageString),
+    'TOPIC': lambda m: u'# {0} set the topic to: {1}'.format(m.User.Name, m.MessageString)
+    }
 
     def onLoad(self):
         logger = logging.getLogger()
@@ -55,10 +55,8 @@ class Log(ModuleInterface):
             if len(message.ParameterList) == 1 and message.User.Name in self.bot.admins:
                 handlerMsg = self.handler.getLatest((message.ParameterList[0]))
                 return IRCResponse(ResponseType.Say, handlerMsg, message.ReplyTo)
-        if message.Type is not None and message.Type in logFuncs:
-            print message.Type
-            print message is None
-            logString = logFuncs[message.Type](message)
+        if message.Type is not None and message.Type in self.logFuncs:
+            logString = self.logFuncs[message.Type](message)
             if message.Type == "PRIVMSG":
                 for trigger in self.bot.moduleHandler.mappedTriggers.keys():
                     if message.Command.lower() == trigger.lower():
