@@ -70,7 +70,7 @@ class ModuleHandler(object):
                             d = threads.deferToThread(module.onTrigger, message)
                             d.addCallback(self.sendResponse)
             except Exception:
-                self.bot.logger.exception("Python Execution Error in \"{}\"".format(name))
+                self.bot.logger.exception("Python Execution Error in \"{}\"".format(module.__class__.__name__))
 
     def LoadModule(self, name):
         name = name.lower()
