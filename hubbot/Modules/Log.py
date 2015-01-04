@@ -35,7 +35,7 @@ class Log(ModuleInterface):
     def onLoad(self):
         logger = logging.getLogger()
         self.handler = CustomHandler()
-        self.handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s', '%H:%M:%S'))
+        self.handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(message)s', '%H:%M:%S'))
         logger.addHandler(self.handler)
 
     def onUnload(self):

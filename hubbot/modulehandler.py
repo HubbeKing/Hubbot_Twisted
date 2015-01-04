@@ -39,13 +39,13 @@ class ModuleHandler(object):
             try:
                 if response.Type == ResponseType.Say:
                     self.bot.msg(response.Target.encode("utf-8"), response.Response.encode("utf-8"))
-                    self.bot.logger.info(u'{} <{}> {}'.format(response.Target, self.bot.nickname, response.Response))
+                    self.bot.logger.info(u'{} | <{}> {}'.format(response.Target, self.bot.nickname, response.Response))
                 elif response.Type == ResponseType.Do:
                     self.bot.describe(response.Target.encode("utf-8"), response.Response.encode("utf-8"))
-                    self.bot.logger.info(u'{} *{} {}*'.format(response.Target, self.bot.nickname, response.Response))
+                    self.bot.logger.info(u'{} | *{} {}*'.format(response.Target, self.bot.nickname, response.Response))
                 elif response.Type == ResponseType.Notice:
                     self.bot.notice(response.Target.encode("utf-8"), response.Response.encode("utf-8"))
-                    self.bot.logger.info(u'{} [{}] {}'.format(response.Target, self.bot.nickname, response.Response))
+                    self.bot.logger.info(u'{} | [{}] {}'.format(response.Target, self.bot.nickname, response.Response))
                 elif response.Type == ResponseType.Raw:
                     self.bot.logger.info(u"Sent raw \"{}\"".format(response.Response))
                     self.bot.sendLine(response.Response.encode("utf-8"))
