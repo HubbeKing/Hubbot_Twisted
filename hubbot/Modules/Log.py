@@ -1,4 +1,6 @@
 from hubbot.moduleinterface import ModuleInterface
+from hubbot.response import IRCResponse, ResponseType
+import logging
 
 logFuncs = {
     'PRIVMSG': lambda m: u'<{0}> {1}'.format(m.User.Name, m.MessageString),
@@ -9,10 +11,36 @@ logFuncs = {
 }
 
 
+class CustomHandler(logging.Handler):
+    def __init__(self):
+        logging.Handler.__init__(self, logging.INFO)
+        self.buffer = {}
+
+    def emit(self, record):
+        self.buffer[record.levelname] = record
+
+    def getLatest(self, level):
+        if level in self.buffer:
+            record = self.format(self.buffer[level])
+            return "Latest message of level {}: > {}".format(record)
+        else:
+            return "No messages of level {} have been logged.".format(level)
+
+
 class Log(ModuleInterface):
     triggers = ["log"]
-    help = "This module will eventually be used to retrieve latest exception and other such niceties."
+    help = "log <level> - Used to retrieve the latest record the specified log level. Also handles most server logging."
     priority = -1
+
+    def onLoad(self):
+        logger = logging.getLogger()
+        self.handler = CustomHandler()
+        self.handler.setFormatter(logging.Formatter('%(asctime)s - %(message)s', '%H:%M:%S'))
+        logger.addHandler(self.handler)
+
+    def onUnload(self):
+        logger = logging.getLogger()
+        logger.removeHandler(self.handler)
 
     def shouldTrigger(self, message):
         """
@@ -36,6 +64,6 @@ class Log(ModuleInterface):
                 return None
 
         if message.Type in self.acceptedTypes and message.Command in self.triggers:
-            # TODO Log trawling for latest exception and so on
-            pass
-
+            if len(message.ParameterList) == 1:
+                handlerMsg = self.handler.getLatest((message.ParameterList[0]))
+                return IRCResponse(ResponseType.Say, handlerMsg, message.ReplyTo)
