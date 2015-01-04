@@ -33,13 +33,15 @@ class Log(ModuleInterface):
     }
 
     def onLoad(self):
-        logger = logging.getLogger()
+        logger = logging.getLogger(self.bot.server)
         self.handler = CustomHandler()
         self.handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(message)s', '%H:%M:%S'))
         logger.addHandler(self.handler)
 
     def onUnload(self):
-        logging.getLogger().removeHandler(self.handler)
+        logger = logging.getLogger(self.bot.server)
+        if self.handler in logger.handlers:
+            logger.removeHandler(self.handler)
 
     def shouldTrigger(self, message):
         """
