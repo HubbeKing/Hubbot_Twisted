@@ -3,6 +3,8 @@ Hubbot_Twisted
 
 A mostly modular IRC bot written using the Twisted library.
 
+BE AWARE: Multiserver is hacky as hell, using multiple servers in one config is not recommended.
+
 Because of Twisted, Windows users will most likely need to install the Microsoft Visual C++ Compiler for Python 2.7
 (http://www.microsoft.com/en-us/download/details.aspx?id=44266)
 
