@@ -22,7 +22,7 @@ class CustomHandler(logging.Handler):
     def getLatest(self, level):
         if level in self.buffer:
             record = self.format(self.buffer[level])
-            return "Latest message of level {}: > {}".format(record)
+            return "Latest message of level {}: > {}".format(level, record)
         else:
             return "No messages of level {} have been logged.".format(level)
 
