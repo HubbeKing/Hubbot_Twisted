@@ -182,6 +182,10 @@ class Hubbot(irc.IRCClient):
         message.ReplyTo = message.ReplyTo if message.Channel else ""
         self.moduleHandler.handleMessage(message)
 
+    def nickChanged(self, nick):
+        self.logger.info("Nick changed from \"{}\" to \"{}\".".format(self.nickname, nick))
+        self.nickname = nick
+
     def privmsg(self, user, channel, msg):
         message = IRCMessage('PRIVMSG', user, self.getChannel(channel), msg, self)
         self.moduleHandler.handleMessage(message)
@@ -192,7 +196,6 @@ class Hubbot(irc.IRCClient):
 
     def noticed(self, user, channel, msg):
         message = IRCMessage('NOTICE', user, self.getChannel(channel), msg.upper(), self)
-        self.logger.info(u'{} [{}] {}'.format(message.ReplyTo, message.User.Name, message.MessageString))
         self.moduleHandler.handleMessage(message)
 
     def loadIgnores(self):

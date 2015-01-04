@@ -5,8 +5,7 @@ logFuncs = {
     'NOTICE': lambda m: u'[{0}] {1}'.format(m.User.Name, m.MessageString),
     'NICK': lambda m: u'{0} is now known as {1}'.format(m.User.Name, m.MessageString),
     'KICK': lambda m: u'!<< {0} was kicked by {1}{2}'.format(m.Kickee, m.User.Name, m.MessageString),
-    'TOPIC': lambda m: u'# {0} set the topic to: {1}'.format(m.User.Name, m.MessageString),
-    'MODE': lambda m: u'# {0} sets mode: {1}{2} {3}'.format(m.User.Name, m.ModeOperator, m.Modes, ' '.join(m.ModeArgs))
+    'TOPIC': lambda m: u'# {0} set the topic to: {1}'.format(m.User.Name, m.MessageString)
 }
 
 

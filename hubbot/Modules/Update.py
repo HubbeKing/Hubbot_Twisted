@@ -17,7 +17,7 @@ class Update(ModuleInterface):
         subprocess.check_call(["git", "fetch"])
 
         output = subprocess.check_output(['git', 'log', '--no-merges',
-                                          '--pretty=format:%s %b', '..origin/master'])
+                                          '--pretty=format:%s', '..origin/master'])
         changes = [s.strip() for s in output.splitlines()]
 
         if len(changes) == 0:
