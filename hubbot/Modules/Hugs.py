@@ -10,13 +10,24 @@ class Hugs(ModuleInterface):
     acceptedTypes = ["PRIVMSG", "ACTION"]
     help = "hugs [nick] -- How many hugs has this person given and received?"
     # hug_dict is : {"nick":[given, received]}
-    commonWords = \
-    [
+    commonWords = [
        "and","of","all","to","the","both","back","again",
         "any","one","<3","with","","<3s","so","hard","right",
         "in","him","her","booper","up","on",":)","against","its",
         "harder","teh","sneakgrabs","people",":3"
     ]
+
+    def shouldTrigger(self, message):
+        if message.Type == "ACTION":
+            pattern = "hu+g|cuddle|snu+ggle|snu+g|squeeze|glomp"
+            match = re.search(pattern, message.MessageList[0], re.IGNORECASE)
+            if match:
+                return True
+        elif message.Type == "PRIVMSG":
+            if message.Command in self.triggers:
+                return True
+        else:
+            return False
 
     def onTrigger(self, message):
         """
