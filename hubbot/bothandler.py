@@ -18,10 +18,10 @@ class BotHandler:
             self.config.readConfig()
         except ConfigError:
             logging.exception("An error occured when trying to read config file \"{}\".".format(parsedArgs.config))
-        for server in self.config["servers"]:
-            port = self.config.serverItemWithDefault(server, "port", 6667)
-            channels = self.config.serverItemWithDefault(server, "channels", [])
-            self.startBotFactory(server, port, channels)
+        server = self.config["server"]
+        port = self.config.itemWithDefault("port", 6667)
+        channels = self.config.itemWithDefault("channels", [])
+        self.startBotFactory(server, port, channels)
         reactor.run()
 
     def startBotFactory(self, server, port, channels):

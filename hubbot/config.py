@@ -1,6 +1,6 @@
 import yaml
 
-_required = ["servers"]
+_required = ["server"]
 
 
 class Config(object):

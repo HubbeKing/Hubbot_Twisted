@@ -35,15 +35,15 @@ class Hubbot(irc.IRCClient):
         self.logger.addHandler(handler)
 
         self.bothandler = bothandler
-        self.nickname = bothandler.config.serverItemWithDefault(server, "nickname", "Hubbot")
-        self.username = bothandler.config.serverItemWithDefault(server, "username", "Hubbot")
-        self.realname = bothandler.config.serverItemWithDefault(server, "realname", "Hubbot")
-        self.password = bothandler.config.serverItemWithDefault(server, "password", None)
+        self.nickname = bothandler.config.itemWithDefault("nickname", "Hubbot")
+        self.username = bothandler.config.itemWithDefault("username", "Hubbot")
+        self.realname = bothandler.config.itemWithDefault("realname", "Hubbot")
+        self.password = bothandler.config.itemWithDefault("password", None)
         self.versionName = self.nickname
         self.versionNum = __version__
         self.versionEnv = platform.platform()
-        self.CommandChar = bothandler.config.serverItemWithDefault(server, "commandchar", "+")
-        self.fingerReply = bothandler.config.serverItemWithDefault(server, "fingerReply", "")
+        self.CommandChar = bothandler.config.itemWithDefault("commandchar", "+")
+        self.fingerReply = bothandler.config.itemWithDefault("fingerReply", "")
 
         self.databaseFile = os.path.join("hubbot", "data", "data.db")
         self.admins = self.loadAdmins()

@@ -19,7 +19,7 @@ class ModuleHandler(object):
         self.modules = {}
         self.moduleCaseMapping = {}
         self.mappedTriggers = {}
-        self.modulesToLoad = bot.bothandler.config.serverItemWithDefault(bot.server, "modulesToLoad", ["all"])
+        self.modulesToLoad = bot.bothandler.config.itemWithDefault("modulesToLoad", ["all"])
 
     def sendResponse(self, response):
         """
