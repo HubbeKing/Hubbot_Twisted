@@ -3,6 +3,7 @@ import logging
 import os
 import sys
 from hubbot.bothandler import BotHandler
+from hubbot.config import Config, ConfigError
 from newDB import createDB
 
 if __name__ == "__main__":
@@ -25,4 +26,11 @@ if __name__ == "__main__":
     fileHandler.setLevel(logging.WARNING)
     rootLogger.addHandler(fileHandler)
 
-    bothandler = BotHandler(options)
+    # actually start up the bot.
+    config = Config(options.config)
+    try:
+        config.readConfig()
+    except ConfigError:
+        logging.exception("Failed to load config \"{}\".".format(options.config))
+
+    bothandler = BotHandler(config)

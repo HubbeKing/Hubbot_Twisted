@@ -6,18 +6,13 @@ from twisted.internet import reactor
 
 from hubbot.factory import HubbotFactory
 from hubbot.channel import IRCChannel
-from hubbot.config import Config, ConfigError
 
 
 class BotHandler:
     botfactories = {}
 
-    def __init__(self, parsedArgs):
-        self.config = Config(parsedArgs.config)
-        try:
-            self.config.readConfig()
-        except ConfigError:
-            logging.exception("An error occured when trying to read config file \"{}\".".format(parsedArgs.config))
+    def __init__(self, config):
+        self.config = config
         server = self.config["server"]
         port = self.config.itemWithDefault("port", 6667)
         channels = self.config.itemWithDefault("channels", [])
@@ -27,7 +22,6 @@ class BotHandler:
     def startBotFactory(self, server, port, channels):
         if server in self.botfactories:
             logging.warning("Bot for server \"{}\" was requested but one is already running!".format(server))
-            return False
         else:
             logging.info("New bot for server \"{}\" requested, starting...".format(server))
             if type(channels) == list:
@@ -48,10 +42,10 @@ class BotHandler:
         else:
             logging.info("Shutting down bot for server \"{}\"".format(server))
             self.botfactories[server].bot.Quitting = True
+            for (name, module) in self.botfactories[server].bot.moduleHandler.modules.items():
+                    module.onUnload()
             try:
                 self.botfactories[server].bot.quit(quitmessage)
-                for (name, module) in self.botfactories[server].bot.moduleHandler.modules.items():
-                    module.onUnload()
             except:
                 # this most likely means the bot in question has yet to establish a connection for whatever reason
                 # TODO should probably figure out and specify what kind of exception this is
