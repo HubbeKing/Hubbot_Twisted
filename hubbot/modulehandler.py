@@ -76,8 +76,11 @@ class ModuleHandler(object):
         moduleListCaseMap = {key.lower(): key for key in moduleList}
 
         if moduleName not in moduleListCaseMap:
-            self.bot.logger.warning("Module \"{}\" was requested to load but it does not exist!".format(moduleName))
-            return False
+            self.bot.logger.warning("Module \"{}\" was requested to enable but it is not imported!".format(moduleName))
+            imported = self.bot.bothandler.loadModule(moduleName)
+            if not imported:
+                self.bot.logger.error("Module \"{}\" was requested to enable but it does not exist!".format(moduleName))
+                return False
 
         alreadyExisted = False
         reloaded = False
@@ -138,7 +141,7 @@ class ModuleHandler(object):
             self.bot.logger.info("-- {} disabled.".format(properName))
             self.bot.bothandler.checkModuleUsage(properName)
         else:
-            self.bot.logger.warning("Module \"{}\" was requested to unload but it is not loaded!".format(moduleName))
+            self.bot.logger.warning("Module \"{}\" was requested to disable but it is not enabled!".format(moduleName))
             return False
 
         return True
