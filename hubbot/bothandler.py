@@ -19,8 +19,8 @@ class BotHandler:
 
         self.config = config
         for server in self.config["servers"]:
-            port = self.config.itemWithDefault("port", 6667)
-            channels = self.config.itemWithDefault("channels", [])
+            port = self.config.serverItemWithDefault(server, "port", 6667)
+            channels = self.config.serverItemWithDefault(server, "channels", [])
             self.startBotFactory(server, port, channels)
         reactor.run()
 
