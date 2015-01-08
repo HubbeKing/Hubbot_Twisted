@@ -1,6 +1,6 @@
 import yaml
 
-_required = ["server"]
+_required = ["servers"]
 
 
 class Config(object):
@@ -32,6 +32,13 @@ class Config(object):
         return self._configData[item]
 
     def itemWithDefault(self, item, default):
+        if item in self._configData:
+            return self._configData[item]
+        return default
+
+    def serverItemWithDefault(self, server, item, default):
+        if item in self._configData["servers"][server]:
+            return self._configData["servers"][server][item]
         if item in self._configData:
             return self._configData[item]
         return default

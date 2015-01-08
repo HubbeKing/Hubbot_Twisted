@@ -15,14 +15,15 @@ modulesToLoad: ["all", "-MemoryHeavyModule"]
 # The reply to give to CTCP FINGER requests
 fingerReply: "Yay"
 
-# The IRC server address to connect to
-server: "irc.example.org"
-
-# The port to use (optional)
-port: 6667
-
-# The list of channels to join once connected
-channels: ["#example"]
-
-# The password (optional) to use when connecting
-password : "butts"
+# The IRC servers to connect to
+# Any global setting (defined above) can be overridden per-server
+servers:
+    "irc.example.org":
+        commandchar: "~"
+        port: 6667
+        channels: ["#example"]
+        password: "butts"
+        modulesToLoad: ["all"]
+    "irc.butts.org":
+        modulesToLoad: ["MemoryHeavyModules"]
+        port: 1232

@@ -18,11 +18,10 @@ class BotHandler:
         self.autoLoadModules()
 
         self.config = config
-        # TODO Redo multiserver support
-        server = self.config["server"]
-        port = self.config.itemWithDefault("port", 6667)
-        channels = self.config.itemWithDefault("channels", [])
-        self.startBotFactory(server, port, channels)
+        for server in self.config["servers"]:
+            port = self.config.itemWithDefault("port", 6667)
+            channels = self.config.itemWithDefault("channels", [])
+            self.startBotFactory(server, port, channels)
         reactor.run()
 
     def startBotFactory(self, server, port, channels):
