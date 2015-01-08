@@ -1,8 +1,5 @@
-import importlib
 import operator
-import os
 import sys
-from glob import glob
 from twisted.internet import threads
 
 from hubbot.response import IRCResponse, ResponseType
@@ -17,7 +14,7 @@ class ModuleHandler(object):
         """
         self.bot = bot
         self.modules = {}
-        self.moduleCaseMapping = {}
+        self.moduleCaseMap = {}
         self.mappedTriggers = {}
         self.modulesToLoad = bot.bothandler.config.itemWithDefault("modulesToLoad", ["all"])
 
@@ -72,48 +69,63 @@ class ModuleHandler(object):
             except Exception:
                 self.bot.logger.exception("Python Execution Error in \"{}\"".format(module.__class__.__name__))
 
-    def LoadModule(self, name):
-        name = name.lower()
+    def loadModule(self, moduleName):
+        moduleName = moduleName.lower()
 
-        moduleList = self.GetModuleDirList()
+        moduleList = self.getModuleDirList()
         moduleListCaseMap = {key.lower(): key for key in moduleList}
 
-        if name not in moduleListCaseMap:
-            self.bot.logger.warning("Module \"{}\" was requested to load but it does not exist!".format(name))
+        if moduleName not in moduleListCaseMap:
+            self.bot.logger.warning("Module \"{}\" was requested to load but it does not exist!".format(moduleName))
             return False
 
         alreadyExisted = False
+        reloaded = False
 
-        if name in self.moduleCaseMapping:
-            self.UnloadModule(name)
+        if moduleName in self.moduleCaseMap:
+            reloaded = self.bot.bothandler.loadModule(moduleName)
+            if reloaded:
+                self.reloadModule(moduleName)
             alreadyExisted = True
 
-        module = importlib.import_module("hubbot.Modules." + moduleListCaseMap[name])
+        module = sys.modules[moduleListCaseMap[moduleName]]
 
-        reload(module)
-
-        class_ = getattr(module, moduleListCaseMap[name])
-
-        if alreadyExisted:
-            self.bot.logger.info('-- {} reloaded.'.format(module.__name__.split(".")[-1]))
-        else:
-            self.bot.logger.info('-- {} loaded.'.format(module.__name__.split(".")[-1]))
+        class_ = getattr(module, moduleListCaseMap[moduleName])
 
         constructedModule = class_(self.bot)
 
-        self.modules.update({moduleListCaseMap[name]: constructedModule})
-        self.moduleCaseMapping.update({name: moduleListCaseMap[name]})
+        self.modules.update({moduleListCaseMap[moduleName]: constructedModule})
+        self.moduleCaseMap.update({moduleName: moduleListCaseMap[moduleName]})
         constructedModule.onLoad()
 
         # map module triggers
         for trigger in constructedModule.triggers:
             self.mappedTriggers[trigger] = constructedModule
 
+        if not alreadyExisted:
+            self.bot.logger.info('-- {} enabled.'.format(self.moduleCaseMap[moduleName]))
+        if alreadyExisted and not reloaded:
+            self.bot.logger.warning("Module \"{}\" failed to reload!".format(self.moduleCaseMap[moduleName]))
         return True
 
-    def UnloadModule(self, name):
-        if name.lower() in self.moduleCaseMapping.keys():
-            properName = self.moduleCaseMapping[name.lower()]
+    def reloadModule(self, moduleName):
+        properName = self.moduleCaseMap[moduleName.lower()]
+        for botfactory in self.bot.bothandler.botfactories.values():
+            wasLoaded = False
+            if moduleName in botfactory.bot.moduleHandler.moduleCaseMap.keys():
+                wasLoaded = True
+                botfactory.bot.moduleHandler.unloadModule(moduleName)
+            if wasLoaded:
+                module = sys.modules[properName]
+                class_ = getattr(module, properName)
+                constructedModule = class_(botfactory.bot)
+                botfactory.bot.moduleHandler.modules.update({properName: constructedModule})
+                constructedModule.onLoad()
+        return True
+
+    def unloadModule(self, moduleName):
+        if moduleName.lower() in self.moduleCaseMap.keys():
+            properName = self.moduleCaseMap[moduleName.lower()]
 
             # unmap module triggers
             for trigger in self.modules[properName].triggers:
@@ -121,23 +133,21 @@ class ModuleHandler(object):
 
             self.modules[properName].onUnload()
 
-            del self.modules[self.moduleCaseMapping[name.lower()]]
-            del self.moduleCaseMapping[name.lower()]
-            del sys.modules["{}.{}".format("hubbot.Modules", properName)]
-            for f in glob("{}/{}.pyc".format("hubbot.Modules", properName)):
-                os.remove(f)
-            self.bot.logger.info("-- {} unloaded.".format(properName))
+            del self.modules[self.moduleCaseMap[moduleName.lower()]]
+            del self.moduleCaseMap[moduleName.lower()]
+            self.bot.logger.info("-- {} disabled.".format(properName))
+            self.bot.bothandler.checkModuleUsage(properName)
         else:
-            self.bot.logger.warning("Module \"{}\" was requested to unload but it is not loaded!".format(name))
+            self.bot.logger.warning("Module \"{}\" was requested to unload but it is not loaded!".format(moduleName))
             return False
 
         return True
 
-    def AutoLoadModules(self):
+    def autoLoadModules(self):
         modulesToLoad = []
         for moduleName in self.modulesToLoad:
             if moduleName.lower() == "all":
-                for module in self.GetModuleDirList():
+                for module in self.getModuleDirList():
                     modulesToLoad.append(module)
             elif moduleName[0] != "-":
                 modulesToLoad.append(moduleName)
@@ -146,19 +156,9 @@ class ModuleHandler(object):
 
         for module in modulesToLoad:
             try:
-                self.LoadModule(module)
+                self.loadModule(module)
             except Exception:
-                self.bot.logger.exception("Exception when loading\"{}\"".format(str(module)))
+                self.bot.logger.exception("Exception when enabling \"{}\"".format(str(module)))
 
-    def GetModuleDirList(self):
-        root = os.path.join('.', "hubbot", 'Modules')
-
-        for item in os.listdir(root):
-            if not os.path.isfile(os.path.join(root, item)):
-                continue
-            if not item.endswith('.py'):
-                continue
-            if item.startswith('__init__'):
-                continue
-
-            yield item[:-3]
+    def getModuleDirList(self):
+        return self.bot.bothandler.modules.keys()

@@ -43,7 +43,7 @@ class ModuleLoader(ModuleInterface):
                 if name == 'ModuleLoader':
                     continue
 
-                self.bot.moduleHandler.LoadModule(name)
+                self.bot.moduleHandler.loadModule(name)
 
             return ['all functions'], [], []
 
@@ -54,9 +54,9 @@ class ModuleLoader(ModuleInterface):
 
             else:
                 try:
-                    success = self.bot.moduleHandler.LoadModule(moduleName)
+                    success = self.bot.moduleHandler.loadModule(moduleName)
                     if success:
-                        successes.append(self.bot.moduleHandler.moduleCaseMapping[moduleName])
+                        successes.append(self.bot.moduleHandler.moduleCaseMap[moduleName])
                     else:
                         failures.append(moduleNameCaseMap[moduleName])
 
@@ -76,7 +76,7 @@ class ModuleLoader(ModuleInterface):
 
         for moduleName in moduleNameCaseMap.keys():
             try:
-                success = self.bot.moduleHandler.UnloadModule(moduleName)
+                success = self.bot.moduleHandler.unloadModule(moduleName)
                 if success:
                     successes.append(moduleNameCaseMap[moduleName])
                 else:

@@ -58,7 +58,7 @@ class Hubbot(irc.IRCClient):
         self.prefixesCharToMode = {"+":"v", "@":"o"}
         self.userModes = {}
         self.moduleHandler = ModuleHandler(self)
-        self.moduleHandler.AutoLoadModules()
+        self.moduleHandler.autoLoadModules()
 
     def signedOn(self):
         for channel in self.channels.keys():

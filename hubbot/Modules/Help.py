@@ -11,8 +11,8 @@ class Help(ModuleInterface):
         @type message: hubbot.message.IRCMessage
         """
         if len(message.ParameterList) > 0:
-            if message.ParameterList[0].lower() in self.bot.moduleHandler.moduleCaseMapping:
-                func = self.bot.moduleHandler.modules[self.bot.moduleHandler.moduleCaseMapping[message.ParameterList[0].lower()]]
+            if message.ParameterList[0].lower() in self.bot.moduleHandler.moduleCaseMap:
+                func = self.bot.moduleHandler.modules[self.bot.moduleHandler.moduleCaseMap[message.ParameterList[0].lower()]]
                 if isinstance(func.help, basestring):
                     return IRCResponse(ResponseType.Say, func.help, message.ReplyTo)
                 else:

@@ -1,3 +1,5 @@
+import importlib
+from glob import glob
 import logging
 import os
 import sys
@@ -9,10 +11,14 @@ from hubbot.channel import IRCChannel
 
 
 class BotHandler:
-    botfactories = {}
-
     def __init__(self, config):
+        self.botfactories = {}
+        self.modules = {}
+        self.moduleCaseMap = {}
+        self.autoLoadModules()
+
         self.config = config
+        # TODO Redo multiserver support
         server = self.config["server"]
         port = self.config.itemWithDefault("port", 6667)
         channels = self.config.itemWithDefault("channels", [])
@@ -51,7 +57,6 @@ class BotHandler:
                 self.botfactories[server].bot.quit(quitmessage)
             except:
                 # this most likely means the bot in question has yet to establish a connection for whatever reason
-                # TODO should probably figure out and specify what kind of exception this is
                 logging.exception("Bot for server \"{}\" could not quit properly!".format(server))
                 self.botfactories[server].stopTrying()
             self.unregisterFactory(server)
@@ -74,3 +79,85 @@ class BotHandler:
         logging.info("Restart command received, going down for restart.")
         reactor.addSystemEventTrigger("after", "shutdown", lambda: os.execl(sys.executable, sys.executable, *sys.argv))
         self.shutdown(quitmessage.encode("utf-8"))
+
+    def loadModule(self, name):
+        name = name.lower()
+
+        moduleList = self.getModuleDirList()
+        moduleListCaseMap = {key.lower(): key for key in moduleList}
+
+        if name not in moduleListCaseMap:
+            logging.warning("Module \"{}\" was requested to load but it does not exist!".format(name))
+            return False
+
+        alreadyExisted = False
+
+        if name in self.moduleCaseMap:
+            self.unloadModule(name)
+            alreadyExisted = True
+
+        module = importlib.import_module("hubbot.Modules." + moduleListCaseMap[name])
+
+        reload(module)
+
+        class_ = getattr(module, moduleListCaseMap[name])
+
+        self.modules.update({moduleListCaseMap[name]: class_})
+        self.moduleCaseMap.update({name: moduleListCaseMap[name]})
+
+        if alreadyExisted:
+            logging.info('-- {} reloaded.'.format(module.__name__.split(".")[-1]))
+        else:
+            logging.info('-- {} loaded.'.format(module.__name__.split(".")[-1]))
+
+        return True
+
+    def unloadModule(self, name):
+        if name.lower() in self.moduleCaseMap.keys():
+            properName = self.moduleCaseMap[name.lower()]
+
+            if len(self.botfactories) != 0:
+                for botfactory in self.botfactories.values():
+                    for module in botfactory.bot.moduleHandler.modules.values():
+                        module.onUnload()
+
+            del self.modules[self.moduleCaseMap[name.lower()]]
+            del self.moduleCaseMap[name.lower()]
+            del sys.modules["{}.{}".format("hubbot.Modules", properName)]
+            for f in glob("{}/{}.pyc".format("hubbot.Modules", properName)):
+                os.remove(f)
+            logging.info("-- {} unloaded.".format(properName))
+        else:
+            logging.warning("Module \"{}\" was requested to unload but it is not loaded!".format(name))
+            return False
+
+        return True
+
+    def checkModuleUsage(self, moduleName):
+        loaded = False
+        for botfactory in self.botfactories.values():
+            if moduleName.lower() in botfactory.bot.moduleHandler.moduleCaseMap:
+                loaded = True
+
+        if not loaded:
+            self.unloadModule(moduleName)
+
+    def autoLoadModules(self):
+        for module in self.getModuleDirList():
+            try:
+                self.loadModule(module)
+            except:
+                logging.exception("Exception when loading module \"{}\".".format(str(module)))
+
+    def getModuleDirList(self):
+        root = os.path.join('.', "hubbot", 'Modules')
+
+        for item in os.listdir(root):
+            if not os.path.isfile(os.path.join(root, item)):
+                continue
+            if not item.endswith('.py'):
+                continue
+            if item.startswith('__init__'):
+                continue
+
+            yield item[:-3]

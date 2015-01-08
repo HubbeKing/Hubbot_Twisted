@@ -25,13 +25,13 @@ class Triggers(ModuleInterface):
                                    "Module \"{}\" contains the triggers: {}".format(properName, ", ".join(self.bot.moduleHandler.mappedTriggers[message.ParameterList[0].lower()].triggers)),
                                    message.ReplyTo)
 
-            elif message.ParameterList[0].lower() not in self.bot.moduleHandler.moduleCaseMapping:
+            elif message.ParameterList[0].lower() not in self.bot.moduleHandler.moduleCaseMap:
                 return IRCResponse(ResponseType.Say,
                                    "No module named \"{}\" is currently loaded!".format(message.ParameterList[0].lower()),
                                    message.ReplyTo)
 
             else:
-                properName = self.bot.moduleHandler.moduleCaseMapping[message.ParameterList[0].lower()]
+                properName = self.bot.moduleHandler.moduleCaseMap[message.ParameterList[0].lower()]
                 module = self.bot.moduleHandler.modules[properName]
 
                 return IRCResponse(ResponseType.Say,
