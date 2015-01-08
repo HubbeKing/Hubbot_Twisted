@@ -39,6 +39,9 @@ class Markov(ModuleInterface):
             nickList = [nick.lower() for nick in self.bot.channels[message.ReplyTo].Users.keys()]
             while reply.split(" ")[0].lower() in nickList:
                 reply = " ".join(reply.split(" ")[1:])
+            for word in reply.split(" "):
+                if word in nickList:
+                    reply.replace(word, "I")
             return IRCResponse(ResponseType.Say, reply.capitalize(), message.ReplyTo)
         else:
             messageList = [item.lower() for item in message.MessageList if item.lower() != self.bot.nickname.lower()]
