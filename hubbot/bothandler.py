@@ -43,7 +43,10 @@ class BotHandler:
             logging.info("Shutting down bot for server \"{}\"".format(server))
             self.botfactories[server].bot.Quitting = True
             for (name, module) in self.botfactories[server].bot.moduleHandler.modules.items():
+                try:
                     module.onUnload()
+                except:
+                    logging.exception("Module \"{}\" threw an exception on unload.".format(name))
             try:
                 self.botfactories[server].bot.quit(quitmessage)
             except:
