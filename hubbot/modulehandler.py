@@ -88,7 +88,7 @@ class ModuleHandler(object):
                 self.reloadModule(moduleName)
             alreadyExisted = True
 
-        module = sys.modules[moduleListCaseMap[moduleName]]
+        module = sys.modules["{}.{}".format("hubbot.Modules", moduleListCaseMap[moduleName])]
 
         class_ = getattr(module, moduleListCaseMap[moduleName])
 
@@ -116,7 +116,7 @@ class ModuleHandler(object):
                 wasLoaded = True
                 botfactory.bot.moduleHandler.unloadModule(moduleName)
             if wasLoaded:
-                module = sys.modules[properName]
+                module = sys.modules["{}.{}".format("hubbot.Modules", properName)]
                 class_ = getattr(module, properName)
                 constructedModule = class_(botfactory.bot)
                 botfactory.bot.moduleHandler.modules.update({properName: constructedModule})
