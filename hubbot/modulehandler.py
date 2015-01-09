@@ -69,7 +69,7 @@ class ModuleHandler(object):
             except Exception:
                 self.bot.logger.exception("Python Execution Error in \"{}\"".format(module.__class__.__name__))
 
-    def loadModule(self, moduleName):
+    def enableModule(self, moduleName):
         moduleName = moduleName.lower()
 
         moduleList = self.getModuleDirList()
@@ -77,19 +77,11 @@ class ModuleHandler(object):
 
         if moduleName not in moduleListCaseMap:
             self.bot.logger.warning("Module \"{}\" was requested to enable but it is not imported!".format(moduleName))
-            imported = self.bot.bothandler.loadModule(moduleName)
-            if not imported:
-                self.bot.logger.error("Module \"{}\" was requested to enable but it does not exist!".format(moduleName))
-                return False
-
-        alreadyExisted = False
-        reloaded = False
+            return False
 
         if moduleName in self.moduleCaseMap:
-            reloaded = self.bot.bothandler.loadModule(moduleName)
-            if reloaded:
-                self.reloadModule(moduleName)
-            alreadyExisted = True
+            self.bot.logger.warning("Module \"{}\" was requested to enable but it is already enabled!".format(moduleName))
+            return False
 
         module = sys.modules["{}.{}".format("hubbot.Modules", moduleListCaseMap[moduleName])]
 
@@ -99,34 +91,16 @@ class ModuleHandler(object):
 
         self.modules.update({moduleListCaseMap[moduleName]: constructedModule})
         self.moduleCaseMap.update({moduleName: moduleListCaseMap[moduleName]})
-        constructedModule.onLoad()
+        constructedModule.onEnable()
 
         # map module triggers
         for trigger in constructedModule.triggers:
             self.mappedTriggers[trigger] = constructedModule
 
-        if not alreadyExisted:
-            self.bot.logger.info('-- {} enabled.'.format(self.moduleCaseMap[moduleName]))
-        if alreadyExisted and not reloaded:
-            self.bot.logger.warning("Module \"{}\" failed to reload!".format(self.moduleCaseMap[moduleName]))
+        self.bot.logger.info('-- {} enabled.'.format(self.moduleCaseMap[moduleName]))
         return True
 
-    def reloadModule(self, moduleName):
-        properName = self.moduleCaseMap[moduleName.lower()]
-        for botfactory in self.bot.bothandler.botfactories.values():
-            wasLoaded = False
-            if moduleName in botfactory.bot.moduleHandler.moduleCaseMap.keys():
-                wasLoaded = True
-                botfactory.bot.moduleHandler.unloadModule(moduleName)
-            if wasLoaded:
-                module = sys.modules["{}.{}".format("hubbot.Modules", properName)]
-                class_ = getattr(module, properName)
-                constructedModule = class_(botfactory.bot)
-                botfactory.bot.moduleHandler.modules.update({properName: constructedModule})
-                constructedModule.onLoad()
-        return True
-
-    def unloadModule(self, moduleName):
+    def disableModule(self, moduleName, check=True):
         if moduleName.lower() in self.moduleCaseMap.keys():
             properName = self.moduleCaseMap[moduleName.lower()]
 
@@ -139,14 +113,15 @@ class ModuleHandler(object):
             del self.modules[self.moduleCaseMap[moduleName.lower()]]
             del self.moduleCaseMap[moduleName.lower()]
             self.bot.logger.info("-- {} disabled.".format(properName))
-            self.bot.bothandler.checkModuleUsage(properName)
+            if check:
+                self.bot.bothandler.checkModuleUsage(properName)
         else:
             self.bot.logger.warning("Module \"{}\" was requested to disable but it is not enabled!".format(moduleName))
             return False
 
         return True
 
-    def autoLoadModules(self):
+    def enableAllModules(self):
         modulesToLoad = []
         for moduleName in self.modulesToLoad:
             if moduleName.lower() == "all":
@@ -159,7 +134,7 @@ class ModuleHandler(object):
 
         for module in modulesToLoad:
             try:
-                self.loadModule(module)
+                self.enableModule(module)
             except Exception:
                 self.bot.logger.exception("Exception when enabling \"{}\"".format(str(module)))
 

@@ -117,8 +117,8 @@ class BotHandler:
 
             if len(self.botfactories) != 0:
                 for botfactory in self.botfactories.values():
-                    for module in botfactory.bot.moduleHandler.modules.values():
-                        module.onUnload()
+                    for moduleName in botfactory.bot.moduleHandler.modules.keys():
+                        botfactory.bot.moduleHandler.disableModule(moduleName, check=False)
 
             del self.modules[self.moduleCaseMap[name.lower()]]
             del self.moduleCaseMap[name.lower()]
@@ -140,6 +140,20 @@ class BotHandler:
 
         if not loaded:
             self.unloadModule(moduleName)
+
+    def reloadModule(self, moduleName):
+        moduleUsages = []
+        if moduleName.lower() in self.moduleCaseMap:
+            properName = self.moduleCaseMap[moduleName.lower()]
+            for botfactory in self.botfactories.values():
+                if moduleName in botfactory.bot.moduleHandler.moduleCaseMap.keys():
+                    botfactory.bot.moduleHandler.disableModule(properName)
+                    moduleUsages.append(botfactory)
+            success = self.loadModule(properName)
+            if len(moduleUsages) != 0:
+                for botfactory in moduleUsages:
+                    botfactory.bot.moduleHandler.enableModule(properName)
+            return success
 
     def autoLoadModules(self):
         for module in self.getModuleDirList():

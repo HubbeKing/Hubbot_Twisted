@@ -21,7 +21,7 @@ class ModuleInterface(object):
         """
         self.bot = bot
 
-    def onLoad(self):
+    def onEnable(self):
         pass
 
     def onUnload(self):

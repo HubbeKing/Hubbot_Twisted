@@ -43,7 +43,7 @@ class RPG(ModuleInterface):
         else:
             return helpDict[u" ".join(message.ParameterList[:2])]
 
-    def onLoad(self):
+    def onEnable(self):
         self.triggers = self.campaigns.keys()
 
     def onTrigger(self, message):

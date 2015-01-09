@@ -32,7 +32,7 @@ class Log(ModuleInterface):
     'TOPIC': lambda m: u'# {0} set the topic to: {1}'.format(m.User.Name, m.MessageString)
     }
 
-    def onLoad(self):
+    def onEnable(self):
         logger = logging.getLogger(self.bot.server)
         self.handler = CustomHandler()
         self.handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(message)s', '%H:%M:%S'))

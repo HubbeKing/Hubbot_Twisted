@@ -24,7 +24,7 @@ class Silly(ModuleInterface):
         "whoa": "http://www.youtube.com/watch?v=6q-gHrEaEAs"
     }
 
-    def onLoad(self):
+    def onEnable(self):
         self.triggers = self.sillyDict.keys()
         sillyList = [item for item in self.triggers if item != "silly"]
         self.sillyDict["silly"] = "{} -- Used to post silly things!".format(", ".join(sorted(sillyList)))

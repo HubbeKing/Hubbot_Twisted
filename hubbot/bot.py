@@ -42,7 +42,7 @@ class Hubbot(irc.IRCClient):
         self.versionName = self.nickname
         self.versionNum = __version__
         self.versionEnv = platform.platform()
-        self.CommandChar = bothandler.config.serverItemWithDefault(server, "commandchar", "+")
+        self.commandChar = bothandler.config.serverItemWithDefault(server, "commandchar", "+")
         self.fingerReply = bothandler.config.serverItemWithDefault(server, "fingerReply", "")
 
         self.databaseFile = os.path.join("hubbot", "data", "data.db")
@@ -55,10 +55,10 @@ class Hubbot(irc.IRCClient):
         self.Quitting = False
         self.startTime = datetime.datetime.now()
 
-        self.prefixesCharToMode = {"+":"v", "@":"o"}
+        self.prefixesCharToMode = {"+": "v", "@": "o"}
         self.userModes = {}
         self.moduleHandler = ModuleHandler(self)
-        self.moduleHandler.autoLoadModules()
+        self.moduleHandler.enableAllModules()
 
     def signedOn(self):
         for channel in self.channels.keys():

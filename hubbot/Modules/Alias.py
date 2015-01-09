@@ -32,7 +32,7 @@ class Alias(ModuleInterface):
             else:
                 return u"'{}' is an alias for: {}".format(command, u" ".join(self.aliases[command]))
 
-    def onLoad(self):
+    def onEnable(self):
         with sqlite3.connect(self.bot.databaseFile) as conn:
             c = conn.cursor()
             for row in c.execute("SELECT * FROM aliashelp"):
@@ -146,7 +146,7 @@ class Alias(ModuleInterface):
         """
         if message.Command in self.aliases.keys():
             alias = self.aliases[message.Command]
-            newMsg = u'{}{}'.format(self.bot.CommandChar, ' '.join(alias))
+            newMsg = u'{}{}'.format(self.bot.commandChar, ' '.join(alias))
             if "$sender" in newMsg:
                 newMsg = newMsg.replace("$sender", message.User.Name)
             if "$channel" in newMsg and message.Channel is not None:

@@ -8,7 +8,7 @@ import os
 class Markov(ModuleInterface):
     help = "Markov - Yeah I'm sentient, what of it?"
 
-    def onLoad(self):
+    def onEnable(self):
         self.brain = Brain(os.path.join("hubbot", "data", "{}.brain".format(self.bot.server)))
 
     def addToBrain(self, msg):
@@ -29,7 +29,7 @@ class Markov(ModuleInterface):
         """
         if message.User.Name == self.bot.nickname:
             return
-        elif message.TargetType is TargetTypes.USER and not message.MessageString.startswith(self.bot.CommandChar):
+        elif message.TargetType is TargetTypes.USER and not message.MessageString.startswith(self.bot.commandChar):
             reply = self.brain.reply(message.MessageString, max_len=100)
             return IRCResponse(ResponseType.Say, reply.capitalize(), message.ReplyTo)
         elif self.bot.nickname.lower() in message.MessageString.lower() and len(message.MessageList) > 1:

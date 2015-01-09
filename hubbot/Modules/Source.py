@@ -5,7 +5,7 @@ from hubbot.moduleinterface import ModuleInterface
 class Source(ModuleInterface):
     triggers = ["source"]
 
-    def onLoad(self):
+    def onEnable(self):
         self.help = "source - returns a link to {}'s source".format(self.bot.nickname)
 
     def onTrigger(self, message):
