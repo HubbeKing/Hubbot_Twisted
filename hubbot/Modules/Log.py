@@ -25,11 +25,11 @@ class Log(ModuleInterface):
     priority = -1
 
     logFuncs = {
-    'PRIVMSG': lambda m: u'<{0}> {1}'.format(m.User.Name, m.MessageString),
-    'NOTICE': lambda m: u'[{0}] {1}'.format(m.User.Name, m.MessageString),
-    'NICK': lambda m: u'{0} is now known as {1}'.format(m.User.Name, m.MessageString),
-    'KICK': lambda m: u'!<< {0} was kicked by {1}{2}'.format(m.Kickee, m.User.Name, m.MessageString),
-    'TOPIC': lambda m: u'# {0} set the topic to: {1}'.format(m.User.Name, m.MessageString)
+        'PRIVMSG': lambda m: u'<{0}> {1}'.format(m.User.Name, m.MessageString),
+        'NOTICE': lambda m: u'[{0}] {1}'.format(m.User.Name, m.MessageString),
+        'NICK': lambda m: u'{0} is now known as {1}'.format(m.User.Name, m.MessageString),
+        'KICK': lambda m: u'!<< {0} was kicked by {1}{2}'.format(m.Kickee, m.User.Name, m.MessageString),
+        'TOPIC': lambda m: u'# {0} set the topic to: {1}'.format(m.User.Name, m.MessageString)
     }
 
     def onEnable(self):

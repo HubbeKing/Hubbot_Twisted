@@ -16,7 +16,7 @@ class BotHandling(ModuleInterface):
             u"restart": u"restart - Restarts the entire bot, reconnecting using currently loaded config.",
             u"shutdown": u"shutdown - Shuts the entire bot down."
         }
-        return helpDict[message.ParameterList[0]]
+        return helpDict[message.ParameterList[0].lower()]
 
     def onTrigger(self, message):
         """
