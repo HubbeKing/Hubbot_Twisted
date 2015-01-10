@@ -17,12 +17,12 @@ class ModuleEnabler(ModuleInterface):
         if message.Command == "enable":
             successes, failures, exceptions = self.enable(message.ParameterList)
 
-        elif message.Command.lower() == "disable":
+        elif message.Command == "disable":
             successes, failures, exceptions = self.disable(message.ParameterList)
 
         responses = []
         if len(successes) > 0:
-            responses.append(IRCResponse(ResponseType.Say, "'{0}' {1}ed successfully".format(', '.join(successes), message.Command.lower()), message.ReplyTo))
+            responses.append(IRCResponse(ResponseType.Say, "'{0}' {1}d successfully".format(', '.join(successes), message.Command.lower()), message.ReplyTo))
         if len(failures) > 0:
             responses.append(IRCResponse(ResponseType.Say, "'{0}' failed to {1}, or (they) do not exist".format(', '.join(failures), message.Command.lower()), message.ReplyTo))
         if len(exceptions) > 0:
@@ -74,6 +74,6 @@ class ModuleEnabler(ModuleInterface):
                     failures.append(moduleNameCaseMap[moduleName])
             except Exception:
                 exceptions.append(moduleNameCaseMap[moduleName])
-                self.bot.logger.exception("Exception when disabliong module \"{}\"".format(moduleNameCaseMap[moduleName]))
+                self.bot.logger.exception("Exception when disabling module \"{}\"".format(moduleNameCaseMap[moduleName]))
 
         return successes, failures, exceptions

@@ -117,8 +117,8 @@ class BotHandler:
 
             if len(self.botfactories) != 0:
                 for botfactory in self.botfactories.values():
-                    for moduleName in botfactory.bot.moduleHandler.modules.keys():
-                        botfactory.bot.moduleHandler.disableModule(moduleName, check=False)
+                    if properName in botfactory.bot.moduleHandler.modules.keys():
+                        botfactory.bot.moduleHandler.disableModule(properName, check=False)
 
             del self.modules[self.moduleCaseMap[name.lower()]]
             del self.moduleCaseMap[name.lower()]
