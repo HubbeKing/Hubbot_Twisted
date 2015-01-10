@@ -108,7 +108,7 @@ class ModuleHandler(object):
             for trigger in self.modules[properName].triggers:
                 del self.mappedTriggers[trigger]
 
-            self.modules[properName].onUnload()
+            self.modules[properName].onDisable()
 
             del self.modules[self.moduleCaseMap[moduleName.lower()]]
             del self.moduleCaseMap[moduleName.lower()]

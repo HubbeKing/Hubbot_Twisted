@@ -38,7 +38,7 @@ class Log(ModuleInterface):
         self.handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(message)s', '%H:%M:%S'))
         logger.addHandler(self.handler)
 
-    def onUnload(self):
+    def onDisable(self):
         logger = logging.getLogger(self.bot.server)
         if self.handler in logger.handlers:
             logger.removeHandler(self.handler)

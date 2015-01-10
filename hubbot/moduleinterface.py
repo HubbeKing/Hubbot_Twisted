@@ -24,7 +24,7 @@ class ModuleInterface(object):
     def onEnable(self):
         pass
 
-    def onUnload(self):
+    def onDisable(self):
         pass
 
     def shouldTrigger(self, message):

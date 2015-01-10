@@ -42,7 +42,7 @@ class Alias(ModuleInterface):
         for alias in self.aliases:
             self.bot.moduleHandler.mappedTriggers[alias.lower()] = self
 
-    def onUnload(self):
+    def onDisable(self):
         for alias in self.aliases:
             del self.bot.moduleHandler.mappedTriggers[alias.lower()]
 

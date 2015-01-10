@@ -49,13 +49,13 @@ class BotHandler:
             self.botfactories[server].bot.Quitting = True
             for (name, module) in self.botfactories[server].bot.moduleHandler.modules.items():
                 try:
-                    module.onUnload()
+                    module.onDisable()
                 except:
-                    logging.exception("Module \"{}\" threw an exception on unload.".format(name))
+                    logging.exception("Module \"{}\" threw an exception on disable.".format(name))
             try:
                 self.botfactories[server].bot.quit(quitmessage)
             except:
-                # this most likely means the bot in question has yet to establish a connection for whatever reason
+                # this most likely means the bot in question is not connected anywhere or otherwise can't send a QUIT
                 logging.exception("Bot for server \"{}\" could not quit properly!".format(server))
                 self.botfactories[server].stopTrying()
             self.unregisterFactory(server)
