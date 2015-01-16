@@ -4,3 +4,6 @@ class IRCChannel(object):
         self.Users = {}
         self.Ranks = {}
         self.NamesListComplete = True
+
+    def __str__(self):
+        return self.Name

@@ -21,20 +21,12 @@ class Hubbot(irc.IRCClient):
         """
         @type bothandler: hubbot.bothandler.BotHandler
         """
-        abspath = os.path.abspath(__file__)
-        dname = os.path.dirname(abspath)
-        logPath = os.path.join(dname, "logs")
-        if not os.path.exists(logPath):
-            os.makedirs(logPath)
-        self.logPath = logPath
-        # set up logging
-        self.logger = logging.getLogger(server)
-        handler = TimedRotatingFileHandler(os.path.join(logPath, "{}.log".format(server)), when="midnight")
-        handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s', '%H:%M:%S'))
-        handler.setLevel(logging.INFO)
-        self.logger.addHandler(handler)
-
         self.bothandler = bothandler
+        self.server = server
+        self.channels = channels
+
+        self.logPath, self.logger = self.setupLogging()
+
         self.nickname = bothandler.config.serverItemWithDefault(server, "nickname", "Hubbot")
         self.username = bothandler.config.serverItemWithDefault(server, "username", "Hubbot")
         self.realname = bothandler.config.serverItemWithDefault(server, "realname", "Hubbot")
@@ -49,9 +41,6 @@ class Hubbot(irc.IRCClient):
         self.admins = self.loadAdmins()
         self.ignores = self.loadIgnores()
 
-        self.server = server
-        self.channels = channels
-
         self.Quitting = False
         self.startTime = datetime.datetime.now()
 
@@ -62,8 +51,7 @@ class Hubbot(irc.IRCClient):
 
     def signedOn(self):
         for channel in self.channels.keys():
-            if channel is not self.nickname and channel is not "Auth":
-                self.join(channel)
+            self.join(channel)
 
     def isupport(self, options):
         for item in options:
@@ -189,6 +177,23 @@ class Hubbot(irc.IRCClient):
     def noticed(self, user, channel, msg):
         message = IRCMessage('NOTICE', user, self.getChannel(channel), msg.upper(), self)
         self.moduleHandler.handleMessage(message)
+
+    def setupLogging(self):
+        # Setup logs folder
+        abspath = os.path.abspath(__file__)
+        dname = os.path.dirname(abspath)
+        logPath = os.path.join(dname, "logs")
+        if not os.path.exists(logPath):
+            os.makedirs(logPath)
+
+        # Setup the logger and handlers
+        logger = logging.getLogger(self.server)
+        handler = TimedRotatingFileHandler(os.path.join(self.logPath, "{}.log".format(self.server)), when="midnight")
+        handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s', '%H:%M:%S'))
+        handler.setLevel(logging.INFO)
+        logger.addHandler(handler)
+
+        return logPath, logger
 
     def loadIgnores(self):
         ignores = []
