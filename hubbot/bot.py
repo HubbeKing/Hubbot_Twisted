@@ -140,14 +140,13 @@ class Hubbot(irc.IRCClient):
 
         channel = self.channels[params[0]]
         message = IRCMessage('KICK', prefix, channel, kickMessage, self)
-        kickee = params[1]
-        message.Kickee = kickee
-        if kickee == self.nickname:
+        message.Kickee = params[1]
+        if message.Kickee == self.nickname:
             del self.channels[message.ReplyTo]
         else:
-            del channel.Users[kickee]
-            if kickee in channel.Ranks:
-                del channel.Ranks[kickee]
+            del channel.Users[message.Kickee]
+            if message.Kickee in channel.Ranks:
+                del channel.Ranks[message.Kickee]
         self.moduleHandler.handleMessage(message)
 
     def irc_QUIT(self, prefix, params):
