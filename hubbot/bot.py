@@ -141,6 +141,7 @@ class Hubbot(irc.IRCClient):
         channel = self.channels[params[0]]
         message = IRCMessage('KICK', prefix, channel, kickMessage, self)
         kickee = params[1]
+        message.Kickee = kickee
         if kickee == self.nickname:
             del self.channels[message.ReplyTo]
         else:
@@ -188,7 +189,7 @@ class Hubbot(irc.IRCClient):
 
         # Setup the logger and handlers
         logger = logging.getLogger(self.server)
-        handler = TimedRotatingFileHandler(os.path.join(self.logPath, "{}.log".format(self.server)), when="midnight")
+        handler = TimedRotatingFileHandler(os.path.join(logPath, "{}.log".format(self.server)), when="midnight")
         handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s', '%H:%M:%S'))
         handler.setLevel(logging.INFO)
         logger.addHandler(handler)
