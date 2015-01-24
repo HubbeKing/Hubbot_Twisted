@@ -98,7 +98,7 @@ class IdentCheck(ModuleInterface):
                                            "{} is a CRITICAL DINOSAUR!".format(message.User.Name),
                                            message.ReplyTo)
                 elif message.Type == "ACTION" and message.MessageString.lower().startswith("points at"):
-                    if self.bot.nickname.lower() in message.MessageString.lower() and "meow" in message.MessageString.lower():
+                    if self.bot.nickname.lower() in message.MessageString.lower() and "kitteh" in message.MessageString.lower() or "kitty" in message.MessageString.lower():
                         return IRCResponse(ResponseType.Say,
                                            "Curses, you've tumbled my nefarious plan!",
                                            message.ReplyTo), \
