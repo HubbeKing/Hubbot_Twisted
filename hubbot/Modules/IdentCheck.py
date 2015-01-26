@@ -1,5 +1,6 @@
 from hubbot.response import IRCResponse, ResponseType
 from hubbot.moduleinterface import ModuleInterface
+import re
 import time
 
 
@@ -19,6 +20,7 @@ class IdentCheck(ModuleInterface):
         """
         @type message: hubbot.message.IRCMessage
         """
+        pointingPattern = "^points at {}.+(kitty|kitteh)".format(re.escape(self.bot.nickname))
         if message.ReplyTo in self.bot.channels.keys():
             if "RoBoBo" not in self.bot.channels[message.ReplyTo].Users.keys():
                 if message.MessageString.lower().startswith("meow"):
@@ -97,11 +99,7 @@ class IdentCheck(ModuleInterface):
                         return IRCResponse(ResponseType.Say,
                                            "{} is a CRITICAL DINOSAUR!".format(message.User.Name),
                                            message.ReplyTo)
-                elif message.Type == "ACTION" and message.MessageString.lower().startswith("points at"):
-                    if self.bot.nickname.lower() in message.MessageString.lower() and "kitteh" in message.MessageString.lower() or "kitty" in message.MessageString.lower():
-                        return IRCResponse(ResponseType.Say,
-                                           "Curses, you've tumbled my nefarious plan!",
-                                           message.ReplyTo), \
-                               IRCResponse(ResponseType.Say,
-                                           "...\nMeow.",
-                                           message.ReplyTo)
+                elif message.Type == "ACTION" and re.match(pointingPattern, message.MessageString, re.IGNORECASE):
+                    return IRCResponse(ResponseType.Say,
+                                       "Curses, you've tumbled my nefarious plan!",
+                                       message.ReplyTo)
