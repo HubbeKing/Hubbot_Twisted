@@ -56,10 +56,10 @@ class ModuleHandler(object):
         for module in sorted(self.modules.values(), key=operator.attrgetter("priority")):
             try:
                 if module.shouldTrigger(message):
-                    if module.accessLevel != ModuleAccessLevel.ANYONE and len(self.bot.admins) != 0 and message.User.Name not in self.bot.admins:
+                    if module.accessLevel == ModuleAccessLevel.ADMINS and len(self.bot.admins) != 0 and message.User.Name not in self.bot.admins:
                         self.bot.logger.info("User {} tried to use {} but was denied access.".format(message.User.Name, message.Command))
                         self.sendResponse(IRCResponse(ResponseType.Say, "Only my admins can use {}!".format(message.Command), message.ReplyTo))
-                    elif message.User.Name not in self.bot.ignores:
+                    elif len(self.bot.ignores) == 0 or message.User.Name not in self.bot.ignores:
                         if not module.runInThread:
                             response = module.onTrigger(message)
                             self.sendResponse(response)
