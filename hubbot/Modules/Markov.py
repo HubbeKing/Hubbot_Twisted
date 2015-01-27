@@ -40,7 +40,7 @@ class Markov(ModuleInterface):
             while reply.split(" ")[0].lower() in nickList:
                 reply = " ".join(reply.split(" ")[1:])
             for word in reply.split(" "):
-                if word in nickList:
+                if word.lower() in nickList:
                     reply.replace(word, message.User.Name)
             return IRCResponse(ResponseType.Say, reply.capitalize(), message.ReplyTo)
         else:
