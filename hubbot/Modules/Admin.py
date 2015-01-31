@@ -30,7 +30,7 @@ class Admin(ModuleInterface):
     def onDisable(self):
         self.saveAdmins()
         self.bot.admins = []
-        self.bot.logger.ingo("Unloaded all admins.")
+        self.bot.logger.info("Unloaded all admins.")
 
     def onTrigger(self, message):
         """
