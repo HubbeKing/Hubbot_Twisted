@@ -6,6 +6,11 @@ from hubbot.bothandler import BotHandler
 from hubbot.config import Config, ConfigError
 from newDB import createDB
 
+
+def exceptionHandler(type, value, tb):
+        logging.getLogger().exception("Uncaught exception: {}".format(str(value)))
+        sys.__excepthook__(type, value, tb)
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="A derpy Twisted IRC bot.")
     parser.add_argument("-c", "--config", help="The configuration file to use", type=str, default="hubbot.yaml")
@@ -25,6 +30,8 @@ if __name__ == "__main__":
     fileHandler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s', '%Y/%m/%d-%H:%M:%S'))
     fileHandler.setLevel(logging.WARNING)
     rootLogger.addHandler(fileHandler)
+    # log all uncaught exceptions with the root logger
+    sys.excepthook = exceptionHandler
 
     # actually start up the bot.
     config = Config(options.config)
