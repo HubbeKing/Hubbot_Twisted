@@ -89,11 +89,9 @@ class BotHandler:
             logging.warning("Module \"{}\" was requested to load but it does not exist!".format(name))
             return False
 
-        alreadyExisted = False
-
         if name in self.moduleCaseMap:
-            self.unloadModule(name)
-            alreadyExisted = True
+            logging.warning("Module \"{}\" was requested to load but it is already loaded!".format(name))
+            return False
 
         module = importlib.import_module("hubbot.Modules." + moduleListCaseMap[name])
 
@@ -104,11 +102,7 @@ class BotHandler:
         self.modules.update({moduleListCaseMap[name]: class_})
         self.moduleCaseMap.update({name: moduleListCaseMap[name]})
 
-        if alreadyExisted:
-            logging.info('-- {} reloaded.'.format(module.__name__.split(".")[-1]))
-        else:
-            logging.info('-- {} loaded.'.format(module.__name__.split(".")[-1]))
-
+        logging.info('-- {} loaded.'.format(module.__name__.split(".")[-1]))
         return True
 
     def unloadModule(self, name):
@@ -118,8 +112,10 @@ class BotHandler:
             if len(self.botfactories) != 0:
                 for botfactory in self.botfactories.values():
                     if properName in botfactory.bot.moduleHandler.modules.keys():
-                        botfactory.bot.moduleHandler.disableModule(properName, check=False)
-
+                        try:
+                            botfactory.bot.moduleHandler.disableModule(properName, check=False)
+                        except:
+                            raise
             del self.modules[self.moduleCaseMap[name.lower()]]
             del self.moduleCaseMap[name.lower()]
             del sys.modules["{}.{}".format("hubbot.Modules", properName)]
@@ -147,8 +143,12 @@ class BotHandler:
             properName = self.moduleCaseMap[moduleName.lower()]
             for botfactory in self.botfactories.values():
                 if moduleName in botfactory.bot.moduleHandler.moduleCaseMap.keys():
-                    botfactory.bot.moduleHandler.disableModule(properName)
-                    moduleUsages.append(botfactory)
+                    try:
+                        botfactory.bot.moduleHandler.disableModule(properName)
+                    except:
+                        raise
+                    finally:
+                        moduleUsages.append(botfactory)
             success = self.loadModule(properName)
             if len(moduleUsages) != 0:
                 for botfactory in moduleUsages:

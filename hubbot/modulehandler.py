@@ -110,6 +110,7 @@ class ModuleHandler(object):
                 self.modules[properName].onDisable()
             except:
                 self.bot.logger.exception("Exception when disabling module {}".format(moduleName))
+                raise
             finally:
                 del self.modules[self.moduleCaseMap[moduleName.lower()]]
                 del self.moduleCaseMap[moduleName.lower()]

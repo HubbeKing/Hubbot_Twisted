@@ -92,8 +92,10 @@ class ModuleLoader(ModuleInterface):
             for name, _ in self.bot.bothandler.modules.iteritems():
                 if name == "ModuleLoader":
                     continue
-
-                self.bot.bothandler.reloadModule(name)
+                try:
+                    self.bot.bothandler.reloadModule(name)
+                except:
+                    self.bot.logger.exception("Exception when reloading module \"{}\"".format(name))
 
             return ["all modules"], [], []
 

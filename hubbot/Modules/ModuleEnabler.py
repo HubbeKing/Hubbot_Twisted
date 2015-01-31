@@ -26,7 +26,7 @@ class ModuleEnabler(ModuleInterface):
         if len(failures) > 0:
             responses.append(IRCResponse(ResponseType.Say, "'{0}' failed to {1}, or (they) do not exist".format(', '.join(failures), message.Command.lower()), message.ReplyTo))
         if len(exceptions) > 0:
-            responses.append(IRCResponse(ResponseType.Say, "'{0}' threw an exception (printed to console)".format(', '.join(exceptions)), message.ReplyTo))
+            responses.append(IRCResponse(ResponseType.Say, "'{0}' threw an exception (logged)".format(', '.join(exceptions)), message.ReplyTo))
 
         return responses
 
@@ -72,8 +72,7 @@ class ModuleEnabler(ModuleInterface):
                     successes.append(moduleNameCaseMap[moduleName])
                 else:
                     failures.append(moduleNameCaseMap[moduleName])
-            except Exception:
+            except:
                 exceptions.append(moduleNameCaseMap[moduleName])
-                self.bot.logger.exception("Exception when disabling module \"{}\"".format(moduleNameCaseMap[moduleName]))
 
         return successes, failures, exceptions
