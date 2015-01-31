@@ -103,18 +103,19 @@ class ModuleHandler(object):
     def disableModule(self, moduleName, check=True):
         if moduleName.lower() in self.moduleCaseMap.keys():
             properName = self.moduleCaseMap[moduleName.lower()]
-
-            # unmap module triggers
-            for trigger in self.modules[properName].triggers:
-                del self.mappedTriggers[trigger]
-
-            self.modules[properName].onDisable()
-
-            del self.modules[self.moduleCaseMap[moduleName.lower()]]
-            del self.moduleCaseMap[moduleName.lower()]
-            self.bot.logger.info("-- {} disabled.".format(properName))
-            if check:
-                self.bot.bothandler.checkModuleUsage(properName)
+            try:
+                # unmap module triggers
+                for trigger in self.modules[properName].triggers:
+                    del self.mappedTriggers[trigger]
+                self.modules[properName].onDisable()
+            except:
+                self.bot.logger.exception("Exception when disabling module {}".format(moduleName))
+            finally:
+                del self.modules[self.moduleCaseMap[moduleName.lower()]]
+                del self.moduleCaseMap[moduleName.lower()]
+                self.bot.logger.info("-- {} disabled.".format(properName))
+                if check:
+                    self.bot.bothandler.checkModuleUsage(properName)
         else:
             self.bot.logger.warning("Module \"{}\" was requested to disable but it is not enabled!".format(moduleName))
             return False
