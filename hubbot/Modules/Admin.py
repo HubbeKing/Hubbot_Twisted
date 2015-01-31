@@ -4,30 +4,60 @@ import sqlite3
 
 
 class Admin(ModuleInterface):
-    triggers = ["admin", "unadmin"]
-    help = "admin/unadmin [nick] -- add/remove a user from the admin list"
+    triggers = ["admin", "unadmin", "admins"]
     accessLevel = ModuleAccessLevel.ADMINS
+
+    def help(self, message):
+        helpDict = {
+            u"admin": u"admin [nick] -- add a user to the admin list.\n"
+                      u"unadmin [nick] -- remove a user from the admin list.\n"
+                      u"admins -- returns the current admin list.",
+            u"unadmin": u"unadmin [nick] -- remove a user from the admin list.",
+            u"admins": u"admins -- returns the current admin list."
+        }
+        command = message.ParameterList[0].lower()
+        return helpDict[command]
+
+    def onEnable(self):
+        admins = []
+        with sqlite3.connect(self.bot.databaseFile) as conn:
+            c = conn.cursor()
+            for row in c.execute("SELECT nick FROM admins"):
+                admins.append(row[0])
+        self.bot.admins = admins
+        self.bot.logger.info("Loaded \"{}\" into admins list.".format(", ".join(admins)))
+
+    def onDisable(self):
+        self.saveAdmins()
+        self.bot.admins = []
+        self.bot.logger.ingo("Unloaded all admins.")
 
     def onTrigger(self, message):
         """
         @type message: hubbot.message.IRCMessage
         """
-        if message.Command == "admin" and len(message.ParameterList) == 1 and message.ParameterList[0] == "save":
-            self.saveAdmins()
+        if message.Command == "admins":
+            return IRCResponse(ResponseType.Say,
+                               "Current admins: {}".format(", ".join(self.bot.admins)),
+                               message.ReplyTo)
         elif message.Command == "admin":
             if len(message.ParameterList) == 0:
-                return IRCResponse(ResponseType.Say, "Current admins: {}".format(", ".join(self.bot.admins)), message.ReplyTo)
+                return IRCResponse(ResponseType.Say, "Admin who?", message.ReplyTo)
             else:
                 for admin in message.ParameterList:
                     self.newAdmin(admin)
-                return IRCResponse(ResponseType.Say, "Added {} to the admin list.".format(", ".join(message.ParameterList)), message.ReplyTo)
+                return IRCResponse(ResponseType.Say,
+                                   "Added {} to the admin list.".format(", ".join(message.ParameterList)),
+                                   message.ReplyTo)
         elif message.Command == "unadmin":
             if len(message.ParameterList) == 0:
                 return IRCResponse(ResponseType.Say, "Unadmin who?", message.ReplyTo)
             else:
                 for admin in message.ParameterList:
                     self.deleteAdmin(admin)
-                return IRCResponse(ResponseType.Say, "Removed {} from the admin list.". format(", ".join(message.ParameterList)), message.ReplyTo)
+                return IRCResponse(ResponseType.Say,
+                                   "Removed {} from the admin list.". format(", ".join(message.ParameterList)),
+                                   message.ReplyTo)
 
     def newAdmin(self, admin):
         for (server, botfactory) in self.bot.bothandler.botfactories.iteritems():

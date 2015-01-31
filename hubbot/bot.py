@@ -38,8 +38,8 @@ class Hubbot(irc.IRCClient):
         self.fingerReply = bothandler.config.serverItemWithDefault(server, "fingerReply", "")
 
         self.databaseFile = os.path.join("hubbot", "data", "data.db")
-        self.admins = self.loadAdmins()
-        self.ignores = self.loadIgnores()
+        self.admins = []
+        self.ignores = []
 
         self.Quitting = False
         self.startTime = datetime.datetime.now()
@@ -194,24 +194,6 @@ class Hubbot(irc.IRCClient):
         logger.addHandler(handler)
 
         return logPath, logger
-
-    def loadIgnores(self):
-        ignores = []
-        with sqlite3.connect(self.databaseFile) as conn:
-            c = conn.cursor()
-            for row in c.execute("SELECT nick FROM ignores"):
-                ignores.append(row[0])
-        self.logger.info("Loaded \"{}\" into ignores list.".format(", ".join(ignores)))
-        return ignores
-
-    def loadAdmins(self):
-        admins = []
-        with sqlite3.connect(self.databaseFile) as conn:
-            c = conn.cursor()
-            for row in c.execute("SELECT nick FROM admins"):
-                admins.append(row[0])
-        self.logger.info("Loaded \"{}\" into admins list.".format(", ".join(admins)))
-        return admins
 
     def getChannel(self, channel):
         if channel in self.channels:
