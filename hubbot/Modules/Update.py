@@ -35,6 +35,6 @@ class Update(ModuleInterface):
 
         pip = os.path.join(os.path.dirname(sys.executable), "pip")
 
-        subprocess.check_call([pip, "install", "--upgrade", "-r", "requirements.txt"])
+        subprocess.check_call([pip, "install", "-r", "requirements.txt"])
 
         return IRCResponse(ResponseType.Say, response, message.ReplyTo)
