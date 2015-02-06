@@ -23,6 +23,12 @@ class Markov(ModuleInterface):
             return True
         return False
 
+    def _indexContainingSubstring(self, list, substring):
+        for i, s in enumerate(list):
+            if substring in s:
+                return i
+        return -1
+
     def onTrigger(self, message):
         """
         @type message: hubbot.message.IRCMessage
@@ -39,7 +45,11 @@ class Markov(ModuleInterface):
             nickList = [nick.lower() for nick in self.bot.channels[message.ReplyTo].Users.keys()]
             for nick in nickList:
                 if nick in reply.lower():
-                    reply = reply.replace(nick, message.User.Name)
+                    replyList = reply.lower().split()
+                    nickIndex = self._indexContainingSubstring(replyList, nick)
+                    newList = [item for item in replyList if nick not in item]
+                    newList.insert(nickIndex, message.User.Name)
+                    reply = " ".join(newList)
             return IRCResponse(ResponseType.Say, reply.capitalize(), message.ReplyTo)
         else:
             messageList = [item.lower() for item in message.MessageList if item.lower() != self.bot.nickname.lower()]
