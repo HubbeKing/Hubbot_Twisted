@@ -11,7 +11,7 @@ class Servers(ModuleInterface):
         "jcmp": "Ricin's Just Cause 2 MP server is hosted at: jcmp.117.me",
         "kf": "The Killing Floor server is hosted at: kf.dahou.se",
         "ksp": "The Kerbal Space Program DMP server is hosted at: ksp.dahou.se",
-        "mc": "The vanilla Minecraft server is hosted at mc.dahou.se (Contact a moderator to get whitelisted)",
+        "mc": "The vanilla Minecraft server is hosted at lrrmc.dahou.se",
         "moddedmc": "The Bevo's Tech Pack server is hosted at craft.dahou.se (Contact a moderator to get whitelisted)",
         "mumble": 'The mumble server is hosted at: mumble.dahou.se',
         "starbound": "The Starbound server is hosted at: starbound.dahou.se",
