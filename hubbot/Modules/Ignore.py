@@ -59,7 +59,7 @@ class Ignore(ModuleInterface):
                     c.execute("DELETE FROM ignores WHERE nick=?", (message.ParameterList[0],))
                     conn.commit()
                 for (server, botfactory) in self.bot.bothandler.botfactories.iteritems():
-                    botfactory.ignores.remove(message.ParameterList[0])
+                    botfactory.bot.ignores.remove(message.ParameterList[0])
                 return IRCResponse(ResponseType.Say,
                                    "Successfully removed '{}' from the ignores list.".format(message.ParameterList[0]),
                                    message.ReplyTo)

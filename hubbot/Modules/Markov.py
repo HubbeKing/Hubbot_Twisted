@@ -37,7 +37,7 @@ class Markov(ModuleInterface):
             return
         elif message.TargetType is TargetTypes.USER and not message.MessageString.startswith(self.bot.commandChar):
             reply = self.brain.reply(message.MessageString, max_len=100)
-            return IRCResponse(ResponseType.Say, reply.capitalize(), message.ReplyTo)
+            return IRCResponse(ResponseType.Say, reply.lstrip("!").capitalize(), message.ReplyTo)
         elif self.bot.nickname.lower() in message.MessageString.lower() and len(message.MessageList) > 1:
             messageList = [item.lower() for item in message.MessageList if item.lower() != self.bot.nickname.lower()]
             reply = self.brain.reply(" ".join(messageList), max_len=100)
@@ -50,7 +50,7 @@ class Markov(ModuleInterface):
                     newList = [item for item in replyList if nick not in item]
                     newList.insert(nickIndex, message.User.Name)
                     reply = " ".join(newList)
-            return IRCResponse(ResponseType.Say, reply.capitalize(), message.ReplyTo)
+            return IRCResponse(ResponseType.Say, reply.lstrip("!").capitalize(), message.ReplyTo)
         else:
             messageList = [item.lower() for item in message.MessageList if item.lower() != self.bot.nickname.lower()]
             self.addToBrain(" ".join(messageList))
