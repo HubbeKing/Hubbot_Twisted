@@ -8,8 +8,9 @@ import os
 class Markov(ModuleInterface):
     help = "Markov - Yeah I'm sentient, what of it?"
 
-    def onEnable(self):
-        self.brain = Brain(os.path.join("hubbot", "data", "{}.brain".format(self.bot.server)))
+    def __init__(self, bot):
+        self.brain = Brain(os.path.join("hubbot", "data", "{}.brain".format(bot.server)))
+        ModuleInterface.__init__(self, bot)
 
     def addToBrain(self, msg):
         if "://" not in msg and len(msg) > 1:
@@ -39,7 +40,7 @@ class Markov(ModuleInterface):
             reply = self.brain.reply(message.MessageString, max_len=100)
             return IRCResponse(ResponseType.Say, reply.lstrip("!").capitalize(), message.ReplyTo)
         elif self.bot.nickname.lower() in message.MessageString.lower() and len(message.MessageList) > 1:
-            messageList = [item.lower() for item in message.MessageList if item.lower() != self.bot.nickname.lower()]
+            messageList = [item for item in message.MessageList if item.lower() != self.bot.nickname.lower()]
             reply = self.brain.reply(" ".join(messageList), max_len=100)
 
             nickList = [nick.lower() for nick in self.bot.channels[message.ReplyTo].Users.keys()]
