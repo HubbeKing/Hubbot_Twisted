@@ -46,7 +46,7 @@ class Ignore(ModuleInterface):
                     c.execute("INSERT INTO ignores VALUES (?,?)", (maxID + 1, message.ParameterList[0]))
                     conn.commit()
                 for (server, botfactory) in self.bot.bothandler.botfactories.iteritems():
-                    botfactory.bot.ignore.append(message.ParameterList[0])
+                    botfactory.bot.ignores.append(message.ParameterList[0])
                 return IRCResponse(ResponseType.Say,
                                    "Successfully added '{}' to the ignores list.".format(message.ParameterList[0]),
                                    message.ReplyTo)
