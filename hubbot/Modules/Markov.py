@@ -8,9 +8,8 @@ import os
 class Markov(ModuleInterface):
     help = "Markov - Yeah I'm sentient, what of it?"
 
-    def __init__(self, bot):
-        self.brain = Brain(os.path.join("hubbot", "data", "{}.brain".format(bot.server)))
-        ModuleInterface.__init__(self, bot)
+    def onEnable(self):
+        self.brain = Brain(os.path.join("hubbot", "data", "{}.brain".format(self.bot.server)))
 
     def addToBrain(self, msg):
         if "://" not in msg and len(msg) > 1:
