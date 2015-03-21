@@ -45,11 +45,13 @@ class Markov(ModuleInterface):
             nickList = [nick.lower() for nick in self.bot.channels[message.ReplyTo].Users.keys()]
             for nick in nickList:
                 if nick in reply.lower():
+                    self.bot.logger.debug("Nick \"{}\" found in generated markov reply, attempting removal.".format(nick))
                     replyList = reply.lower().split()
                     nickIndex = self._indexContainingSubstring(replyList, nick)
                     newList = [item for item in replyList if nick not in item]
                     newList.insert(nickIndex, message.User.Name)
                     reply = " ".join(newList)
+                    self.bot.logger.debug("New reply is \"{}\"".format(reply.lstrip("!").capitalize()))
             return IRCResponse(ResponseType.Say, reply.lstrip("!").capitalize(), message.ReplyTo)
         else:
             messageList = [item.lower() for item in message.MessageList if item.lower() != self.bot.nickname.lower()]
