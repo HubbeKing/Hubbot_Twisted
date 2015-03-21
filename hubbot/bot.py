@@ -74,11 +74,12 @@ class Hubbot(irc.IRCClient):
 
         channelUsers = params[3].split(" ")
         for channelUser in channelUsers:
+            if channelUser == "":
+                continue
             rank = ""
             if channelUser != "" and channelUser[0] in self.prefixesCharToMode:
                 rank = self.prefixesCharToMode[channelUser[0]]
                 channelUser = channelUser[1:]
-
             if channelUser not in channel.Users:
                 user = IRCUser("{}!{}@{}".format(channelUser, "none", "none"))
             else:
