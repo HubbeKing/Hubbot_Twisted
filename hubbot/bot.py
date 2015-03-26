@@ -3,7 +3,6 @@ import logging
 from logging.handlers import TimedRotatingFileHandler
 import os
 import platform
-import sqlite3
 
 from twisted.words.protocols import irc
 
