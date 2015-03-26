@@ -45,7 +45,7 @@ class RPG(ModuleInterface):
             u"welch search": u"welch search <text> [number] -- Searches the Welch list for the specified text, with optional numbered matching."
         }
         if len(message.ParameterList) == 1:
-            return helpDict[message.ParameterList[0]]
+            return helpDict[message.ParameterList[0].lower()]
         else:
             return helpDict[u" ".join([word.lower() for word in message.ParameterList[:2]])]
 
