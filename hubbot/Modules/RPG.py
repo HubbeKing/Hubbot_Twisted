@@ -12,6 +12,7 @@ class RPG(ModuleInterface):
         "pf": {"displayname": "Pathfinder", "tablename": "pathfinder", "isAddingAllowed": True},
         "lp": {"displayname": "Let's Play", "tablename": "lp", "isAddingAllowed": True},
         "mm": {"displayname": "Mutants & Masterminds", "tablename": "mm", "isAddingAllowed": True},
+        "advice": {"displayname": "Advice", "tablename": "advice", "isAddingAllowed": True},
         "welch": {"displayname": "Welch", "tablename": "welch", "isAddingAllowed": False}
     }
 
@@ -33,6 +34,11 @@ class RPG(ModuleInterface):
             u"mm add": u"mm add <string> -- Adds the specified string as an entry in the Mutants & Masterminds list.",
             u"mm list": u"mm list [searchterm] -- Posts the Mutants & Masterminds list to paste.ee, with optional searchterm matching.",
             u"mm search": u"mm search <text> [number] -- Searches the Mutants & Masterminds list for the specified text, with optional numbered matching.",
+
+            u"advice": u"advice [number] -- Fetches a random or given entry from the Advice list.",
+            u"advice add": u"advice add <string> -- Adds the specified string as a bit of advice.",
+            u"advice list": u"advice list [searchterm] -- Posts the Advice list to paste.ee, with optional searchterm matching",
+            u"advice search": u"advice <text> [number] -- Searches the Advice list for the specified text, with optional numbered matching.",
 
             u"welch": u"welch [number] -- Fetches a random or given entry from the Welch list.",
             u"welch list": u"welch list [searchterm] -- Posts the Welch list to paste.ee, with optional searchterm matching.",
