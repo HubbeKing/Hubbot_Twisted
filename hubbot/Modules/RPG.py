@@ -18,7 +18,7 @@ class RPG(ModuleInterface):
 
     def help(self, message):
         helpDict = {
-            u"rpg": u"pf/lp/mm/welch <number>/add <thing>/list/search <term> -- \"helpful\" RPG advice and stuff",
+            u"rpg": u"pf/lp/mm/welch/advice <number>/add <thing>/list/search <term> -- \"helpful\" RPG advice and stuff",
 
             u"pf": u"pf [number] -- Fetches a random or given entry from the Pathfinder list.",
             u"pf add": u"pf add <string> -- Adds the specified string as an entry in the Pathfinder list.",
