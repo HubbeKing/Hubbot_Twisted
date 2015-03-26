@@ -122,11 +122,10 @@ class BotHandler:
             for f in glob("{}/{}.pyc".format("hubbot.Modules", properName)):
                 os.remove(f)
             logging.info("-- {} unloaded.".format(properName))
+            return True
         else:
             logging.warning("Module \"{}\" was requested to unload but it is not loaded!".format(name))
             return False
-
-        return True
 
     def checkModuleUsage(self, moduleName):
         loaded = False
