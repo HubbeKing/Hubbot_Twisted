@@ -134,3 +134,5 @@ class ModuleLoader(ModuleInterface):
             except:
                 exceptions.append(moduleCaseMap[moduleName])
                 self.bot.logger.exception("Exception when unloading module \"{}\"".format(moduleCaseMap[moduleName]))
+
+        return successes, failures, exceptions
