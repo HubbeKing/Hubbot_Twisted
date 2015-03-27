@@ -45,9 +45,12 @@ class RPG(ModuleInterface):
             u"welch search": u"welch search <text> [number] -- Searches the Welch list for the specified text, with optional numbered matching."
         }
         if len(message.ParameterList) == 1:
-            return helpDict[message.ParameterList[0].lower()]
+            command = message.ParameterList[0].lower()
+            return helpDict[command]
         else:
-            return helpDict[u" ".join([word.lower() for word in message.ParameterList[:2]])]
+            command = u" ".join([word.lower() for word in message.ParameterList[:2]])
+            if command in helpDict:
+                return helpDict[command]
 
     def onEnable(self):
         self.triggers = self.campaigns.keys()
