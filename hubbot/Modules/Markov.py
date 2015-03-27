@@ -35,7 +35,7 @@ class Markov(ModuleInterface):
         """
         if message.User.Name == self.bot.nickname:
             return
-        elif len(message.MessageList) > 1 and message.MessageList[0].lower() == self.bot.nickname.lower() and message.MessageList[1].lower() in self.bot.moduleHandler.mappedTriggers:
+        elif len(message.MessageList) > 1 and message.MessageList[0].lower().startswith(self.bot.nickname.lower()) and message.MessageList[1].lower() in self.bot.moduleHandler.mappedTriggers:
             return
         elif message.TargetType is TargetTypes.USER and not message.MessageString.startswith(self.bot.commandChar):
             reply = self.brain.reply(message.MessageString, max_len=100)
