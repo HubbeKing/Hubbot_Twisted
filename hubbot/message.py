@@ -1,3 +1,4 @@
+import re
 from enum import Enum
 from hubbot.user import IRCUser
 
@@ -41,7 +42,6 @@ class IRCMessage(object):
             self.ReplyTo = channel.Name
             self.TargetType = TargetTypes.CHANNEL
 
-
         if self.MessageList[0].startswith(bot.commandChar):
             self.Command = self.MessageList[0][len(bot.commandChar):].lower()
             if self.Command == "":
@@ -49,6 +49,11 @@ class IRCMessage(object):
                 self.Parameters = ' '.join(self.MessageList[2:])
             else:
                 self.Parameters = ' '.join(self.MessageList[1:])
+
+        elif re.match('{}[:,]?'.format(re.escape(bot.nickname)), self.MessageList[0], re.IGNORECASE):
+            if len(self.MessageList) > 1:
+                self.Command = self.MessageList[1].lower()
+                self.Parameters = u" ".join(self.MessageList[2:])
 
         if self.Parameters.strip():
             self.ParameterList = self.Parameters.split(' ')
