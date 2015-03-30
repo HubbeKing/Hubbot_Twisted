@@ -55,7 +55,14 @@ class Log(ModuleInterface):
         if message.Type in self.acceptedTypes and message.Command in self.triggers:
             if len(message.ParameterList) == 1 and message.User.Name in self.bot.admins:
                 handlerMsg = self.handler.getLatest((message.ParameterList[0]))
-                return IRCResponse(ResponseType.Say, handlerMsg, message.ReplyTo)
+                if "\n" not in handlerMsg:
+                    return IRCResponse(ResponseType.Say, handlerMsg, message.ReplyTo)
+                else:
+                    returnMessage = handlerMsg.split("\n")[0]
+                    exceptionInfo = " ".join(handlerMsg.split("\n")[1:])
+                    return IRCResponse(ResponseType.Say, returnMessage, message.ReplyTo), \
+                           IRCResponse(ResponseType.Notice, exceptionInfo, message.ReplyTo)
+
         if message.Type is not None and message.Type in self.logFuncs:
             logString = self.logFuncs[message.Type](message)
             if message.Type == "PRIVMSG":
