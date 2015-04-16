@@ -8,8 +8,7 @@ from newDB import createDB
 
 
 def exceptionHandler(type, value, tb):
-        logging.getLogger().exception("Uncaught exception: {}".format(str(value)))
-        sys.__excepthook__(type, value, tb)
+    logging.getLogger().exception("Uncaught exception: {}".format(str(value)))
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="A derpy Twisted IRC bot.")
