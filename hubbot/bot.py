@@ -188,7 +188,7 @@ class Hubbot(irc.IRCClient):
 
         # Setup the logger and handlers
         logger = logging.getLogger(self.server)
-        handler = TimedRotatingFileHandler(os.path.join(logPath, "{}.log".format(self.server)), when="midnight")
+        handler = TimedRotatingFileHandler(os.path.join(logPath, "{}.log".format(self.server)), when="midnight", backupCount=7)
         handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s', '%H:%M:%S'))
         handler.setLevel(logging.INFO)
         logger.addHandler(handler)
