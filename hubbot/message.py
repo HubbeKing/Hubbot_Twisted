@@ -50,10 +50,10 @@ class IRCMessage(object):
             else:
                 self.Parameters = ' '.join(self.MessageList[1:])
 
-        elif re.match('{}[:,]?'.format(re.escape(bot.nickname)), self.MessageList[0], re.IGNORECASE):
-            if len(self.MessageList) > 1:
-                self.Command = self.MessageList[1].lower()
-                self.Parameters = u" ".join(self.MessageList[2:])
+        #elif re.match('{}[:,]?'.format(re.escape(bot.nickname)), self.MessageList[0], re.IGNORECASE):
+        #    if len(self.MessageList) > 1:
+        #        self.Command = self.MessageList[1].lower()
+        #        self.Parameters = u" ".join(self.MessageList[2:])
 
         if self.Parameters.strip():
             self.ParameterList = self.Parameters.split(' ')
