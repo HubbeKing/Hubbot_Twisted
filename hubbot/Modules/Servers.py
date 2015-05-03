@@ -10,6 +10,7 @@ class Servers(ModuleInterface):
                 "The Garry's Mod server is hosted at: gmod.dahou.se",
         "jcmp": "Ricin's Just Cause 2 MP server is hosted at: jcmp.117.me",
         "kf": "The Killing Floor server is hosted at: kf.dahou.se",
+        "kf2": "The Killing Floor 2 server is hosted at: kf2.dahou.se",
         "ksp": "The Kerbal Space Program DMP server is hosted at: ksp.dahou.se",
         "mc": "The vanilla Minecraft server is hosted at lrrmc.dahou.se",
         "moddedmc": "The Bevo's Tech Pack server is hosted at craft.dahou.se (Contact a moderator to get whitelisted)",
