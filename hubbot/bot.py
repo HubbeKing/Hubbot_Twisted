@@ -20,9 +20,9 @@ class Hubbot(irc.IRCClient):
         """
         @type bothandler: hubbot.bothandler.BotHandler
         """
-        self.bothandler = bothandler
         self.server = server
         self.channels = channels
+        self.bothandler = bothandler
 
         self.logPath, self.logger = self.setupLogging()
 
@@ -64,7 +64,7 @@ class Hubbot(irc.IRCClient):
                         self.prefixesCharToMode[statusChars[i]] = statusModes[i]
 
     def irc_RPL_NAMREPLY(self, prefix, params):
-        channel = self.channels[params[2]]
+        channel = self.getChannel(params[2])
 
         if channel.NamesListComplete:
             channel.NamesListComplete = False
@@ -88,7 +88,7 @@ class Hubbot(irc.IRCClient):
             channel.Ranks[user.Name] = rank
 
     def irc_RPL_ENDOFNAMES(self, prefix, params):
-        channel = self.channels[params[1]]
+        channel = self.getChannel(params[1])
         channel.NamesListComplete = True
 
     def irc_NICK(self, prefix, params):
@@ -110,7 +110,7 @@ class Hubbot(irc.IRCClient):
                     self.moduleHandler.handleMessage(message)
 
     def irc_JOIN(self, prefix, params):
-        channel = self.channels[params[0]]
+        channel = self.getChannel(params[0])
         message = IRCMessage('JOIN', prefix, channel, '', self)
 
         if message.User.Name != self.nickname:
@@ -121,9 +121,8 @@ class Hubbot(irc.IRCClient):
         partMessage = ""
         if len(params) > 1:
             partMessage = ", message: " + " ".join(params[1:])
-        if params[0] in self.channels.keys():
-            channel = self.channels[params[0]]
-        else:
+        channel = self.getChannel(params[0])
+        if channel is None:
             channel = IRCChannel(params[0])
         message = IRCMessage('PART', prefix, channel, partMessage, self)
 
@@ -138,7 +137,7 @@ class Hubbot(irc.IRCClient):
         if len(params) > 2:
             kickMessage = ", message: " + " ".join(params[2:])
 
-        channel = self.channels[params[0]]
+        channel = self.getChannel(params[0])
         message = IRCMessage('KICK', prefix, channel, kickMessage, self)
         message.Kickee = params[1]
         if message.Kickee == self.nickname:
