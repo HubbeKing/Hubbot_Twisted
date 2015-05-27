@@ -13,7 +13,6 @@ class Servers(ModuleInterface):
         "kf2": "The Killing Floor 2 server is hosted at: kf2.dahou.se",
         "ksp": "The Kerbal Space Program DMP server is hosted at: ksp.dahou.se",
         "mc": "The vanilla Minecraft server is hosted at lrrmc.dahou.se",
-        "moddedmc": "The Bevo's Tech Pack server is hosted at craft.dahou.se (Contact a moderator to get whitelisted)",
         "mumble": 'The mumble server is hosted at: lrr.dahou.se',
         "starbound": "The Starbound server is hosted at: starbound.dahou.se",
         "starbound2": "Ricin's Starbound server is hosted at: sb.117.me",
@@ -26,10 +25,7 @@ class Servers(ModuleInterface):
         @type message: hubbot.message.IRCMessage
         """
         helpDict = {
-            "ksp": "In order to play on ksp.dahou.se, you need MechJeb and Kerbal Engineer installed.",
-            "moddedmc": "In order to play on craft.dahou.se, you need Bevo's Tech Pack v11 Full.\n"
-                        "The easiest way to get it is with AT Launcher (http://www.atlauncher.com/downloads)\n"
-                        "You also have to enable Biomes O' Plenty, Blood Magic and Thaumcraft when installing the pack."
+            "ksp": "In order to play on ksp.dahou.se, you need MechJeb and Kerbal Engineer installed."
         }
         command = message.ParameterList[0].lower()
         if command in helpDict:
