@@ -13,12 +13,13 @@ class RPG(ModuleInterface):
         "lp": {"displayname": "Let's Play", "tablename": "lp", "isAddingAllowed": True},
         "mm": {"displayname": "Mutants & Masterminds", "tablename": "mm", "isAddingAllowed": True},
         "advice": {"displayname": "Advice", "tablename": "advice", "isAddingAllowed": True},
-        "welch": {"displayname": "Welch", "tablename": "welch", "isAddingAllowed": False}
+        "welch": {"displayname": "Welch", "tablename": "welch", "isAddingAllowed": False},
+        "dnd": {"displayname": "Dungeons & Dragons", "tablename": "dnd", "isAddingAllowed": True}
     }
 
     def help(self, message):
         helpDict = {
-            u"rpg": u"pf/lp/mm/welch/advice <number>/add <thing>/list/search <term> -- \"helpful\" RPG advice and stuff",
+            u"rpg": u"pf/lp/mm/welch/advice/dnd <number>/add <thing>/list/search <term> -- \"helpful\" RPG advice and stuff",
 
             u"pf": u"pf [number] -- Fetches a random or given entry from the Pathfinder list.",
             u"pf add": u"pf add <string> -- Adds the specified string as an entry in the Pathfinder list.",
@@ -39,6 +40,11 @@ class RPG(ModuleInterface):
             u"advice add": u"advice add <string> -- Adds the specified string as a bit of advice.",
             u"advice list": u"advice list [searchterm] -- Posts the Advice list to paste.ee, with optional searchterm matching",
             u"advice search": u"advice <text> [number] -- Searches the Advice list for the specified text, with optional numbered matching.",
+
+            u"dnd": u"dnd [number] -- Fetches a random or given entry from the D&D list.",
+            u"dnd add": u"advice add <string> -- Adds the specified string to the D&D list.",
+            u"dnd list": u"advice list [searchterm] -- Posts the D&D list to paste.ee, with optional searchterm matching",
+            u"dnd search": u"advice <text> [number] -- Searches the D&D list for the specified text, with optional numbered matching.",
 
             u"welch": u"welch [number] -- Fetches a random or given entry from the Welch list.",
             u"welch list": u"welch list [searchterm] -- Posts the Welch list to paste.ee, with optional searchterm matching.",
