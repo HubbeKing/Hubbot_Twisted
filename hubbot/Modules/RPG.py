@@ -133,7 +133,7 @@ class RPG(ModuleInterface):
     def addLine(self, table, line):
         with sqlite3.connect(self.bot.databaseFile) as conn:
             c = conn.cursor()
-            c.execute("INSERT INTO {} VALUES (?)".format(table), (line,))
+            c.execute("INSERT INTO {} VALUES (NULL, ?)".format(table), (line,))
             c.execute("SELECT max(id) FROM {}".format(table))
             maxNumber = c.fetchone()[0]
             conn.commit()
