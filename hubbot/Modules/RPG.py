@@ -137,7 +137,7 @@ class RPG(ModuleInterface):
             c.execute("SELECT max(id) FROM {}".format(table))
             maxNumber = c.fetchone()[0]
             conn.commit()
-        return maxNumber + 1
+        return maxNumber
 
     def search(self, table, line):
         messageDict = {}
