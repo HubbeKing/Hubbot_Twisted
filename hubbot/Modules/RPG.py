@@ -95,7 +95,7 @@ class RPG(ModuleInterface):
             for row in c.execute("SELECT * FROM {}".format(table)):
                 messageDict[row[0]] = row[1]
         choice = random.choice(messageDict.keys())
-        return "{}. {}".format(str(choice), messageDict[choice])
+        return "{}/{}: {}".format(str(choice), max(messageDict.keys()), messageDict[choice])
 
     def getSpecific(self, table, number):
         try:
@@ -108,7 +108,7 @@ class RPG(ModuleInterface):
             for row in c.execute("SELECT * FROM {}".format(table)):
                 messageDict[row[0]] = row[1]
         if choice in messageDict.keys():
-            return "{}. {}".format(str(choice), messageDict[choice])
+            return "{}/{}: {}".format(str(choice), max(messageDict.keys()), messageDict[choice])
         else:
             return "Invalid number, valid numbers are <{}-{}>".format(min(messageDict.keys()), max(messageDict.keys()))
 
