@@ -78,7 +78,7 @@ class RPG(ModuleInterface):
         elif message.ParameterList[0] == "add" and self.campaigns[message.Command]["isAddingAllowed"]:
             lineToAdd = " ".join(message.ParameterList[1:])
             newIndex = self.addLine(self.campaigns[message.Command]["tablename"], lineToAdd)
-            return IRCResponse(ResponseType.Say, "Successfully added line '{}. {}'".format(newIndex, lineToAdd),
+            return IRCResponse(ResponseType.Say, "Successfully added line '{} - {}'".format(newIndex, lineToAdd),
                                message.ReplyTo)
         elif message.ParameterList[0] == "search":
             return IRCResponse(ResponseType.Say, self.search(self.campaigns[message.Command]["tablename"],
@@ -95,7 +95,7 @@ class RPG(ModuleInterface):
             for row in c.execute("SELECT * FROM {}".format(table)):
                 messageDict[row[0]] = row[1]
         choice = random.choice(messageDict.keys())
-        return "{}/{}: {}".format(str(choice), max(messageDict.keys()), messageDict[choice])
+        return "Entry #{}/{} - {}".format(str(choice), max(messageDict.keys()), messageDict[choice])
 
     def getSpecific(self, table, number):
         try:
@@ -108,7 +108,7 @@ class RPG(ModuleInterface):
             for row in c.execute("SELECT * FROM {}".format(table)):
                 messageDict[row[0]] = row[1]
         if choice in messageDict.keys():
-            return "{}/{}: {}".format(str(choice), max(messageDict.keys()), messageDict[choice])
+            return "Entry #{}/{} - {}".format(str(choice), max(messageDict.keys()), messageDict[choice])
         else:
             return "Invalid number, valid numbers are <{}-{}>".format(min(messageDict.keys()), max(messageDict.keys()))
 
