@@ -1,3 +1,4 @@
+import re
 import sqlite3
 from hubbot.moduleinterface import ModuleInterface, ModuleAccessLevel
 from hubbot.response import IRCResponse, ResponseType
@@ -23,6 +24,17 @@ class Pushbullet(ModuleInterface):
                 return device
         return None
 
+    def findDeviceName(self, pushMessage):
+        deviceList = []
+        for device in self.pb.devices:
+            deviceList.append(device.nickname)
+
+        matchObject = re.match("(%s) (.*)" % "|".join(deviceList), pushMessage)
+        if matchObject is not None:
+            return matchObject.groups()
+        else:
+            return "", pushMessage
+
     def onEnable(self):
         try:
             apiKey = self.getAPIkey()
@@ -43,13 +55,15 @@ class Pushbullet(ModuleInterface):
         @type message: hubbot.message.IRCMessage
         """
         try:
-            device = self.getDeviceByName(message.ParameterList[0].lower())
+            pushMessage = " ".join(message.ParameterList)
+            deviceName, pushMessage = self.findDeviceName(pushMessage)
+            device = self.getDeviceByName(deviceName)
             if device is not None:
-                push = device.push_note("{} <{}>".format(str(message.ReplyTo), str(message.User.Name)), " ".join(message.ParameterList[1:]))
+                push = device.push_note("{} <{}>".format(str(message.ReplyTo), str(message.User.Name)), pushMessage)
             elif "://" in message.ParameterList[0]:
-                push = self.pb.push_link("{} <{}>".format(str(message.ReplyTo), str(message.User.Name)), " ".join(message.ParameterList[0:]))
+                push = self.pb.push_link("{} <{}>".format(str(message.ReplyTo), str(message.User.Name)), pushMessage)
             else:
-                push = self.pb.push_note("{} <{}>".format(str(message.ReplyTo), str(message.User.Name)), " ".join(message.ParameterList[0:]))
+                push = self.pb.push_note("{} <{}>".format(str(message.ReplyTo), str(message.User.Name)), pushMessage)
         except:
             self.bot.logger.exception("Pushbullet push failed!")
             return IRCResponse(ResponseType.Say, "I think something broke, I couldn't send that pushbullet.", message.ReplyTo)
