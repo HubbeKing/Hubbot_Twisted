@@ -17,6 +17,12 @@ class Pushbullet(ModuleInterface):
                 apiKey = row[0]
         return apiKey
 
+    def getDeviceByName(self, deviceName):
+        for device in self.pb.devices:
+            if device.nickname.lower() == deviceName.lower():
+                return device
+        return None
+
     def onEnable(self):
         try:
             apiKey = self.getAPIkey()
@@ -37,7 +43,10 @@ class Pushbullet(ModuleInterface):
         @type message: hubbot.message.IRCMessage
         """
         try:
-            if "://" in message.ParameterList[0]:
+            device = self.getDeviceByName(message.ParameterList[0].lower())
+            if device is not None:
+                push = device.push_note("#{} <{}>".format(str(message.ReplyTo), str(message.User.Name)), " ".join(message.ParameterList[1:]))
+            elif "://" in message.ParameterList[0]:
                 push = self.pb.push_link("#{} <{}>".format(str(message.ReplyTo), str(message.User.Name)), " ".join(message.ParameterList[0:]))
             else:
                 push = self.pb.push_note("#{} <{}>".format(str(message.ReplyTo), str(message.User.Name)), " ".join(message.ParameterList[0:]))
