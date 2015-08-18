@@ -45,11 +45,11 @@ class Pushbullet(ModuleInterface):
         try:
             device = self.getDeviceByName(message.ParameterList[0].lower())
             if device is not None:
-                push = device.push_note("#{} <{}>".format(str(message.ReplyTo), str(message.User.Name)), " ".join(message.ParameterList[1:]))
+                push = device.push_note("{} <{}>".format(str(message.ReplyTo), str(message.User.Name)), " ".join(message.ParameterList[1:]))
             elif "://" in message.ParameterList[0]:
-                push = self.pb.push_link("#{} <{}>".format(str(message.ReplyTo), str(message.User.Name)), " ".join(message.ParameterList[0:]))
+                push = self.pb.push_link("{} <{}>".format(str(message.ReplyTo), str(message.User.Name)), " ".join(message.ParameterList[0:]))
             else:
-                push = self.pb.push_note("#{} <{}>".format(str(message.ReplyTo), str(message.User.Name)), " ".join(message.ParameterList[0:]))
+                push = self.pb.push_note("{} <{}>".format(str(message.ReplyTo), str(message.User.Name)), " ".join(message.ParameterList[0:]))
         except:
             self.bot.logger.exception("Pushbullet push failed!")
             return IRCResponse(ResponseType.Say, "I think something broke, I couldn't send that pushbullet.", message.ReplyTo)
