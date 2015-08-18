@@ -37,17 +37,14 @@ class Pushbullet(ModuleInterface):
 
     def onEnable(self):
         try:
-            apiKey = self.getAPIkey()
-            if apiKey is not None:
-                self.pb = PushBullet(self.getAPIkey())
+            self.APIKey = self.getAPIkey()
+            self.pb = None
+            if self.APIKey is not None:
                 self.bot.logger.info("Successfully authenticated with Pushbullet API key.")
             else:
-                self.bot.logger.error("Could not fetch Pushbullet API key!")
-        except InvalidKeyError:
-            self.bot.logger.exception("Pushbullet API key is invalid!")
-            raise
+                self.bot.logger.error("Could not find Pushbullet API key!")
         except:
-            self.bot.logger.exception("Exception when fetching Pushbullet API key!")
+            self.bot.logger.error("Error when fetching Pushbullet API key!")
             raise
 
     def onTrigger(self, message):
@@ -55,6 +52,7 @@ class Pushbullet(ModuleInterface):
         @type message: hubbot.message.IRCMessage
         """
         try:
+            self.pb = PushBullet(self.APIKey)
             pushMessage = " ".join(message.ParameterList)
             deviceName, pushMessage = self.findDeviceName(pushMessage)
             device = self.getDeviceByName(deviceName)
