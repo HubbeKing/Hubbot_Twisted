@@ -7,7 +7,7 @@ from pushbullet import PushBullet, InvalidKeyError
 class Pushbullet(ModuleInterface):
     triggers = ["pb"]
     accessLevel = ModuleAccessLevel.ADMINS
-    help = "pb [title] <text> -- Pushes a pushbullet notification to HubbeKing, title is optional."
+    help = "pb [device] <text> -- Sends a pushbullet notification to HubbeKing, device specification is optional."
 
     def getAPIkey(self):
         apiKey = None
