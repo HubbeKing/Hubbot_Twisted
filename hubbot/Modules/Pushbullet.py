@@ -27,8 +27,10 @@ class Pushbullet(ModuleInterface):
                 self.bot.logger.error("Could not fetch Pushbullet API key!")
         except InvalidKeyError:
             self.bot.logger.exception("Pushbullet API key is invalid!")
+            raise
         except:
             self.bot.logger.exception("Exception when fetching Pushbullet API key!")
+            raise
 
     def onTrigger(self, message):
         """
