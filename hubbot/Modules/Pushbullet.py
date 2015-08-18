@@ -29,7 +29,7 @@ class Pushbullet(ModuleInterface):
         for device in self.pb.devices:
             deviceList.append(device.nickname)
 
-        matchObject = re.match("(%s) (.*)" % "|".join(deviceList), pushMessage)
+        matchObject = re.match("(%s) (.*)" % "|".join(deviceList), pushMessage, flags=re.IGNORECASE)
         if matchObject is not None:
             return matchObject.groups()
         else:
