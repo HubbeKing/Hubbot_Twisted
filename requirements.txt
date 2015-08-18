@@ -3,4 +3,4 @@ Twisted==15.1.0
 enum34==1.0.4
 pytimeparse==1.1.4
 cobe==2.1.1
-pushbullet.py=0.8.1
+pushbullet.py==0.8.1
