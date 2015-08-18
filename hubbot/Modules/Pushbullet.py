@@ -13,7 +13,7 @@ class Pushbullet(ModuleInterface):
         apiKey = None
         with sqlite3.connect(self.bot.databaseFile) as conn:
             c = conn.cursor()
-            for row in c.execute("SELECT pushbullet FROM keys"):
+            for row in c.execute("SELECT apikey FROM keys WHERE name=\"pushbullet\""):
                 apiKey = row[0]
         return apiKey
 
