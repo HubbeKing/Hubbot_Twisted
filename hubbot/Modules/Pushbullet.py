@@ -37,16 +37,10 @@ class Pushbullet(ModuleInterface):
         @type message: hubbot.message.IRCMessage
         """
         try:
-            if len(message.ParameterList) == 1:
-                if "://" not in message.ParameterList[0]:
-                    push = self.pb.push_note("From Chat", message.ParameterList[0])
-                else:
-                    push = self.pb.push_link("From Chat", message.ParameterList[0])
-            elif len(message.ParameterList) == 2:
-                if "://" not in message.ParameterList[1]:
-                    push = self.pb.push_note(message.ParameterList[0], message.ParameterList[1])
-                else:
-                    push = self.pb.push_link(message.ParameterList[0], message.ParameterList[1])
+            if "://" in message.ParameterList[0]:
+                push = self.pb.push_link("#{} <{}>".format(str(message.ReplyTo), str(message.User.Name)), " ".join(message.ParameterList[0:]))
+            else:
+                push = self.pb.push_note("#{} <{}>".format(str(message.ReplyTo), str(message.User.Name)), " ".join(message.ParameterList[0:]))
         except:
             self.bot.logger.exception("Pushbullet push failed!")
             return IRCResponse(ResponseType.Say, "I think something broke, I couldn't send that pushbullet.", message.ReplyTo)
