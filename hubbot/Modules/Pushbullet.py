@@ -11,6 +11,9 @@ class Pushbullet(ModuleInterface):
     help = "pb [device] <text> -- Sends a pushbullet notification to the bot owner, device specification is optional."
 
     def getAPIkey(self):
+        """
+        Get the API key for pushbullet from the sqlite database.
+        """
         apiKey = None
         with sqlite3.connect(self.bot.databaseFile) as conn:
             c = conn.cursor()
@@ -20,8 +23,8 @@ class Pushbullet(ModuleInterface):
 
     def getDeviceByName(self, deviceName):
         """
-        Tries to find the named devices in the list of devices availible with the current PushBullet object
-        Returns the Device object if one can be found, otherwise returns None
+        Tries to find the named device in the list of devices availible with the current PushBullet object.
+        Returns the Device object if one can be found, otherwise returns None.
         """
         for device in self.pb.devices:
             if device.nickname.lower() == deviceName.lower():
@@ -64,7 +67,7 @@ class Pushbullet(ModuleInterface):
         @type message: hubbot.message.IRCMessage
         """
         try:
-            self.pb = PushBullet(self.APIKey)
+            self.pb = PushBullet(self.APIKey) # refresh the PushBullet object so we are working with the latest availible data
             pushMessage = " ".join(message.ParameterList)
             deviceName, pushMessage = self.findDeviceName(pushMessage)
             device = self.getDeviceByName(deviceName)
