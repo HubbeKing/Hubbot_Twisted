@@ -8,7 +8,7 @@ from pushbullet import PushBullet, InvalidKeyError
 class Pushbullet(ModuleInterface):
     triggers = ["pb"]
     accessLevel = ModuleAccessLevel.ADMINS
-    help = "pb [device] <text> -- Sends a pushbullet notification to HubbeKing, device specification is optional."
+    help = "pb [device] <text> -- Sends a pushbullet notification to the bot owner, device specification is optional."
 
     def getAPIkey(self):
         apiKey = None
@@ -19,12 +19,21 @@ class Pushbullet(ModuleInterface):
         return apiKey
 
     def getDeviceByName(self, deviceName):
+        """
+        Tries to find the named devices in the list of devices availible with the current PushBullet object
+        Returns the Device object if one can be found, otherwise returns None
+        """
         for device in self.pb.devices:
             if device.nickname.lower() == deviceName.lower():
                 return device
         return None
 
     def findDeviceName(self, pushMessage):
+        """
+        Trawls through the message, trying to figure out if a device name was given, and what it was.
+        If no device name can be found, returns empty string as device name and the original message.
+        If a valid device name can be found, returns the device name and the message with it stripped out as a tuple.
+        """
         deviceList = []
         for device in self.pb.devices:
             deviceList.append(device.nickname)
@@ -36,6 +45,9 @@ class Pushbullet(ModuleInterface):
             return "", pushMessage
 
     def onEnable(self):
+        """
+        When the module is enabled, try to get the API key for Pushbullet and authenticate with it.
+        """
         try:
             self.APIKey = self.getAPIkey()
             self.pb = None
@@ -67,7 +79,7 @@ class Pushbullet(ModuleInterface):
             return IRCResponse(ResponseType.Say, "I think something broke, I couldn't send that pushbullet.", message.ReplyTo)
         else:
             if "error" not in push:
-                return IRCResponse(ResponseType.Say, "Okay, I'll send that to HubbeKing!", message.ReplyTo)
+                return IRCResponse(ResponseType.Say, "Okay, I'll send that to my owner!", message.ReplyTo)
             else:
                 self.bot.logger.error("Pushbullet returned error '{}'".format(push["error"]["type"]))
                 return IRCResponse(ResponseType.Say, "I got an error code when trying to send that, sorry!", message.ReplyTo)
