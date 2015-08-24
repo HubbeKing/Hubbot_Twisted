@@ -55,6 +55,11 @@ class Pushbullet(ModuleInterface):
             self.APIKey = self.getAPIkey()
             self.pb = None
             if self.APIKey is not None:
+                try:
+                    self.pb = PushBullet(self.APIKey)
+                except InvalidKeyError:
+                    self.bot.logger.exception("Pushbullet API key invalid!")
+                    raise
                 self.bot.logger.info("Successfully authenticated with Pushbullet API key.")
             else:
                 self.bot.logger.error("Could not find Pushbullet API key!")
