@@ -72,7 +72,7 @@ class Pushbullet(ModuleInterface):
         @type message: hubbot.message.IRCMessage
         """
         try:
-            self.pb = PushBullet(self.APIKey) # refresh the PushBullet object so we are working with the latest availible data
+            self.pb.refresh()  # refresh the PushBullet object so we are working with the latest available data
             pushMessage = " ".join(message.ParameterList)
             deviceName, pushMessage = self.findDeviceName(pushMessage)
             device = self.getDeviceByName(deviceName)
