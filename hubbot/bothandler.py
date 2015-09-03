@@ -58,8 +58,10 @@ class BotHandler:
                 # this most likely means the bot in question is not connected anywhere or otherwise can't send a QUIT
                 logging.exception("Bot for server \"{}\" could not quit properly!".format(server))
                 self.botfactories[server].stopTrying()
-            self.unregisterFactory(server)
-            logging.info("Successfully shut down bot for server \"{}\"".format(server))
+                self.unregisterFactory(server)
+            else:
+                self.unregisterFactory(server)
+                logging.info("Successfully shut down bot for server \"{}\"".format(server))
 
     def unregisterFactory(self, server):
         if server in self.botfactories:
@@ -173,3 +175,10 @@ class BotHandler:
                 continue
 
             yield item[:-3]
+            
+    def getModule(self, moduleName):
+        if moduleName.lower() in self.moduleCaseMap.keys():
+            properName = self.moduleCaseMap[moduleName.lower()]
+            return self.modules[properName]
+        else:
+            return None
