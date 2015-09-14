@@ -83,7 +83,7 @@ class ModuleHandler(object):
             self.bot.logger.warning("Module \"{}\" was requested to enable but it is already enabled!".format(moduleName))
             return False
 
-        module = self.bot.bothandler.getModule(moduleListCaseMap[moduleName])
+        module = sys.modules["{}.{}".format("hubbot.Modules", moduleListCaseMap[moduleName])]
 
         class_ = getattr(module, moduleListCaseMap[moduleName])
 
