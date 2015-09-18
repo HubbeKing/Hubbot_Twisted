@@ -24,17 +24,8 @@ class Hubbot(irc.IRCClient):
         self.channels = channels
         self.bothandler = bothandler
 
-        self.logPath, self.logger = self.setupLogging()
-
-        self.nickname = bothandler.config.serverItemWithDefault(server, "nickname", "Hubbot")
-        self.username = bothandler.config.serverItemWithDefault(server, "username", "Hubbot")
-        self.realname = bothandler.config.serverItemWithDefault(server, "realname", "Hubbot")
-        self.password = bothandler.config.serverItemWithDefault(server, "password", None)
-        self.versionName = self.nickname
-        self.versionNum = __version__
-        self.versionEnv = platform.platform()
-        self.commandChar = bothandler.config.serverItemWithDefault(server, "commandchar", "+")
-        self.fingerReply = bothandler.config.serverItemWithDefault(server, "fingerReply", "")
+        self.setupLogging()
+        self.readConfig()
 
         self.databaseFile = os.path.join("hubbot", "data", "data.db")
         self.admins = []
@@ -191,8 +182,21 @@ class Hubbot(irc.IRCClient):
         handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s', '%H:%M:%S'))
         handler.setLevel(logging.INFO)
         logger.addHandler(handler)
-
-        return logPath, logger
+        
+        self.logPath = logPath
+        self.logger = logger
+        
+    def readConfig(self):
+        self.nickname = self.bothandler.config.serverItemWithDefault(self.server, "nickname", "Hubbot")
+        self.username = self.bothandler.config.serverItemWithDefault(self.server, "username", "Hubbot")
+        self.realname = self.bothandler.config.serverItemWithDefault(self.server, "realname", "Hubbot")
+        self.password = self.bothandler.config.serverItemWithDefault(self.server, "password", None)
+        self.versionName = self.nickname
+        self.versionNum = __version__
+        self.versionEnv = platform.platform()
+        self.commandChar = self.bothandler.config.serverItemWithDefault(self.server, "commandchar", "+")
+        self.fingerReply = self.bothandler.config.serverItemWithDefault(self.server, "fingerReply", "")
+        
 
     def getChannel(self, channel):
         if channel in self.channels:
