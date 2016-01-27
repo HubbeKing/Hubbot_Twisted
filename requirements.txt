@@ -1,6 +1,6 @@
 PyYAML==3.11
-Twisted==15.3.0
-enum34==1.0.4
+Twisted==15.5.0
+enum34==1.1.2
 pytimeparse==1.1.5
-cobe==2.1.1
-pushbullet.py==0.8.1
+cobe==2.1.2
+pushbullet.py==0.10.0
