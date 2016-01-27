@@ -39,7 +39,7 @@ class BotHandling(ModuleInterface):
                 if server not in self.bot.bothandler.botfactories:
                     return IRCResponse(ResponseType.Say, "Could not connect to server '{}'".format(server), message.ReplyTo)
                 else:
-                    return IRCResponse(ResponseType.Say, "Connected to server '{]'".format(server), message.ReplyTo)
+                    return IRCResponse(ResponseType.Say, "Connected to server '{}'".format(server), message.ReplyTo)
 
         if message.Command == "quit":
             if datetime.datetime.now() > self.bot.startTime + datetime.timedelta(seconds=10):
