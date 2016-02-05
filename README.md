@@ -16,3 +16,12 @@ HOW TO USE:
 3. Run `pip install -r requirements.txt`. inside said virtualenv
 4. Create a config file from hubbot.yaml.example
 5. Use said virtualenv to run `python app.py -c configFileName`
+
+
+MODULE SYSTEM:
+
+The module system for Hubbot works like this:
+- Modules are globally loaded by the BotHandler class
+- Loaded modules are enabled on a per-server basis by each bot's modulehandler
+
+This is in order to enable different servers have different modules loaded in.
