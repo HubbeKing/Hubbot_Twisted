@@ -29,17 +29,19 @@ class Markov(ModuleInterface):
                 return i
         return -1
 
+    def _cleanupString(self, string):
+        return "".join(c for c in string if ord(c) >= 0x20).lstrip("~").lstrip("!").lstrip(".")
+
     def onTrigger(self, message):
         """
         @type message: hubbot.message.IRCMessage
         """
         if message.User.Name == self.bot.nickname:
             return
-        #elif len(message.MessageList) > 1 and message.MessageList[0].lower().startswith(self.bot.nickname.lower()) and message.MessageList[1].lower() in self.bot.moduleHandler.mappedTriggers:
-        #    return
         elif message.TargetType is TargetTypes.USER and not message.MessageString.startswith(self.bot.commandChar):
             reply = self.brain.reply(message.MessageString, max_len=100)
-            return IRCResponse(ResponseType.Say, reply.lstrip("!").capitalize(), message.ReplyTo)
+            reply = self._cleanupString(reply)
+            return IRCResponse(ResponseType.Say, reply.capitalize(), message.ReplyTo)
         elif self.bot.nickname.lower() in message.MessageString.lower() and len(message.MessageList) > 1:
             messageList = [item for item in message.MessageList if item.lower() != self.bot.nickname.lower()]
             reply = self.brain.reply(" ".join(messageList), max_len=100)
@@ -52,7 +54,8 @@ class Markov(ModuleInterface):
                     newList = [item for item in replyList if nick not in item]
                     newList.insert(nickIndex, message.User.Name)
                     reply = " ".join(newList)
-            return IRCResponse(ResponseType.Say, reply.lstrip("!").capitalize(), message.ReplyTo)
+            reply = self._cleanupString(reply)
+            return IRCResponse(ResponseType.Say, reply.capitalize(), message.ReplyTo)
         else:
             messageList = [item.lower() for item in message.MessageList if item.lower() != self.bot.nickname.lower()]
             self.addToBrain(" ".join(messageList))
