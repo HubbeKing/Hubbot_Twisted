@@ -5,7 +5,6 @@ import random
 from hubbot.moduleinterface import ModuleInterface
 from hubbot.response import IRCResponse, ResponseType
 from hubbot.Utils.webutils import pasteEE
-from hubbot.Utils.timeout import Timeout
 
 
 class RPG(ModuleInterface):
@@ -125,11 +124,7 @@ class RPG(ModuleInterface):
                 pasteString += str(number) + ". " + string + "\n"
         else:
             for number, string in messageDict.iteritems():
-                try:
-                    with Timeout(5):
-                        match = re.search(params, string, re.IGNORECASE)
-                except Timeout:
-                    match = False
+                match = re.search(params, string, re.IGNORECASE)
                 if match:
                     pasteString += str(number) + ". " + string + "\n"
         pasteLink = pasteEE(pasteString, name, 10)
@@ -158,11 +153,7 @@ class RPG(ModuleInterface):
             for row in c.execute("SELECT * FROM {}".format(table)):
                 messageDict[row[0]] = row[1]
         for number, text in messageDict.iteritems():
-            try:
-                with Timeout(5):
-                    match = re.search(line, text, re.IGNORECASE)
-            except Timeout:
-                match = False
+            match = re.search(line, text, re.IGNORECASE)
             if match:
                 for number, text in messageDict.iteritems():
                     if text == match.string:

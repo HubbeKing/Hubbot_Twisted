@@ -7,7 +7,6 @@ import traceback
 from hubbot.response import IRCResponse, ResponseType
 from hubbot.moduleinterface import ModuleInterface
 from hubbot.Utils.webutils import pasteEE
-from hubbot.Utils.timeout import Timeout
 
 
 class Headcanon(ModuleInterface):
@@ -62,11 +61,7 @@ class Headcanon(ModuleInterface):
                 random.shuffle(hc)
                 re_string = "{}".format(" ".join(message.ParameterList[1:]))
                 for canon in hc:
-                    try:
-                        with Timeout(5):
-                            match = re.search(re_string, canon, re.IGNORECASE)
-                    except Timeout:
-                        match = False
+                    match = re.search(re_string, canon, re.IGNORECASE)
                     if match:
                         returnString = match.string
                         break
@@ -93,11 +88,7 @@ class Headcanon(ModuleInterface):
             try:
                 re_string = "{}".format(" ".join(message.ParameterList[1:]))
                 for canon in headcanon:
-                    try:
-                        with Timeout(5):
-                            match = re.search(re_string, canon, re.IGNORECASE)
-                    except Timeout:
-                        match = False
+                    match = re.search(re_string, canon, re.IGNORECASE)
                     if match:
                         headcanon.remove(match.string)
                         with sqlite3.connect(self.bot.databaseFile) as conn:
