@@ -1,5 +1,6 @@
 from hubbot.moduleinterface import ModuleInterface
 from hubbot.response import IRCResponse, ResponseType
+from hubbot.Utils.timeout import Timeout
 import string
 import sqlite3
 import re
@@ -100,7 +101,8 @@ class Hugs(ModuleInterface):
             matches = []
             for (user, hugCounts) in hug_dict.items():
                 try:
-                    match = re.search(target, user, re.IGNORECASE)
+                    with Timeout(5):
+                        match = re.search(target, user, re.IGNORECASE)
                 except:
                     match = False
                 if match:

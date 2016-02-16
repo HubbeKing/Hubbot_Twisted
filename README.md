@@ -6,6 +6,9 @@ A mostly modular IRC bot written using the Twisted library.
 Because of Twisted, Windows users will most likely need to install the Microsoft Visual C++ Compiler for Python 2.7
 (http://www.microsoft.com/en-us/download/details.aspx?id=44266)
 
+NOTE:
+    Because of SIGALRM usage in the timeout utility, some of Hubbot's modules will only function on linux.
+
 Please be aware that the default behaviour of Hubbot is to load all existing modules on startup.
 This can be changed in the config file.
 
