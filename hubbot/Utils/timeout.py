@@ -27,7 +27,7 @@ class Timeout(Exception):
     def __exit__(self, *exc_info):
         signal.alarm(0)  # cancel any pending alarm
         my_handler = signal.signal(signal.SIGALRM, self._old_handler)
-        assert my_handler is self._handler, "Wrong SIGALRM handler on __exit__, is something else messing with signal handlers?"
+        assert my_handler == self._handler, "Wrong SIGALRM handler on __exit__, is something else messing with signal handlers?"
 
     def __str__(self):
         return "Exceeded timeout of {} seconds".format(self.duration)
