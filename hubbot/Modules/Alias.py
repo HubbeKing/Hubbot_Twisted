@@ -16,9 +16,9 @@ class Alias(ModuleInterface):
         @type message: IRCMessage
         """
         helpDict = {
-            u"alias":   u"alias <alias> <command/alias> <params> - aliases <alias> to the specified command/alias and parameters\n" \
-                        u"you can specify where parameters given to the alias should be inserted with $1, $2, $n. " \
-                        u"The whole parameter string is $0. $sender and $channel can also be used.",
+            u"alias": u"alias <alias> <command/alias> <params> - aliases <alias> to the specified command/alias and parameters\n"
+                      u"you can specify where parameters given to the alias should be inserted with $1, $2, $n. "
+                      u"The whole parameter string is $0. $sender and $channel can also be used.",
             u"unalias": u"unalias <alias> - deletes the alias <alias>",
             u"aliases": u"aliases [<alias>] - lists all defined aliases, or the contents of the specified alias",
             u"aliashelp": u"aliashelp <alias> <helptext> - sets the helptext of the specified alias to the specified string"
@@ -153,12 +153,12 @@ class Alias(ModuleInterface):
                 newMsg = newMsg.replace("$channel", message.Channel.Name)
 
             if re.search(r'\$[0-9]+', newMsg):  # if the alias contains numbered param replacement points, replace them
-                newMsg = newMsg.replace('$0',  u' '.join(message.ParameterList))
+                newMsg = newMsg.replace('$0', u' '.join(message.ParameterList))
                 for i, param in enumerate(message.ParameterList):
-                    if newMsg.find(u"${}+".format(i+1)) != -1:
-                        newMsg = newMsg.replace(u"${}+".format(i+1), u" ".join(message.ParameterList[i:]))
+                    if newMsg.find(u"${}+".format(i + 1)) != -1:
+                        newMsg = newMsg.replace(u"${}+".format(i + 1), u" ".join(message.ParameterList[i:]))
                     else:
-                        newMsg = newMsg.replace(u"${}".format(i+1), param)
+                        newMsg = newMsg.replace(u"${}".format(i + 1), param)
             else:  # if there are no numbered replacement points, append the full parameter list instead
                 newMsg += u' {}'.format(u' '.join(message.ParameterList))
             return IRCMessage(message.Type, message.User.String, message.Channel, newMsg, self.bot)

@@ -23,8 +23,12 @@ class Markov(ModuleInterface):
             return True
         return False
 
-    def _indexContainingSubstring(self, list, substring):
-        for i, s in enumerate(list):
+    def _indexContainingSubstring(self, stringlist, substring):
+        """
+        Given a list of strings, returns the index of the first element that contains a given substring
+        If none exists, returns -1
+        """
+        for i, s in enumerate(stringlist):
             if substring in s:
                 return i
         return -1

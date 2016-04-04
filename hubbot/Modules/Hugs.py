@@ -11,7 +11,7 @@ class Hugs(ModuleInterface):
     help = "hugs [nick] -- How many hugs has this person given and received?"
     # hug_dict is : {"nick":[given, received]}
     commonWords = [
-       "and","of","all","to","the","both","back","again",
+        "and","of","all","to","the","both","back","again",
         "any","one","<3","with","","<3s","so","hard","right",
         "in","him","her","booper","up","on",":)","against","its",
         "harder","teh","sneakgrabs","people",":3"

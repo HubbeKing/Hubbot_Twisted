@@ -1,4 +1,3 @@
-import re
 from enum import Enum
 from hubbot.user import IRCUser
 
@@ -19,7 +18,7 @@ class IRCMessage(object):
     Parameters = ''
     ParameterList = []
 
-    def __init__(self, type, user, channel, message, bot):
+    def __init__(self, messagetype, user, channel, message, bot):
         """
         @type channel: hubbot.channel.IRCChannel
         @type bot: hubbot.bot.Hubbot
@@ -28,7 +27,7 @@ class IRCMessage(object):
             unicodeMessage = message.decode('utf-8', 'ignore')
         except:  # Already utf-8, probably.
             unicodeMessage = message
-        self.Type = type
+        self.Type = messagetype
         self.MessageList = unicodeMessage.strip().split(' ')
         self.MessageString = unicodeMessage
         self.User = IRCUser(user)
@@ -49,11 +48,6 @@ class IRCMessage(object):
                 self.Parameters = ' '.join(self.MessageList[2:])
             else:
                 self.Parameters = ' '.join(self.MessageList[1:])
-
-        #elif re.match('{}[:,]?'.format(re.escape(bot.nickname)), self.MessageList[0], re.IGNORECASE):
-        #    if len(self.MessageList) > 1:
-        #        self.Command = self.MessageList[1].lower()
-        #        self.Parameters = u" ".join(self.MessageList[2:])
 
         if self.Parameters.strip():
             self.ParameterList = self.Parameters.split(' ')

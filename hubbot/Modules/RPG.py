@@ -148,6 +148,7 @@ class RPG(ModuleInterface):
             line = line.replace(line.split(" ")[-1], "", 1).strip()
             specific = True
         except:
+            choice = None
             specific = False
         with sqlite3.connect(self.bot.databaseFile) as conn:
             c = conn.cursor()
@@ -156,9 +157,9 @@ class RPG(ModuleInterface):
         for number, text in messageDict.iteritems():
             match = re.search(line, text, re.IGNORECASE)
             if match:
-                for number, text in messageDict.iteritems():
-                    if text == match.string:
-                        foundNumber = number
+                for nr, txt in messageDict.iteritems():
+                    if txt == match.string:
+                        foundNumber = nr
                         matches.append("{}. {}".format(foundNumber, match.string))
         if len(matches) > 0:
             if not specific:

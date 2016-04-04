@@ -17,7 +17,7 @@ class ModuleEnabler(ModuleInterface):
         if message.Command == "enable":
             successes, failures, exceptions = self.enable(message.ParameterList)
 
-        elif message.Command == "disable":
+        else:
             successes, failures, exceptions = self.disable(message.ParameterList)
 
         responses = []

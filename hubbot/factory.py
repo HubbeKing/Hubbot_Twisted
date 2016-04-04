@@ -39,4 +39,3 @@ class HubbotFactory(protocol.ReconnectingClientFactory):
         """
         self.bot.logger.warning("-!- Connection to \"{}\" failed, reason: \"{}\" Retrying in {} seconds.".format(self.bot.server, reason.getErrorMessage(), self.delay))
         protocol.ReconnectingClientFactory.clientConnectionFailed(self, connector, reason)
-

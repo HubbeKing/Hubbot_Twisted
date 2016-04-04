@@ -97,7 +97,7 @@ class Headcanon(ModuleInterface):
                             c.execute("DELETE FROM headcanon WHERE canon=?", (match.string,))
                             conn.commit()
                         return IRCResponse(ResponseType.Say, 'Removed "' + match.string + '"', message.ReplyTo)
-                return IRCResponse(ResponseType.Say, '"' + match.string + '"was not found!', message.ReplyTo)
+                return IRCResponse(ResponseType.Say, '"' + re_string + '"was not found!', message.ReplyTo)
             except Exception:
                 print "Python Execution Error in '%s': %s" % ("headcanon", str(sys.exc_info()))
                 traceback.print_tb(sys.exc_info()[2])

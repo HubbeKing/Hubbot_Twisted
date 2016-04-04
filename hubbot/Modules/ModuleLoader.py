@@ -26,7 +26,7 @@ class ModuleLoader(ModuleInterface):
             return IRCResponse(ResponseType.Say,
                                "You didn't specify a module name! Usage: {}".format(self.help(message)),
                                message.ReplyTo)
-        command = {"load": self.load, "reload": self.reload,  "unload": self.unload}[message.Command]
+        command = {"load": self.load, "reload": self.reload, "unload": self.unload}[message.Command]
 
         successes, failures, exceptions = command(message.ParameterList)
 
