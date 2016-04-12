@@ -45,11 +45,17 @@ class Notify(ModuleInterface):
         @type message: hubbot.message.IRCMessage
         """
         if message.Type in self.acceptedTypes:
-            match = re.search(self.regexPattern, message.MessageString, re.IGNORECASE)
-            if match:
-                return True
-            else:
-                return False
+            for IRCUser in message.Channel.Users:
+                userMatch = re.search(self.regexPattern, IRCUser.Name, re.IGNORECASE)
+                if userMatch:
+                    match = re.search(self.regexPattern, message.MessageString, re.IGNORECASE)
+                    if match:
+                        return True
+                    else:
+                        return False
+                else:
+                    continue
+            return False
 
     def onTrigger(self, message):
         """
