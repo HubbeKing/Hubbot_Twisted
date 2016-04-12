@@ -58,7 +58,7 @@ class Notify(ModuleInterface):
         try:
             self.pb.refresh()
             phone = self.getDeviceByName("phone")
-            push = phone.pb.push_note("Highlight in {}".format(message.Channel.Name), "<{}> {}".format(message.User.Name, message.MessageString))
+            push = phone.push_note("Highlight in {}".format(message.Channel.Name), "<{}> {}".format(message.User.Name, message.MessageString))
         except:
             self.bot.logger.exception("Highlighting pushbullet push failed.")
         else:
