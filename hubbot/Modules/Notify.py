@@ -1,11 +1,10 @@
 import re
 import sqlite3
-from hubbot.moduleinterface import ModuleInterface, ModuleAccessLevel
+from hubbot.moduleinterface import ModuleInterface
 from pushbullet import PushBullet, InvalidKeyError
 
 
 class Notify(ModuleInterface):
-    accessLevel = ModuleAccessLevel.ADMINS
     pb = None
     APIKey = None
     regexPattern = "Hubbe.*"
@@ -58,9 +57,20 @@ class Notify(ModuleInterface):
         """
         try:
             self.pb.refresh()
-            push = self.pb.push_note("Highlight in {}".format(message.Channel.Name), message.MessageString)
+            phone = self.getDeviceByName("phone")
+            push = phone.pb.push_note("Highlight in {}".format(message.Channel.Name), "<{}> {}".format(message.User.Name, message.MessageString))
         except:
             self.bot.logger.exception("Highlighting pushbullet push failed.")
         else:
             if "error" in push:
                 self.bot.logger.error("Pushbullet returned error '{}'".format(push["error"]["type"]))
+
+    def getDeviceByName(self, deviceName):
+        """
+        Tries to find the named device in the list of devices availible with the current PushBullet object.
+        Returns the Device object if one can be found, otherwise returns None.
+        """
+        for device in self.pb.devices:
+            if device.nickname.lower() == deviceName.lower():
+                return device
+        return None
