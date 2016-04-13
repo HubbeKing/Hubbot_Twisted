@@ -30,13 +30,17 @@ class IRCMessage(object):
         self.Type = messagetype
         self.MessageList = unicodeMessage.strip().split(' ')
         self.MessageString = unicodeMessage
-        self.User = IRCUser(user)
 
-        self.Channel = None
         if channel is None:
+            self.User = IRCUser(user)
+            self.Channel = None
             self.ReplyTo = self.User.Name
             self.TargetType = TargetTypes.USER
         else:
+            if user in channel.Users:
+                self.User = channel.Users[user]
+            else:
+                self.User = IRCUser(user)
             self.Channel = channel
             self.ReplyTo = channel.Name
             self.TargetType = TargetTypes.CHANNEL
