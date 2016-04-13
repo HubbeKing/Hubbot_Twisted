@@ -1,5 +1,5 @@
 PyYAML==3.11
-Twisted==15.5.0
+Twisted==16.1.1
 enum34==1.1.2
 pytimeparse==1.1.5
 cobe==2.1.2
