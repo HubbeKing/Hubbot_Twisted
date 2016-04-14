@@ -86,6 +86,7 @@ class Notify(ModuleInterface):
         if target is not None:
             now = datetime.datetime.now()
             if (now - target.LastActive).total_seconds() > 60:
+                self.bot.logger.info("Notify - Sending notification to target user.")
                 try:
                     self.pb.refresh()
                     phone = self.getDeviceByName("phone")
@@ -95,6 +96,8 @@ class Notify(ModuleInterface):
                 else:
                     if "error" in push:
                         self.bot.logger.error("Pushbullet returned error '{}'".format(push["error"]["type"]))
+            else:
+                self.bot.logger.info("Notify - Target user recently active, no notification sent.")
 
     def getDeviceByName(self, deviceName):
         """
