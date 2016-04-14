@@ -3,6 +3,7 @@ import re
 import sqlite3
 from hubbot.moduleinterface import ModuleInterface
 from pushbullet import PushBullet, InvalidKeyError
+from twisted.internet import reactor
 
 
 class Notify(ModuleInterface):
@@ -70,15 +71,30 @@ class Notify(ModuleInterface):
         """
         @type message: hubbot.message.IRCMessage
         """
-        try:
-            self.pb.refresh()
-            phone = self.getDeviceByName("phone")
-            push = phone.push_note("Highlight in {}".format(message.Channel.Name), "<{}> {}".format(message.User.Name, message.MessageString))
-        except:
-            self.bot.logger.exception("Highlighting pushbullet push failed.")
-        else:
-            if "error" in push:
-                self.bot.logger.error("Pushbullet returned error '{}'".format(push["error"]["type"]))
+        targetUser = None
+        for user in message.Channel.Users:
+            target = re.search(self.notifyTarget, user, re.IGNORECASE)
+            if target:
+                targetUser = message.Channel.Users[user]
+        reactor.callLater(15, self.notify, targetUser, message)
+
+    def notify(self, target, message):
+        """
+        @type target: hubbot.user.IRCUser
+        @type message: hubbot.message.IRCMessage
+        """
+        if target is not None:
+            now = datetime.datetime.now()
+            if (now - target.LastActive).total_seconds() > 60:
+                try:
+                    self.pb.refresh()
+                    phone = self.getDeviceByName("phone")
+                    push = phone.push_note("Highlight in {}".format(message.Channel.Name), "<{}> {}".format(message.User.Name, message.MessageString))
+                except:
+                    self.bot.logger.exception("Highlighting push failed.")
+                else:
+                    if "error" in push:
+                        self.bot.logger.error("Pushbullet returned error '{}'".format(push["error"]["type"]))
 
     def getDeviceByName(self, deviceName):
         """
