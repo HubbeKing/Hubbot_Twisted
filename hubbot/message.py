@@ -39,7 +39,7 @@ class IRCMessage(object):
             self.TargetType = TargetTypes.USER
         else:
             if user.split("!")[0] in channel.Users:
-                self.User = channel.Users[user]
+                self.User = channel.Users[user.split("!")[0]]
             else:
                 self.User = IRCUser(user)
             self.Channel = channel
