@@ -52,14 +52,19 @@ class Notify(ModuleInterface):
                     match = re.search(self.notifyTarget, message.MessageString, re.IGNORECASE)
                     if match:
                         now = datetime.datetime.now()
-                        timeDelta = now - message.Channel.Users[user].LastActive
-                        if timeDelta.minute > 1:
+                        try:
+                            timeDelta = now - message.Channel.Users[user].LastActive
+                        except TypeError:  # this means that LastActive is None for some reason
+                            timeDelta = now - datetime.datetime.min
+                            self.bot.logger.exception("TypeError in module \"Notify\", LastActive is probably not datetime.")
+                        if timeDelta.total_seconds() > 60:
                             return True
                         else:
                             return False
                     else:
                         return False
             return False
+        return False
 
     def onTrigger(self, message):
         """
