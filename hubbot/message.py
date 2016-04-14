@@ -1,3 +1,4 @@
+import datetime
 from enum import Enum
 from hubbot.user import IRCUser
 
@@ -37,13 +38,14 @@ class IRCMessage(object):
             self.ReplyTo = self.User.Name
             self.TargetType = TargetTypes.USER
         else:
-            if user in channel.Users:
+            if user.split("!")[0] in channel.Users:
                 self.User = channel.Users[user]
             else:
                 self.User = IRCUser(user)
             self.Channel = channel
             self.ReplyTo = channel.Name
             self.TargetType = TargetTypes.CHANNEL
+        self.User.LastActive = datetime.datetime.now()
 
         if self.MessageList[0].startswith(bot.commandChar):
             self.Command = self.MessageList[0][len(bot.commandChar):].lower()

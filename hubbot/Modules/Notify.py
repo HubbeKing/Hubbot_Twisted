@@ -1,3 +1,4 @@
+import datetime
 import re
 import sqlite3
 from hubbot.moduleinterface import ModuleInterface
@@ -7,7 +8,7 @@ from pushbullet import PushBullet, InvalidKeyError
 class Notify(ModuleInterface):
     pb = None
     APIKey = None
-    regexPattern = "Hubbe.*"
+    notifyTarget = "Hubbe.*"
 
     def getAPIkey(self):
         """
@@ -44,17 +45,20 @@ class Notify(ModuleInterface):
         """
         @type message: hubbot.message.IRCMessage
         """
-        if message.Type in self.acceptedTypes:
-            for IRCUser in message.Channel.Users:
-                userMatch = re.search(self.regexPattern, IRCUser.Name, re.IGNORECASE)
-                if userMatch:
-                    match = re.search(self.regexPattern, message.MessageString, re.IGNORECASE)
+        if message.Type in self.acceptedTypes and not re.search(self.notifyTarget, message.User.Name, re.IGNORECASE):
+            for user in message.Channel.Users:
+                targetHere = re.search(self.notifyTarget, user, re.IGNORECASE)
+                if targetHere:
+                    match = re.search(self.notifyTarget, message.MessageString, re.IGNORECASE)
                     if match:
-                        return True
+                        now = datetime.datetime.now()
+                        timeDelta = now - message.Channel.Users[user].LastActive
+                        if timeDelta.minute > 1:
+                            return True
+                        else:
+                            return False
                     else:
                         return False
-                else:
-                    continue
             return False
 
     def onTrigger(self, message):

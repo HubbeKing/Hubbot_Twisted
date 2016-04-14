@@ -4,6 +4,7 @@ class IRCUser(object):
     def __init__(self, user):
         self.User = None
         self.Hostmask = None
+        self.LastActive = None
 
         if "!" in user:
             userArray = user.split("!")
