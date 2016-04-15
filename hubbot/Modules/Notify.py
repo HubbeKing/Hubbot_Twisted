@@ -76,7 +76,7 @@ class Notify(ModuleInterface):
             target = re.search(self.notifyTarget, user, re.IGNORECASE)
             if target:
                 targetUser = message.Channel.Users[user]
-        reactor.callLater(15, self.notify, targetUser, message)
+        reactor.callLater(30, self.notify, targetUser, message)
 
     def notify(self, target, message):
         """
@@ -85,8 +85,8 @@ class Notify(ModuleInterface):
         """
         if target is not None:
             now = datetime.datetime.now()
-            if (now - target.LastActive).total_seconds() > 60:
-                self.bot.logger.info("Notify - Sending notification to target user.")
+            if (now - target.LastActive).total_seconds() > 30:
+                self.bot.logger.info("Notify - Sending highlighting push.")
                 try:
                     self.pb.refresh()
                     phone = self.getDeviceByName("phone")
@@ -97,7 +97,7 @@ class Notify(ModuleInterface):
                     if "error" in push:
                         self.bot.logger.error("Pushbullet returned error '{}'".format(push["error"]["type"]))
             else:
-                self.bot.logger.info("Notify - Target user recently active, no notification sent.")
+                self.bot.logger.debug("Notify - Target user recently active, no highlighting push sent.")
 
     def getDeviceByName(self, deviceName):
         """
