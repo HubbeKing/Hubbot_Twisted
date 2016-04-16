@@ -35,8 +35,8 @@ class Alias(ModuleInterface):
     def onEnable(self):
         with sqlite3.connect(self.bot.databaseFile) as conn:
             c = conn.cursor()
-            c.execute("CREATE TABLE IF NOT EXISTS aliashelp (alias text, help text")
-            c.execute("CREATE TABLE IF NOT EXISTS aliases (alias text, command text")
+            c.execute("CREATE TABLE IF NOT EXISTS aliashelp (alias text, help text)")
+            c.execute("CREATE TABLE IF NOT EXISTS aliases (alias text, command text)")
             for row in c.execute("SELECT * FROM aliashelp"):
                 self.aliasHelpDict[row[0].lower()] = row[1].split(" ")
             for row in c.execute("SELECT * FROM aliases"):
