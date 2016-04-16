@@ -10,6 +10,8 @@ class Notify(ModuleInterface):
     pb = None
     APIKey = None
     notifyTarget = "Hubbe.*"
+    acceptedTypes = ["PRIVMSG", "ACTION"]
+    help = "Notify - A module that notifies HubbeKing if he's in the channel but doesn't respond to being highlighted."
 
     def getAPIkey(self):
         """
