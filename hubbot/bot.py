@@ -57,6 +57,7 @@ class Hubbot(irc.IRCClient):
                         self.prefixesCharToMode[statusChars[i]] = statusModes[i]
                 elif option[0] == "NETWORK":
                     self.network = option[1]
+                    self.logger.info("Network is \"{}\".".format(self.network))
 
     def irc_RPL_NAMREPLY(self, prefix, params):
         channel = self.getChannel(params[2])
@@ -87,9 +88,9 @@ class Hubbot(irc.IRCClient):
         channel.NamesListComplete = True
 
     def irc_RPL_YOURHOST(self, prefix, params):
-        for param in params:
-            if "," in param:
-                self.hostname = param.rstrip(",")
+        for word in params[0]:
+            if "," in word:
+                self.hostname = word.rstrip(",")
         self.logger.info("Host is \"{}\".".format(self.hostname))
 
     def irc_NICK(self, prefix, params):
