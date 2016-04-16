@@ -153,7 +153,7 @@ class Hubbot(irc.IRCClient):
             self.moduleHandler.handleMessage(message)
 
     def irc_ERROR(self, prefix, params):
-        self.logger.error("Error when connecting to server \"{}\" - {}".format(prefix, " ".join(params)))
+        self.logger.error("Error when connecting to server \"{}\" - {}".format(self.server, " ".join(params)))
 
     def nickChanged(self, nick):
         self.logger.info("Nick changed from \"{}\" to \"{}\".".format(self.nickname, nick))
@@ -199,7 +199,6 @@ class Hubbot(irc.IRCClient):
         self.versionEnv = platform.platform()
         self.commandChar = self.bothandler.config.serverItemWithDefault(self.server, "commandchar", "+")
         self.fingerReply = self.bothandler.config.serverItemWithDefault(self.server, "fingerReply", "")
-        
 
     def getChannel(self, channel):
         if channel in self.channels:
