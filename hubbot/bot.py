@@ -41,7 +41,6 @@ class Hubbot(irc.IRCClient):
         self.moduleHandler = ModuleHandler(self)
 
     def signedOn(self):
-        self.moduleHandler.enableAllModules()
         for channel in self.channels.keys():
             self.join(channel)
 
@@ -58,6 +57,8 @@ class Hubbot(irc.IRCClient):
                 elif option[0] == "NETWORK":
                     self.network = option[1]
                     self.logger.info("Network is \"{}\".".format(self.network))
+                    self.logger.info("Enabling modules...")
+                    self.moduleHandler.enableAllModules()
 
     def irc_RPL_NAMREPLY(self, prefix, params):
         channel = self.getChannel(params[2])
