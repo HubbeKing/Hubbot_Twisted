@@ -15,10 +15,13 @@ class HubbotFactory(protocol.ReconnectingClientFactory):
         reactor.connectTCP(server, port, self)
 
     def startedConnecting(self, connector):
-        self.bot.logger.info("-#- Started to connect to \"{}\".".format(self.bot.server))
+        """
+        @type connector: twisted.internet.tcp.Connector
+        """
+        self.bot.logger.info("-#- Started to connect to \"{}\".".format(connector.getDestination().host))
 
     def buildProtocol(self, addr):
-        self.bot.logger.info("-#- Connected to \"{}\".".format(self.bot.server))
+        self.bot.logger.info("-#- Connected.")
         self.bot.logger.info("-#- Resetting reconnection delay.")
         self.resetDelay()
         return self.bot
@@ -29,7 +32,7 @@ class HubbotFactory(protocol.ReconnectingClientFactory):
         @type reason: twisted.python.failure.Failure
         """
         if not self.bot.Quitting:
-            self.bot.logger.warning("-!- Connection to \"{}\" lost, reason: \"{}\" Retrying in {} seconds.".format(connector.host, reason.getErrorMessage(), self.delay))
+            self.bot.logger.warning("-!- Connection to \"{}\" lost, reason: \"{}\" Retrying in {} seconds.".format(connector.getDestination().host, reason.getErrorMessage(), self.delay))
             protocol.ReconnectingClientFactory.clientConnectionLost(self, connector, reason)
 
     def clientConnectionFailed(self, connector, reason):
@@ -37,5 +40,5 @@ class HubbotFactory(protocol.ReconnectingClientFactory):
         @type connector: twisted.internet.tcp.Connector
         @type reason: twisted.python.failure.Failure
         """
-        self.bot.logger.warning("-!- Connection to \"{}\" failed, reason: \"{}\" Retrying in {} seconds.".format(connector.host, reason.getErrorMessage(), self.delay))
+        self.bot.logger.warning("-!- Connection to \"{}\" failed, reason: \"{}\" Retrying in {} seconds.".format(connector.getDestination().host, reason.getErrorMessage(), self.delay))
         protocol.ReconnectingClientFactory.clientConnectionFailed(self, connector, reason)
