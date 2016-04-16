@@ -152,6 +152,9 @@ class Hubbot(irc.IRCClient):
                     del channel.Ranks[message.User.Name]
             self.moduleHandler.handleMessage(message)
 
+    def irc_ERROR(self, prefix, params):
+        self.logger.error("Error when connecting to server \"{}\" - {}".format(self.server, " ".join(params)))
+
     def nickChanged(self, nick):
         self.logger.info("Nick changed from \"{}\" to \"{}\".".format(self.nickname, nick))
         self.nickname = nick
