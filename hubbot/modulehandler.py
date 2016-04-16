@@ -97,7 +97,7 @@ class ModuleHandler(object):
         for trigger in constructedModule.triggers:
             self.mappedTriggers[trigger] = constructedModule
 
-        self.bot.logger.info('-- {} enabled.'.format(self.moduleCaseMap[moduleName]))
+        self.bot.logger.debug('-- {} enabled.'.format(self.moduleCaseMap[moduleName]))
         return True
 
     def disableModule(self, moduleName, check=True):
@@ -114,7 +114,7 @@ class ModuleHandler(object):
             finally:
                 del self.modules[self.moduleCaseMap[moduleName.lower()]]
                 del self.moduleCaseMap[moduleName.lower()]
-                self.bot.logger.info("-- {} disabled.".format(properName))
+                self.bot.logger.debug("-- {} disabled.".format(properName))
                 if check:
                     self.bot.bothandler.checkModuleUsage(properName)
         else:

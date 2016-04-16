@@ -21,6 +21,8 @@ class Hubbot(irc.IRCClient):
         @type bothandler: hubbot.bothandler.BotHandler
         """
         self.server = server
+        self.hostname = None
+        self.network = None
         self.channels = channels
         self.bothandler = bothandler
 
@@ -37,9 +39,9 @@ class Hubbot(irc.IRCClient):
         self.prefixesCharToMode = {"+": "v", "@": "o"}
         self.userModes = {}
         self.moduleHandler = ModuleHandler(self)
-        self.moduleHandler.enableAllModules()
 
     def signedOn(self):
+        self.moduleHandler.enableAllModules()
         for channel in self.channels.keys():
             self.join(channel)
 
@@ -53,6 +55,8 @@ class Hubbot(irc.IRCClient):
                     statusChars = prefixes[prefixes.find(")"):]
                     for i in range(1, len(statusModes)):
                         self.prefixesCharToMode[statusChars[i]] = statusModes[i]
+                elif option[0] == "NETWORK":
+                    self.network = option[1]
 
     def irc_RPL_NAMREPLY(self, prefix, params):
         channel = self.getChannel(params[2])
@@ -81,6 +85,12 @@ class Hubbot(irc.IRCClient):
     def irc_RPL_ENDOFNAMES(self, prefix, params):
         channel = self.getChannel(params[1])
         channel.NamesListComplete = True
+
+    def irc_RPL_YOURHOST(self, prefix, params):
+        for param in params:
+            if "," in param:
+                self.hostname = param.rstrip(",")
+        self.logger.info("Host is \"{}\".".format(self.hostname))
 
     def irc_NICK(self, prefix, params):
         userArray = prefix.split("!")
@@ -153,7 +163,7 @@ class Hubbot(irc.IRCClient):
             self.moduleHandler.handleMessage(message)
 
     def irc_ERROR(self, prefix, params):
-        self.logger.error("Error when connecting to server \"{}\" - {}".format(self.server, " ".join(params)))
+        self.logger.error(" ".join(params))
 
     def nickChanged(self, nick):
         self.logger.info("Nick changed from \"{}\" to \"{}\".".format(self.nickname, nick))

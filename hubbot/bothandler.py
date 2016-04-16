@@ -102,7 +102,7 @@ class BotHandler:
         self.modules.update({moduleListCaseMap[name]: class_})
         self.moduleCaseMap.update({name: moduleListCaseMap[name]})
 
-        logging.info('-- {} loaded.'.format(module.__name__.split(".")[-1]))
+        logging.debug('-- {} loaded.'.format(module.__name__.split(".")[-1]))
         return True
 
     def unloadModule(self, name):
@@ -121,7 +121,7 @@ class BotHandler:
             del sys.modules["{}.{}".format("hubbot.Modules", properName)]
             for f in glob("{}/{}.pyc".format("hubbot.Modules", properName)):
                 os.remove(f)
-            logging.info("-- {} unloaded.".format(properName))
+            logging.debug("-- {} unloaded.".format(properName))
             return True
         else:
             logging.warning("Module \"{}\" was requested to unload but it is not loaded!".format(name))
