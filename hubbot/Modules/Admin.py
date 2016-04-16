@@ -22,6 +22,8 @@ class Admin(ModuleInterface):
         admins = []
         with sqlite3.connect(self.bot.databaseFile) as conn:
             c = conn.cursor()
+            c.execute("CREATE TABLE IF NOT EXISTS admins (nick text)")
+            conn.commit()
             for row in c.execute("SELECT nick FROM admins"):
                 admins.append(row[0])
         self.bot.admins = admins

@@ -1,8 +1,6 @@
 import random
 import re
 import sqlite3
-import sys
-import traceback
 
 from hubbot.response import IRCResponse, ResponseType
 from hubbot.moduleinterface import ModuleInterface
@@ -26,6 +24,12 @@ class Headcanon(ModuleInterface):
             return helpDict[message.ParameterList[0]].lower()
         else:
             return helpDict[u" ".join([word.lower() for word in message.ParameterList[:2]])]
+
+    def onEnable(self):
+        with sqlite3.connect(self.bot.databaseFile) as conn:
+            c = conn.cursor()
+            c.execute("CREATE TABLE IF NOT EXISTS headcanon (canon text)")
+            conn.commit()
 
     def onTrigger(self, message):
         """
@@ -81,8 +85,7 @@ class Headcanon(ModuleInterface):
                     response = pasteEE(pasteBinString, "Headcanon", "10M")
                     return IRCResponse(ResponseType.Say, "Link posted! (Expires in 10 minutes) {}".format(response), message.ReplyTo)
                 except Exception:
-                    print "Python Execution Error in '%s': %s" % ("headcanon", str(sys.exc_info()))
-                    traceback.print_tb(sys.exc_info()[2])
+                    self.bot.logger.exception("Exception in module \"Headcanon\"")
                     return IRCResponse(ResponseType.Say, "Uh-oh, something broke!", message.ReplyTo)
 
         elif subCommand.lower() == "remove" and message.User.Name in self.bot.admins:
@@ -99,6 +102,5 @@ class Headcanon(ModuleInterface):
                         return IRCResponse(ResponseType.Say, 'Removed "' + match.string + '"', message.ReplyTo)
                 return IRCResponse(ResponseType.Say, '"' + re_string + '"was not found!', message.ReplyTo)
             except Exception:
-                print "Python Execution Error in '%s': %s" % ("headcanon", str(sys.exc_info()))
-                traceback.print_tb(sys.exc_info()[2])
+                self.bot.logger.exception("Exception in module \"Headcanon\"")
                 return IRCResponse(ResponseType.Say, "Something broke!", message.ReplyTo)

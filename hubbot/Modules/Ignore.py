@@ -22,6 +22,8 @@ class Ignore(ModuleInterface):
         ignores = []
         with sqlite3.connect(self.bot.databaseFile) as conn:
             c = conn.cursor()
+            c.execute("CREATE TABLE IF NOT EXISTS ignores (nick text)")
+            conn.commit()
             for row in c.execute("SELECT nick FROM ignores"):
                 ignores.append(row[0])
         self.bot.ignores = ignores

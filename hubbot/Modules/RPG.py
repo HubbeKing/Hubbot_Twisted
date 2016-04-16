@@ -61,6 +61,13 @@ class RPG(ModuleInterface):
 
     def onEnable(self):
         self.triggers = self.campaigns.keys()
+        with sqlite3.connect(self.bot.databaseFile) as conn:
+            c = conn.cursor()
+            c.execute("CREATE TABLE IF NOT EXISTS lp (id int, message text")
+            c.execute("CREATE TABLE IF NOT EXISTS mm (id int, message text")
+            c.execute("CREATE TABLE IF NOT EXISTS pathfinder (id int, message text")
+            c.execute("CREATE TABLE IF NOT EXISTS welch (id int, message text")
+            conn.commit()
 
     def onTrigger(self, message):
         """

@@ -14,7 +14,7 @@ class URLResponse(object):
 
 
 def fetchURL(url, extraHeaders=None):
-    headers = [( "User-agent", "Mozilla/5.0" )]
+    headers = [("User-agent", "Mozilla/5.0")]
     if extraHeaders:
         for header in extraHeaders:
             # For whatever reason headers are defined in different way in opener than they are in a normal urlopen
@@ -46,7 +46,7 @@ def fetchURL(url, extraHeaders=None):
 
 
 def postURL(url, values, extraHeaders=None):
-    headers = { "User-agent" : "Mozilla/5.0" }
+    headers = {"User-agent": "Mozilla/5.0"}
     if extraHeaders:
         for header in extraHeaders:
             headers[header] = extraHeaders[header]
@@ -78,15 +78,16 @@ def postURL(url, values, extraHeaders=None):
 
 
 def pasteEE(data, description, expire):
-    values = { "key" : "public",
-               "description" : description,
-               "paste" : data,
-               "expiration" : expire,
-               "format" : "json" }
+    values = {"key": "public",
+              "description": description,
+              "paste": data,
+              "expiration": expire,
+              "format": "json"}
     result = postURL("http://paste.ee/api", values)
     if result:
         jsonResult = json.loads(result.body)
         if jsonResult["status"] == "success":
             return jsonResult["paste"]["link"]
         elif jsonResult["status"] == "error":
-            return "An error occurred while posting to Paste.ee, code: {}, reason: {}".format(jsonResult["errorcode"], jsonResult["error"])
+            return "An error occurred while posting to Paste.ee, code: {}, reason: {}".format(jsonResult["errorcode"],
+                                                                                              jsonResult["error"])

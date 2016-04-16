@@ -11,10 +11,10 @@ class Hugs(ModuleInterface):
     help = "hugs [nick] -- How many hugs has this person given and received?"
     # hug_dict is : {"nick":[given, received]}
     commonWords = [
-        "and","of","all","to","the","both","back","again",
-        "any","one","<3","with","","<3s","so","hard","right",
-        "in","him","her","booper","up","on",":)","against","its",
-        "harder","teh","sneakgrabs","people",":3"
+        "and", "of", "all", "to", "the", "both", "back", "again",
+        "any", "one", "<3", "with", "", "<3s", "so", "hard", "right",
+        "in", "him", "her", "booper", "up", "on", ":)", "against", "its",
+        "harder", "teh", "sneakgrabs", "people", ":3"
     ]
     runInThread = True
 
@@ -29,6 +29,12 @@ class Hugs(ModuleInterface):
                 return True
         else:
             return False
+
+    def onEnable(self):
+        with sqlite3.connect(self.bot.databaseFile) as conn:
+            c = conn.cursor()
+            c.execute("CREATE TABLE IF NOT EXISTS hugs (nick text, given int, received int)")
+            conn.commit()
 
     def onTrigger(self, message):
         """
@@ -124,4 +130,6 @@ class Hugs(ModuleInterface):
                     numberOfMatches += 1
             if len(matches) > 30:
                 matchedNicksString = "Matches found: LOTS."
-            return IRCResponse(ResponseType.Say, matchedNicksString, message.ReplyTo), IRCResponse(ResponseType.Say, HugString, message.ReplyTo)
+            return IRCResponse(ResponseType.Say, matchedNicksString, message.ReplyTo), IRCResponse(ResponseType.Say,
+                                                                                                   HugString,
+                                                                                                   message.ReplyTo)
