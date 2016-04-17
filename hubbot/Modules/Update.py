@@ -26,6 +26,9 @@ class Update(ModuleInterface):
         changes = list(reversed(changes))
         response = "New Commits: {}".format(" | ".join(changes))
 
+        output = subprocess.check_output(['git', 'show', '--pretty=format:', '--name-only', '..origin/master'])
+        filesChanged = [s.strip() for s in output.splitlines()]
+
         returnCode = subprocess.check_call(['git', 'merge', 'origin/master'])
 
         if returnCode != 0:
@@ -33,8 +36,13 @@ class Update(ModuleInterface):
                                'Merge after update failed, please merge manually',
                                message.ReplyTo)
 
-        pip = os.path.join(os.path.dirname(sys.executable), "pip")
+        if "requirements.txt" in filesChanged:
+            pip = os.path.join(os.path.dirname(sys.executable), "pip")
+            returnCode = subprocess.check_call([pip, "install", "-r", "requirements.txt"])
 
-        subprocess.check_call([pip, "install", "-r", "requirements.txt"])
+            if returnCode != 0:
+                return IRCResponse(ResponseType.Say,
+                                   'Requirements update failed, please check output manually.',
+                                   message.ReplyTo)
 
         return IRCResponse(ResponseType.Say, response, message.ReplyTo)
