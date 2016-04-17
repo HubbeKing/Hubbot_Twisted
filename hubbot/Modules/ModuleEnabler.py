@@ -22,11 +22,12 @@ class ModuleEnabler(ModuleInterface):
 
         responses = []
         if len(successes) > 0:
-            responses.append(IRCResponse(ResponseType.Say, "'{0}' {1}d successfully".format(', '.join(successes), message.Command.lower()), message.ReplyTo))
+            responses.append(IRCResponse(ResponseType.Say, "'{}' {}d successfully.".format(', '.join(successes), message.Command), message.ReplyTo))
+            self.bot.logger.info("'{}' {}d successfully.".format(", ".join(successes), message.Command))
         if len(failures) > 0:
-            responses.append(IRCResponse(ResponseType.Say, "'{0}' failed to {1}, or (they) do not exist".format(', '.join(failures), message.Command.lower()), message.ReplyTo))
+            responses.append(IRCResponse(ResponseType.Say, "'{}' failed to {}.".format(', '.join(failures), message.Command), message.ReplyTo))
         if len(exceptions) > 0:
-            responses.append(IRCResponse(ResponseType.Say, "'{0}' threw an exception (logged)".format(', '.join(exceptions)), message.ReplyTo))
+            responses.append(IRCResponse(ResponseType.Say, "'{}' threw an exception.".format(', '.join(exceptions)), message.ReplyTo))
 
         return responses
 

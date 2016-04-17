@@ -6,6 +6,8 @@ from pushbullet import PushBullet, InvalidKeyError
 
 
 class Pushbullet(ModuleInterface):
+    pb = None
+    APIKey = None
     triggers = ["pb"]
     accessLevel = ModuleAccessLevel.ADMINS
     help = "pb [device] <text> -- Sends a pushbullet notification to the bot owner, device specification is optional."
@@ -60,11 +62,11 @@ class Pushbullet(ModuleInterface):
                 except InvalidKeyError:
                     self.bot.logger.exception("Pushbullet API key invalid!")
                     raise
-                self.bot.logger.info("Successfully authenticated with Pushbullet API key.")
+                self.bot.logger.debug("Successfully authenticated with Pushbullet API key.")
             else:
                 self.bot.logger.error("Could not find Pushbullet API key!")
         except:
-            self.bot.logger.error("Error when fetching Pushbullet API key!")
+            self.bot.logger.exception("Error when fetching Pushbullet API key!")
             raise
 
     def onTrigger(self, message):
@@ -84,7 +86,7 @@ class Pushbullet(ModuleInterface):
                 push = self.pb.push_note("{} <{}>".format(str(message.ReplyTo), str(message.User.Name)), pushMessage)
         except:
             self.bot.logger.exception("Pushbullet push failed!")
-            return IRCResponse(ResponseType.Say, "I think something broke, I couldn't send that pushbullet.", message.ReplyTo)
+            return IRCResponse(ResponseType.Say, "I think something broke, I couldn't send that push.", message.ReplyTo)
         else:
             if "error" not in push:
                 return IRCResponse(ResponseType.Say, "Okay, I'll send that to my owner!", message.ReplyTo)

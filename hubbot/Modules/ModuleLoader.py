@@ -36,13 +36,14 @@ class ModuleLoader(ModuleInterface):
             responses.append(IRCResponse(ResponseType.Say,
                                          "\"{}\" {}ed successfully.".format(", ".join(successes), message.Command),
                                          message.ReplyTo))
+            self.bot.logger.info("'{}' {}d successfully.".format(", ".join(successes), message.Command))
         if len(failures) > 0:
             responses.append(IRCResponse(ResponseType.Say,
-                                         "\"{}\" failed to {}, or (they) do not exist.".format(", ".join(failures), message.Command),
+                                         "\"{}\" failed to {}.".format(", ".join(failures), message.Command),
                                          message.ReplyTo))
         if len(exceptions) > 0:
             responses.append(IRCResponse(ResponseType.Say,
-                                         "\"{}\" threw an exception (printed to console)".format(", ".join(exceptions)),
+                                         "\"{}\" threw an exception.".format(", ".join(exceptions)),
                                          message.ReplyTo))
 
         return responses

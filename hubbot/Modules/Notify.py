@@ -10,7 +10,6 @@ class Notify(ModuleInterface):
     pb = None
     APIKey = None
     notifyTarget = "Hubbe.*"
-    acceptedTypes = ["PRIVMSG", "ACTION"]
     help = "Notify - A module that notifies HubbeKing if he's in the channel but doesn't respond to being highlighted."
 
     def getAPIkey(self):
@@ -37,11 +36,11 @@ class Notify(ModuleInterface):
                 except InvalidKeyError:
                     self.bot.logger.exception("Pushbullet API key invalid!")
                     raise
-                self.bot.logger.info("Successfully authenticated with Pushbullet API key.")
+                self.bot.logger.debug("Successfully authenticated with Pushbullet API key.")
             else:
                 self.bot.logger.error("Could not find Pushbullet API key!")
         except:
-            self.bot.logger.error("Error when fetching Pushbullet API key!")
+            self.bot.logger.exception("Error when fetching Pushbullet API key!")
             raise
 
     def shouldTrigger(self, message):
@@ -87,19 +86,23 @@ class Notify(ModuleInterface):
         """
         if target is not None:
             now = datetime.datetime.now()
-            if (now - target.LastActive).total_seconds() > 30:
+            if (now - target.LastActive).total_seconds() > 60:
                 self.bot.logger.info("Notify - Sending highlighting push.")
                 try:
                     self.pb.refresh()
                     phone = self.getDeviceByName("phone")
-                    push = phone.push_note("Highlight in {}".format(message.Channel.Name), "<{}> {}".format(message.User.Name, message.MessageString))
+                    if phone is not None:
+                        push = phone.push_note("Highlight in {}".format(message.Channel.Name), "<{}> {}".format(message.User.Name, message.MessageString))
+                    else:
+                        self.bot.logger.error("Notify - Could not find phone device for highlighting push!")
+                        push = None
                 except:
-                    self.bot.logger.exception("Highlighting push failed.")
+                    self.bot.logger.exception("Notify - Unknown error when pushing highlight.")
                 else:
                     if "error" in push:
-                        self.bot.logger.error("Pushbullet returned error '{}'".format(push["error"]["type"]))
+                        self.bot.logger.error("Notify - Pushbullet returned error '{}'".format(push["error"]["type"]))
             else:
-                self.bot.logger.debug("Notify - Target user recently active, no highlighting push sent.")
+                self.bot.logger.info("Notify - Target user recently active, no highlighting push sent.")
 
     def getDeviceByName(self, deviceName):
         """

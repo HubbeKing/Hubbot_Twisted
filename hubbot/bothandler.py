@@ -127,14 +127,15 @@ class BotHandler:
             logging.warning("Module \"{}\" was requested to unload but it is not loaded!".format(name))
             return False
 
-    def checkModuleUsage(self, moduleName):
-        loaded = False
+    def unloadModuleIfNotEnabled(self, moduleName):
+        enabled = False
         for botfactory in self.botfactories.values():
             if moduleName.lower() in botfactory.bot.moduleHandler.moduleCaseMap:
-                loaded = True
+                enabled = True
 
-        if not loaded:
+        if not enabled:
             self.unloadModule(moduleName)
+            logging.info("Module \"{}\" is no longer enabled anywhere and was unloaded.".format(moduleName))
 
     def reloadModule(self, moduleName):
         moduleUsages = []
