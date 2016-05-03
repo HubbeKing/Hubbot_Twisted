@@ -49,7 +49,7 @@ class Markov(ModuleInterface):
         """
         if message.User.Name == self.bot.nickname:
             return
-        elif message.TargetType is TargetTypes.USER and not message.MessageString.startswith(self.bot.commandChar):
+        elif message.TargetType is TargetTypes.USER and message.Command not in self.bot.moduleHandler.mappedTriggers:
             reply = self.brain.reply(message.MessageString, max_len=100)
             reply = self._cleanupString(reply)
             return IRCResponse(ResponseType.Say, reply.capitalize(), message.ReplyTo)
