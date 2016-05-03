@@ -48,7 +48,10 @@ class IRCMessage(object):
         self.User.LastActive = datetime.datetime.now()
 
         if self.TargetType == TargetTypes.USER:
-            self.Command = self.MessageList[0].lower()
+            if self.MessageList[0].startswith(bot.commandChar):
+                self.Command = self.MessageList[0][len(bot.commandChar):].lower()
+            else:
+                self.Command = self.MessageList[0].lower()
             if self.Command == '':
                 self.Command = self.MessageList[1].lower()
                 self.Parameters = ' '.join(self.MessageList[2:])
