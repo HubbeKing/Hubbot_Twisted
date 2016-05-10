@@ -1,6 +1,6 @@
+import multiprocessing
 import operator
 import sys
-from twisted.internet import threads
 
 from hubbot.response import IRCResponse, ResponseType
 from hubbot.moduleinterface import ModuleAccessLevel
@@ -64,10 +64,21 @@ class ModuleHandler(object):
                             response = module.onTrigger(message)
                             self.sendResponse(response)
                         else:
-                            d = threads.deferToThread(module.onTrigger, message)
-                            d.addCallback(self.sendResponse)
+                            q = multiprocessing.Queue()
+                            p = multiprocessing.Process(target=self._threadTriggerModule, args=(module, message, q))
+                            p.start()
+                            p.join(timeout=5)
+                            if p.is_alive():
+                                self.sendResponse(IRCResponse(ResponseType.Say, "Command timed out.", message.ReplyTo))
+                                p.terminate()
+                            else:
+                                self.sendResponse(q.get())
             except Exception:
                 self.bot.logger.exception("Python Execution Error in \"{}\"".format(module.__class__.__name__))
+
+    def _threadTriggerModule(self, module, message, queue):
+        response = module.onTrigger(message)
+        queue.put(response)
 
     def enableModule(self, moduleName):
         moduleName = moduleName.lower()
