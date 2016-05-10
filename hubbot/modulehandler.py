@@ -1,5 +1,6 @@
 import multiprocessing
 import operator
+import os
 import sys
 
 from hubbot.response import IRCResponse, ResponseType
@@ -70,7 +71,7 @@ class ModuleHandler(object):
                             p.join(timeout=5)
                             if p.is_alive():
                                 self.sendResponse(IRCResponse(ResponseType.Say, "Command timed out.", message.ReplyTo))
-                                p.terminate()
+                                os.kill(p.pid, 9)
                             else:
                                 self.sendResponse(q.get())
             except Exception:
