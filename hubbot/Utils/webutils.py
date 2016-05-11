@@ -1,80 +1,35 @@
-import json
 import re
-import time
-from urllib import urlencode
-from urllib2 import build_opener, Request, urlopen, URLError
-from urlparse import urlparse
+import requests
 
 
-class URLResponse(object):
-    def __init__(self, body, domain, responseHeaders):
-        self.body = body
-        self.domain = domain
-        self.responseHeaders = responseHeaders
-
-
-def fetchURL(url, extraHeaders=None):
-    headers = [("User-agent", "Mozilla/5.0")]
+def fetchURL(url, params=None, extraHeaders=None):
+    headers = {"User-Agent": "Mozilla/5.0", "Accept-Language": "en-us,en;q=0.5"}
     if extraHeaders:
-        for header in extraHeaders:
-            # For whatever reason headers are defined in different way in opener than they are in a normal urlopen
-            headers.append((header, extraHeaders[header]))
+        headers.update(extraHeaders)
     try:
-        opener = build_opener()
-        opener.addheaders = headers
-        response = opener.open(url)
-        responseHeaders = response.info().dict
-        print responseHeaders
-        pageType = responseHeaders["content-type"]
-
-        # Make sure we don't download any unwanted things
-        if re.match("^(text/.*|application/((rss|atom|rdf)\+)?xml(;.*)?|application/(.*)json(;.*)?)$", pageType):
-            urlResponse = URLResponse(response.read(), urlparse(response.geturl()).hostname, responseHeaders)
-            response.close()
-            return urlResponse
-        else:
-            response.close()
-
-    except URLError as e:
-        today = time.strftime("[%H:%M:%S]")
-        reason = None
-        if hasattr(e, "reason"):
-            reason = "We failed to reach the server, reason: {}".format(e.reason)
-        elif hasattr(e, "code"):
-            reason = "The server couldn't fulfill the request, code: {}".format(e.code)
-        print "{} *** ERROR: Fetch from \"{} \" failed: {}".format(today, url, reason)
+        request = requests.get(url, params=params, headers=headers, timeout=15)
+        pageType = request.headers["content-type"]
+        if not re.match("^(text/.*|application/((rss|atom|rdf)\+)?xml(;.*)?|application/(.*)json(;.*)?)$", pageType):
+            # Make sure we don't download any unwanted things
+            return None
+        return request
+    except:
+        return None
 
 
-def postURL(url, values, extraHeaders=None):
-    headers = {"User-agent": "Mozilla/5.0"}
+def postURL(url, data, extraHeaders=None):
+    headers = {"User-Agent": "Mozilla/5.0"}
     if extraHeaders:
-        for header in extraHeaders:
-            headers[header] = extraHeaders[header]
-
-    data = urlencode(values)
-
+        headers.update(extraHeaders)
     try:
-        request = Request(url, data, headers)
-        response = urlopen(request)
-        responseHeaders = response.info().dict
-        pageType = responseHeaders["content-type"]
-
-        # Make sure we don't download any unwanted things
-        if re.match('^(text/.*|application/((rss|atom|rdf)\+)?xml(;.*)?|application/(.*)json(;.*)?)$', pageType):
-            urlResponse = URLResponse(response.read(), urlparse(response.geturl()).hostname, responseHeaders)
-            response.close()
-            return urlResponse
-        else:
-            response.close()
-
-    except URLError as e:
-        today = time.strftime("[%H:%M:%S]")
-        reason = None
-        if hasattr(e, "reason"):
-            reason = "We failed to reach the server, reason: {}".format(e.reason)
-        elif hasattr(e, "code"):
-            reason = "The server couldn't fulfill the request, code: {}".format(e.code)
-        print "{} *** ERROR: Post to \"{} \" failed: {}".format(today, url, reason)
+        request = requests.post(url, data=data, headers=headers, timeout=15)
+        pageType = request.headers["content-type"]
+        if not re.match("^(text/.*|application/((rss|atom|rdf)\+)?xml(;.*)?|application/(.*)json(;.*)?)$", pageType):
+            # Make sure we don't download any unwanted things
+            return None
+        return request
+    except:
+        return None
 
 
 def pasteEE(key, data, description, expire):
@@ -85,7 +40,7 @@ def pasteEE(key, data, description, expire):
               "format": "json"}
     result = postURL("http://paste.ee/api", values)
     if result:
-        jsonResult = json.loads(result.body)
+        jsonResult = result.json()
         if jsonResult["status"] == "success":
             return jsonResult["paste"]["link"]
         elif jsonResult["status"] == "error":
