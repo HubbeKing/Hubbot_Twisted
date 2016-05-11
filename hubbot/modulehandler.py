@@ -67,26 +67,26 @@ class ModuleHandler(object):
                             response = module.onTrigger(message)
                             self.sendResponse(response)
                         else:
-                            q = multiprocessing.Queue()
-                            p = multiprocessing.Process(target=self._threadTriggerModule, args=(module, message, q))
-                            p.start()
-                            p.join(timeout=module.timeout)
-                            if p.is_alive() and message.Command != "":
-                                self.sendResponse(IRCResponse(ResponseType.Say,
-                                                              "Command \"{}\" timed out and was killed.".format(
-                                                                  message.Command),
-                                                              message.ReplyTo))
-                                os.kill(p.pid, 9)
-                                self.bot.logger.warning(
-                                    "Module \"{}\" timed out on execution.".format(module.__class__.__name__))
-                            elif p.is_alive():
-                                os.kill(p.pid, 9)
-                                self.bot.logger.warning(
-                                    "Module \"{}\" timed out on execution.".format(module.__class__.__name__))
-                            else:
-                                self.sendResponse(q.get())
+                            d = threads.deferToThread(self._handleInThread, module, message)
             except Exception:
                 self.bot.logger.exception("Python Execution Error in \"{}\"".format(module.__class__.__name__))
+
+    def _handleInThread(self, module, message):
+        q = multiprocessing.Queue()
+        p = multiprocessing.Process(target=self._threadTriggerModule, args=(module, message, q))
+        p.start()
+        p.join(timeout=module.timeout)
+        if p.is_alive() and message.Command != "":
+            self.sendResponse(IRCResponse(ResponseType.Say,
+                                          "Command \"{}\" timed out and was killed.".format(message.Command),
+                                          message.ReplyTo))
+            os.kill(p.pid, 9)
+            self.bot.logger.warning("Module \"{}\" timed out on execution.".format(module.__class__.__name__))
+        elif p.is_alive():
+            os.kill(p.pid, 9)
+            self.bot.logger.warning("Module \"{}\" timed out on execution.".format(module.__class__.__name__))
+        else:
+            self.sendResponse(q.get())
 
     def _threadTriggerModule(self, module, message, queue):
         response = module.onTrigger(message)
