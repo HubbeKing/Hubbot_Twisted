@@ -4,14 +4,14 @@ import sqlite3
 
 from hubbot.response import IRCResponse, ResponseType
 from hubbot.moduleinterface import ModuleInterface
-#from hubbot.Utils.webutils import pasteEE
+from hubbot.Utils.webutils import pasteEE
 
 
 class Headcanon(ModuleInterface):
     triggers = ["headcanon"]
     subCommands = ["add", "search", "list", "remove"]
     runInThread = True
-    timeout = 15
+    timeout = 30
     APIKey = None
 
     def help(self, message):
