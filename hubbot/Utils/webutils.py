@@ -7,7 +7,8 @@ def pasteEE(key, data, description, expire):
               "paste": data,
               "expiration": expire,
               "format": "json"}
-    result = requests.post("http://paste.ee/api", data=values, timeout=2)
+    result = requests.post("http://paste.ee/api", data=values, timeout=5)
+    result.close()
     if result:
         jsonResult = result.json()
         if jsonResult["status"] == "success":
