@@ -7,7 +7,7 @@ def fetchURL(url, params=None, extraHeaders=None):
     if extraHeaders:
         headers.update(extraHeaders)
     try:
-        request = requests.get(url, params=params, headers=headers)
+        request = requests.get(url, params=params, headers=headers, timeout=5)
         pageType = request.headers["content-type"]
         if not re.match("^(text/.*|application/((rss|atom|rdf)\+)?xml(;.*)?|application/(.*)json(;.*)?)$", pageType):
             # Make sure we don't download any unwanted things
@@ -22,7 +22,7 @@ def postURL(url, data, extraHeaders=None):
     if extraHeaders:
         headers.update(extraHeaders)
     try:
-        request = requests.post(url, data=data, headers=headers)
+        request = requests.post(url, data=data, headers=headers, timeout=5)
         pageType = request.headers["content-type"]
         if not re.match("^(text/.*|application/((rss|atom|rdf)\+)?xml(;.*)?|application/(.*)json(;.*)?)$", pageType):
             # Make sure we don't download any unwanted things

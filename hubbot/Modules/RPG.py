@@ -17,7 +17,7 @@ class RPG(ModuleInterface):
         "dnd": {"displayname": "Dungeons & Dragons", "tablename": "dnd", "isAddingAllowed": True}
     }
     runInThread = True
-    timeout = 5
+    timeout = 10
     APIKey = None
 
     def help(self, message):

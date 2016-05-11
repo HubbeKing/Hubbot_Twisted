@@ -11,7 +11,7 @@ class Headcanon(ModuleInterface):
     triggers = ["headcanon"]
     subCommands = ["add", "search", "list", "remove"]
     runInThread = True
-    timeout = 5
+    timeout = 10
     APIKey = None
 
     def help(self, message):
