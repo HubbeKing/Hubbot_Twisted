@@ -4,7 +4,7 @@ import sqlite3
 
 from hubbot.response import IRCResponse, ResponseType
 from hubbot.moduleinterface import ModuleInterface
-from hubbot.Utils.webutils import pasteEE
+#from hubbot.Utils.webutils import pasteEE
 
 
 class Headcanon(ModuleInterface):
@@ -12,6 +12,7 @@ class Headcanon(ModuleInterface):
     subCommands = ["add", "search", "list", "remove"]
     runInThread = True
     timeout = 15
+    APIKey = None
 
     def help(self, message):
         helpDict = {
@@ -31,6 +32,18 @@ class Headcanon(ModuleInterface):
             c = conn.cursor()
             c.execute("CREATE TABLE IF NOT EXISTS headcanon (canon text)")
             conn.commit()
+        self.APIKey = self.getAPIkey()
+
+    def getAPIkey(self):
+        """
+        Get the API key for paste.ee from the sqlite database.
+        """
+        apiKey = None
+        with sqlite3.connect(self.bot.databaseFile) as conn:
+            c = conn.cursor()
+            for row in c.execute("SELECT apikey FROM keys WHERE name=\"paste\""):
+                apiKey = row[0]
+        return apiKey
 
     def onTrigger(self, message):
         """
@@ -76,6 +89,8 @@ class Headcanon(ModuleInterface):
                 return IRCResponse(ResponseType.Say, returnString, message.ReplyTo)
 
         elif subCommand.lower() == "list":
+            if self.APIKey is None:
+                return IRCResponse(ResponseType.Say, "No API key for paste.ee was found, please add one.", message.ReplyTo)
             pasteBinString = ""
             if len(headcanon) == 0:
                 return IRCResponse(ResponseType.Say, "The database is empty! D:", message.ReplyTo)
@@ -83,7 +98,7 @@ class Headcanon(ModuleInterface):
                 for item in headcanon:
                     pasteBinString = pasteBinString + item + "\n"
                 try:
-                    response = pasteEE(pasteBinString, "Headcanon", "10M")
+                    response = pasteEE(self.APIKey, pasteBinString, "Headcanon", 10)
                     return IRCResponse(ResponseType.Say, "Link posted! (Expires in 10 minutes) {}".format(response), message.ReplyTo)
                 except Exception:
                     self.bot.logger.exception("Exception in module \"Headcanon\"")

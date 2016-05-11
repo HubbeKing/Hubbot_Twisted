@@ -18,6 +18,7 @@ class RPG(ModuleInterface):
     }
     runInThread = True
     timeout = 15
+    APIKey = None
 
     def help(self, message):
         helpDict = {
@@ -69,6 +70,18 @@ class RPG(ModuleInterface):
             c.execute("CREATE TABLE IF NOT EXISTS pathfinder (id int, message text)")
             c.execute("CREATE TABLE IF NOT EXISTS welch (id int, message text)")
             conn.commit()
+        self.APIKey = self.getAPIkey()
+
+    def getAPIkey(self):
+        """
+        Get the API key for paste.ee from the sqlite database.
+        """
+        apiKey = None
+        with sqlite3.connect(self.bot.databaseFile) as conn:
+            c = conn.cursor()
+            for row in c.execute("SELECT apikey FROM keys WHERE name=\"paste\""):
+                apiKey = row[0]
+        return apiKey
 
     def onTrigger(self, message):
         """
@@ -122,6 +135,8 @@ class RPG(ModuleInterface):
             return "Invalid number, valid numbers are <{}-{}>".format(min(messageDict.keys()), max(messageDict.keys()))
 
     def getList(self, table, name, params):
+        if self.APIKey is None:
+            return "No API key for paste.ee was found, please add one."
         messageDict = {}
         with sqlite3.connect(self.bot.databaseFile) as conn:
             c = conn.cursor()
@@ -136,7 +151,7 @@ class RPG(ModuleInterface):
                 match = re.search(params, string, re.IGNORECASE)
                 if match:
                     pasteString += str(number) + ". " + string + "\n"
-        pasteLink = pasteEE(pasteString, name, 10)
+        pasteLink = pasteEE(self.APIKey, pasteString, name, 10)
         return "Link posted! {}".format(pasteLink)
 
     def addLine(self, table, line):

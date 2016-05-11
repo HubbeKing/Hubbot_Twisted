@@ -77,8 +77,8 @@ def postURL(url, values, extraHeaders=None):
         print "{} *** ERROR: Post to \"{} \" failed: {}".format(today, url, reason)
 
 
-def pasteEE(data, description, expire):
-    values = {"key": "public",
+def pasteEE(key, data, description, expire):
+    values = {"key": key,
               "description": description,
               "paste": data,
               "expiration": expire,
