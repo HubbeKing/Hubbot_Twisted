@@ -68,10 +68,16 @@ class ModuleHandler(object):
                             q = multiprocessing.Queue()
                             p = multiprocessing.Process(target=self._threadTriggerModule, args=(module, message, q))
                             p.start()
-                            p.join(timeout=5)
-                            if p.is_alive():
-                                self.sendResponse(IRCResponse(ResponseType.Say, "Command timed out.", message.ReplyTo))
+                            p.join(timeout=module.timeout)
+                            if p.is_alive() and message.Command != "":
+                                self.sendResponse(IRCResponse(ResponseType.Say,
+                                                              "Command \"{}\" timed out and was killed.".format(message.Command),
+                                                              message.ReplyTo))
                                 os.kill(p.pid, 9)
+                                self.bot.logger.warning("Module \"{}\" timed out on execution.".format(module.__class__.__name__))
+                            elif p.is_alive():
+                                os.kill(p.pid, 9)
+                                self.bot.logger.warning("Module \"{}\" timed out on execution.".format(module.__class__.__name__))
                             else:
                                 self.sendResponse(q.get())
             except Exception:

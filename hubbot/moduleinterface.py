@@ -11,6 +11,7 @@ class ModuleInterface(object):
     acceptedTypes = ['PRIVMSG']
     help = '<no help defined (yet)>'
     runInThread = False
+    timeout = 5
     accessLevel = ModuleAccessLevel.ANYONE
 
     priority = 0
