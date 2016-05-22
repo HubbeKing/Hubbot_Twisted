@@ -27,7 +27,7 @@ class Ignore(ModuleInterface):
             for row in c.execute("SELECT nick FROM ignores"):
                 ignores.append(row[0])
         self.bot.ignores = ignores
-        self.bot.logger.debug("Loaded \"{}\" into ignores list.".format(", ".join(ignores)))
+        self.bot.logger.debug("Loaded {!r} into ignores list.".format(", ".join(ignores)))
 
     def onDisable(self):
         self.bot.ignores = []

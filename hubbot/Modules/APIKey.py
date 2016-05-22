@@ -16,6 +16,6 @@ class APIKey(ModuleInterface):
             with sqlite3.connect(self.bot.databaseFile) as conn:
                 c = conn.cursor()
                 c.execute("CREATE TABLE IF NOT EXISTS keys (name text, apikey text)")
-                c.execute("INSERT INTO keys VALUES (?,?)", (message.ParameterList[0], message.ParameterList[1]))
+                c.execute("INSERT OR REPLACE INTO keys VALUES (?,?)", (message.ParameterList[0], message.ParameterList[1]))
                 conn.commit()
-            return IRCResponse(ResponseType.Say, "Inserted API key into database as \"{}\".".format(message.ParameterList[0]), message.ReplyTo)
+            return IRCResponse(ResponseType.Say, "Inserted API key into database as {!r}.".format(message.ParameterList[0]), message.ReplyTo)

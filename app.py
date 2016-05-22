@@ -33,6 +33,6 @@ if __name__ == "__main__":
     try:
         config.readConfig()
     except ConfigError:
-        logging.exception("Failed to load config \"{}\".".format(options.config))
+        logging.exception("Failed to load config {!r}.".format(options.config))
     else:
         bothandler = BotHandler(config)

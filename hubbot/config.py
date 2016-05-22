@@ -20,7 +20,7 @@ class Config(object):
     def _validateConfigData(self, configData):
         for item in _required:
             if item not in configData:
-                raise ConfigError(self.configFile, "Required item \"{}\" was not found in the config.".format(item))
+                raise ConfigError(self.configFile, "Required item {!r} was not found in the config.".format(item))
 
     def __len__(self):
         return len(self._configData)

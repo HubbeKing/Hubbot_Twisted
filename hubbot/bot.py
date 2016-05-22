@@ -56,7 +56,7 @@ class Hubbot(irc.IRCClient):
                         self.prefixesCharToMode[statusChars[i]] = statusModes[i]
                 elif option[0] == "NETWORK":
                     self.network = option[1]
-                    self.logger.info("Network is \"{}\".".format(self.network))
+                    self.logger.info("Network is {!r}.".format(self.network))
                     self.logger.info("Enabling modules...")
                     self.moduleHandler.enableAllModules()
 
@@ -92,7 +92,7 @@ class Hubbot(irc.IRCClient):
         for word in params[0]:
             if "," in word:
                 self.hostname = word.rstrip(",")
-        self.logger.info("Host is \"{}\".".format(self.hostname))
+        self.logger.info("Host is {!r}.".format(self.hostname))
 
     def irc_NICK(self, prefix, params):
         userArray = prefix.split("!")
@@ -168,7 +168,7 @@ class Hubbot(irc.IRCClient):
         self.logger.error(" ".join(params))
 
     def nickChanged(self, nick):
-        self.logger.info("Nick changed from \"{}\" to \"{}\".".format(self.nickname, nick))
+        self.logger.info("Nick changed from {!r} to {!r}.".format(self.nickname, nick))
         self.nickname = nick
 
     def privmsg(self, user, channel, msg):

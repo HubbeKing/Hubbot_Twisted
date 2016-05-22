@@ -21,7 +21,7 @@ class RPG(ModuleInterface):
 
     def help(self, message):
         helpDict = {
-            u"rpg": u"pf/lp/mm/welch/advice/dnd [number]/add <thing>/list [term]/search <term> -- \"helpful\" RPG advice and stuff",
+            u"rpg": u"pf/lp/mm/welch/advice/dnd [number]/add <thing>/list [term]/search <term> -- 'helpful' RPG advice and stuff",
 
             u"pf": u"pf [number] -- Fetches a random or given entry from the Pathfinder list.",
             u"pf add": u"pf add <string> -- Adds the specified string as an entry in the Pathfinder list.",
@@ -78,7 +78,7 @@ class RPG(ModuleInterface):
         apiKey = None
         with sqlite3.connect(self.bot.databaseFile) as conn:
             c = conn.cursor()
-            for row in c.execute("SELECT apikey FROM keys WHERE name=\"paste\""):
+            for row in c.execute("SELECT apikey FROM keys WHERE name='paste'"):
                 apiKey = row[0]
         return apiKey
 

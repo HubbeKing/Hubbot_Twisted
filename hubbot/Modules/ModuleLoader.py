@@ -34,16 +34,16 @@ class ModuleLoader(ModuleInterface):
 
         if len(successes) > 0:
             responses.append(IRCResponse(ResponseType.Say,
-                                         "\"{}\" {}ed successfully.".format(", ".join(successes), message.Command),
+                                         "{!r} {}ed successfully.".format(", ".join(successes), message.Command),
                                          message.ReplyTo))
             self.bot.logger.info("'{}' {}d successfully.".format(", ".join(successes), message.Command))
         if len(failures) > 0:
             responses.append(IRCResponse(ResponseType.Say,
-                                         "\"{}\" failed to {}.".format(", ".join(failures), message.Command),
+                                         "{!r} failed to {}.".format(", ".join(failures), message.Command),
                                          message.ReplyTo))
         if len(exceptions) > 0:
             responses.append(IRCResponse(ResponseType.Say,
-                                         "\"{}\" threw an exception.".format(", ".join(exceptions)),
+                                         "{!r} threw an exception.".format(", ".join(exceptions)),
                                          message.ReplyTo))
 
         return responses
@@ -78,7 +78,7 @@ class ModuleLoader(ModuleInterface):
                         failures.append(moduleCaseMap[moduleName])
                 except:
                     exceptions.append(moduleCaseMap[moduleName])
-                    self.bot.logger.exception("Exception when loading module \"{}\"".format(moduleCaseMap[moduleName]))
+                    self.bot.logger.exception("Exception when loading module {!r}".format(moduleCaseMap[moduleName]))
 
         return successes, failures, exceptions
 
@@ -96,7 +96,7 @@ class ModuleLoader(ModuleInterface):
                 try:
                     self.bot.bothandler.reloadModule(name)
                 except:
-                    self.bot.logger.exception("Exception when reloading module \"{}\"".format(name))
+                    self.bot.logger.exception("Exception when reloading module {!r}".format(name))
 
             return ["all modules"], [], []
 
@@ -114,7 +114,7 @@ class ModuleLoader(ModuleInterface):
                         failures.append(moduleCaseMap[moduleName])
                 except:
                     exceptions.append(moduleCaseMap[moduleName])
-                    self.bot.logger.exception("Exception when reloading module \"{}\"".format(moduleCaseMap[moduleName]))
+                    self.bot.logger.exception("Exception when reloading module {!r}".format(moduleCaseMap[moduleName]))
 
         return successes, failures, exceptions
 
@@ -134,6 +134,6 @@ class ModuleLoader(ModuleInterface):
                     failures.append(moduleCaseMap[moduleName])
             except:
                 exceptions.append(moduleCaseMap[moduleName])
-                self.bot.logger.exception("Exception when unloading module \"{}\"".format(moduleCaseMap[moduleName]))
+                self.bot.logger.exception("Exception when unloading module {!r}".format(moduleCaseMap[moduleName]))
 
         return successes, failures, exceptions

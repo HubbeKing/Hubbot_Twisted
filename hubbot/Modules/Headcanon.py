@@ -40,7 +40,7 @@ class Headcanon(ModuleInterface):
         apiKey = None
         with sqlite3.connect(self.bot.databaseFile) as conn:
             c = conn.cursor()
-            for row in c.execute("SELECT apikey FROM keys WHERE name=\"paste\""):
+            for row in c.execute("SELECT apikey FROM keys WHERE name='paste'"):
                 apiKey = row[0]
         return apiKey
 
@@ -100,7 +100,7 @@ class Headcanon(ModuleInterface):
                     response = pasteEE(self.APIKey, pasteBinString, "Headcanon", 10)
                     return IRCResponse(ResponseType.Say, "Link posted! (Expires in 10 minutes) {}".format(response), message.ReplyTo)
                 except Exception:
-                    self.bot.logger.exception("Exception in module \"Headcanon\"")
+                    self.bot.logger.exception("Exception in module 'Headcanon'")
                     return IRCResponse(ResponseType.Say, "Uh-oh, something broke!", message.ReplyTo)
 
         elif subCommand.lower() == "remove" and message.User.Name in self.bot.admins:
@@ -117,5 +117,5 @@ class Headcanon(ModuleInterface):
                         return IRCResponse(ResponseType.Say, 'Removed "' + match.string + '"', message.ReplyTo)
                 return IRCResponse(ResponseType.Say, '"' + re_string + '"was not found!', message.ReplyTo)
             except Exception:
-                self.bot.logger.exception("Exception in module \"Headcanon\"")
+                self.bot.logger.exception("Exception in module 'Headcanon'")
                 return IRCResponse(ResponseType.Say, "Something broke!", message.ReplyTo)

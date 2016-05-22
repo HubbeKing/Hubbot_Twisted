@@ -19,7 +19,7 @@ class Notify(ModuleInterface):
         apiKey = None
         with sqlite3.connect(self.bot.databaseFile) as conn:
             c = conn.cursor()
-            for row in c.execute("SELECT apikey FROM keys WHERE name=\"pushbullet\""):
+            for row in c.execute("SELECT apikey FROM keys WHERE name='pushbullet'"):
                 apiKey = row[0]
         return apiKey
 
@@ -58,7 +58,7 @@ class Notify(ModuleInterface):
                             timeDelta = now - message.Channel.Users[user].LastActive
                         except TypeError:  # this means that LastActive is None for some reason
                             timeDelta = now - datetime.datetime.min
-                            self.bot.logger.exception("TypeError in module \"Notify\", LastActive is probably not datetime.")
+                            self.bot.logger.exception("TypeError in module 'Notify', LastActive is probably not datetime.")
                         if timeDelta.total_seconds() > 60:
                             return True
                         else:

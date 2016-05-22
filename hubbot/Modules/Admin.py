@@ -27,7 +27,7 @@ class Admin(ModuleInterface):
             for row in c.execute("SELECT nick FROM admins"):
                 admins.append(row[0])
         self.bot.admins = admins
-        self.bot.logger.debug("Loaded \"{}\" into admins list.".format(", ".join(admins)))
+        self.bot.logger.debug("Loaded {!r} into admins list.".format(", ".join(admins)))
 
     def onDisable(self):
         self.saveAdmins()

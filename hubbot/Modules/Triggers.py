@@ -22,12 +22,12 @@ class Triggers(ModuleInterface):
             if message.ParameterList[0].lower() in self.bot.moduleHandler.mappedTriggers:
                 properName = self.bot.moduleHandler.mappedTriggers[message.ParameterList[0].lower()].__class__.__name__
                 return IRCResponse(ResponseType.Say,
-                                   "Module \"{}\" contains the triggers: {}".format(properName, ", ".join(self.bot.moduleHandler.mappedTriggers[message.ParameterList[0].lower()].triggers)),
+                                   "Module {!r} contains the triggers: {}".format(properName, ", ".join(self.bot.moduleHandler.mappedTriggers[message.ParameterList[0].lower()].triggers)),
                                    message.ReplyTo)
 
             elif message.ParameterList[0].lower() not in self.bot.moduleHandler.moduleCaseMap:
                 return IRCResponse(ResponseType.Say,
-                                   "No module named \"{}\" is currently loaded!".format(message.ParameterList[0].lower()),
+                                   "No module named {!r} is currently loaded!".format(message.ParameterList[0].lower()),
                                    message.ReplyTo)
 
             else:
@@ -35,5 +35,5 @@ class Triggers(ModuleInterface):
                 module = self.bot.moduleHandler.modules[properName]
 
                 return IRCResponse(ResponseType.Say,
-                                   "Module \"{}\" contains the triggers: {}".format(properName, ", ".join(module.triggers)),
+                                   "Module {!r} contains the triggers: {}".format(properName, ", ".join(module.triggers)),
                                    message.ReplyTo)

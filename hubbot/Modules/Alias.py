@@ -109,9 +109,9 @@ class Alias(ModuleInterface):
                 if len(message.ParameterList) == 0:
                     return IRCResponse(ResponseType.Say, "Set the help text for what alias to what?", message.ReplyTo)
                 if message.ParameterList[0].lower() not in self.aliases:
-                    return IRCResponse(ResponseType.Say, "I have no alias called \"{}\".".format(message.ParameterList[0].lower()), message.ReplyTo)
+                    return IRCResponse(ResponseType.Say, "I have no alias called {!r}.".format(message.ParameterList[0].lower()), message.ReplyTo)
                 if len(message.ParameterList) == 1:
-                    return IRCResponse(ResponseType.Say, "You didn't give me any help text to set for \"{}\"!".format(message.ParameterList[0].lower()), message.ReplyTo)
+                    return IRCResponse(ResponseType.Say, "You didn't give me any help text to set for {!r}!".format(message.ParameterList[0].lower()), message.ReplyTo)
                 alias = message.ParameterList[0].lower()
                 aliasHelp = " ".join(message.ParameterList[1:])
                 self.aliasHelpDict[alias] = aliasHelp
@@ -119,7 +119,7 @@ class Alias(ModuleInterface):
                     c = conn.cursor()
                     c.execute("INSERT INTO aliashelp VALUES (?,?)", (alias, aliasHelp))
                     conn.commit()
-                return IRCResponse(ResponseType.Say, "\"{}\" help text set to \"{}\".".format(alias, aliasHelp), message.ReplyTo)
+                return IRCResponse(ResponseType.Say, "{!r} help text set to {!r}.".format(alias, aliasHelp), message.ReplyTo)
 
         elif message.Command in self.aliases:
             newMessage = self._aliasedMessage(message)

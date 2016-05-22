@@ -54,7 +54,7 @@ class ModuleEnabler(ModuleInterface):
 
                 except Exception:
                     exceptions.append(moduleNameCaseMap[moduleName])
-                    self.bot.logger.exception("Exception when enabling module \"{}\"".format(moduleNameCaseMap[moduleName]))
+                    self.bot.logger.exception("Exception when enabling module {!r}".format(moduleNameCaseMap[moduleName]))
 
         return successes, failures, exceptions
 

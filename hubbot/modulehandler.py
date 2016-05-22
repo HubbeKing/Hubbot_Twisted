@@ -47,10 +47,10 @@ class ModuleHandler(object):
                     self.bot.notice(response.Target.encode("utf-8"), response.Response.encode("utf-8"))
                     self.bot.logger.info(u'{} | [{}] {}'.format(response.Target, self.bot.nickname, response.Response))
                 elif response.Type == ResponseType.Raw:
-                    self.bot.logger.info(u"Sent raw \"{}\"".format(response.Response))
+                    self.bot.logger.info(u"Sent raw {!r}".format(response.Response))
                     self.bot.sendLine(response.Response.encode("utf-8"))
             except Exception:
-                self.bot.logger.exception("Python Execution Error sending responses \"{}\"".format(responses))
+                self.bot.logger.exception("Python Execution Error sending responses {!r}".format(responses))
 
     def handleMessage(self, message):
         """
@@ -69,7 +69,7 @@ class ModuleHandler(object):
                         else:
                             d = threads.deferToThread(self._handleInThread, module, message)
             except Exception:
-                self.bot.logger.exception("Python Execution Error in \"{}\"".format(module.__class__.__name__))
+                self.bot.logger.exception("Python Execution Error in {!r}".format(module.__class__.__name__))
 
     def _handleInThread(self, module, message):
         q = multiprocessing.Queue()
@@ -78,13 +78,13 @@ class ModuleHandler(object):
         p.join(timeout=module.timeout)
         if p.is_alive() and message.Command != "":
             self.sendResponse(IRCResponse(ResponseType.Say,
-                                          "Command \"{}\" timed out and was killed.".format(message.Command),
+                                          "Command {!r} timed out and was killed.".format(message.Command),
                                           message.ReplyTo))
             os.kill(p.pid, 9)
-            self.bot.logger.warning("Module \"{}\" timed out on execution.".format(module.__class__.__name__))
+            self.bot.logger.warning("Module {!r} timed out on execution.".format(module.__class__.__name__))
         elif p.is_alive():
             os.kill(p.pid, 9)
-            self.bot.logger.warning("Module \"{}\" timed out on execution.".format(module.__class__.__name__))
+            self.bot.logger.warning("Module {!r} timed out on execution.".format(module.__class__.__name__))
         else:
             self.sendResponse(q.get())
 
@@ -99,11 +99,11 @@ class ModuleHandler(object):
         moduleListCaseMap = {key.lower(): key for key in moduleList}
 
         if moduleName not in moduleListCaseMap:
-            self.bot.logger.warning("Module \"{}\" was requested to enable but it is not loaded!".format(moduleName))
+            self.bot.logger.warning("Module {!r} was requested to enable but it is not loaded!".format(moduleName))
             return False
 
         if moduleName in self.moduleCaseMap:
-            self.bot.logger.warning("Module \"{}\" was requested to enable but it is already enabled!".format(moduleName))
+            self.bot.logger.warning("Module {!r} was requested to enable but it is already enabled!".format(moduleName))
             return False
 
         module = sys.modules["{}.{}".format("hubbot.Modules", moduleListCaseMap[moduleName])]
@@ -141,7 +141,7 @@ class ModuleHandler(object):
                 if check:
                     self.bot.bothandler.unloadModuleIfNotEnabled(properName)
         else:
-            self.bot.logger.warning("Module \"{}\" was requested to disable but it is not enabled!".format(moduleName))
+            self.bot.logger.warning("Module {!r} was requested to disable but it is not enabled!".format(moduleName))
             return False
 
         return True
@@ -161,7 +161,7 @@ class ModuleHandler(object):
             try:
                 self.enableModule(module)
             except Exception:
-                self.bot.logger.exception("Exception when enabling \"{}\"".format(str(module)))
+                self.bot.logger.exception("Exception when enabling {!r}".format(str(module)))
 
     def getModuleDirList(self):
         return self.bot.bothandler.modules.keys()

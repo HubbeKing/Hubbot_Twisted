@@ -26,9 +26,9 @@ class BotHandler:
 
     def startBotFactory(self, server, port, channels):
         if server in self.botfactories:
-            logging.warning("Bot for server \"{}\" was requested but one is already running!".format(server))
+            logging.warning("Bot for server {!r} was requested but one is already running!".format(server))
         else:
-            logging.info("New bot for server \"{}\" requested, starting...".format(server))
+            logging.info("New bot for server {!r} requested, starting...".format(server))
             if type(channels) == list:
                 chanObjects = {}
                 for channel in channels:
@@ -43,23 +43,23 @@ class BotHandler:
         if quitmessage is None:
             quitmessage = "ohok".encode("utf-8")
         if server not in self.botfactories:
-            logging.warning("Bot for \"{}\" does not exist yet was asked to stop.".format(server))
+            logging.warning("Bot for {!r} does not exist yet was asked to stop.".format(server))
         else:
-            logging.info("Shutting down bot for server \"{}\"".format(server))
+            logging.info("Shutting down bot for server {!r}".format(server))
             self.botfactories[server].bot.Quitting = True
             for (name, module) in self.botfactories[server].bot.moduleHandler.modules.items():
                 try:
                     module.onDisable()
                 except:
-                    logging.exception("Module \"{}\" threw an exception on disable.".format(name))
+                    logging.exception("Module {!r} threw an exception on disable.".format(name))
             try:
                 self.botfactories[server].bot.quit(quitmessage)
             except:
                 # this most likely means the bot in question is not connected anywhere or otherwise can't send a QUIT
-                logging.exception("Bot for server \"{}\" could not quit properly!".format(server))
+                logging.exception("Bot for server {!r} could not quit properly!".format(server))
                 self.botfactories[server].stopTrying()
             self.unregisterFactory(server)
-            logging.info("Successfully shut down bot for server \"{}\"".format(server))
+            logging.info("Successfully shut down bot for server {!r}".format(server))
 
     def unregisterFactory(self, server):
         if server in self.botfactories:
@@ -86,11 +86,11 @@ class BotHandler:
         moduleListCaseMap = {key.lower(): key for key in moduleList}
 
         if name not in moduleListCaseMap:
-            logging.warning("Module \"{}\" was requested to load but it does not exist!".format(name))
+            logging.warning("Module {!r} was requested to load but it does not exist!".format(name))
             return False
 
         if name in self.moduleCaseMap:
-            logging.warning("Module \"{}\" was requested to load but it is already loaded!".format(name))
+            logging.warning("Module {!r} was requested to load but it is already loaded!".format(name))
             return False
 
         module = importlib.import_module("hubbot.Modules." + moduleListCaseMap[name])
@@ -124,7 +124,7 @@ class BotHandler:
             logging.debug("-- {} unloaded.".format(properName))
             return True
         else:
-            logging.warning("Module \"{}\" was requested to unload but it is not loaded!".format(name))
+            logging.warning("Module {!r} was requested to unload but it is not loaded!".format(name))
             return False
 
     def unloadModuleIfNotEnabled(self, moduleName):
@@ -135,7 +135,7 @@ class BotHandler:
 
         if not enabled:
             self.unloadModule(moduleName)
-            logging.info("Module \"{}\" is no longer enabled anywhere and was unloaded.".format(moduleName))
+            logging.info("Module {!r} is no longer enabled anywhere and was unloaded.".format(moduleName))
 
     def reloadModule(self, moduleName):
         moduleUsages = []
@@ -160,7 +160,7 @@ class BotHandler:
             try:
                 self.loadModule(module)
             except:
-                logging.exception("Exception when loading module \"{}\".".format(str(module)))
+                logging.exception("Exception when loading module {!r}.".format(str(module)))
 
     def getModuleDirList(self):
         root = os.path.join('.', "hubbot", 'Modules')
