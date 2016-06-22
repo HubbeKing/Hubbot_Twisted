@@ -1,6 +1,4 @@
-import multiprocessing
 import operator
-import os
 import sys
 
 from twisted.internet import threads
@@ -67,30 +65,11 @@ class ModuleHandler(object):
                             response = module.onTrigger(message)
                             self.sendResponse(response)
                         else:
-                            d = threads.deferToThread(self._handleInThread, module, message)
+                            d = threads.deferToThread(module.onTrigger, message)
+                            d.addCallback(self.sendResponse)
+
             except Exception:
                 self.bot.logger.exception("Python Execution Error in {!r}".format(module.__class__.__name__))
-
-    def _handleInThread(self, module, message):
-        q = multiprocessing.Queue()
-        p = multiprocessing.Process(target=self._threadTriggerModule, args=(module, message, q))
-        p.start()
-        p.join(timeout=module.timeout)
-        if p.is_alive() and message.Command != "":
-            self.sendResponse(IRCResponse(ResponseType.Say,
-                                          "Command {!r} timed out and was killed.".format(message.Command),
-                                          message.ReplyTo))
-            os.kill(p.pid, 9)
-            self.bot.logger.warning("Module {!r} timed out on execution.".format(module.__class__.__name__))
-        elif p.is_alive():
-            os.kill(p.pid, 9)
-            self.bot.logger.warning("Module {!r} timed out on execution.".format(module.__class__.__name__))
-        else:
-            self.sendResponse(q.get())
-
-    def _threadTriggerModule(self, module, message, queue):
-        response = module.onTrigger(message)
-        queue.put(response)
 
     def enableModule(self, moduleName):
         moduleName = moduleName.lower()

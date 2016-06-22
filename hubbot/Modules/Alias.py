@@ -1,6 +1,5 @@
 import re
 import sqlite3
-from multiprocessing import Manager
 from hubbot.moduleinterface import ModuleInterface
 from hubbot.response import IRCResponse, ResponseType
 from hubbot.message import IRCMessage
@@ -32,9 +31,8 @@ class Alias(ModuleInterface):
                 return u"'{}' is an alias for: {}".format(command, u" ".join(self.aliases[command]))
 
     def onEnable(self):
-        self.manager = Manager()
-        self.aliases = self.manager.dict()
-        self.aliasHelpDict = self.manager.dict()
+        self.aliases = {}
+        self.aliasHelpDict = {}
         with sqlite3.connect(self.bot.databaseFile) as conn:
             c = conn.cursor()
             c.execute("CREATE TABLE IF NOT EXISTS aliashelp (alias text, help text)")
