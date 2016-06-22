@@ -113,8 +113,8 @@ class ModuleHandler(object):
 
         constructedModule = class_(self.bot)
 
-        self.modules.update({moduleListCaseMap[moduleName]: constructedModule})
-        self.moduleCaseMap.update({moduleName: moduleListCaseMap[moduleName]})
+        self.modules[moduleListCaseMap[moduleName]] = constructedModule
+        self.moduleCaseMap[moduleName] = moduleListCaseMap[moduleName]
         constructedModule.onEnable()
 
         # map module triggers
