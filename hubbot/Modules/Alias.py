@@ -8,8 +8,6 @@ from hubbot.message import IRCMessage
 class Alias(ModuleInterface):
     triggers = ["alias", "unalias", "aliases", "aliashelp"]
     runInThread = True
-    aliases = {}
-    aliasHelpDict = {}
 
     def help(self, message):
         """
@@ -33,6 +31,8 @@ class Alias(ModuleInterface):
                 return u"'{}' is an alias for: {}".format(command, u" ".join(self.aliases[command]))
 
     def onEnable(self):
+        self.aliases = self.bot.moduleHandler.manager.dict()
+        self.aliasHelpDict = self.bot.moduleHandler.manager.dict()
         with sqlite3.connect(self.bot.databaseFile) as conn:
             c = conn.cursor()
             c.execute("CREATE TABLE IF NOT EXISTS aliashelp (alias text, help text)")

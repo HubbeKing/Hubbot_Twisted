@@ -16,9 +16,10 @@ class ModuleHandler(object):
         @type bot: hubbot.bot.Hubbot
         """
         self.bot = bot
-        self.modules = {}
-        self.moduleCaseMap = {}
-        self.mappedTriggers = {}
+        self.manager = multiprocessing.Manager()
+        self.modules = self.manager.dict()
+        self.moduleCaseMap = self.manager.dict()
+        self.mappedTriggers = self.manager.dict()
         self.modulesToLoad = bot.bothandler.config.serverItemWithDefault(self.bot.server, "modulesToLoad", ["all"])
 
     def sendResponse(self, response):
