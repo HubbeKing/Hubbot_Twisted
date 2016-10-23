@@ -51,13 +51,13 @@ class Markov(ModuleInterface):
             return
         elif message.TargetType is TargetTypes.USER and message.Command not in self.bot.moduleHandler.mappedTriggers:
             reply = ""
-            while len(reply) < 2:
+            while len(reply.split()) < 2:
                 reply = self.brain.reply(message.MessageString, max_len=100)
                 reply = self._cleanupString(reply)
             return IRCResponse(ResponseType.Say, reply.capitalize(), message.ReplyTo)
         elif self.bot.nickname.lower() in message.MessageString.lower() and len(message.MessageList) > 1:
             reply = ""
-            while len(reply) < 2:
+            while len(reply.split()) < 2:
                 messageList = [item for item in message.MessageList if item.lower() != self.bot.nickname.lower()]
                 reply = self.brain.reply(" ".join(messageList), max_len=100)
                 nickList = [nick.lower() for nick in self.bot.channels[message.ReplyTo].Users.keys()]
