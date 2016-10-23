@@ -7,6 +7,7 @@ import os
 
 class Markov(ModuleInterface):
     help = "Markov - Yeah I'm sentient, what of it?"
+    acceptedTypes = ["PRIVMSG", "ACTION"]
 
     def __init__(self, bot):
         self.brain = None
@@ -70,6 +71,6 @@ class Markov(ModuleInterface):
                         reply = " ".join(newList)
                 reply = self._cleanupString(reply)
             return IRCResponse(ResponseType.Say, reply.capitalize(), message.ReplyTo)
-        else:
+        elif message.Type == "PRIVMSG":
             messageList = [item.lower() for item in message.MessageList if item.lower() != self.bot.nickname.lower()]
             self.addToBrain(" ".join(messageList))
