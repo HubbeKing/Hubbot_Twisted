@@ -42,7 +42,8 @@ class Markov(ModuleInterface):
         return -1
 
     def _cleanupString(self, string):
-        return "".join(c for c in string if ord(c) >= 0x20 and "(.+.+)" not in c).lstrip("~").lstrip("!").lstrip(".")
+        newString = "".join(c for c in string if ord(c) >= 0x20).lstrip("~").lstrip("!").lstrip(".").lstrip("@")
+        return newString.replace("(.+.+)", "")
 
     def onTrigger(self, message):
         """
