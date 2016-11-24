@@ -68,6 +68,7 @@ class ModuleHandler(object):
 
             except Exception:
                 self.bot.logger.exception("Python Execution Error in {!r}".format(module.__class__.__name__))
+                self.sendResponse(IRCResponse(ResponseType.Say, "Python Execution Error occurred", message.ReplyTo))
 
     def enableModule(self, moduleName):
         moduleName = moduleName.lower()
