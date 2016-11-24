@@ -16,7 +16,6 @@ class RPG(ModuleInterface):
         "welch": {"displayname": "Welch", "tablename": "welch", "isAddingAllowed": False},
         "dnd": {"displayname": "Dungeons & Dragons", "tablename": "dnd", "isAddingAllowed": True}
     }
-    runInThread = True
     APIKey = None
 
     def help(self, message):

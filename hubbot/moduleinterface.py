@@ -10,7 +10,6 @@ class ModuleInterface(object):
     triggers = []
     acceptedTypes = ['PRIVMSG']
     help = '<no help defined (yet)>'
-    runInThread = False
     accessLevel = ModuleAccessLevel.ANYONE
 
     priority = 0

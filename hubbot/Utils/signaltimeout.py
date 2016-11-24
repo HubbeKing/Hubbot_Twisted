@@ -9,6 +9,12 @@ import subprocess
 class Timeout(Exception):
     """This is raised when a timeout occurs"""
 
+    def __init__(self):
+        self.message = "The requested operation has timed out."
+
+    def __str__(self):
+        return self.message
+
 
 class SignalTimeout(object):
     """

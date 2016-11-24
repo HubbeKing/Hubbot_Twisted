@@ -1,8 +1,6 @@
 import operator
 import sys
 
-from twisted.internet import threads
-
 from hubbot.response import IRCResponse, ResponseType
 from hubbot.moduleinterface import ModuleAccessLevel
 from hubbot.Utils.signaltimeout import SignalTimeout, Timeout
@@ -63,12 +61,8 @@ class ModuleHandler(object):
                             self.bot.logger.info("User {} tried to use {} but was denied access.".format(message.User.Name, message.Command))
                             self.sendResponse(IRCResponse(ResponseType.Say, "Only my admins can use {}!".format(message.Command), message.ReplyTo))
                         elif len(self.bot.ignores) == 0 or message.User.Name not in self.bot.ignores:
-                            if not module.runInThread:
-                                response = module.onTrigger(message)
-                                self.sendResponse(response)
-                            else:
-                                d = threads.deferToThread(module.onTrigger, message)
-                                d.addCallback(self.sendResponse)
+                            response = module.onTrigger(message)
+                            self.sendResponse(response)
             except Timeout:
                 self.sendResponse(IRCResponse(ResponseType.Say, "Command timed out.", message.ReplyTo))
 

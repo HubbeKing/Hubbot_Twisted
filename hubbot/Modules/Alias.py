@@ -7,7 +7,6 @@ from hubbot.message import IRCMessage
 
 class Alias(ModuleInterface):
     triggers = ["alias", "unalias", "aliases", "aliashelp"]
-    runInThread = True
 
     def help(self, message):
         """

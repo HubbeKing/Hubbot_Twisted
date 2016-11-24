@@ -10,7 +10,6 @@ from hubbot.Utils.webutils import pasteEE
 class Headcanon(ModuleInterface):
     triggers = ["headcanon"]
     subCommands = ["add", "search", "list", "remove"]
-    runInThread = True
     APIKey = None
 
     def help(self, message):

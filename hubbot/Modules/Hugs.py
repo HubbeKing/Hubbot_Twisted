@@ -15,8 +15,7 @@ class Hugs(ModuleInterface):
         "any", "one", "<3", "with", "", "<3s", "so", "hard", "right",
         "in", "him", "her", "booper", "up", "on", ":)", "against", "its",
         "harder", "teh", "sneakgrabs", "people", ":3"
-    ]
-    runInThread = True
+        ]
 
     def shouldTrigger(self, message):
         if message.Type == "ACTION":
