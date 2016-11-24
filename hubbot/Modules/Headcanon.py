@@ -5,6 +5,7 @@ import sqlite3
 from hubbot.response import IRCResponse, ResponseType
 from hubbot.moduleinterface import ModuleInterface
 from hubbot.Utils.webutils import pasteEE
+from hubbot.Utils.signaltimeout import SignalTimeout
 
 
 class Headcanon(ModuleInterface):
@@ -79,10 +80,11 @@ class Headcanon(ModuleInterface):
                 random.shuffle(hc)
                 re_string = "{}".format(" ".join(message.ParameterList[1:]))
                 for canon in hc:
-                    match = re.search(re_string, canon, re.IGNORECASE)
-                    if match:
-                        returnString = match.string
-                        break
+                    with SignalTimeout(5):
+                        match = re.search(re_string, canon, re.IGNORECASE)
+                        if match:
+                            returnString = match.string
+                            break
                 return IRCResponse(ResponseType.Say, returnString, message.ReplyTo)
             except:
                 return IRCResponse(ResponseType.Say, returnString, message.ReplyTo)
@@ -107,14 +109,15 @@ class Headcanon(ModuleInterface):
             try:
                 re_string = "{}".format(" ".join(message.ParameterList[1:]))
                 for canon in headcanon:
-                    match = re.search(re_string, canon, re.IGNORECASE)
-                    if match:
-                        headcanon.remove(match.string)
-                        with sqlite3.connect(self.bot.databaseFile) as conn:
-                            c = conn.cursor()
-                            c.execute("DELETE FROM headcanon WHERE canon=?", (match.string,))
-                            conn.commit()
-                        return IRCResponse(ResponseType.Say, 'Removed "' + match.string + '"', message.ReplyTo)
+                    with SignalTimeout(5):
+                        match = re.search(re_string, canon, re.IGNORECASE)
+                        if match:
+                            headcanon.remove(match.string)
+                            with sqlite3.connect(self.bot.databaseFile) as conn:
+                                c = conn.cursor()
+                                c.execute("DELETE FROM headcanon WHERE canon=?", (match.string,))
+                                conn.commit()
+                            return IRCResponse(ResponseType.Say, 'Removed "' + match.string + '"', message.ReplyTo)
                 return IRCResponse(ResponseType.Say, '"' + re_string + '"was not found!', message.ReplyTo)
             except Exception:
                 self.bot.logger.exception("Exception in module 'Headcanon'")
