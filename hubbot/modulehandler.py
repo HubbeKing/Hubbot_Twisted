@@ -5,6 +5,7 @@ from twisted.internet import threads
 
 from hubbot.response import IRCResponse, ResponseType
 from hubbot.moduleinterface import ModuleAccessLevel
+from hubbot.Utils.signaltimeout import SignalTimeout, Timeout
 
 
 class ModuleHandler(object):
@@ -65,8 +66,11 @@ class ModuleHandler(object):
                             response = module.onTrigger(message)
                             self.sendResponse(response)
                         else:
-                            d = threads.deferToThread(module.onTrigger, message)
-                            d.addCallback(self.sendResponse)
+                            with SignalTimeout(10):
+                                d = threads.deferToThread(module.onTrigger, message)
+                                d.addCallback(self.sendResponse)
+            except Timeout:
+                self.sendResponse(IRCResponse(ResponseType.Say, "Command timed out.", message.ReplyTo))
 
             except Exception:
                 self.bot.logger.exception("Python Execution Error in {!r}".format(module.__class__.__name__))

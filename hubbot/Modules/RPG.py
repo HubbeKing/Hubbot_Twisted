@@ -5,7 +5,6 @@ import random
 from hubbot.moduleinterface import ModuleInterface
 from hubbot.response import IRCResponse, ResponseType
 from hubbot.Utils.webutils import pasteEE
-from hubbot.Utils.signaltimeout import SignalTimeout
 
 
 class RPG(ModuleInterface):
