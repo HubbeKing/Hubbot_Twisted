@@ -22,9 +22,9 @@ class SignalTimeout(object):
     Will even interrupt hard loops in C by raising from an OS signal.
     """
     
-    def __init__(self, timeout, signal=signal.SIGUSR1, to_raise=Timeout):
+    def __init__(self, timeout, timeout_signal=signal.SIGUSR1, to_raise=Timeout):
         self.timeout = float(timeout)
-        self.signal = signal
+        self.signal = timeout_signal
         self.to_raise = to_raise
         self.old_handler = None
         self.proc = None
