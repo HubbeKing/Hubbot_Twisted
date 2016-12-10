@@ -1,6 +1,5 @@
 from hubbot.moduleinterface import ModuleInterface
 from hubbot.response import IRCResponse, ResponseType
-import string
 import sqlite3
 import re
 
@@ -51,18 +50,18 @@ class Hugs(ModuleInterface):
                         hug_dict[row[0]] = [row[1], row[2]]
                 receivers = []
                 for nick in message.MessageList[1:]:
-                    if string.lower(nick) not in self.commonWords:
-                        nick = string.rstrip(nick, "\x01")
-                        nick = string.rstrip(nick, ".")
-                        nick = string.rstrip(nick, "!")
-                        nick = string.rstrip(nick, ",")
-                        nick = string.lower(nick)
+                    if nick.lower() not in self.commonWords:
+                        nick = nick.rstrip("\x01")
+                        nick = nick.rstrip(".")
+                        nick = nick.rstrip("!")
+                        nick = nick.rstrip(",")
+                        nick = nick.lower()
                         regexPattern = r"^[^a-zA-Z0-9`_\[\]\{\}\|\^\\]+$"
                         invalid = re.match(regexPattern, nick)
-                        if not invalid:
+                        if not invalid and nick != message.User.Name.lower():
                             receivers.append(nick)
                 for index in range(0, len(receivers)):
-                    giver = string.lower(message.User.Name)
+                    giver = message.User.Name.lower()
                     receiver = receivers[index]
                     if giver not in hug_dict:
                         hug_dict[giver] = [1, 0]
