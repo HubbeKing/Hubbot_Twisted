@@ -1,4 +1,7 @@
-import re
+try:
+    import re2 as re
+except ImportError:
+    import re
 import sqlite3
 import random
 
@@ -16,10 +19,10 @@ class RPG(ModuleInterface):
         "welch": {"displayname": "Welch", "tablename": "welch", "isAddingAllowed": False},
         "dnd": {"displayname": "Dungeons & Dragons", "tablename": "dnd", "isAddingAllowed": True}
     }
-    APIKey = None
+    api_key = None
 
     def help(self, message):
-        helpDict = {
+        help_dict = {
             u"rpg": u"pf/lp/mm/welch/advice/dnd [number]/add <thing>/list [term]/search <term> -- 'helpful' RPG advice and stuff",
 
             u"pf": u"pf [number] -- Fetches a random or given entry from the Pathfinder list.",
@@ -51,118 +54,118 @@ class RPG(ModuleInterface):
             u"welch list": u"welch list [searchterm] -- Posts the Welch list to paste.ee, with optional searchterm matching.",
             u"welch search": u"welch search <text> [number] -- Searches the Welch list for the specified text, with optional numbered matching."
         }
-        if len(message.ParameterList) == 1:
-            command = message.ParameterList[0].lower()
-            return helpDict[command]
+        if len(message.parameter_list) == 1:
+            command = message.parameter_list[0].lower()
+            return help_dict[command]
         else:
-            command = u" ".join([word.lower() for word in message.ParameterList[:2]])
-            if command in helpDict:
-                return helpDict[command]
+            command = u" ".join([word.lower() for word in message.parameter_list[:2]])
+            if command in help_dict:
+                return help_dict[command]
 
-    def onEnable(self):
+    def on_load(self):
         self.triggers = self.campaigns.keys()
-        with sqlite3.connect(self.bot.databaseFile) as conn:
+        with sqlite3.connect(self.bot.database_file) as conn:
             c = conn.cursor()
             c.execute("CREATE TABLE IF NOT EXISTS lp (id int, message text)")
             c.execute("CREATE TABLE IF NOT EXISTS mm (id int, message text)")
             c.execute("CREATE TABLE IF NOT EXISTS pathfinder (id int, message text)")
             c.execute("CREATE TABLE IF NOT EXISTS welch (id int, message text)")
             conn.commit()
-        self.APIKey = self.getAPIkey()
+        self.api_key = self.get_api_key()
 
-    def getAPIkey(self):
+    def get_api_key(self):
         """
         Get the API key for paste.ee from the sqlite database.
         """
-        apiKey = None
-        with sqlite3.connect(self.bot.databaseFile) as conn:
+        api_key = None
+        with sqlite3.connect(self.bot.database_file) as conn:
             c = conn.cursor()
             for row in c.execute("SELECT apikey FROM keys WHERE name='paste'"):
-                apiKey = row[0]
-        return apiKey
+                api_key = row[0]
+        return api_key
 
-    def onTrigger(self, message):
+    def on_trigger(self, message):
         """
         @type message: hubbot.message.IRCMessage
         """
-        if len(message.ParameterList) == 0:
-            return IRCResponse(ResponseType.Say, self.getRandom(self.campaigns[message.Command]["tablename"]),
-                               message.ReplyTo)
-        elif message.ParameterList[0] == "list":
+        if len(message.parameter_list) == 0:
+            return IRCResponse(ResponseType.SAY, self.get_random(self.campaigns[message.command]["tablename"]),
+                               message.reply_to)
+        elif message.parameter_list[0] == "list":
             params = ""
-            if len(message.ParameterList) > 1:
-                params = " ".join(message.ParameterList[1:])
-            return IRCResponse(ResponseType.Say, self.getList(self.campaigns[message.Command]["tablename"],
-                                                              self.campaigns[message.Command]["displayname"], params),
-                               message.ReplyTo)
-        elif message.ParameterList[0] == "add" and self.campaigns[message.Command]["isAddingAllowed"]:
-            lineToAdd = " ".join(message.ParameterList[1:])
-            newIndex = self.addLine(self.campaigns[message.Command]["tablename"], lineToAdd)
-            return IRCResponse(ResponseType.Say, "Successfully added line '{} - {}'".format(newIndex, lineToAdd),
-                               message.ReplyTo)
-        elif message.ParameterList[0] == "search":
-            return IRCResponse(ResponseType.Say, self.search(self.campaigns[message.Command]["tablename"],
-                                                             " ".join(message.ParameterList[1:])), message.ReplyTo)
+            if len(message.parameter_list) > 1:
+                params = " ".join(message.parameter_list[1:])
+            return IRCResponse(ResponseType.SAY, self.get_list(self.campaigns[message.command]["tablename"],
+                                                               self.campaigns[message.command]["displayname"], params),
+                               message.reply_to)
+        elif message.parameter_list[0] == "add" and self.campaigns[message.command]["isAddingAllowed"]:
+            line_to_add = " ".join(message.parameter_list[1:])
+            new_index = self.add_line(self.campaigns[message.command]["tablename"], line_to_add)
+            return IRCResponse(ResponseType.SAY, "Successfully added line '{} - {}'".format(new_index, line_to_add),
+                               message.reply_to)
+        elif message.parameter_list[0] == "search":
+            return IRCResponse(ResponseType.SAY, self.search(self.campaigns[message.command]["tablename"],
+                                                             " ".join(message.parameter_list[1:])), message.reply_to)
         else:
-            return IRCResponse(ResponseType.Say,
-                               self.getSpecific(self.campaigns[message.Command]["tablename"], message.ParameterList[0]),
-                               message.ReplyTo)
+            return IRCResponse(ResponseType.SAY,
+                               self.get_specific(self.campaigns[message.command]["tablename"], message.parameter_list[0]),
+                               message.reply_to)
 
-    def getRandom(self, table):
-        messageDict = {}
-        with sqlite3.connect(self.bot.databaseFile) as conn:
+    def get_random(self, table):
+        message_dict = {}
+        with sqlite3.connect(self.bot.database_file) as conn:
             c = conn.cursor()
             for row in c.execute("SELECT * FROM {}".format(table)):
-                messageDict[row[0]] = row[1]
-        choice = random.choice(messageDict.keys())
-        return "Entry #{}/{} - {}".format(str(choice), max(messageDict.keys()), messageDict[choice])
+                message_dict[row[0]] = row[1]
+        choice = random.choice(message_dict.keys())
+        return "Entry #{}/{} - {}".format(str(choice), max(message_dict.keys()), message_dict[choice])
 
-    def getSpecific(self, table, number):
+    def get_specific(self, table, number):
         try:
             choice = int(number)
         except:
             return "I don't know what you mean by '{}'.".format(number)
-        messageDict = {}
-        with sqlite3.connect(self.bot.databaseFile) as conn:
+        message_dict = {}
+        with sqlite3.connect(self.bot.database_file) as conn:
             c = conn.cursor()
             for row in c.execute("SELECT * FROM {}".format(table)):
-                messageDict[row[0]] = row[1]
-        if choice in messageDict.keys():
-            return "Entry #{}/{} - {}".format(str(choice), max(messageDict.keys()), messageDict[choice])
+                message_dict[row[0]] = row[1]
+        if choice in message_dict.keys():
+            return "Entry #{}/{} - {}".format(str(choice), max(message_dict.keys()), message_dict[choice])
         else:
-            return "Invalid number, valid numbers are <{}-{}>".format(min(messageDict.keys()), max(messageDict.keys()))
+            return "Invalid number, valid numbers are <{}-{}>".format(min(message_dict.keys()), max(message_dict.keys()))
 
-    def getList(self, table, name, params):
-        if self.APIKey is None:
+    def get_list(self, table, name, params):
+        if self.api_key is None:
             return "No API key for paste.ee was found, please add one."
-        messageDict = {}
-        with sqlite3.connect(self.bot.databaseFile) as conn:
+        message_dict = {}
+        with sqlite3.connect(self.bot.database_file) as conn:
             c = conn.cursor()
             for row in c.execute("SELECT * FROM {}".format(table)):
-                messageDict[row[0]] = row[1]
-        pasteString = ""
+                message_dict[row[0]] = row[1]
+        paste_string = ""
         if len(params) == 0:
-            for number, string in messageDict.iteritems():
-                pasteString += str(number) + ". " + string + "\n"
+            for number, string in message_dict.iteritems():
+                paste_string += str(number) + ". " + string + "\n"
         else:
-            for number, string in messageDict.iteritems():
+            for number, string in message_dict.iteritems():
                 match = re.search(params, string, re.IGNORECASE)
                 if match:
-                    pasteString += str(number) + ". " + string + "\n"
-        pasteLink = pasteEE(self.APIKey, pasteString, name, 10)
-        return "Link posted! {}".format(pasteLink)
+                    paste_string += str(number) + ". " + string + "\n"
+        paste_link = pasteEE(self.api_key, paste_string, name, 10)
+        return "Link posted! {}".format(paste_link)
 
-    def addLine(self, table, line):
-        with sqlite3.connect(self.bot.databaseFile) as conn:
+    def add_line(self, table, line):
+        with sqlite3.connect(self.bot.database_file) as conn:
             c = conn.cursor()
             c.execute("INSERT INTO {} VALUES (NULL, ?)".format(table), (line,))
             c.execute("SELECT max(id) FROM {}".format(table))
-            maxNumber = c.fetchone()[0]
+            max_number = c.fetchone()[0]
             conn.commit()
-        return maxNumber
+        return max_number
 
     def search(self, table, line):
-        messageDict = {}
+        message_dict = {}
         matches = []
         try:
             choice = int(line.split(" ")[-1])
@@ -171,17 +174,17 @@ class RPG(ModuleInterface):
         except:
             choice = None
             specific = False
-        with sqlite3.connect(self.bot.databaseFile) as conn:
+        with sqlite3.connect(self.bot.database_file) as conn:
             c = conn.cursor()
             for row in c.execute("SELECT * FROM {}".format(table)):
-                messageDict[row[0]] = row[1]
-        for number, text in messageDict.iteritems():
+                message_dict[row[0]] = row[1]
+        for number, text in message_dict.iteritems():
             match = re.search(line, text, re.IGNORECASE)
             if match:
-                for nr, txt in messageDict.iteritems():
+                for nr, txt in message_dict.iteritems():
                     if txt == match.string:
-                        foundNumber = nr
-                        matches.append("{}. {}".format(foundNumber, match.string))
+                        found_number = nr
+                        matches.append("{}. {}".format(found_number, match.string))
         if len(matches) > 0:
             if not specific:
                 choice = random.choice(matches)

@@ -2,20 +2,20 @@ from enum import Enum
 
 
 class ResponseType(Enum):
-    Say = 1
-    Do = 2
-    Notice = 3
-    Raw = 4
+    SAY = 1
+    DO = 2
+    NOTICE = 3
+    RAW = 4
 
 
 class IRCResponse(object):
-    def __init__(self, messageType, response, target):
-        self.Type = messageType
+    def __init__(self, message_type, response, target):
+        self.type = message_type
         try:
-            self.Response = unicode(response, 'utf-8')
-        except TypeError:  # Already utf-8
-            self.Response = response
-        try:
-            self.Target = unicode(target, 'utf-8')
+            self.response = unicode(response, "utf-8")
         except TypeError:
-            self.Target = target
+            self.response = response
+        try:
+            self.target = unicode(target, "utf-8")
+        except TypeError:
+            self.target = target

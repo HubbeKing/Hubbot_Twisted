@@ -3,30 +3,30 @@ from hubbot.moduleinterface import ModuleInterface
 
 
 class Help(ModuleInterface):
-    triggers = ['help','command','commands']
+    triggers = ['help', 'command', 'commands']
     help = 'command(s)/help (<function>) - returns a list of loaded modules, or the help text of a particular command if one is specified'
     
-    def onTrigger(self, message):
+    def on_trigger(self, message):
         """
         @type message: hubbot.message.IRCMessage
         """
-        if len(message.ParameterList) > 0:
-            if message.ParameterList[0].lower() in self.bot.moduleHandler.moduleCaseMap:
-                func = self.bot.moduleHandler.modules[self.bot.moduleHandler.moduleCaseMap[message.ParameterList[0].lower()]]
+        if len(message.parameter_list) > 0:
+            if message.parameter_list[0].lower() in self.bot.module_handler.module_case_map:
+                func = self.bot.moduleHandler.modules[self.bot.module_handler.module_case_map[message.parameter_list[0].lower()]]
                 if isinstance(func.help, basestring):
-                    return IRCResponse(ResponseType.Say, func.help, message.ReplyTo)
+                    return IRCResponse(ResponseType.SAY, func.help, message.reply_to)
                 else:
-                    return IRCResponse(ResponseType.Say, func.help(message), message.ReplyTo)
-            elif message.ParameterList[0].lower() in self.bot.moduleHandler.mappedTriggers:
-                funcHelp = self.bot.moduleHandler.mappedTriggers[message.ParameterList[0].lower()].help
-                if isinstance(funcHelp, basestring):
-                    return IRCResponse(ResponseType.Say, funcHelp, message.ReplyTo)
+                    return IRCResponse(ResponseType.SAY, func.help(message), message.reply_to)
+            elif message.parameter_list[0].lower() in self.bot.module_handler.mapped_triggers:
+                func_help = self.bot.module_handler.mapped_triggers[message.parameter_list[0].lower()].help
+                if isinstance(func_help, basestring):
+                    return IRCResponse(ResponseType.SAY, func_help, message.reply_to)
                 else:
-                    return IRCResponse(ResponseType.Say, funcHelp(message), message.ReplyTo)
+                    return IRCResponse(ResponseType.SAY, func_help(message), message.reply_to)
             else:
-                return IRCResponse(ResponseType.Say, '"{}" not found, try "{}" without parameters to see a list of loaded modules'.format(message.ParameterList[0], message.Command), message.ReplyTo)
+                return IRCResponse(ResponseType.SAY, '"{}" not found, try "{}" without parameters to see a list of loaded modules'.format(message.parameter_list[0], message.command), message.reply_to)
         else:
-            funcs = ', '.join(sorted(self.bot.moduleHandler.modules.iterkeys(), key=lambda s: s.lower()))
-            return [IRCResponse(ResponseType.Say, "Modules loaded are:", message.ReplyTo),
-                    IRCResponse(ResponseType.Say, funcs, message.ReplyTo),
-                    IRCResponse(ResponseType.Say, "Use {}help <module> for module commands.".format(self.bot.commandChar), message.ReplyTo)]
+            funcs = ', '.join(sorted(self.bot.module_handler.modules.iterkeys(), key=lambda s: s.lower()))
+            return [IRCResponse(ResponseType.SAY, "Modules loaded are:", message.reply_to),
+                    IRCResponse(ResponseType.SAY, funcs, message.reply_to),
+                    IRCResponse(ResponseType.SAY, "Use {}help <module> for module commands.".format(self.bot.command_char), message.reply_to)]

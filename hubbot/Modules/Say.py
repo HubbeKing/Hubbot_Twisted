@@ -6,15 +6,15 @@ class Say(ModuleInterface):
     help = "say [channel] <thing> -- say a thing."
     triggers = ["say"]
 
-    def onTrigger(self, message):
+    def on_trigger(self, message):
         """
         @type message: hubbot.message.IRCMessage
         """
-        if len(message.ParameterList) == 0:
-            return IRCResponse(ResponseType.Say, "Say what?", message.ReplyTo)
+        if len(message.parameter_list) == 0:
+            return IRCResponse(ResponseType.SAY, "Say what?", message.reply_to)
         else:
-            channel = message.ParameterList[0]
+            channel = message.parameter_list[0]
             if channel not in self.bot.channels:
-                return IRCResponse(ResponseType.Say, "{}".format(" ".join(message.ParameterList)), message.ReplyTo)
+                return IRCResponse(ResponseType.SAY, "{}".format(" ".join(message.parameter_list)), message.reply_to)
             else:
-                return IRCResponse(ResponseType.Say, "{}".format(" ".join(message.ParameterList[1:])), channel)
+                return IRCResponse(ResponseType.SAY, "{}".format(" ".join(message.parameter_list[1:])), channel)

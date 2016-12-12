@@ -9,67 +9,62 @@ class TargetTypes(Enum):
 
 
 class IRCMessage(object):
-    Type = None
-    User = None
-    ReplyTo = None
-    MessageList = []
-    MessageString = None
+    """
+    @type user: hubbot.user.IRCUser
+    """
 
-    Command = ''
-    Parameters = ''
-    ParameterList = []
-
-    def __init__(self, messagetype, user, channel, message, bot):
+    def __init__(self, message_type, user, channel, message, bot):
         """
         @type channel: hubbot.channel.IRCChannel
         @type bot: hubbot.bot.Hubbot
         """
         try:
-            unicodeMessage = message.decode('utf-8', 'ignore')
-        except:  # Already utf-8, probably.
-            unicodeMessage = message
-        self.Type = messagetype
-        self.MessageList = unicodeMessage.strip().split(' ')
-        self.MessageString = unicodeMessage
+            unicode_message = message.decode("utf-8", "ignore")
+        except UnicodeDecodeError:
+            unicode_message = message
+
+        self.type = message_type
+        self.message_list = unicode_message.strip().split(" ")
+        self.message_string = unicode_message
 
         if channel is None:
-            self.User = IRCUser(user)
-            self.Channel = None
-            self.ReplyTo = self.User.Name
-            self.TargetType = TargetTypes.USER
+            self.user = IRCUser(user)
+            self.channel = None
+            self.reply_to = self.user.name
+            self.target_type = TargetTypes.USER
         else:
-            if user.split("!")[0] in channel.Users:
-                self.User = channel.Users[user.split("!")[0]]
+            if user.split("!")[0] in channel.users:
+                self.user = channel.users[user.split("!")[0]]
             else:
-                self.User = IRCUser(user)
-            self.Channel = channel
-            self.ReplyTo = channel.Name
-            self.TargetType = TargetTypes.CHANNEL
-        self.User.LastActive = datetime.datetime.now()
+                self.user = IRCUser(user)
+            self.channel = channel
+            self.reply_to = channel.name
+            self.target_type = TargetTypes.CHANNEL
+        self.user.last_active = datetime.datetime.utcnow()
 
-        if self.TargetType == TargetTypes.USER:
-            if self.MessageList[0].startswith(bot.commandChar):
-                self.Command = self.MessageList[0][len(bot.commandChar):].lower()
+        if self.target_type == TargetTypes.USER:
+            if self.message_list[0].startswith(bot.command_char):
+                self.command = self.message_list[0][len(bot.command_char):].lower()
             else:
-                self.Command = self.MessageList[0].lower()
-            if self.Command == '':
-                self.Command = self.MessageList[1].lower()
-                self.Parameters = ' '.join(self.MessageList[2:])
+                self.command = self.message_list[0].lower()
+            if self.command == "":
+                self.command = self.message_list[1].lower()
+                self.parameters = " ".join(self.message_list[2:])
             else:
-                self.Parameters = ' '.join(self.MessageList[1:])
+                self.parameters = " ".join(self.message_list[1:])
 
-        elif self.MessageList[0].startswith(bot.commandChar):
-            self.Command = self.MessageList[0][len(bot.commandChar):].lower()
-            if self.Command == '':
-                self.Command = self.MessageList[1].lower()
-                self.Parameters = ' '.join(self.MessageList[2:])
+        elif self.message_list[0].startswith(bot.command_char):
+            self.command = self.message_list[0][len(bot.command_char):].lower()
+            if self.command == "":
+                self.command = self.message_list[1].lower()
+                self.parameters = " ".join(self.message_list[2:])
             else:
-                self.Parameters = ' '.join(self.MessageList[1:])
+                self.parameters = " ".join(self.message_list[1:])
 
-        if self.Parameters.strip():
-            self.ParameterList = self.Parameters.split(' ')
+        if self.parameters.strip():
+            self.parameter_list = self.parameters.split(" ")
 
-            self.ParameterList = [param for param in self.ParameterList if param != '']
+            self.parameter_list = [param for param in self.parameter_list if param != ""]
 
-            if len(self.ParameterList) == 1 and not self.ParameterList[0]:
-                self.ParameterList = []
+            if len(self.parameter_list) == 1 and not self.parameter_list[0]:
+                self.parameter_list = []

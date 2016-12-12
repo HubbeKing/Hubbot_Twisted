@@ -1,19 +1,23 @@
+from hubbot.config import Config, ConfigError
+from hubbot.factory import HubbotFactory
 import argparse
 import logging
 import sys
-from hubbot.bothandler import BotHandler
-from hubbot.config import Config, ConfigError
 
-
-def exceptionHandler(type, value, tb):
-    logging.getLogger().exception("Uncaught exception: {}".format(str(value)))
 
 if __name__ == "__main__":
+    logger = logging.getLogger("startup")
+    handler = logging.StreamHandler()
+    handler.setLevel(logging.INFO)
+    formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s", "%H:%M:%S")
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+
     parser = argparse.ArgumentParser(description="A derpy Twisted IRC bot.")
-    parser.add_argument("-c", "--config", help="The configuration file to use", type=str, default="hubbot.yaml")
+    parser.add_argument("-c", "--config", help="The configuration file to user", type=str, default="hubbot.yaml")
     parser.add_argument("-l", "--logfile", help="The file used for global error logging", type=str, default="hubbot.log")
     options = parser.parse_args()
-    # set up console output for general logging
+
     rootLogger = logging.getLogger()
     rootLogger.setLevel(logging.INFO)
     streamHandler = logging.StreamHandler(stream=sys.stdout)
@@ -22,17 +26,15 @@ if __name__ == "__main__":
     rootLogger.addHandler(streamHandler)
     # set up file for error logging
     fileHandler = logging.FileHandler(filename=options.logfile)
-    fileHandler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s', '%Y/%m/%d-%H:%M:%S'))
-    fileHandler.setLevel(logging.WARNING)
+    fileHandler.setFormatter(
+        logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s', '%Y/%m/%d-%H:%M:%S'))
+    fileHandler.setLevel(logging.ERROR)
     rootLogger.addHandler(fileHandler)
-    # log all uncaught exceptions with the root logger
-    sys.excepthook = exceptionHandler
 
-    # actually start up the bot.
     config = Config(options.config)
     try:
-        config.readConfig()
+        config.read_config()
     except ConfigError:
-        logging.exception("Failed to load config {!r}.".format(options.config))
+        logger.exception("Failed to load config {!r}".format(options.config))
     else:
-        bothandler = BotHandler(config)
+        factory = HubbotFactory(config)

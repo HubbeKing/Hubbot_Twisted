@@ -1,44 +1,41 @@
 from twisted.internet import protocol, reactor
 from hubbot.bot import Hubbot
+import logging
 
 
 class HubbotFactory(protocol.ReconnectingClientFactory):
-    def __init__(self, server, port, channels, bothandler):
+    def __init__(self, config):
         """
-        @type bothandler: hubbot.bothandler.BotHandler
+        @type config: hubbot.config.Config
         """
-        self.port = port
-        self.bot = Hubbot(server, channels, bothandler)
+        self.logger = logging.getLogger("factory")
+        handler = logging.StreamHandler()
+        handler.setLevel(logging.INFO)
+        formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s", "%H:%M:%S")
+        handler.setFormatter(formatter)
+        self.logger.addHandler(handler)
+
+        self.port = config.item_with_default("port", 6667)
+        self.address = config["address"]
+        self.bot = Hubbot(self, config)
         self.protocol = self.bot
-        self.initialDelay = 15.0
-        self.delay = self.initialDelay
-        reactor.connectTCP(server, port, self)
+        reactor.connectTCP(self.address, self.port, self)
+        reactor.run()
 
     def startedConnecting(self, connector):
-        """
-        @type connector: twisted.internet.tcp.Connector
-        """
-        self.bot.logger.info("-#- Started to connect to {!r}.".format(connector.host))
+        self.logger.info(" - Started connecting to {!r}".format(connector.host))
 
     def buildProtocol(self, addr):
-        self.bot.logger.info("-#- Connected to {!r}.".format(self.bot.server))
-        self.bot.logger.info("-#- Resetting reconnection delay.")
+        self.logger.info(" - Connected to {!r}".format(self.address))
+        self.logger.info(" - Resetting connection delay")
         self.resetDelay()
         return self.bot
 
-    def clientConnectionLost(self, connector, reason):
-        """
-        @type connector: twisted.internet.tcp.Connector
-        @type reason: twisted.python.failure.Failure
-        """
-        if not self.bot.Quitting:
-            self.bot.logger.warning("-!- Connection to {!r} lost, reason: {!r} Retrying in {} seconds.".format(connector.host, reason.getErrorMessage(), self.delay))
-            protocol.ReconnectingClientFactory.clientConnectionLost(self, connector, reason)
-
     def clientConnectionFailed(self, connector, reason):
-        """
-        @type connector: twisted.internet.tcp.Connector
-        @type reason: twisted.python.failure.Failure
-        """
-        self.bot.logger.warning("-!- Connection to {!r} failed, reason: {!r} Retrying in {} seconds.".format(connector.host, reason.getErrorMessage(), self.delay))
+        self.logger.warning("-!- Connection to {!r} failed, reason: {!r}".format(connector.host, reason.getErrorMessage()))
         protocol.ReconnectingClientFactory.clientConnectionFailed(self, connector, reason)
+
+    def clientConnectionLost(self, connector, reason):
+        if not self.bot.quitting:
+            self.logger.warning("-!- Connection to {!r} lost, reason {!r}".format(connector.host, reason.getErrorMessage()))
+            protocol.ReconnectingClientFactory.clientConnectionLost(self, connector, reason)

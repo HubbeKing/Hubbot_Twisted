@@ -8,9 +8,9 @@ import subprocess
 class Update(ModuleInterface):
     triggers = ["update"]
     help = "update - pulls the latest code from GitHub"
-    accessLevel = ModuleAccessLevel.ADMINS
+    access_level = ModuleAccessLevel.ADMINS
 
-    def onTrigger(self, message):
+    def on_trigger(self, message):
         """
         @type message: hubbot.message.IRCMessage
         """
@@ -21,28 +21,28 @@ class Update(ModuleInterface):
         changes = [s.strip() for s in output.splitlines()]
 
         if len(changes) == 0:
-            return IRCResponse(ResponseType.Say, "The bot is already up to date.", message.ReplyTo)
+            return IRCResponse(ResponseType.SAY, "The bot is already up to date.", message.reply_to)
 
         changes = list(reversed(changes))
         response = "New Commits: {}".format(" | ".join(changes))
 
         output = subprocess.check_output(['git', 'show', '--pretty=format:', '--name-only', '..origin/master'])
-        filesChanged = [s.strip() for s in output.splitlines()]
+        files_changed = [s.strip() for s in output.splitlines()]
 
-        returnCode = subprocess.check_call(['git', 'merge', 'origin/master'])
+        return_code = subprocess.check_call(['git', 'merge', 'origin/master'])
 
-        if returnCode != 0:
-            return IRCResponse(ResponseType.Say,
+        if return_code != 0:
+            return IRCResponse(ResponseType.SAY,
                                'Merge after update failed, please merge manually',
-                               message.ReplyTo)
+                               message.reply_to)
 
-        if "requirements.txt" in filesChanged:
+        if "requirements.txt" in files_changed:
             pip = os.path.join(os.path.dirname(sys.executable), "pip")
-            returnCode = subprocess.check_call([pip, "install", "-r", "requirements.txt"])
+            return_code = subprocess.check_call([pip, "install", "-r", "requirements.txt"])
 
-            if returnCode != 0:
-                return IRCResponse(ResponseType.Say,
+            if return_code != 0:
+                return IRCResponse(ResponseType.SAY,
                                    'Requirements update failed, please check output manually.',
-                                   message.ReplyTo)
+                                   message.reply_to)
 
-        return IRCResponse(ResponseType.Say, response, message.ReplyTo)
+        return IRCResponse(ResponseType.SAY, response, message.reply_to)

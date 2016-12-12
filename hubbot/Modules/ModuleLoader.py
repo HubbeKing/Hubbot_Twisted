@@ -4,136 +4,136 @@ from hubbot.moduleinterface import ModuleInterface, ModuleAccessLevel
 
 class ModuleLoader(ModuleInterface):
     triggers = ["load", "unload", "reload"]
-    accessLevel = ModuleAccessLevel.ADMINS
+    access_level = ModuleAccessLevel.ADMINS
 
     def help(self, message):
         """
         @type message: hubbot.message.IRCMessage
         """
-        helpDict = {
+        help_dict = {
             u"moduleloader": u"load/unload/reload <modules> - Handles loading, unloading, and reloading of modules.",
             u"load": u"load <modules> - Used to load modules to make them available for enabling.",
             u"unload": u"unload <modules> - Used to unload modules entirely, from all servers.",
             u"reload": u"reload <modules> - Used to reload modules to make new changes take effect."
         }
-        return helpDict[message.ParameterList[0].lower()]
+        return help_dict[message.parameter_list[0].lower()]
 
-    def onTrigger(self, message):
+    def on_trigger(self, message):
         """
         @type message: hubbot.message.IRCMessage
         """
-        if len(message.ParameterList) == 0:
-            return IRCResponse(ResponseType.Say,
+        if len(message.parameter_list) == 0:
+            return IRCResponse(ResponseType.SAY,
                                "You didn't specify a module name! Usage: {}".format(self.help(message)),
-                               message.ReplyTo)
-        command = {"load": self.load, "reload": self.reload, "unload": self.unload}[message.Command]
+                               message.reply_to)
+        command = {"load": self.load, "reload": self.reload, "unload": self.unload}[message.command]
 
-        successes, failures, exceptions = command(message.ParameterList)
+        successes, failures, exceptions = command(message.parameter_list)
 
         responses = []
 
         if len(successes) > 0:
-            responses.append(IRCResponse(ResponseType.Say,
-                                         "{!r} {}ed successfully.".format(", ".join(successes), message.Command),
-                                         message.ReplyTo))
-            self.bot.logger.info("'{}' {}d successfully.".format(", ".join(successes), message.Command))
+            responses.append(IRCResponse(ResponseType.SAY,
+                                         "{!r} {}ed successfully.".format(", ".join(successes), message.command),
+                                         message.reply_to))
+            self.bot.logger.info("'{}' {}d successfully.".format(", ".join(successes), message.command))
         if len(failures) > 0:
-            responses.append(IRCResponse(ResponseType.Say,
-                                         "{!r} failed to {}.".format(", ".join(failures), message.Command),
-                                         message.ReplyTo))
+            responses.append(IRCResponse(ResponseType.SAY,
+                                         "{!r} failed to {}.".format(", ".join(failures), message.command),
+                                         message.reply_to))
         if len(exceptions) > 0:
-            responses.append(IRCResponse(ResponseType.Say,
+            responses.append(IRCResponse(ResponseType.SAY,
                                          "{!r} threw an exception.".format(", ".join(exceptions)),
-                                         message.ReplyTo))
+                                         message.reply_to))
 
         return responses
 
-    def load(self, moduleNames):
-        moduleCaseMap = {m.lower(): m for m in moduleNames}
+    def load(self, module_names):
+        module_case_map = {m.lower(): m for m in module_names}
 
         successes = []
         failures = []
         exceptions = []
 
-        if len(moduleNames) == 1 and "all" in moduleCaseMap:
-            for name, _ in self.bot.bothandler.modules.iteritems():
+        if len(module_names) == 1 and "all" in module_case_map:
+            for name, _ in self.bot.module_handler.modules.iteritems():
                 if name == "ModuleLoader":
                     continue
 
-                self.bot.bothandler.loadModule(name)
+                self.bot.module_handler.load_module(name)
 
             return ["all modules"], [], []
 
-        for moduleName in moduleCaseMap.keys():
+        for module_name in module_case_map.keys():
 
-            if moduleName == "moduleloader":
+            if module_name == "moduleloader":
                 failures.append("ModuleLoader (I can't load myself)")
 
             else:
                 try:
-                    success = self.bot.bothandler.loadModule(moduleName)
+                    success = self.bot.module_handler.load_module(module_name)
                     if success:
-                        successes.append(self.bot.bothandler.moduleCaseMap[moduleName])
+                        successes.append(self.bot.module_handler.module_case_map[module_name])
                     else:
-                        failures.append(moduleCaseMap[moduleName])
+                        failures.append(module_case_map[module_name])
                 except:
-                    exceptions.append(moduleCaseMap[moduleName])
-                    self.bot.logger.exception("Exception when loading module {!r}".format(moduleCaseMap[moduleName]))
+                    exceptions.append(module_case_map[module_name])
+                    self.bot.logger.exception("Exception when loading module {!r}".format(module_case_map[module_name]))
 
         return successes, failures, exceptions
 
-    def reload(self, moduleNames):
-        moduleCaseMap = {m.lower(): m for m in moduleNames}
+    def reload(self, module_names):
+        module_case_map = {m.lower(): m for m in module_names}
 
         successes = []
         failures = []
         exceptions = []
 
-        if len(moduleNames) == 1 and "all" in moduleCaseMap:
-            for name, _ in self.bot.bothandler.modules.iteritems():
+        if len(module_names) == 1 and "all" in module_case_map:
+            for name, _ in self.bot.module_handler.modules.iteritems():
                 if name == "ModuleLoader":
                     continue
                 try:
-                    self.bot.bothandler.reloadModule(name)
+                    self.bot.module_handler.load_module(name)
                 except:
                     self.bot.logger.exception("Exception when reloading module {!r}".format(name))
 
             return ["all modules"], [], []
 
-        for moduleName in moduleCaseMap.keys():
+        for module_name in module_case_map.keys():
 
-            if moduleName == "moduleloader":
+            if module_name == "moduleloader":
                 failures.append("ModuleLoader (I can't reload myself)")
 
             else:
                 try:
-                    success = self.bot.bothandler.reloadModule(moduleName)
+                    success = self.bot.module_handler.load_module(module_name)
                     if success:
-                        successes.append(self.bot.bothandler.moduleCaseMap[moduleName])
+                        successes.append(self.bot.module_handler.module_case_map[module_name])
                     else:
-                        failures.append(moduleCaseMap[moduleName])
+                        failures.append(module_case_map[module_name])
                 except:
-                    exceptions.append(moduleCaseMap[moduleName])
-                    self.bot.logger.exception("Exception when reloading module {!r}".format(moduleCaseMap[moduleName]))
+                    exceptions.append(module_case_map[module_name])
+                    self.bot.logger.exception("Exception when reloading module {!r}".format(module_case_map[module_name]))
 
         return successes, failures, exceptions
 
-    def unload(self, moduleNames):
-        moduleCaseMap = {m.lower(): m for m in moduleNames}
+    def unload(self, module_names):
+        module_case_map = {m.lower(): m for m in module_names}
 
         successes = []
         failures = []
         exceptions = []
 
-        for moduleName in moduleCaseMap.keys():
+        for module_name in module_case_map.keys():
             try:
-                success = self.bot.bothandler.unloadModule(moduleName)
+                success = self.bot.module_handler.unload_module(module_name)
                 if success:
-                    successes.append(moduleCaseMap[moduleName])
+                    successes.append(module_case_map[module_name])
                 else:
-                    failures.append(moduleCaseMap[moduleName])
+                    failures.append(module_case_map[module_name])
             except:
-                exceptions.append(moduleCaseMap[moduleName])
-                self.bot.logger.exception("Exception when unloading module {!r}".format(moduleCaseMap[moduleName]))
+                exceptions.append(module_case_map[module_name])
+                self.bot.logger.exception("Exception when unloading module {!r}".format(module_case_map[module_name]))
 
         return successes, failures, exceptions

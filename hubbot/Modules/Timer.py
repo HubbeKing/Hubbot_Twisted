@@ -8,35 +8,39 @@ class Timer(ModuleInterface):
     triggers = ["timer"]
     help = "timer <time> - starts a countdown timer and notifies you when time's up. No decimals in months or years, max 1 year."
 
-    def onTrigger(self, message):
+    def on_trigger(self, message):
         """
         @type message: hubbot.message.IRCMessage
         """
         flag = False
-        if len(message.ParameterList) == 1:
+        if len(message.parameter_list) == 1:
             try:
-                delay = int(message.ParameterList[0])
+                delay = int(message.parameter_list[0])
                 flag = True
             except:
-                delay = timeparse(message.ParameterList[0])
+                delay = timeparse(message.parameter_list[0])
         else:
-            delay = timeparse(" ".join(message.ParameterList))
+            delay = timeparse(" ".join(message.parameter_list))
         if delay <= 0 or delay is None:
-            return IRCResponse(ResponseType.Say, "I don't think I understand that...", message.ReplyTo)
+            return IRCResponse(ResponseType.SAY, "I don't think I understand that...", message.reply_to)
         elif delay > (60 * 60 * 24 * 365):
-            return IRCResponse(ResponseType.Say, "Do you really need a timer that long?", message.ReplyTo)
+            return IRCResponse(ResponseType.SAY, "Do you really need a timer that long?", message.reply_to)
         elif delay <= 1:
-            return IRCResponse(ResponseType.Say, "Your timer is up now, {}.".format(message.User.Name), message.ReplyTo)
+            return IRCResponse(ResponseType.SAY, "Your timer is up now, {}.".format(message.user.name), message.reply_to)
 
         else:
-            reactor.callLater(delay, self.notifyUser, flag, message)
+            reactor.callLater(delay, self.notify_user, flag, message)
             if flag:
-                return IRCResponse(ResponseType.Say, "{}: A {} second timer has been started!".format(message.User.Name, message.ParameterList[0]), message.ReplyTo)
+                return IRCResponse(ResponseType.SAY, "{}: A {} second timer has been started!".format(message.user.name, message.parameter_list[0]), message.reply_to)
             else:
-                return IRCResponse(ResponseType.Say, "{}: A {} timer has been started!".format(message.User.Name," ".join(message.ParameterList)), message.ReplyTo)
+                return IRCResponse(ResponseType.SAY, "{}: A {} timer has been started!".format(message.user.name, " ".join(message.parameter_list)), message.reply_to)
 
-    def notifyUser(self, flag, message):
+    def notify_user(self, flag, message):
+        """
+        @type flag: bool
+        @type message: hubbot.message.IRCMessage
+        """
         if flag:
-            self.bot.moduleHandler.sendResponse(IRCResponse(ResponseType.Say, "{}: Your {} second timer is up!".format(message.User.Name, message.ParameterList[0]), message.ReplyTo))
+            self.bot.moduleHandler.sendResponse(IRCResponse(ResponseType.SAY, "{}: Your {} second timer is up!".format(message.user.name, message.parameter_list[0]), message.reply_to))
         else:
-            self.bot.moduleHandler.sendResponse(IRCResponse(ResponseType.Say, "{}: Your {} timer is up!".format(message.User.Name, " ".join(message.ParameterList)), message.ReplyTo))
+            self.bot.moduleHandler.sendResponse(IRCResponse(ResponseType.SAY, "{}: Your {} timer is up!".format(message.user.name, " ".join(message.parameter_list)), message.reply_to))

@@ -7,41 +7,51 @@ import platform
 from twisted.words.protocols import irc
 
 from hubbot import __version__
-from hubbot.message import IRCMessage
 from hubbot.channel import IRCChannel
-from hubbot.user import IRCUser
+from hubbot.message import IRCMessage
 from hubbot.modulehandler import ModuleHandler
+from hubbot.user import IRCUser
 
 
 class Hubbot(irc.IRCClient):
-    sourceURL = "https://github.com/HubbeKing/Hubbot_Twisted/"
+    sourceURL = "https://github.com/HubbeKing/Hubbot_Twisted"
 
-    def __init__(self, server, channels, bothandler):
+    def __init__(self, factory, config):
         """
-        @type bothandler: hubbot.bothandler.BotHandler
+        @type factory: hubbot.factory.HubbotFactory
+        @type config: hubbot.config.Config
         """
-        self.server = server
-        self.hostname = None
-        self.network = None
-        self.channels = channels
-        self.bothandler = bothandler
+        self.factory = factory
+        self.address = config["address"]
+        self.port = config.item_with_default("port", 6667)
+        self.nickname = config.item_with_default("nickname", "Hubbot")
+        self.username = config.item_with_default("username", self.nickname)
+        self.realname = config.item_with_default("realname", self.nickname)
+        self.password = config.item_with_default("password", None)
+        self.versionName = self.nickname
+        self.versionNum = __version__
+        self.versionEnv = platform.platform()
+        self.channel_list = config.item_with_default("channels", [])
+        self.command_char = config.item_with_default("command_char", "!")
 
-        self.setupLogging()
-        self.readConfig()
-
-        self.databaseFile = os.path.join("hubbot", "data", "data.db")
+        self.logger = None
+        self.setup_logging()
+        self.database_file = os.path.join("hubbot", "data", "data.db")
         self.admins = []
         self.ignores = []
 
-        self.Quitting = False
-        self.startTime = datetime.datetime.now()
+        self.network = None
+        self.hostname = None
+        self.prefixes_char_to_mode = {}
+        self.user_modes = {}
+        self.channels = {}
 
-        self.prefixesCharToMode = {"+": "v", "@": "o"}
-        self.userModes = {}
-        self.moduleHandler = ModuleHandler(self)
+        self.quitting = False
+        self.start_time = datetime.datetime.utcnow()
+        self.module_handler = ModuleHandler(self)
 
     def signedOn(self):
-        for channel in self.channels.keys():
+        for channel in self.channel_list:
             self.join(channel)
 
     def isupport(self, options):
@@ -50,170 +60,161 @@ class Hubbot(irc.IRCClient):
                 option = item.split("=")
                 if option[0] == "PREFIX":
                     prefixes = option[1]
-                    statusModes = prefixes[:prefixes.find(")")]
-                    statusChars = prefixes[prefixes.find(")"):]
-                    for i in range(1, len(statusModes)):
-                        self.prefixesCharToMode[statusChars[i]] = statusModes[i]
+                    status_modes = prefixes[:prefixes.find(")")]
+                    status_chars = prefixes[prefixes.find(")"):]
+                    for i in range(1, len(status_modes)):
+                        self.prefixes_char_to_mode[status_chars[i]] = status_modes[i]
                 elif option[0] == "NETWORK":
                     self.network = option[1]
                     self.logger.info("Network is {!r}.".format(self.network))
-                    self.logger.info("Enabling modules...")
-                    self.moduleHandler.enableAllModules()
 
     def irc_RPL_NAMREPLY(self, prefix, params):
-        channel = self.getChannel(params[2])
+        channel = self.get_channel(params[2])
 
-        if channel.NamesListComplete:
-            channel.NamesListComplete = False
-            channel.Users.clear()
-            channel.Ranks.clear()
+        if channel.names_list_complete:
+            channel.names_list_complete = False
+            channel.users.clear()
+            channel.ranks.clear()
 
-        channelUsers = params[3].split(" ")
-        for channelUser in channelUsers:
-            if channelUser == "":
+        channel_users = params[3].split(" ")
+        for channel_user in channel_users:
+            if channel_user == "":
                 continue
             rank = ""
-            if channelUser != "" and channelUser[0] in self.prefixesCharToMode:
-                rank = self.prefixesCharToMode[channelUser[0]]
-                channelUser = channelUser[1:]
-            if channelUser not in channel.Users:
-                user = IRCUser("{}!{}@{}".format(channelUser, "none", "none"))
+            if channel_user[0] in self.prefixes_char_to_mode:
+                rank = self.prefixes_char_to_mode[channel_user[0]]
+                channel_user = channel_user[1:]
+            if channel_user not in channel.user:
+                user = IRCUser("{}!{}@{}".format(channel_user, "none", "none"))
             else:
-                user = channel.Users[channelUser]
+                user = channel.users[channel_user]
 
-            channel.Users[user.Name] = user
-            channel.Ranks[user.Name] = rank
+            channel.users[user.name] = user
+            channel.ranks[user.name] = rank
 
     def irc_RPL_ENDOFNAMES(self, prefix, params):
-        channel = self.getChannel(params[1])
-        channel.NamesListComplete = True
+        channel = self.get_channel(params[1])
+        channel.names_list_complete = True
 
     def irc_RPL_YOURHOST(self, prefix, params):
         for word in params[0]:
             if "," in word:
                 self.hostname = word.rstrip(",")
-        self.logger.info("Host is {!r}.".format(self.hostname))
+        self.logger.info("Host is {!r}".format(self.hostname))
 
     def irc_NICK(self, prefix, params):
-        userArray = prefix.split("!")
-        oldnick = userArray[0]
+        user_array = prefix.split("!")
+        oldnick = user_array[0]
         newnick = params[0]
 
         for key in self.channels:
             channel = self.channels[key]
-            for userKey in channel.Users:
-                user = channel.Users[userKey]
-                if userKey == oldnick:
-                    channel.Users[newnick] = IRCUser("{}!{}@{}".format(newnick, user.User, user.Hostmask))
-                    del channel.Users[oldnick]
-                    if oldnick in channel.Ranks:
-                        channel.Ranks[newnick] = channel.Ranks[oldnick]
-                        del channel.Ranks[oldnick]
-                    message = IRCMessage('NICK', prefix, channel, newnick, self)
-                    self.moduleHandler.handleMessage(message)
+            for user_key in channel.users:
+                user = channel.users[user_key]
+                if user_key == oldnick:
+                    channel.users[newnick] = IRCUser("{}!{}@{}".format(newnick, user.user, user.hostmask))
+                    del channel.users[oldnick]
+                    if oldnick in channel.ranks:
+                        channel.ranks[newnick] = channel.ranks[oldnick]
+                        del channel.ranks[oldnick]
+                    message = IRCMessage("NICK", prefix, channel, newnick, self)
+                    self.module_handler.handle_message(message)
 
     def irc_JOIN(self, prefix, params):
-        channel = self.getChannel(params[0])
-        message = IRCMessage('JOIN', prefix, channel, '', self)
+        channel = self.get_channel(params[0])
+        message = IRCMessage("JOIN", prefix, channel, "", self)
 
-        if message.User.Name != self.nickname:
-            channel.Users[message.User.Name] = message.User
-        self.moduleHandler.handleMessage(message)
+        if message.user.name != self.nickname:
+            channel.users[message.user.name] = message.user
+        self.module_handler.handle_message(message)
 
     def irc_PART(self, prefix, params):
-        partMessage = ""
+        part_message = ""
         if len(params) > 1:
-            partMessage = ", message: " + " ".join(params[1:])
-        channel = self.getChannel(params[0])
+            part_message = ", message: " + " ".join(params[1:])
+        channel = self.get_channel(params[0])
         if channel is None:
             channel = IRCChannel(params[0])
-        message = IRCMessage('PART', prefix, channel, partMessage, self)
+        message = IRCMessage("PART", prefix, channel, part_message, self)
 
-        if message.User.Name != self.nickname:
-            del channel.Users[message.User.Name]
-            if message.User.Name in channel.Ranks:
-                del channel.Ranks[message.User.Name]
-        self.moduleHandler.handleMessage(message)
+        if message.user.name != self.nickname:
+            del channel.users[message.user.name]
+            if message.user.name in channel.ranks:
+                del channel.ranks[message.user.name]
+
+        self.module_handler.handle_message(message)
 
     def irc_KICK(self, prefix, params):
-        kickMessage = ""
+        kick_message = ""
         if len(params) > 2:
-            kickMessage = ", message: " + " ".join(params[2:])
+            kick_message = ", message: " + " ".join(params[2:])
 
-        channel = self.getChannel(params[0])
-        message = IRCMessage('KICK', prefix, channel, kickMessage, self)
-        message.Kickee = params[1]
-        if message.Kickee == self.nickname:
-            del self.channels[message.ReplyTo]
+        channel = self.get_channel(params[0])
+        message = IRCMessage("KICK", prefix, channel, kick_message, self)
+        message.kickee = params[1]
+        if message.kickee == self.nickname:
+            del self.channels[message.reply_to]
         else:
-            del channel.Users[message.Kickee]
-            if message.Kickee in channel.Ranks:
-                del channel.Ranks[message.Kickee]
-        self.moduleHandler.handleMessage(message)
+            del channel.users[message.kickee]
+            if message.kickee in channel.ranks:
+                del channel.ranks[message.kickee]
+        self.module_handler.handle_message(message)
 
     def irc_QUIT(self, prefix, params):
-        quitMessage = ""
+        quit_message = ""
         if len(params) > 0:
-            quitMessage = ", message: " + " ".join(params[0:])
+            quit_message = ", message: " + " ".join(params[0:])
         for key in self.channels:
             channel = self.channels[key]
-            message = IRCMessage('QUIT', prefix, channel, quitMessage, self)
-            if message.User.Name in channel.Users:
-                del channel.Users[message.User.Name]
-                if message.User.Name in channel.Ranks:
-                    del channel.Ranks[message.User.Name]
-            self.moduleHandler.handleMessage(message)
+            message = IRCMessage("QUIT", prefix, channel, quit_message, self)
+            if message.user.name in channel.users:
+                del channel.users[message.user.name]
+                if message.user.name in channel.ranks:
+                    del channel.ranks[message.user.name]
+            self.module_handler.handle_message(message)
 
-    def irc_ERROR(self, prefix, params):
+    def irc_ERRROR(self, prefix, params):
         self.logger.error(" ".join(params))
 
     def nickChanged(self, nick):
-        self.logger.info("Nick changed from {!r} to {!r}.".format(self.nickname, nick))
+        self.logger.info("Nick changed from {!r} to {!r}".format(self.nickname, nick))
         self.nickname = nick
 
-    def privmsg(self, user, channel, msg):
-        message = IRCMessage('PRIVMSG', user, self.getChannel(channel), msg, self)
-        self.moduleHandler.handleMessage(message)
+    def privmsg(self, user, channel, message):
+        msg = IRCMessage("PRIVMSG", user, self.get_channel(channel), message, self)
+        self.module_handler.handle_message(msg)
 
-    def action(self, user, channel, msg):
-        message = IRCMessage('ACTION', user, self.getChannel(channel), msg, self)
-        self.moduleHandler.handleMessage(message)
+    def action(self, user, channel, data):
+        msg = IRCMessage("ACTION", user, self.get_channel(channel), data, self)
+        self.module_handler.handle_message(msg)
 
-    def noticed(self, user, channel, msg):
-        message = IRCMessage('NOTICE', user, self.getChannel(channel), msg.upper(), self)
-        self.moduleHandler.handleMessage(message)
+    def noticed(self, user, channel, message):
+        msg = IRCMessage("NOTICE", user, self.get_channel(channel), message.upper(), self)
+        self.module_handler.handle_message(msg)
 
-    def setupLogging(self):
-        # Setup logs folder
+    def join(self, channel, key=None):
+        self.channels[channel] = IRCChannel(channel)
+        irc.IRCClient.join(self, channel, key)
+
+    def get_channel(self, channel_name):
+        if channel_name in self.channels:
+            return self.channels[channel_name]
+        else:
+            return None
+
+    def setup_logging(self):
         abspath = os.path.abspath(__file__)
         dname = os.path.dirname(abspath)
-        logPath = os.path.join(dname, "logs")
-        if not os.path.exists(logPath):
-            os.makedirs(logPath)
+        log_path = os.path.join(dname, "logs")
+        if not os.path.exists(log_path):
+            os.makedirs(log_path)
 
-        # Setup the logger and handlers
-        logger = logging.getLogger(self.server)
-        handler = TimedRotatingFileHandler(os.path.join(logPath, "{}.log".format(self.server)), when="midnight", backupCount=7)
+        logger = logging.getLogger("boT")
+        handler = TimedRotatingFileHandler(os.path.join(log_path, "{}.log".format(self.address)), when="midnight",
+                                           backupCount=7)
         handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s', '%H:%M:%S'))
         handler.setLevel(logging.INFO)
         logger.addHandler(handler)
-        
-        self.logPath = logPath
-        self.logger = logger
-        
-    def readConfig(self):
-        self.nickname = self.bothandler.config.serverItemWithDefault(self.server, "nickname", "Hubbot")
-        self.username = self.bothandler.config.serverItemWithDefault(self.server, "username", "Hubbot")
-        self.realname = self.bothandler.config.serverItemWithDefault(self.server, "realname", "Hubbot")
-        self.password = self.bothandler.config.serverItemWithDefault(self.server, "password", None)
-        self.versionName = self.nickname
-        self.versionNum = __version__
-        self.versionEnv = platform.platform()
-        self.commandChar = self.bothandler.config.serverItemWithDefault(self.server, "commandchar", "+")
-        self.fingerReply = self.bothandler.config.serverItemWithDefault(self.server, "fingerReply", "")
 
-    def getChannel(self, channel):
-        if channel in self.channels:
-            return self.channels[channel]
-        else:
-            return None
+        self.logger = logger
+

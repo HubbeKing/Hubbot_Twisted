@@ -5,14 +5,14 @@ from hubbot.response import IRCResponse, ResponseType
 class CommandChar(ModuleInterface):
     triggers = ["commandchar"]
     help = "commandchar <char> -- changes the prefix for bot commands (admin-only)"
-    accessLevel = ModuleAccessLevel.ADMINS
+    access_level = ModuleAccessLevel.ADMINS
 
-    def onTrigger(self, message):
+    def on_trigger(self, message):
         """
         @type message: hubbot.message.IRCMessage
         """
-        if len(message.ParameterList) == 0:
-            return IRCResponse(ResponseType.Say, "Change my command character to what?", message.ReplyTo)
+        if len(message.parameter_list) == 0:
+            return IRCResponse(ResponseType.SAY, "Change my command character to what?", message.reply_to)
         else:
-            self.bot.commandChar = message.ParameterList[0]
-            return IRCResponse(ResponseType.Say, 'Command prefix char changed to \'{0}\'!'.format(self.bot.commandChar), message.ReplyTo)
+            self.bot.command_char = message.parameter_list[0]
+            return IRCResponse(ResponseType.SAY, "Command prefix char changed to {!r}".format(self.bot.command_char), message.reply_to)
