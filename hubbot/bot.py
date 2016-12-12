@@ -85,7 +85,7 @@ class Hubbot(irc.IRCClient):
             if channel_user[0] in self.prefixes_char_to_mode:
                 rank = self.prefixes_char_to_mode[channel_user[0]]
                 channel_user = channel_user[1:]
-            if channel_user not in channel.user:
+            if channel_user not in channel.users:
                 user = IRCUser("{}!{}@{}".format(channel_user, "none", "none"))
             else:
                 user = channel.users[channel_user]
