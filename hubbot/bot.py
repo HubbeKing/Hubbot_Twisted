@@ -21,6 +21,7 @@ class Hubbot(irc.IRCClient):
         @type factory: hubbot.factory.HubbotFactory
         @type config: hubbot.config.Config
         """
+        self.config = config
         self.factory = factory
         self.address = config["address"]
         self.port = config.item_with_default("port", 6667)
