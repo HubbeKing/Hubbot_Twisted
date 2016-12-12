@@ -3,7 +3,7 @@ realname: "Hubbot"
 username: "Hubbot"
 
 # The command character for the bot, used to trigger its commands.
-commandchar: "+"
+command_char: "+"
 
 # The default behavior is to load all modules in the Modules folder on startup.
 # Setting modules to anything other than ["all"] causes the bot to only load the listed modules on startup

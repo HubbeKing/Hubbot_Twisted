@@ -210,7 +210,7 @@ class Hubbot(irc.IRCClient):
         if not os.path.exists(log_path):
             os.makedirs(log_path)
 
-        logger = logging.getLogger("boT")
+        logger = logging.getLogger("bot")
         handler = TimedRotatingFileHandler(os.path.join(log_path, "{}.log".format(self.address)), when="midnight",
                                            backupCount=7)
         handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s', '%H:%M:%S'))

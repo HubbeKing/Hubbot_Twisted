@@ -6,7 +6,6 @@ import sys
 
 from hubbot.response import IRCResponse, ResponseType
 from hubbot.moduleinterface import ModuleAccessLevel
-from hubbot.Utils.signaltimeout import SignalTimeout, TimeoutException
 
 
 class ModuleHandler(object):
@@ -63,12 +62,8 @@ class ModuleHandler(object):
                         self.bot.logger.warning("User {!r} tried to use {!r} but was denied access.".format(message.user.name, message.command))
                         self.send_response(IRCResponse(ResponseType.SAY, "Only my admins may use that!", message.reply_to))
                     elif len(self.bot.ignores) == 0 or message.user.name not in self.bot.ignores:
-                        with SignalTimeout(10):
-                            response = module.on_trigger(message)
-                            self.send_response(response)
-
-            except TimeoutException:
-                self.send_response(IRCResponse(ResponseType.SAY, "Command timed out.", message.reply_to))
+                        response = module.on_trigger(message)
+                        self.send_response(response)
 
             except Exception as ex:
                 self.bot.logger.exception("Python Execution Error in {!r}".format(module.__class__.__name__))
