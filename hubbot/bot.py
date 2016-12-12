@@ -55,6 +55,10 @@ class Hubbot(irc.IRCClient):
         for channel in self.channel_list:
             self.join(channel)
 
+    def join(self, channel, key=None):
+        self.channels[channel] = IRCChannel(channel)
+        irc.IRCClient.join(self, channel, key)
+
     def isupport(self, options):
         for item in options:
             if "=" in item:
@@ -192,9 +196,6 @@ class Hubbot(irc.IRCClient):
     def noticed(self, user, channel, message):
         msg = IRCMessage("NOTICE", user, self.get_channel(channel), message.upper(), self)
         self.module_handler.handle_message(msg)
-
-    def joined(self, channel):
-        self.channels[channel] = IRCChannel(channel)
 
     def get_channel(self, channel_name):
         if channel_name in self.channels:
