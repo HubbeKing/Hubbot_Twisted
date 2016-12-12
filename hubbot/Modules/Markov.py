@@ -17,7 +17,7 @@ class Markov(ModuleInterface):
         if self.bot.network is not None:
             self.brain = Brain(os.path.join("hubbot", "data", "{}.brain".format(self.bot.network)))
         else:
-            self.brain = Brain(os.path.join("hubbot", "data", "{}.brain".format(self.bot.server)))
+            self.brain = Brain(os.path.join("hubbot", "data", "{}.brain".format(self.bot.address)))
 
     def add_to_brain(self, msg):
         if "://" not in msg and len(msg) > 1:

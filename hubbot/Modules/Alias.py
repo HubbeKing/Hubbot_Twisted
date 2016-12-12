@@ -43,7 +43,7 @@ class Alias(ModuleInterface):
     def on_load(self):
         self.aliases = {}
         self.alias_help_dict = {}
-        with sqlite3.connect(self.bot.databaseFile) as conn:
+        with sqlite3.connect(self.bot.database_file) as conn:
             c = conn.cursor()
             c.execute("CREATE TABLE IF NOT EXISTS aliashelp (alias text, help text)")
             c.execute("CREATE TABLE IF NOT EXISTS aliases (alias text, command text)")
@@ -53,11 +53,11 @@ class Alias(ModuleInterface):
                 self.aliases[row[0].lower()] = row[1].split(" ")
             conn.commit()
         for alias in self.aliases:
-            self.bot.moduleHandler.mappedTriggers[alias.lower()] = self
+            self.bot.module_handler.mapped_triggers[alias.lower()] = self
 
     def on_unload(self):
         for alias in self.aliases:
-            del self.bot.moduleHandler.mappedTriggers[alias.lower()]
+            del self.bot.module_handler.mapped_triggers[alias.lower()]
 
     def should_trigger(self, message):
         """
@@ -82,7 +82,7 @@ class Alias(ModuleInterface):
                 if message.parameter_list[0].lower() in self.bot.module_handler.mapped_triggers:
                     return IRCResponse(ResponseType.SAY, "'{}' is already a command!".format(message.parameter_list[0].lower()), message.reply_to)
 
-                if message.parameter_list[1].lower() not in self.bot.moduleHandler.mappedTriggers and message.parameter_list[1].lower() not in self.aliases:
+                if message.parameter_list[1].lower() not in self.bot.module_handler.mapped_triggers and message.parameter_list[1].lower() not in self.aliases:
                     return IRCResponse(ResponseType.SAY, "'{}' is not a valid command or alias!".format(message.parameter_list[1].lower()), message.reply_to)
                 if message.parameter_list[0].lower() in self.aliases:
                     return IRCResponse(ResponseType.SAY, "'{}' is already an alias!".format(message.parameter_list[0].lower()), message.reply_to)
@@ -125,7 +125,7 @@ class Alias(ModuleInterface):
                 alias = message.parameter_list[0].lower()
                 alias_help = " ".join(message.parameter_list[1:])
                 self.alias_help_dict[alias] = alias_help
-                with sqlite3.connect(self.bot.databaseFile) as conn:
+                with sqlite3.connect(self.bot.database_file) as conn:
                     c = conn.cursor()
                     c.execute("INSERT INTO aliashelp VALUES (?,?)", (alias, alias_help))
                     conn.commit()
@@ -138,16 +138,16 @@ class Alias(ModuleInterface):
 
     def _new_alias(self, alias, command):
         self.aliases[alias] = command
-        self.bot.moduleHandler.mappedTriggers[alias] = self
-        with sqlite3.connect(self.bot.databaseFile) as conn:
+        self.bot.module_handler.mapped_triggers[alias] = self
+        with sqlite3.connect(self.bot.database_file) as conn:
             c = conn.cursor()
             c.execute("INSERT INTO aliases VALUES (?,?)", (alias, " ".join(command)))
             conn.commit()
 
     def _delete_alias(self, alias):
         del self.aliases[alias]
-        del self.bot.moduleHandler.mappedTriggers[alias]
-        with sqlite3.connect(self.bot.databaseFile) as conn:
+        del self.bot.module_handler.mapped_triggers[alias]
+        with sqlite3.connect(self.bot.database_file) as conn:
             c = conn.cursor()
             c.execute("DELETE FROM aliases WHERE alias=?", (alias,))
             c.execute("DELETE FROM aliashelp WHERE alias=?", (alias,))
@@ -159,7 +159,7 @@ class Alias(ModuleInterface):
         """
         if message.command in self.aliases.keys():
             alias = self.aliases[message.command]
-            new_msg = u'{}{}'.format(self.bot.commandChar, ' '.join(alias))
+            new_msg = u'{}{}'.format(self.bot.command_char, ' '.join(alias))
             if "$sender" in new_msg:
                 new_msg = new_msg.replace("$sender", message.user.name)
             if "$channel" in new_msg and message.channel is not None:

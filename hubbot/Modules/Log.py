@@ -36,13 +36,13 @@ class Log(ModuleInterface):
         super(Log, self).__init__(bot)
 
     def on_load(self):
-        logger = logging.getLogger(self.bot.server)
+        logger = logging.getLogger("bot")
         self.handler = CustomHandler()
         self.handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(message)s', '%H:%M:%S'))
         logger.addHandler(self.handler)
 
     def on_unload(self):
-        logger = logging.getLogger(self.bot.server)
+        logger = logging.getLogger("bot")
         if self.handler in logger.handlers:
             logger.removeHandler(self.handler)
 
@@ -69,7 +69,7 @@ class Log(ModuleInterface):
         if message.type is not None and message.type in self.log_funcs:
             log_string = self.log_funcs[message.type](message)
             if message.type == "PRIVMSG":
-                for trigger in self.bot.moduleHandler.mappedTriggers.keys():
+                for trigger in self.bot.module_handler.mapped_triggers.keys():
                     if message.command.lower() == trigger.lower():
                         self.bot.logger.info(log_string)
                         break
