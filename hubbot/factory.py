@@ -1,7 +1,6 @@
 from twisted.internet import protocol, reactor
 from hubbot.bot import Hubbot
 import logging
-import sys
 
 
 class HubbotFactory(protocol.ReconnectingClientFactory):
@@ -10,11 +9,6 @@ class HubbotFactory(protocol.ReconnectingClientFactory):
         @type config: hubbot.config.Config
         """
         self.logger = logging.getLogger("factory")
-        handler = logging.StreamHandler(stream=sys.stdout)
-        formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s", "%H:%M:%S")
-        handler.setLevel(logging.INFO)
-        handler.setFormatter(formatter)
-        self.logger.addHandler(handler)
 
         self.port = config.item_with_default("port", 6667)
         self.address = config["address"]
