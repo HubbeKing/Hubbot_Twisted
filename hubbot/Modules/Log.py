@@ -31,6 +31,10 @@ class Log(ModuleInterface):
         'TOPIC': lambda m: u'# {0} set the topic to: {1}'.format(m.user.name, m.message_string)
     }
 
+    def __init__(self, bot):
+        self.handler = None
+        super(Log, self).__init__(bot)
+
     def on_load(self):
         logger = logging.getLogger(self.bot.server)
         self.handler = CustomHandler()
@@ -60,8 +64,7 @@ class Log(ModuleInterface):
                 else:
                     return_message = handler_msg.split("\n")[0]
                     exception_info = " ".join(handler_msg.split("\n")[1:])
-                    return IRCResponse(ResponseType.SAY, return_message, message.reply_to), \
-                           IRCResponse(ResponseType.NOTICE, exception_info, message.reply_to)
+                    return IRCResponse(ResponseType.SAY, return_message, message.reply_to), IRCResponse(ResponseType.NOTICE, exception_info, message.reply_to)
 
         if message.type is not None and message.type in self.log_funcs:
             log_string = self.log_funcs[message.type](message)

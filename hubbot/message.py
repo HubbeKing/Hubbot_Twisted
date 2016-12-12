@@ -19,13 +19,13 @@ class IRCMessage(object):
         @type bot: hubbot.bot.Hubbot
         """
         try:
-            unicode_message = message.decode("utf-8", "ignore")
-        except UnicodeDecodeError:
+            unicode_message = unicode(message, encoding="utf-8", errors="ignore")
+        except TypeError:
             unicode_message = message
 
         self.type = message_type
         self.message_list = unicode_message.strip().split(" ")
-        self.message_string = unicode_message
+        self.message_string = unicode_message.decode("utf-8", errors="ignore")
 
         if channel is None:
             self.user = IRCUser(user)

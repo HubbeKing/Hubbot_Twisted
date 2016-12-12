@@ -11,6 +11,14 @@ from hubbot.message import IRCMessage
 class Alias(ModuleInterface):
     triggers = ["alias", "unalias", "aliases", "aliashelp"]
 
+    def __init__(self, bot):
+        """
+        @type bot: hubbot.bot.Hubbot
+        """
+        self.aliases = {}
+        self.alias_help_dict = {}
+        super(Alias, self).__init__(bot)
+
     def help(self, message):
         """
         @type message: IRCMessage

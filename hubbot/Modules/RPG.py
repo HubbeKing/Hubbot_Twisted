@@ -7,7 +7,7 @@ import random
 
 from hubbot.moduleinterface import ModuleInterface
 from hubbot.response import IRCResponse, ResponseType
-from hubbot.Utils.webutils import pasteEE
+from hubbot.Utils.webutils import paste_ee
 
 
 class RPG(ModuleInterface):
@@ -152,7 +152,7 @@ class RPG(ModuleInterface):
                 match = re.search(params, string, re.IGNORECASE)
                 if match:
                     paste_string += str(number) + ". " + string + "\n"
-        paste_link = pasteEE(self.api_key, paste_string, name, 10)
+        paste_link = paste_ee(self.api_key, paste_string, name, 10)
         return "Link posted! {}".format(paste_link)
 
     def add_line(self, table, line):

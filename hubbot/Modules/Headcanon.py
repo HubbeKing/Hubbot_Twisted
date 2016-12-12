@@ -7,7 +7,7 @@ import sqlite3
 
 from hubbot.response import IRCResponse, ResponseType
 from hubbot.moduleinterface import ModuleInterface
-from hubbot.Utils.webutils import pasteEE
+from hubbot.Utils.webutils import paste_ee
 
 
 class Headcanon(ModuleInterface):
@@ -99,7 +99,7 @@ class Headcanon(ModuleInterface):
                 for item in headcanon:
                     paste_ee_string = paste_ee_string + item + "\n"
                 try:
-                    response = pasteEE(self.api_key, paste_ee_string, "Headcanon", 10)
+                    response = paste_ee(self.api_key, paste_ee_string, "Headcanon", 10)
                     return IRCResponse(ResponseType.SAY, "Link posted! (Expires in 10 minutes) {}".format(response), message.reply_to)
                 except Exception:
                     self.bot.logger.exception("Exception in module 'Headcanon'")
