@@ -72,7 +72,7 @@ class Hubbot(irc.IRCClient):
                         self.prefixes_char_to_mode[status_chars[i]] = status_modes[i]
                 elif option[0] == "NETWORK":
                     self.network = option[1]
-                    self.logger.info("Network is {!r}.".format(self.network))
+                    self.logger.info("Network is {!r}".format(self.network))
 
     def irc_RPL_NAMREPLY(self, prefix, params):
         channel = self.get_channel(params[2])
