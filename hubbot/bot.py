@@ -50,6 +50,7 @@ class Hubbot(irc.IRCClient):
         self.quitting = False
         self.start_time = datetime.datetime.utcnow()
         self.module_handler = ModuleHandler(self)
+        self.module_handler.load_add_modules()
 
     def signedOn(self):
         for channel in self.channel_list:

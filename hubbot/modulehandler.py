@@ -62,7 +62,7 @@ class ModuleHandler(object):
                         self.bot.logger.warning("User {!r} tried to use {!r} but was denied access.".format(message.user.name, message.command))
                         self.send_response(IRCResponse(ResponseType.SAY, "Only my admins may use that!", message.reply_to))
                     elif len(self.bot.ignores) == 0 or message.user.name not in self.bot.ignores:
-                        self.bot.logger.info("Responding to message {!r}".format(message.message_string))
+                        self.bot.logger.debug("Responding to message {!r}".format(message.message_string))
                         response = module.on_trigger(message)
                         self.send_response(response)
 
