@@ -24,8 +24,8 @@ class IRCMessage(object):
             unicode_message = message
 
         self.type = message_type
-        self.message_list = unicode_message.strip().split(" ")
         self.message_string = unicode_message.decode("utf-8", errors="ignore")
+        self.message_list = self.message_string.strip().split(" ")
 
         if channel is None:
             self.user = IRCUser(user)
