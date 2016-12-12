@@ -6,16 +6,16 @@ from hubbot.response import IRCResponse, ResponseType
 class APIKey(ModuleInterface):
     triggers = ["apikey"]
     help = "apikey <name> <api_key> -- adds an API key to the database"
-    accessLevel = ModuleAccessLevel.ADMINS
+    access_level = ModuleAccessLevel.ADMINS
 
-    def onTrigger(self, message):
+    def on_trigger(self, message):
         """
         @type message: hubbot.message.IRCMessage
         """
-        if len(message.ParameterList) == 2:
+        if len(message.parameter_list) == 2:
             with sqlite3.connect(self.bot.databaseFile) as conn:
                 c = conn.cursor()
                 c.execute("CREATE TABLE IF NOT EXISTS keys (name text, apikey text)")
-                c.execute("INSERT OR REPLACE INTO keys VALUES (?,?)", (message.ParameterList[0], message.ParameterList[1]))
+                c.execute("INSERT OR REPLACE INTO keys VALUES (?,?)", (message.parameter_list[0], message.parameter_list[1]))
                 conn.commit()
-            return IRCResponse(ResponseType.Say, "Inserted API key into database as {!r}.".format(message.ParameterList[0]), message.ReplyTo)
+            return IRCResponse(ResponseType.SAY, "Inserted API key into database as {!r}.".format(message.parameter_list[0]), message.reply_to)

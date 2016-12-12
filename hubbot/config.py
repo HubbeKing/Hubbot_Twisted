@@ -1,53 +1,46 @@
 import yaml
 
-_required = ["servers"]
+_required = ["address"]
 
 
 class Config(object):
-    def __init__(self, configFile):
-        self.configFile = configFile
-        self._configData = {}
+    def __init__(self, config_file):
+        self.config_file = config_file
+        self._config_data = {}
 
-    def readConfig(self):
+    def read_config(self):
         try:
-            with open(self.configFile, "r") as config:
-                configData = yaml.safe_load(config)
+            with open(self.config_file, "r") as config:
+                config_data = yaml.safe_load(config)
         except Exception as e:
-            raise ConfigError(self.configFile, e)
-        self._validateConfigData(configData)
-        self._configData = configData
+            raise ConfigError(self.config_file, e)
+        self._validate_config(config_data)
+        self._config_data = config_data
 
-    def _validateConfigData(self, configData):
+    def _validate_config(self, config_data):
         for item in _required:
-            if item not in configData:
-                raise ConfigError(self.configFile, "Required item {!r} was not found in the config.".format(item))
+            if item not in config_data:
+                raise ConfigError(self.config_file, "Required item {!r} was not found in the config.".format(item))
 
     def __len__(self):
-        return len(self._configData)
+        return len(self._config_data)
 
     def __iter__(self):
-        return iter(self._configData)
+        return iter(self._config_data)
 
     def __getitem__(self, item):
-        return self._configData[item]
+        return self._config_data[item]
 
-    def itemWithDefault(self, item, default):
-        if item in self._configData:
-            return self._configData[item]
-        return default
-
-    def serverItemWithDefault(self, server, item, default):
-        if item in self._configData["servers"][server]:
-            return self._configData["servers"][server][item]
-        if item in self._configData:
-            return self._configData[item]
+    def item_with_default(self, item, default):
+        if item in self._config_data:
+            return self._config_data[item]
         return default
 
 
 class ConfigError(Exception):
-    def __init(self, configFile, message):
-        self.configFile = configFile
+    def __init(self, config_file, message):
+        self.config_file = config_file
         self.message = message
 
     def __str(self):
-        return "An error occurred while reading config file {}: {}".format(self.configFile, self.message)
+        return "An error occurred while reading config file {}: {}".format(self.config_file, self.message)

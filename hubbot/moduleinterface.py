@@ -8,10 +8,9 @@ class ModuleAccessLevel(Enum):
 
 class ModuleInterface(object):
     triggers = []
-    acceptedTypes = ['PRIVMSG']
-    help = '<no help defined (yet)>'
-    accessLevel = ModuleAccessLevel.ANYONE
-
+    accepted_types = ["PRIVMSG"]
+    help = "No help defined yet."
+    access_level = ModuleAccessLevel.ANYONE
     priority = 0
 
     def __init__(self, bot):
@@ -20,24 +19,23 @@ class ModuleInterface(object):
         """
         self.bot = bot
 
-    def onEnable(self):
+    def on_load(self):
         pass
 
-    def onDisable(self):
+    def on_unload(self):
         pass
 
-    def shouldTrigger(self, message):
+    def should_trigger(self, message):
         """
         @type message: hubbot.message.IRCMessage
         """
-        if message.Type not in self.acceptedTypes:
+        if message.type not in self.accepted_types:
             return False
-        if message.Command not in self.triggers:
+        if message.command not in self.triggers:
             return False
-
         return True
 
-    def onTrigger(self, message):
+    def on_trigger(self, message):
         """
         @type message: hubbot.message.IRCMessage
         """

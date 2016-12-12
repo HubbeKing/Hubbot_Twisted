@@ -1,9 +1,11 @@
+import importlib
+from glob import glob
 import operator
+import os
 import sys
 
 from hubbot.response import IRCResponse, ResponseType
 from hubbot.moduleinterface import ModuleAccessLevel
-from hubbot.Utils.signaltimeout import SignalTimeout, Timeout
 
 
 class ModuleHandler(object):
@@ -14,132 +16,148 @@ class ModuleHandler(object):
         """
         self.bot = bot
         self.modules = {}
-        self.moduleCaseMap = {}
-        self.mappedTriggers = {}
-        self.modulesToLoad = bot.bothandler.config.serverItemWithDefault(self.bot.server, "modulesToLoad", ["all"])
+        self.module_case_map = {}
+        self.mapped_triggers = {}
+        self.modules_to_load = bot.config.item_with_default("modules", ["all"])
 
-    def sendResponse(self, response):
+    def send_response(self, response):
         """
-        @type response: hubbot.response.IRCResponse || list
+        @type response: hubbot.reponse.IRCResponse || list || tuple
         """
         responses = []
 
         if hasattr(response, "__iter__"):
             for r in response:
-                if r is None or r.Response is None or r.Response == "":
+                if r is None or r.response is None or r.response == "":
                     continue
                 responses.append(r)
-        elif response is not None and response.Response is not None and response.Response != "":
+        elif response is not None and response.response is not None and response.response != "":
             responses.append(response)
 
         for response in responses:
             try:
-                if response.Type == ResponseType.Say:
-                    self.bot.msg(response.Target.encode("utf-8"), response.Response.encode("utf-8"))
-                    self.bot.logger.info(u'{} | <{}> {}'.format(response.Target, self.bot.nickname, response.Response))
-                elif response.Type == ResponseType.Do:
-                    self.bot.describe(response.Target.encode("utf-8"), response.Response.encode("utf-8"))
-                    self.bot.logger.info(u'{} | *{} {}*'.format(response.Target, self.bot.nickname, response.Response))
-                elif response.Type == ResponseType.Notice:
-                    self.bot.notice(response.Target.encode("utf-8"), response.Response.encode("utf-8"))
-                    self.bot.logger.info(u'{} | [{}] {}'.format(response.Target, self.bot.nickname, response.Response))
-                elif response.Type == ResponseType.Raw:
-                    self.bot.logger.info(u"Sent raw {!r}".format(response.Response))
-                    self.bot.sendLine(response.Response.encode("utf-8"))
-            except Exception:
+                if response.type == ResponseType.SAY:
+                    self.bot.msg(response.target.encode("utf-8"), response.response.encode("utf-8"))
+                    self.bot.logger.info(u'{} | <{}> {}'.format(response.target, self.bot.nickname, response.response))
+                elif response.type == ResponseType.DO:
+                    self.bot.describe(response.target.encode("utf-8"), response.response.encode("utf-8"))
+                    self.bot.logger.info(u'{} | *{} {}*'.format(response.target, self.bot.nickname, response.response))
+                elif response.type == ResponseType.NOTICE:
+                    self.bot.notice(response.target.encode("utf-8"), response.response.encode("utf-8"))
+                    self.bot.logger.info(u'{} | [{}] {}'.format(response.target, self.bot.nickname, response.response))
+                elif response.type == ResponseType.RAW:
+                    self.bot.logger.info(u"Sent raw {!r}".format(response.response))
+                    self.bot.sendLine(response.response.encode("utf-8"))
+            except:
                 self.bot.logger.exception("Python Execution Error sending responses {!r}".format(responses))
 
-    def handleMessage(self, message):
+    def handle_message(self, message):
         """
         @type message: hubbot.message.IRCMessage
         """
         for module in sorted(self.modules.values(), key=operator.attrgetter("priority")):
             try:
-                if module.shouldTrigger(message):
-                    if module.accessLevel == ModuleAccessLevel.ADMINS and len(self.bot.admins) != 0 and message.User.Name not in self.bot.admins:
-                        self.bot.logger.info("User {} tried to use {} but was denied access.".format(message.User.Name, message.Command))
-                        self.sendResponse(IRCResponse(ResponseType.Say, "Only my admins can use {}!".format(message.Command), message.ReplyTo))
-                    elif len(self.bot.ignores) == 0 or message.User.Name not in self.bot.ignores:
-                        with SignalTimeout(10):
-                            response = module.onTrigger(message)
-                            self.sendResponse(response)
-            except Timeout:
-                self.sendResponse(IRCResponse(ResponseType.Say, "Command timed out.", message.ReplyTo))
+                if module.should_trigger(message):
+                    if module.access_level == ModuleAccessLevel.ADMINS and len(self.bot.admins) != 0 and message.user.name not in self.bot.admins:
+                        self.bot.logger.warning("User {!r} tried to use {!r} but was denied access.".format(message.user.name, message.command))
+                        self.send_response(IRCResponse(ResponseType.SAY, "Only my admins may use that!", message.reply_to))
+                    elif len(self.bot.ignores) == 0 or message.user.name not in self.bot.ignores:
+                        self.bot.logger.debug("Responding to message {!r}".format(message.message_string))
+                        response = module.on_trigger(message)
+                        self.send_response(response)
 
-            except Exception:
+            except Exception as ex:
                 self.bot.logger.exception("Python Execution Error in {!r}".format(module.__class__.__name__))
-                self.sendResponse(IRCResponse(ResponseType.Say, "Python Execution Error occurred", message.ReplyTo))
+                self.send_response(IRCResponse(ResponseType.SAY, "Python Execution Error - {!r}".format(ex.message), message.reply_to))
 
-    def enableModule(self, moduleName):
-        moduleName = moduleName.lower()
+    def load_module(self, module_name):
+        module_name = module_name.lower()
 
-        moduleList = self.getModuleDirList()
-        moduleListCaseMap = {key.lower(): key for key in moduleList}
+        module_list = ModuleHandler.get_all_modules()
+        module_list_case_map = {key.lower(): key for key in module_list}
 
-        if moduleName not in moduleListCaseMap:
-            self.bot.logger.warning("Module {!r} was requested to enable but it is not loaded!".format(moduleName))
+        if module_name not in module_list_case_map:
+            self.bot.logger.warning("Module {!r} was requested to load but does not exist!")
             return False
 
-        if moduleName in self.moduleCaseMap:
-            self.bot.logger.warning("Module {!r} was requested to enable but it is already enabled!".format(moduleName))
-            return False
+        already_loaded = False
 
-        module = sys.modules["{}.{}".format("hubbot.Modules", moduleListCaseMap[moduleName])]
+        if module_name in self.module_case_map:
+            self.unload_module(module_name)
+            already_loaded = True
 
-        class_ = getattr(module, moduleListCaseMap[moduleName])
+        module = importlib.import_module("hubbot.Modules." + module_list_case_map[module_name])
 
-        constructedModule = class_(self.bot)
+        reload(module)
 
-        self.modules[moduleListCaseMap[moduleName]] = constructedModule
-        self.moduleCaseMap[moduleName] = moduleListCaseMap[moduleName]
-        constructedModule.onEnable()
+        class_ = getattr(module, module_list_case_map[module_name])
 
-        # map module triggers
-        for trigger in constructedModule.triggers:
-            self.mappedTriggers[trigger] = constructedModule
-
-        self.bot.logger.debug('-- {} enabled.'.format(self.moduleCaseMap[moduleName]))
-        return True
-
-    def disableModule(self, moduleName, check=True):
-        if moduleName.lower() in self.moduleCaseMap.keys():
-            properName = self.moduleCaseMap[moduleName.lower()]
-            try:
-                # unmap module triggers
-                for trigger in self.modules[properName].triggers:
-                    del self.mappedTriggers[trigger]
-                self.modules[properName].onDisable()
-            except:
-                self.bot.logger.exception("Exception when disabling module {}".format(moduleName))
-                raise
-            finally:
-                del self.modules[self.moduleCaseMap[moduleName.lower()]]
-                del self.moduleCaseMap[moduleName.lower()]
-                self.bot.logger.debug("-- {} disabled.".format(properName))
-                if check:
-                    self.bot.bothandler.unloadModuleIfNotEnabled(properName)
+        if already_loaded:
+            self.bot.logger.debug("Module {!r} reloaded.".format(module.__name__))
         else:
-            self.bot.logger.warning("Module {!r} was requested to disable but it is not enabled!".format(moduleName))
+            self.bot.logger.debug("Module {!r} loaded.".format(module.__name__))
+
+        constructed_module = class_(self.bot)
+
+        self.modules.update({module_list_case_map[module_name]: constructed_module})
+        self.module_case_map.update({module_name: module_list_case_map[module_name]})
+
+        if hasattr(constructed_module, "triggers"):
+            for trigger in constructed_module.triggers:
+                self.mapped_triggers[trigger] = constructed_module
+
+        constructed_module.on_load()
+
+        return True
+
+    def unload_module(self, module_name):
+        if module_name.lower() in self.module_case_map.keys():
+            proper_name = self.module_case_map[module_name.lower()]
+
+            if hasattr(self.modules[proper_name], "triggers"):
+                for trigger in self.modules[proper_name].triggers:
+                    del self.mapped_triggers[trigger]
+
+            self.modules[proper_name].on_unload()
+
+            del self.modules[proper_name]
+            del self.module_case_map[module_name.lower()]
+            del sys.modules["{}.{}".format("hubbot.Modules.", proper_name)]
+            for f in glob("{}/{}.pyc".format("hubbot.Modules.", proper_name)):
+                os.remove(f)
+            self.bot.logger.debug("Module {!r} unloaded.".format(proper_name))
+        else:
+            self.bot.logger.warning("Module {!r} was requested to unload but is not loaded!".format(module_name))
             return False
 
         return True
 
-    def enableAllModules(self):
-        modulesToLoad = []
-        for moduleName in self.modulesToLoad:
-            if moduleName.lower() == "all":
-                for module in self.getModuleDirList():
-                    modulesToLoad.append(module)
-            elif moduleName[0] != "-":
-                modulesToLoad.append(moduleName)
+    def load_add_modules(self):
+        modules_to_load = []
+        for module_name in self.modules_to_load:
+            if module_name.lower() == "all":
+                for module in ModuleHandler.get_all_modules():
+                    modules_to_load.append(module)
+            elif module_name[0] != "-":
+                modules_to_load.append(module_name)
             else:
-                modulesToLoad.remove(moduleName[1:])
+                modules_to_load.remove(module_name[1:])
 
-        for module in modulesToLoad:
+        for module in modules_to_load:
             try:
-                self.enableModule(module)
-            except Exception:
-                self.bot.logger.exception("Exception when enabling {!r}".format(str(module)))
+                self.load_module(module)
+            except:
+                self.bot.logger.exception("Exception when loading module {!r}".format(str(module)))
 
-    def getModuleDirList(self):
-        return self.bot.bothandler.modules.keys()
+    @staticmethod
+    def get_all_modules():
+        root = os.path.join(".", "hubbot", "Modules")
+
+        for item in os.listdir(root):
+            if not os.path.isfile(os.path.join(root, item)):
+                continue
+            if not item.endswith(".py"):
+                continue
+            if item.startswith("__init__"):
+                continue
+            yield item[:-3]

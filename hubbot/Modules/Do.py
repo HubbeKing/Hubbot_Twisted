@@ -6,15 +6,15 @@ class Do(ModuleInterface):
     help = "do [channel] <thing> -- do a thing."
     triggers = ["do"]
 
-    def onTrigger(self, message):
+    def on_trigger(self, message):
         """
         @type message: hubbot.message.IRCMessage
         """
-        if len(message.ParameterList) == 0:
-            return IRCResponse(ResponseType.Say, "Do what?", message.ReplyTo)
+        if len(message.parameter_list) == 0:
+            return IRCResponse(ResponseType.SAY, "Do what?", message.reply_to)
         else:
-            channel = message.ParameterList[0]
+            channel = message.parameter_list[0]
             if channel not in self.bot.channels:
-                return IRCResponse(ResponseType.Do, "{}".format(" ".join(message.ParameterList)), message.ReplyTo)
+                return IRCResponse(ResponseType.DO, "{}".format(" ".join(message.parameter_list)), message.reply_to)
             else:
-                return IRCResponse(ResponseType.Do, "{}".format(" ".join(message.ParameterList[1:])), channel)
+                return IRCResponse(ResponseType.DO, "{}".format(" ".join(message.parameter_list[1:])), channel)

@@ -3,27 +3,18 @@ realname: "Hubbot"
 username: "Hubbot"
 
 # The command character for the bot, used to trigger its commands.
-commandchar: "+"
-
+command_char: "+"
 
 # The default behavior is to load all modules in the Modules folder on startup.
-# Setting modulesToLoad to anything other than ["all"] causes the bot to only load the listed modules on startup
-# The modulesToLoad list can be defined manually, and - can be used to list modules not to load.
+# Setting modules to anything other than ["all"] causes the bot to only load the listed modules on startup
+# The modules list can be defined manually, and - can be used to list modules not to load.
+modules: ["all", "-MemoryHeavyModule"]
 
-modulesToLoad: ["all", "-MemoryHeavyModule"]
-
-# The reply to give to CTCP FINGER requests
-fingerReply: "Yay"
-
-# The IRC servers to connect to
-# Any global setting (defined above) can be overridden per-server
-servers:
-    "irc.example.org":
-        commandchar: "~"
-        port: 6667
-        channels: ["#example"]
-        password: "butts"
-        modulesToLoad: ["all"]
-    "irc.butts.org":
-        modulesToLoad: ["MemoryHeavyModules"]
-        port: 1232
+# The address to connect to
+address: "irc.example.org"
+# The port to use
+port: 6667
+# (optional) The password to user when connecting
+password: "butts"
+# The list of channels to join once connected
+channels: ["#example"]

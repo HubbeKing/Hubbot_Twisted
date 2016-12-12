@@ -6,21 +6,21 @@ from hubbot.moduleinterface import ModuleInterface
 class Nope(ModuleInterface):
     help = "Nope."
     seconds = 300
-    lastTriggered = datetime.datetime.min
+    last_triggered = datetime.datetime.min
 
-    def shouldTrigger(self, message):
+    def should_trigger(self, message):
         """
         @type message: hubbot.message.IRCMessage
         """
-        if message.MessageString.lower().startswith("nope"):
-            if (datetime.datetime.now() - self.lastTriggered).seconds >= self.seconds:
-                self.lastTriggered = datetime.datetime.now()
+        if message.message_string.lower().startswith("nope"):
+            if (datetime.datetime.now() - self.last_triggered).seconds >= self.seconds:
+                self.last_triggered = datetime.datetime.now()
                 return True
         else:
             return False
 
-    def onTrigger(self, message):
+    def on_trigger(self, message):
         """
         @type message: hubbot.message.IRCMessage
         """
-        return IRCResponse(ResponseType.Say, "I don't think so either.", message.ReplyTo)
+        return IRCResponse(ResponseType.SAY, "I don't think so either.", message.reply_to)

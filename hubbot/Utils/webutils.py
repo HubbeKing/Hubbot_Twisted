@@ -1,7 +1,7 @@
 import requests
 
 
-def pasteEE(key, data, description, expire):
+def paste_ee(key, data, description, expire):
     values = {"key": key,
               "description": description,
               "paste": data,
@@ -9,9 +9,9 @@ def pasteEE(key, data, description, expire):
               "format": "json"}
     result = requests.post("http://paste.ee/api", data=values, timeout=3, headers={"Connection": "close"})
     if result:
-        jsonResult = result.json()
-        if jsonResult["status"] == "success":
-            return jsonResult["paste"]["link"]
-        elif jsonResult["status"] == "error":
-            return "An error occurred while posting to Paste.ee, code: {}, reason: {}".format(jsonResult["errorcode"],
-                                                                                              jsonResult["error"])
+        json_result = result.json()
+        if json_result["status"] == "success":
+            return json_result["paste"]["link"]
+        elif json_result["status"] == "error":
+            return "An error occurred while posting to Paste.ee, code: {}, reason: {}".format(json_result["errorcode"],
+                                                                                              json_result["error"])
