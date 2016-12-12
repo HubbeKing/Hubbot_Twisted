@@ -143,11 +143,13 @@ class ModuleHandler(object):
             else:
                 modules_to_load.remove(module_name[1:])
 
+        self.bot.logger.info("Loading modules...")
         for module in modules_to_load:
             try:
                 self.load_module(module)
             except:
                 self.bot.logger.exception("Exception when loading module {!r}".format(str(module)))
+        self.bot.logger.info("Module loading complete.")
 
     @staticmethod
     def get_all_modules():
