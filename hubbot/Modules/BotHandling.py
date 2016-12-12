@@ -22,7 +22,7 @@ class BotHandling(ModuleInterface):
         @type message: hubbot.message.IRCMessage
         """
         if message.command == "restart":
-            if datetime.datetime.now() > self.bot.start_time + datetime.timedelta(seconds=10):
+            if datetime.datetime.utcnow() > self.bot.start_time + datetime.timedelta(seconds=10):
                 self.bot.quitting = True
                 reactor.addSystemEventTrigger("after", "shutdown", lambda: os.execl(sys.executable, sys.executable, *sys.argv))
                 self.bot.quit("Restarting...".encode("utf-8"))
@@ -30,7 +30,7 @@ class BotHandling(ModuleInterface):
                 return
 
         elif message.command == "shutdown":
-            if datetime.datetime.now() > self.bot.start_time + datetime.timedelta(seconds=10):
+            if datetime.datetime.utcnow() > self.bot.start_time + datetime.timedelta(seconds=10):
                 self.bot.quitting = True
                 self.bot.quit("Shutting down...".encode("utf-8"))
                 reactor.callLater(2.0, reactor.stop)
