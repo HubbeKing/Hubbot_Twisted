@@ -27,6 +27,8 @@ class IRCMessage(object):
         self.message_string = unicode_message.decode("utf-8", errors="ignore")
         self.message_list = self.message_string.strip().split(" ")
 
+        self.channel = None
+        self.user = None
         if channel is None:
             self.user = IRCUser(user)
             self.channel = None
@@ -41,6 +43,10 @@ class IRCMessage(object):
             self.reply_to = channel.name
             self.target_type = TargetTypes.CHANNEL
         self.user.last_active = datetime.datetime.utcnow()
+
+        self.command = ""
+        self.parameters = ""
+        self.parameter_list = []
 
         if self.target_type == TargetTypes.USER:
             if self.message_list[0].startswith(bot.command_char):
