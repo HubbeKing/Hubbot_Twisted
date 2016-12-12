@@ -193,9 +193,8 @@ class Hubbot(irc.IRCClient):
         msg = IRCMessage("NOTICE", user, self.get_channel(channel), message.upper(), self)
         self.module_handler.handle_message(msg)
 
-    def join(self, channel, key=None):
+    def joined(self, channel):
         self.channels[channel] = IRCChannel(channel)
-        irc.IRCClient.join(self, channel, key)
 
     def get_channel(self, channel_name):
         if channel_name in self.channels:
