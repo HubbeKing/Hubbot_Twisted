@@ -5,6 +5,9 @@ import logging
 import sys
 
 
+def exception_handler(type, value, tb):
+    logging.getLogger().exception("Uncaught exception: {!r}".format(value))
+
 if __name__ == "__main__":
     logger = logging.getLogger("startup")
     handler = logging.StreamHandler()
@@ -30,6 +33,7 @@ if __name__ == "__main__":
         logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s', '%Y/%m/%d-%H:%M:%S'))
     fileHandler.setLevel(logging.ERROR)
     rootLogger.addHandler(fileHandler)
+    sys.excepthook = exception_handler
 
     config = Config(options.config)
     try:
