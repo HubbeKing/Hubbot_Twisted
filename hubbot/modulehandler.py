@@ -133,7 +133,7 @@ class ModuleHandler(object):
 
         return True
 
-    def load_add_modules(self):
+    def load_all_modules(self):
         modules_to_load = []
         for module_name in self.modules_to_load:
             if module_name.lower() == "all":

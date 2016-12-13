@@ -1,4 +1,5 @@
 from __future__ import unicode_literals
+from twisted.internet import reactor
 from hubbot.message import TargetTypes
 from hubbot.moduleinterface import ModuleInterface
 from hubbot.response import IRCResponse, ResponseType
@@ -17,8 +18,11 @@ class Markov(ModuleInterface):
     def on_load(self):
         if self.bot.network is not None:
             self.brain = Brain(os.path.join("hubbot", "data", "{}.brain".format(self.bot.network)))
+            self.bot.logger.info("Markov module loaded successfully.")
         else:
-            self.brain = Brain(os.path.join("hubbot", "data", "{}.brain".format(self.bot.address)))
+            self.bot.logger.info("Markov module could not get network name, delaying load...")
+            self.bot.module_handler.unload_module("Markov")
+            reactor.callLater(5.0, self.bot.module_handler.load_module, "Markov")
 
     def add_to_brain(self, msg):
         if "://" not in msg and len(msg) > 1:
