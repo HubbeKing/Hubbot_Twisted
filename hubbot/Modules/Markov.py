@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 from hubbot.message import TargetTypes
 from hubbot.moduleinterface import ModuleInterface
 from hubbot.response import IRCResponse, ResponseType

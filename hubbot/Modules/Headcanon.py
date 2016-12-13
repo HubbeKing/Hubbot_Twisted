@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 import random
 try:
     import re2 as re
@@ -17,16 +18,16 @@ class Headcanon(ModuleInterface):
 
     def help(self, message):
         help_dict = {
-            u"headcanon": u"headcanon [function] -- Used to store Symphony's headcanon!\nHeadcanon functions: {}".format(u", ".join(self.sub_commands)),
-            u"headcanon add": u"headcanon add <string> -- Used to add lines to the headcanon.",
-            u"headcanon search": u"headcanon search <string> -- Used to search within the headcanon.",
-            u"headcanon list": u"headcanon list -- Posts a list of all headcanon entries to paste.ee",
-            u"headcanon remove": u"headcanon remove <string> -- Used to remove lines from the headcanon."
+            "headcanon": "headcanon [function] -- Used to store Symphony's headcanon!\nHeadcanon functions: {}".format(", ".join(self.sub_commands)),
+            "headcanon add": "headcanon add <string> -- Used to add lines to the headcanon.",
+            "headcanon search": "headcanon search <string> -- Used to search within the headcanon.",
+            "headcanon list": "headcanon list -- Posts a list of all headcanon entries to paste.ee",
+            "headcanon remove": "headcanon remove <string> -- Used to remove lines from the headcanon."
         }
         if len(message.parameter_list) == 1:
             return help_dict[message.parameter_list[0]].lower()
         else:
-            return help_dict[u" ".join([word.lower() for word in message.parameter_list[:2]])]
+            return help_dict[" ".join([word.lower() for word in message.parameter_list[:2]])]
 
     def on_load(self):
         with sqlite3.connect(self.bot.database_file) as conn:

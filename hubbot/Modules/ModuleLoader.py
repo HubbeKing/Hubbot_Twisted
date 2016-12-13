@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 from hubbot.response import IRCResponse, ResponseType
 from hubbot.moduleinterface import ModuleInterface, ModuleAccessLevel
 
@@ -11,10 +12,10 @@ class ModuleLoader(ModuleInterface):
         @type message: hubbot.message.IRCMessage
         """
         help_dict = {
-            u"moduleloader": u"load/unload/reload <modules> - Handles loading, unloading, and reloading of modules.",
-            u"load": u"load <modules> - Used to load modules to make them available for enabling.",
-            u"unload": u"unload <modules> - Used to unload modules entirely, from all servers.",
-            u"reload": u"reload <modules> - Used to reload modules to make new changes take effect."
+            "moduleloader": "load/unload/reload <modules> - Handles loading, unloading, and reloading of modules.",
+            "load": "load <modules> - Used to load modules to make them available for enabling.",
+            "unload": "unload <modules> - Used to unload modules entirely, from all servers.",
+            "reload": "reload <modules> - Used to reload modules to make new changes take effect."
         }
         return help_dict[message.parameter_list[0].lower()]
 

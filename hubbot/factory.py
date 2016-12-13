@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 from twisted.internet import protocol, reactor
 from hubbot.bot import Hubbot
 import logging

@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 import datetime
 import os
 import sys
@@ -11,9 +12,9 @@ class BotHandling(ModuleInterface):
 
     def help(self, message):
         help_dict = {
-            u"bothandling": u"restart, shutdown - Restart, and Shutdown. Fairly self-explanatory.",
-            u"restart": u"restart - Restarts the entire bot.",
-            u"shutdown": u"shutdown - Shuts the entire bot down."
+            "bothandling": "restart, shutdown - Restart, and Shutdown. Fairly self-explanatory.",
+            "restart": "restart - Restarts the entire bot.",
+            "shutdown": "shutdown - Shuts the entire bot down."
         }
         return help_dict[message.parameter_list[0].lower()]
 

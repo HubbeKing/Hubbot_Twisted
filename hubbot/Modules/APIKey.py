@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 import sqlite3
 from hubbot.moduleinterface import ModuleInterface, ModuleAccessLevel
 from hubbot.response import IRCResponse, ResponseType

@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 from hubbot.moduleinterface import ModuleInterface, ModuleAccessLevel
 from hubbot.response import IRCResponse, ResponseType
 import sqlite3
@@ -9,11 +10,11 @@ class Admin(ModuleInterface):
 
     def help(self, message):
         help_dict = {
-            u"admin": u"admin [nick] -- add a user to the admin list.\n"
-                      u"unadmin [nick] -- remove a user from the admin list.\n"
-                      u"admins -- returns the current admin list.",
-            u"unadmin": u"unadmin [nick] -- remove a user from the admin list.",
-            u"admins": u"admins -- returns the current admin list."
+            "admin": "admin [nick] -- add a user to the admin list.\n"
+                     "unadmin [nick] -- remove a user from the admin list.\n"
+                     "admins -- returns the current admin list.",
+            "unadmin": "unadmin [nick] -- remove a user from the admin list.",
+            "admins": "admins -- returns the current admin list."
         }
         command = message.parameter_list[0].lower()
         return help_dict[command]
@@ -22,7 +23,7 @@ class Admin(ModuleInterface):
         admins = []
         with sqlite3.connect(self.bot.database_file) as conn:
             c = conn.cursor()
-            c.execute("CREATE TABLE IF NOT EXISTS admins (nick text)")
+            c.execute("CREATE TABLE IF NOT EXISTS admins (nick TEXT)")
             conn.commit()
             for row in c.execute("SELECT nick FROM admins"):
                 admins.append(row[0])
@@ -58,7 +59,7 @@ class Admin(ModuleInterface):
                 for admin in message.parameter_list:
                     self._delete_admin(admin)
                 return IRCResponse(ResponseType.SAY,
-                                   "Removed {} from the admin list.". format(", ".join(message.parameter_list)),
+                                   "Removed {} from the admin list.".format(", ".join(message.parameter_list)),
                                    message.reply_to)
 
     def _new_admin(self, admin):
@@ -79,7 +80,7 @@ class Admin(ModuleInterface):
         with sqlite3.connect(self.bot.databaseFile) as conn:
             c = conn.cursor()
             c.execute("DROP TABLE IF EXISTS admins")
-            c.execute("CREATE TABLE admins (nick text)")
+            c.execute("CREATE TABLE admins (nick TEXT)")
             for admin in self.bot.admins:
                 c.execute("INSERT INTO admins VALUES (?)", (admin,))
             conn.commit()

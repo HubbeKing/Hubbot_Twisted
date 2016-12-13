@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 import datetime
 from enum import Enum
 from hubbot.user import IRCUser
@@ -18,13 +19,12 @@ class IRCMessage(object):
         @type channel: hubbot.channel.IRCChannel
         @type bot: hubbot.bot.Hubbot
         """
-        try:
-            unicode_message = unicode(message, encoding="utf-8", errors="ignore")
-        except TypeError:
-            unicode_message = message
-
         self.type = message_type
-        self.message_string = unicode_message.encode(encoding="ascii", errors="ignore")
+        self.message_string = ""
+        try:
+            self.message_string = unicode(message, encoding="utf-8", errors="ignore")
+        except TypeError:
+            self.message_string = message
         self.message_list = self.message_string.strip().split(" ")
 
         self.channel = None

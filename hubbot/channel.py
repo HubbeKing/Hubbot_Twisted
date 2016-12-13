@@ -1,3 +1,6 @@
+from __future__ import unicode_literals
+
+
 class IRCChannel(object):
     def __init__(self, name):
         self.name = name

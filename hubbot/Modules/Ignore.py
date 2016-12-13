@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 import sqlite3
 from hubbot.moduleinterface import ModuleInterface, ModuleAccessLevel
 from hubbot.response import IRCResponse, ResponseType
@@ -9,11 +10,11 @@ class Ignore(ModuleInterface):
 
     def help(self, message):
         help_dict = {
-            u"ignore": u"ignore [nick] -- Add someone to the ignore list.\n"
-                       u"unignore [nick] -- Remove someone from the ignore list.\n"
-                       u"ignores -- Returns the current ignore list.",
-            u"unignore": u"unignore [nick] -- Remove someone from the ignore list.",
-            u"ignores": u"ignores -- Returns the current ignore list."
+            "ignore": "ignore [nick] -- Add someone to the ignore list.\n"
+                      "unignore [nick] -- Remove someone from the ignore list.\n"
+                      "ignores -- Returns the current ignore list.",
+            "unignore": "unignore [nick] -- Remove someone from the ignore list.",
+            "ignores": "ignores -- Returns the current ignore list."
         }
         command = message.parameter_list[0].lower()
         return help_dict[command]
@@ -22,7 +23,7 @@ class Ignore(ModuleInterface):
         ignores = []
         with sqlite3.connect(self.bot.database_file) as conn:
             c = conn.cursor()
-            c.execute("CREATE TABLE IF NOT EXISTS ignores (nick text)")
+            c.execute("CREATE TABLE IF NOT EXISTS ignores (nick TEXT)")
             conn.commit()
             for row in c.execute("SELECT nick FROM ignores"):
                 ignores.append(row[0])

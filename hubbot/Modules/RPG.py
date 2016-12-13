@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 try:
     import re2 as re
 except ImportError:
@@ -23,36 +24,36 @@ class RPG(ModuleInterface):
 
     def help(self, message):
         help_dict = {
-            u"rpg": u"pf/lp/mm/welch/advice/dnd [number]/add <thing>/list [term]/search <term> -- 'helpful' RPG advice and stuff",
+            "rpg": "pf/lp/mm/welch/advice/dnd [number]/add <thing>/list [term]/search <term> -- 'helpful' RPG advice and stuff",
 
-            u"pf": u"pf [number] -- Fetches a random or given entry from the Pathfinder list.",
-            u"pf add": u"pf add <string> -- Adds the specified string as an entry in the Pathfinder list.",
-            u"pf list": u"pf list [searchterm] -- Posts the Pathfinder list to paste.ee, with optional searchterm matching.",
-            u"pf search": u"pf search <text> [number] -- Searches the Pathfinder list for the specified text, with optional numbered matching.",
+            "pf": "pf [number] -- Fetches a random or given entry from the Pathfinder list.",
+            "pf add": "pf add <string> -- Adds the specified string as an entry in the Pathfinder list.",
+            "pf list": "pf list [searchterm] -- Posts the Pathfinder list to paste.ee, with optional searchterm matching.",
+            "pf search": "pf search <text> [number] -- Searches the Pathfinder list for the specified text, with optional numbered matching.",
 
-            u"lp": u"lp [number] -- Fetches a random or given entry from the Let's Play list.",
-            u"lp add": u"lp add <string> -- Adds the specified string as an entry in the Let's Play list.",
-            u"lp list": u"lp list [searchterm] -- Posts the Let's Play list to paste.ee, with optional searchterm matching.",
-            u"lp search": u"lp search <text> [number] -- Searches the Let's Play list for the specified text, with optional numbered matching.",
+            "lp": "lp [number] -- Fetches a random or given entry from the Let's Play list.",
+            "lp add": "lp add <string> -- Adds the specified string as an entry in the Let's Play list.",
+            "lp list": "lp list [searchterm] -- Posts the Let's Play list to paste.ee, with optional searchterm matching.",
+            "lp search": "lp search <text> [number] -- Searches the Let's Play list for the specified text, with optional numbered matching.",
 
-            u"mm": u"mm [number] -- Fetches a random or given entry from the Mutants & Masterminds list.",
-            u"mm add": u"mm add <string> -- Adds the specified string as an entry in the Mutants & Masterminds list.",
-            u"mm list": u"mm list [searchterm] -- Posts the Mutants & Masterminds list to paste.ee, with optional searchterm matching.",
-            u"mm search": u"mm search <text> [number] -- Searches the Mutants & Masterminds list for the specified text, with optional numbered matching.",
+            "mm": "mm [number] -- Fetches a random or given entry from the Mutants & Masterminds list.",
+            "mm add": "mm add <string> -- Adds the specified string as an entry in the Mutants & Masterminds list.",
+            "mm list": "mm list [searchterm] -- Posts the Mutants & Masterminds list to paste.ee, with optional searchterm matching.",
+            "mm search": "mm search <text> [number] -- Searches the Mutants & Masterminds list for the specified text, with optional numbered matching.",
 
-            u"advice": u"advice [number] -- Fetches a random or given entry from the Advice list.",
-            u"advice add": u"advice add <string> -- Adds the specified string as a bit of advice.",
-            u"advice list": u"advice list [searchterm] -- Posts the Advice list to paste.ee, with optional searchterm matching",
-            u"advice search": u"advice <text> [number] -- Searches the Advice list for the specified text, with optional numbered matching.",
+            "advice": "advice [number] -- Fetches a random or given entry from the Advice list.",
+            "advice add": "advice add <string> -- Adds the specified string as a bit of advice.",
+            "advice list": "advice list [searchterm] -- Posts the Advice list to paste.ee, with optional searchterm matching",
+            "advice search": "advice <text> [number] -- Searches the Advice list for the specified text, with optional numbered matching.",
 
-            u"dnd": u"dnd [number] -- Fetches a random or given entry from the D&D list.",
-            u"dnd add": u"advice add <string> -- Adds the specified string to the D&D list.",
-            u"dnd list": u"advice list [searchterm] -- Posts the D&D list to paste.ee, with optional searchterm matching",
-            u"dnd search": u"advice <text> [number] -- Searches the D&D list for the specified text, with optional numbered matching.",
+            "dnd": "dnd [number] -- Fetches a random or given entry from the D&D list.",
+            "dnd add": "advice add <string> -- Adds the specified string to the D&D list.",
+            "dnd list": "advice list [searchterm] -- Posts the D&D list to paste.ee, with optional searchterm matching",
+            "dnd search": "advice <text> [number] -- Searches the D&D list for the specified text, with optional numbered matching.",
 
-            u"welch": u"welch [number] -- Fetches a random or given entry from the Welch list.",
-            u"welch list": u"welch list [searchterm] -- Posts the Welch list to paste.ee, with optional searchterm matching.",
-            u"welch search": u"welch search <text> [number] -- Searches the Welch list for the specified text, with optional numbered matching."
+            "welch": "welch [number] -- Fetches a random or given entry from the Welch list.",
+            "welch list": "welch list [searchterm] -- Posts the Welch list to paste.ee, with optional searchterm matching.",
+            "welch search": "welch search <text> [number] -- Searches the Welch list for the specified text, with optional numbered matching."
         }
         if len(message.parameter_list) == 1:
             command = message.parameter_list[0].lower()

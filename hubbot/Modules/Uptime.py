@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 from hubbot.Utils.stringutils import delta_time_to_string
 from hubbot.moduleinterface import ModuleInterface
 from hubbot.response import IRCResponse, ResponseType

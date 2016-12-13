@@ -1,3 +1,6 @@
+from __future__ import unicode_literals
+
+
 class IRCUser(object):
     def __init__(self, user):
         self.user = None

@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 import importlib
 from glob import glob
 import operator
@@ -38,15 +39,15 @@ class ModuleHandler(object):
             try:
                 if response.type == ResponseType.SAY:
                     self.bot.msg(response.target.encode("utf-8"), response.response.encode("utf-8"))
-                    self.bot.logger.info(u'{} | <{}> {}'.format(response.target, self.bot.nickname, response.response))
+                    self.bot.logger.info('{} | <{}> {}'.format(response.target, self.bot.nickname, response.response))
                 elif response.type == ResponseType.DO:
                     self.bot.describe(response.target.encode("utf-8"), response.response.encode("utf-8"))
-                    self.bot.logger.info(u'{} | *{} {}*'.format(response.target, self.bot.nickname, response.response))
+                    self.bot.logger.info('{} | *{} {}*'.format(response.target, self.bot.nickname, response.response))
                 elif response.type == ResponseType.NOTICE:
                     self.bot.notice(response.target.encode("utf-8"), response.response.encode("utf-8"))
-                    self.bot.logger.info(u'{} | [{}] {}'.format(response.target, self.bot.nickname, response.response))
+                    self.bot.logger.info('{} | [{}] {}'.format(response.target, self.bot.nickname, response.response))
                 elif response.type == ResponseType.RAW:
-                    self.bot.logger.info(u"Sent raw {!r}".format(response.response))
+                    self.bot.logger.info("Sent raw {!r}".format(response.response))
                     self.bot.sendLine(response.response.encode("utf-8"))
             except:
                 self.bot.logger.exception("Python Execution Error sending responses {!r}".format(responses))

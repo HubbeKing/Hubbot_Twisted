@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 from hubbot.moduleinterface import ModuleInterface
 from hubbot.response import IRCResponse, ResponseType
 import sqlite3
@@ -48,7 +49,7 @@ class Hugs(ModuleInterface):
             pattern = "hu+g|cuddle|snu+ggle|snu+g|squeeze|glomp"
             match = re.search(pattern, message.message_list[0], re.IGNORECASE)
             if match:
-                self.bot.logger.info(u'{} *{} {}*'.format(message.reply_to, message.user.name, message.message_string))
+                self.bot.logger.info('{} *{} {}*'.format(message.reply_to, message.user.name, message.message_string))
                 hug_dict = {}
                 with sqlite3.connect(self.bot.database_file) as conn:
                     c = conn.cursor()

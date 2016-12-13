@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 from hubbot.moduleinterface import ModuleInterface
 from hubbot.response import IRCResponse, ResponseType
 import logging
@@ -25,10 +26,10 @@ class Log(ModuleInterface):
     priority = -1
 
     log_funcs = {
-        'PRIVMSG': lambda m: u'<{0}> {1}'.format(m.user.name, m.message_string),
-        'NOTICE': lambda m: u'[{0}] {1}'.format(m.user.name, m.message_string),
-        'KICK': lambda m: u'!<< {0} was kicked by {1}{2}'.format(m.kickee, m.m.user.name, m.message_string),
-        'TOPIC': lambda m: u'# {0} set the topic to: {1}'.format(m.user.name, m.message_string)
+        'PRIVMSG': lambda m: '<{0}> {1}'.format(m.user.name, m.message_string),
+        'NOTICE': lambda m: '[{0}] {1}'.format(m.user.name, m.message_string),
+        'KICK': lambda m: '!<< {0} was kicked by {1}{2}'.format(m.kickee, m.m.user.name, m.message_string),
+        'TOPIC': lambda m: '# {0} set the topic to: {1}'.format(m.user.name, m.message_string)
     }
 
     def __init__(self, bot):
