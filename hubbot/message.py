@@ -20,11 +20,11 @@ class IRCMessage(object):
         """
         try:
             unicode_message = unicode(message, encoding="utf-8", errors="ignore")
-        except:
+        except TypeError:
             unicode_message = message
 
         self.type = message_type
-        self.message_string = unicode_message.decode(encoding="utf-8", errors="ignore")
+        self.message_string = unicode_message.encode(encoding="ascii", errors="ignore")
         self.message_list = self.message_string.strip().split(" ")
 
         self.channel = None
