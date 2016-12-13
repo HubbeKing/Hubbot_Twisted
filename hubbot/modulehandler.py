@@ -122,8 +122,8 @@ class ModuleHandler(object):
 
             del self.modules[proper_name]
             del self.module_case_map[module_name.lower()]
-            del sys.modules["{}.{}".format("hubbot.Modules.", proper_name)]
-            for f in glob("{}/{}.pyc".format("hubbot.Modules.", proper_name)):
+            del sys.modules["{}.{}".format("hubbot.Modules", proper_name)]
+            for f in glob("{}/{}.pyc".format("hubbot.Modules", proper_name)):
                 os.remove(f)
             self.bot.logger.debug("Module {!r} unloaded.".format(proper_name))
         else:
