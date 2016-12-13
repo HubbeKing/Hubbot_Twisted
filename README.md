@@ -21,7 +21,5 @@ HOW TO USE:
 MODULE SYSTEM:
 
 The module system for Hubbot works like this:
-- Modules are globally loaded by the BotHandler class
-- Loaded modules are enabled on a per-server basis by each bot's modulehandler
-
-This is in order to enable different servers have different modules loaded in.
+- Modules are loaded by the ModuleHandler class, from the Modules directory.
+- The directory is, for the moment, hardcoded. It also doesn't support subdirectories.
