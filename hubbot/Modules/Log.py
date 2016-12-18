@@ -28,7 +28,7 @@ class Log(ModuleInterface):
     log_funcs = {
         'PRIVMSG': lambda m: '<{0}> {1}'.format(m.user.name, m.message_string),
         'NOTICE': lambda m: '[{0}] {1}'.format(m.user.name, m.message_string),
-        'KICK': lambda m: '!<< {0} was kicked by {1}{2}'.format(m.kickee, m.m.user.name, m.message_string),
+        'KICK': lambda m: '!<< {0} was kicked by {1}{2}'.format(m.kickee, m.user.name, m.message_string),
         'TOPIC': lambda m: '# {0} set the topic to: {1}'.format(m.user.name, m.message_string)
     }
 
