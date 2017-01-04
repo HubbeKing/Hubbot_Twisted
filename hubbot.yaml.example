@@ -14,6 +14,8 @@ modules: ["all", "-MemoryHeavyModule"]
 address: "irc.example.org"
 # The port to use
 port: 6667
+# Whether or not to connect using SSL
+ssl: False
 # (optional) The password to user when connecting
 password: "butts"
 # The list of channels to join once connected

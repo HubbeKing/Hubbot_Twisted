@@ -1,5 +1,9 @@
 from __future__ import unicode_literals
 from twisted.internet import protocol, reactor
+try:
+    from twisted.internet import ssl
+except ImportError:
+    ssl = None
 from hubbot.bot import Hubbot
 import logging
 
@@ -11,12 +15,21 @@ class HubbotFactory(protocol.ReconnectingClientFactory):
         """
         self.logger = logging.getLogger("factory")
 
+        self.ssl = config.item_with_default("ssl", False)
         self.port = config.item_with_default("port", 6667)
         self.address = config["address"]
         self.bot = Hubbot(self, config)
         self.protocol = self.bot
-        reactor.connectTCP(self.address, self.port, self)
-        reactor.run()
+        if self.ssl:
+            if ssl is not None:
+                reactor.connectSSL(self.address, self.port, self, ssl.ClientContextFactory())
+                reactor.run()
+            else:
+                self.logger.fatal("Could not enable SSL functionality. Ensure pyOpenSSL is installed.")
+                reactor.stop()
+        else:
+            reactor.connectTCP(self.address, self.port, self)
+            reactor.run()
 
     def startedConnecting(self, connector):
         self.logger.info(" - Started connecting to {!r}".format(connector.host))
