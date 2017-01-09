@@ -23,32 +23,32 @@ class ModuleHandler(object):
 
     def send_response(self, response):
         """
-        @type response: hubbot.reponse.IRCResponse || list || tuple
+        @type response: hubbot.reponse.IRCResponse
         """
         responses = []
 
         if hasattr(response, "__iter__"):
             for r in response:
-                if r is None or r.response is None or r.response == "":
+                if r is None or r.message is None or r.message == "":
                     continue
                 responses.append(r)
-        elif response is not None and response.response is not None and response.response != "":
+        elif response is not None and response.message is not None and response.message != "":
             responses.append(response)
 
         for response in responses:
             try:
                 if response.type == ResponseType.SAY:
-                    self.bot.msg(response.target.encode("utf-8"), response.response.encode("utf-8"))
-                    self.bot.logger.info('{} | <{}> {}'.format(response.target, self.bot.nickname, response.response))
+                    self.bot.msg(response.target.encode("utf-8"), response.message.encode("utf-8"))
+                    self.bot.logger.info('{} | <{}> {}'.format(response.target, self.bot.nickname, response.message))
                 elif response.type == ResponseType.DO:
-                    self.bot.describe(response.target.encode("utf-8"), response.response.encode("utf-8"))
-                    self.bot.logger.info('{} | *{} {}*'.format(response.target, self.bot.nickname, response.response))
+                    self.bot.describe(response.target.encode("utf-8"), response.message.encode("utf-8"))
+                    self.bot.logger.info('{} | *{} {}*'.format(response.target, self.bot.nickname, response.message))
                 elif response.type == ResponseType.NOTICE:
-                    self.bot.notice(response.target.encode("utf-8"), response.response.encode("utf-8"))
-                    self.bot.logger.info('{} | [{}] {}'.format(response.target, self.bot.nickname, response.response))
+                    self.bot.notice(response.target.encode("utf-8"), response.message.encode("utf-8"))
+                    self.bot.logger.info('{} | [{}] {}'.format(response.target, self.bot.nickname, response.message))
                 elif response.type == ResponseType.RAW:
-                    self.bot.logger.info("Sent raw {!r}".format(response.response))
-                    self.bot.sendLine(response.response.encode("utf-8"))
+                    self.bot.logger.info("Sent raw {!r}".format(response.message))
+                    self.bot.sendLine(response.message.encode("utf-8"))
             except:
                 self.bot.logger.exception("Python Execution Error sending responses {!r}".format(responses))
 

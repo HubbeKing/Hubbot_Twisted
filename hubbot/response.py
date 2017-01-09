@@ -10,12 +10,12 @@ class ResponseType(Enum):
 
 
 class IRCResponse(object):
-    def __init__(self, message_type, response, target):
+    def __init__(self, message_type, message, target):
         self.type = message_type
         try:
-            self.response = unicode(response, "utf-8")
+            self.message = unicode(message, "utf-8")
         except TypeError:
-            self.response = response
+            self.message = message
         try:
             self.target = unicode(target, "utf-8")
         except TypeError:
