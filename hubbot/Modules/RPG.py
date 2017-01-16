@@ -16,15 +16,13 @@ class RPG(ModuleInterface):
         "pf": {"displayname": "Pathfinder", "tablename": "pathfinder", "isAddingAllowed": True},
         "lp": {"displayname": "Let's Play", "tablename": "lp", "isAddingAllowed": True},
         "mm": {"displayname": "Mutants & Masterminds", "tablename": "mm", "isAddingAllowed": True},
-        "advice": {"displayname": "Advice", "tablename": "advice", "isAddingAllowed": True},
-        "welch": {"displayname": "Welch", "tablename": "welch", "isAddingAllowed": False},
-        "dnd": {"displayname": "Dungeons & Dragons", "tablename": "dnd", "isAddingAllowed": True}
+        "welch": {"displayname": "Welch", "tablename": "welch", "isAddingAllowed": False}
     }
     api_key = None
 
     def help(self, message):
         help_dict = {
-            "rpg": "pf/lp/mm/welch/advice/dnd [number]/add <thing>/list [term]/search <term> -- 'helpful' RPG advice and stuff",
+            "rpg": "pf/lp/mm/welch [number]/add <thing>/list [term]/search <term> -- Quotes and advice from various RPGs",
 
             "pf": "pf [number] -- Fetches a random or given entry from the Pathfinder list.",
             "pf add": "pf add <string> -- Adds the specified string as an entry in the Pathfinder list.",
@@ -40,16 +38,6 @@ class RPG(ModuleInterface):
             "mm add": "mm add <string> -- Adds the specified string as an entry in the Mutants & Masterminds list.",
             "mm list": "mm list [searchterm] -- Posts the Mutants & Masterminds list to paste.ee, with optional searchterm matching.",
             "mm search": "mm search <text> [number] -- Searches the Mutants & Masterminds list for the specified text, with optional numbered matching.",
-
-            "advice": "advice [number] -- Fetches a random or given entry from the Advice list.",
-            "advice add": "advice add <string> -- Adds the specified string as a bit of advice.",
-            "advice list": "advice list [searchterm] -- Posts the Advice list to paste.ee, with optional searchterm matching",
-            "advice search": "advice <text> [number] -- Searches the Advice list for the specified text, with optional numbered matching.",
-
-            "dnd": "dnd [number] -- Fetches a random or given entry from the D&D list.",
-            "dnd add": "advice add <string> -- Adds the specified string to the D&D list.",
-            "dnd list": "advice list [searchterm] -- Posts the D&D list to paste.ee, with optional searchterm matching",
-            "dnd search": "advice <text> [number] -- Searches the D&D list for the specified text, with optional numbered matching.",
 
             "welch": "welch [number] -- Fetches a random or given entry from the Welch list.",
             "welch list": "welch list [searchterm] -- Posts the Welch list to paste.ee, with optional searchterm matching.",
