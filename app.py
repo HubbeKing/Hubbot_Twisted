@@ -7,7 +7,7 @@ import sys
 
 
 def exception_handler(type, value, tb):
-    logging.getLogger().exception("Uncaught exception: {!r}".format(value))
+    logging.getLogger().exception("Uncaught exception.", exc_info=(type, value, tb))
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="A derpy Twisted IRC bot.")
