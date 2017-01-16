@@ -7,6 +7,9 @@ import sys
 
 
 def exception_handler(type, value, tb):
+    if issubclass(type, KeyboardInterrupt):
+        sys.__excepthook__(type, value, tb)
+        return
     logging.getLogger().exception("Uncaught exception.", exc_info=(type, value, tb))
 
 if __name__ == "__main__":
