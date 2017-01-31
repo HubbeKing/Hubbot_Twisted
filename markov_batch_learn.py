@@ -61,10 +61,10 @@ def filter_log_lines(raw_lines):
     parsed_lines = []
     for line in raw_lines:
         templine = line.decode("utf-8", errors="ignore")
-        newline = templine[templine.find("]")+1:].lstrip().rstrip()
+        newline = templine.split("]", 1)[1].strip()
         nick_start_index = newline.find("<")
         nick_end_index = newline.find(">")
-        if nick_start_index == 0 and nick_end_index != -1 and newline[nick_start_index:nick_end_index + 1].lower() not in bots and "://" not in newline:
+        if "://" not in newline and nick_start_index == 0 and nick_end_index != -1 and newline[nick_start_index:nick_end_index + 1].lower() not in bots:
             parsed_lines.append(newline[nick_end_index + 1:])
     return parsed_lines
 
