@@ -38,18 +38,18 @@ def batch_learn(folder, brainfile):
 
     start_time = datetime.datetime.now()
 
-    for filename in os.listdir(folder):
+    for log_file in os.listdir(folder):
         file_start_time = datetime.datetime.now()
         brain.start_batch_learning()
-        logger.info("Parsing {!r}".format(filename))
+        logger.info("Parsing {!r}".format(log_file))
         try:
-            with open(os.path.join(folder, filename)) as current_file:
-                lines = current_file.readlines()
-                parsed_lines = filter_log_lines(lines)
-                for line in parsed_lines:
+            with open(os.path.join(folder, log_file)) as current_log:
+                raw_lines = current_log.readlines()
+                filtered_lines = filter_log_lines(raw_lines)
+                for line in filtered_lines:
                     brain.learn(line)
         except:
-            logger.exception("Error when processing file {!r}".format(filename))
+            logger.exception("Error when processing file {!r}".format(log_file))
         finally:
             brain.stop_batch_learning()
         logger.info("Done, {} elapsed".format(delta_time_to_string((datetime.datetime.now() - file_start_time), resolution="s")))
@@ -58,34 +58,34 @@ def batch_learn(folder, brainfile):
 
 
 def filter_log_lines(raw_lines):
-    parsed_lines = []
+    filtered_lines = []
     for line in raw_lines:
-        templine = line.decode("utf-8", errors="ignore")
-        if "://" in templine:
+        decoded_line = line.decode("utf-8", errors="ignore")
+        if "://" in decoded_line:
             continue
-        newline = templine.split("]", 1)[1].strip()
+        newline = decoded_line.split("]", 1)[1].strip()
         nick_start_index = newline.find("<")
         nick_end_index = newline.find(">")
         if nick_start_index == 0 and nick_end_index != -1 and newline[nick_start_index:nick_end_index + 1].lower() not in bots:
-            parsed_lines.append(newline[nick_end_index + 1:].lstrip())
-    return parsed_lines
+            filtered_lines.append(newline[nick_end_index + 1:].lstrip())
+    return filtered_lines
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="A script to quickly teach a new markov brain from a folder of text files.")
-    parser.add_argument("-f", "--folder", help="The folder to read through.", type=str)
-    parser.add_argument("-b", "--brainfile", help="The filename to use for the brain.", type=str, default="output")
-    parser.add_argument("-p", "--parse", help="Don't train a brainfile, instead output logs as a file of newline-separated text.", action="store_true")
+    parser.add_argument("-t", "--target_folder", help="The folder to read through.", type=str)
+    parser.add_argument("-f", "--filename", help="The filename to use for output.", type=str, default="output")
+    parser.add_argument("-p", "--parse", help="Don't train a brain, instead output logs as a file of newline-separated text.", action="store_true")
     options = parser.parse_args()
 
     if options.parse:
-        with open(options.brainfile, "w") as output:
-            for filename in os.listdir(options.folder):
-                with open(os.path.join(options.folder, filename)) as current_file:
+        with open(options.filename, "w") as output:
+            for filename in os.listdir(options.target_folder):
+                with open(os.path.join(options.target_folder, filename)) as current_file:
                     lines = current_file.readlines()
                     parsed_lines = filter_log_lines(lines)
                     for parsed_line in parsed_lines:
                         output.write(parsed_line + "\n")
 
     else:
-        markov_batch = batch_learn(options.folder, options.brainfile)
+        markov_batch = batch_learn(options.target_folder, options.filename)
