@@ -7,7 +7,7 @@ def delta_time_to_string(time_delta, resolution='m'):
     """
     returns a string version of the given timedelta, with a resolution of minutes ('m') or seconds ('s')
     @type time_delta: timedelta
-    @type resolution: str
+    @type resolution: unicode
     """
     d = OrderedDict()
     d['days'] = time_delta.days
