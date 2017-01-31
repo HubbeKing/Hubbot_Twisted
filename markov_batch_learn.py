@@ -65,7 +65,7 @@ def filter_log_lines(raw_lines):
         nick_start_index = newline.find("<")
         nick_end_index = newline.find(">")
         if "://" not in newline and nick_start_index == 0 and nick_end_index != -1 and newline[nick_start_index:nick_end_index + 1].lower() not in bots:
-            parsed_lines.append(newline[nick_end_index + 1:])
+            parsed_lines.append(newline[nick_end_index + 1:].lstrip())
     return parsed_lines
 
 
