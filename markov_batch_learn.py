@@ -74,7 +74,18 @@ def filter_log_lines(raw_lines):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="A script to quickly teach a new markov brain from a folder of text files.")
     parser.add_argument("-f", "--folder", help="The folder to read through.", type=str)
-    parser.add_argument("-b", "--brainfile", help="The filename to use for the brain.", type=str)
+    parser.add_argument("-b", "--brainfile", help="The filename to use for the brain.", type=str, default="output")
+    parser.add_argument("-p", "--parse", help="Don't train a brainfile, instead output logs as a file of newline-separated text.", action="store_true")
     options = parser.parse_args()
 
-    markov_batch = batch_learn(options.folder, options.brainfile)
+    if options.parse:
+        with open(options.brainfile, "w") as output:
+            for filename in os.listdir(options.folder):
+                with open(os.path.join(options.folder, filename)) as current_file:
+                    lines = current_file.readlines()
+                    parsed_lines = filter_log_lines(lines)
+                    for parsed_line in parsed_lines:
+                        output.write(parsed_line + "\n")
+
+    else:
+        markov_batch = batch_learn(options.folder, options.brainfile)
