@@ -40,20 +40,29 @@ def batch_learn(folder, brainfile):
 
     for log_file in os.listdir(folder):
         file_start_time = datetime.datetime.now()
-        brain.start_batch_learning()
-        logger.info("Parsing {!r}".format(log_file))
+        logger.info("Reading {!r}".format(log_file))
         try:
-            with open(os.path.join(folder, log_file)) as current_log:
-                raw_lines = current_log.readlines()
-                filtered_lines = filter_log_lines(raw_lines)
-                for line in filtered_lines:
-                    brain.learn(line)
+            with open("temp.txt", "w") as temp_output:
+                with open(os.path.join(folder, log_file)) as current_log:
+                    raw_lines = current_log.readlines()
+                    filtered_lines = filter_log_lines(raw_lines)
+                    for line in filtered_lines:
+                        try:
+                            temp_output.write(line + "\n")
+                        except:
+                            continue
         except:
             logger.exception("Error when processing file {!r}".format(log_file))
-        finally:
-            brain.stop_batch_learning()
         logger.info("Done, {} elapsed".format(delta_time_to_string((datetime.datetime.now() - file_start_time), resolution="s")))
+    logger.info("File reading done, beginning brain batch learn...")
+    with open("temp.txt") as temp_file:
+        full_log_lines = temp_file.readlines()
+        for line in full_log_lines:
+            brain.start_batch_learning()
+            brain.learn(line)
+            brain.stop_batch_learning()
     logger.info("All done, total execution time: {}".format(delta_time_to_string((datetime.datetime.now() - start_time), resolution="s")))
+
     return brain
 
 
