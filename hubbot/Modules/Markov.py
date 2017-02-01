@@ -54,15 +54,25 @@ class Markov(ModuleInterface):
         """
         @type message: hubbot.message.IRCMessage
         """
-        if message.user.name == self.bot.nickname:
+        if message.command == "markov" and message.user.name in self.bot.admins:
+            if len(message.parameter_list) == 2 and message.parameter_list[0].lower() == "load":
+                self.brain = None
+                self.brain = Brain(os.path.join("hubbot", "data", "{}.brain".format(message.parameter_list[1])))
+            elif message.parameter_list[0].lower() == "unload":
+                self.brain = None
+        elif message.user.name == self.bot.nickname:
             return
         elif message.target_type is TargetTypes.USER and message.command not in self.bot.module_handler.mapped_triggers:
+            if self.brain is None:
+                return
             reply = ""
             while len(reply.split()) < 2:
                 reply = self.brain.reply(message.message_string, max_len=100)
                 reply = self._clean_up_string(reply)
             return IRCResponse(ResponseType.SAY, reply.capitalize(), message.reply_to)
         elif self.bot.nickname.lower() in message.message_string.lower() and len(message.message_list) > 1:
+            if self.brain is None:
+                return
             reply = ""
             while len(reply.split()) < 2:
                 message_list = [item for item in message.message_list if item.lower() != self.bot.nickname.lower()]
