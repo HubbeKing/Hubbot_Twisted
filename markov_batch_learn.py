@@ -85,7 +85,10 @@ if __name__ == "__main__":
                     lines = current_file.readlines()
                     parsed_lines = filter_log_lines(lines)
                     for parsed_line in parsed_lines:
-                        output.write(parsed_line + "\n")
+                        try:
+                            output.write(parsed_line + "\n")
+                        except:
+                            pass
 
     else:
         markov_batch = batch_learn(options.target_folder, options.filename)
