@@ -57,10 +57,10 @@ def batch_learn(folder, brainfile):
     logger.info("File reading done, beginning brain batch learn...")
     with open("temp.txt") as temp_file:
         full_log_lines = temp_file.readlines()
+        brain.start_batch_learning()
         for line in full_log_lines:
-            brain.start_batch_learning()
             brain.learn(line)
-            brain.stop_batch_learning()
+        brain.stop_batch_learning()
     logger.info("All done, total execution time: {}".format(delta_time_to_string((datetime.datetime.now() - start_time), resolution="s")))
 
     return brain
