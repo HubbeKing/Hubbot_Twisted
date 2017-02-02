@@ -38,22 +38,10 @@ def batch_learn(folder, brainfile):
 
     start_time = datetime.datetime.now()
 
-    for log_file in os.listdir(folder):
-        file_start_time = datetime.datetime.now()
-        logger.info("Reading {!r}".format(log_file))
-        try:
-            with open("temp.txt", "w") as temp_output:
-                with open(os.path.join(folder, log_file)) as current_log:
-                    raw_lines = current_log.readlines()
-                    filtered_lines = filter_log_lines(raw_lines)
-                    for line in filtered_lines:
-                        try:
-                            temp_output.write(line + "\n")
-                        except:
-                            continue
-        except:
-            logger.exception("Error when processing file {!r}".format(log_file))
-        logger.info("Done, {} elapsed".format(delta_time_to_string((datetime.datetime.now() - file_start_time), resolution="s")))
+    try:
+        consolidate_log_files(folder, "temp.txt")
+    except:
+        logger.exception("Exception during file reading!")
     logger.info("File reading done, beginning brain batch learn...")
     with open("temp.txt") as temp_file:
         full_log_lines = temp_file.readlines()
@@ -61,9 +49,28 @@ def batch_learn(folder, brainfile):
         for line in full_log_lines:
             brain.learn(line)
         brain.stop_batch_learning()
-    logger.info("All done, total execution time: {}".format(delta_time_to_string((datetime.datetime.now() - start_time), resolution="s")))
+    logger.info("Brain learned {:,} lines.".format(len(full_log_lines)))
+    logger.info("Execution time: {}".format(delta_time_to_string((datetime.datetime.now() - start_time), resolution="s")))
 
     return brain
+
+
+def consolidate_log_files(folder, output_filename):
+    for log_file in os.listdir(folder):
+        try:
+            with open(output_filename, "w") as output_file:
+                with open(os.path.join(folder, log_file)) as current_log:
+                    raw_lines = current_log.readlines()
+                    filtered_lines = filter_log_lines(raw_lines)
+                    for line in filtered_lines:
+                        try:
+                            output_file.write(line + "\n")
+                        except:
+                            # this should only happen if we encounter weird chars, which we can probably skip
+                            continue
+        except:
+            raise
+    return output_filename
 
 
 def filter_log_lines(raw_lines):
@@ -88,16 +95,6 @@ if __name__ == "__main__":
     options = parser.parse_args()
 
     if options.parse:
-        with open(options.filename, "w") as output:
-            for filename in os.listdir(options.target_folder):
-                with open(os.path.join(options.target_folder, filename)) as current_file:
-                    lines = current_file.readlines()
-                    parsed_lines = filter_log_lines(lines)
-                    for parsed_line in parsed_lines:
-                        try:
-                            output.write(parsed_line + "\n")
-                        except:
-                            pass
-
+        consolidate_log_files(options.target_folder, options.filename)
     else:
         markov_batch = batch_learn(options.target_folder, options.filename)
