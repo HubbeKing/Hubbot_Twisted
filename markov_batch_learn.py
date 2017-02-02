@@ -37,7 +37,7 @@ def batch_learn(folder, brainfile):
     logger.addHandler(stream_handler)
 
     start_time = datetime.datetime.now()
-
+    logger.info("Consolidating log files for easy learning...")
     try:
         consolidate_log_files(folder, "temp.txt")
     except:
@@ -58,7 +58,7 @@ def batch_learn(folder, brainfile):
 def consolidate_log_files(folder, output_filename):
     for log_file in os.listdir(folder):
         try:
-            with open(output_filename, "w") as output_file:
+            with open(output_filename, "a+") as output_file:
                 with open(os.path.join(folder, log_file)) as current_log:
                     raw_lines = current_log.readlines()
                     filtered_lines = filter_log_lines(raw_lines)
