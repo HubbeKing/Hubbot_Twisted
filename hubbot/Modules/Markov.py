@@ -70,7 +70,9 @@ class Markov(ModuleInterface):
                 self.brain_file = ""
                 return IRCResponse(ResponseType.SAY, "Successfully unloaded markov brain {}".format(old_name), message.reply_to)
             else:
-                return IRCResponse(ResponseType.SAY, "Current loaded brain is {}".format(self.brain_file), message.reply_to)
+                available_brains = [brain for brain in os.listdir(os.path.join("hubbot", "data", "brains")) if brain.split(".", 1)[1] == "brain"]
+                return IRCResponse(ResponseType.SAY, "Current loaded brain is {}".format(self.brain_file), message.reply_to), \
+                       IRCResponse(ResponseType.SAY, "Available brains are: {}".format(", ".join(available_brains)), message.reply_to)
         elif message.command == "markov":
             return IRCResponse(ResponseType.SAY, "Current loaded brain is {}".format(self.brain_file), message.reply_to)
         elif message.user.name == self.bot.nickname:
