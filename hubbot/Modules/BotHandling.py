@@ -7,7 +7,7 @@ from hubbot.moduleinterface import ModuleInterface, ModuleAccessLevel
 
 
 class BotHandling(ModuleInterface):
-    triggers = ["quit", "quitfrom", "restart", "shutdown"]
+    triggers = ["restart", "shutdown"]
     access_level = ModuleAccessLevel.ADMINS
 
     def help(self, message):
