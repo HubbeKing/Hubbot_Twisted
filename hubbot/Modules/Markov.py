@@ -8,7 +8,7 @@ import os
 
 
 class Markov(ModuleInterface):
-    help = "Markov - Yeah I'm sentient, what of it?"
+    help = "Markov - Markov chain replies. Bot admins can use +markov load/unload to do brain surgery."
     accepted_types = ["PRIVMSG", "ACTION"]
 
     def __init__(self, bot):

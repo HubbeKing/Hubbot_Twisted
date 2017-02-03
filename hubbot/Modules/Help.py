@@ -13,7 +13,7 @@ class Help(ModuleInterface):
         """
         if len(message.parameter_list) > 0:
             if message.parameter_list[0].lower() in self.bot.module_handler.module_case_map:
-                func = self.bot.moduleHandler.modules[self.bot.module_handler.module_case_map[message.parameter_list[0].lower()]]
+                func = self.bot.module_handler.modules[self.bot.module_handler.module_case_map[message.parameter_list[0].lower()]]
                 if isinstance(func.help, basestring):
                     return IRCResponse(ResponseType.SAY, func.help, message.reply_to)
                 else:
