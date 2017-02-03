@@ -63,9 +63,12 @@ class Markov(ModuleInterface):
                 self.brain = None
                 self.brain = Brain(os.path.join("hubbot", "data", "{}.brain".format(message.parameter_list[1])))
                 self.brain_file = message.parameter_list[1]
+                return IRCResponse(ResponseType.SAY, "Successfully loaded markov brain {!r}".format(self.brain_file), message.reply_to)
             elif message.parameter_list[0].lower() == "unload":
                 self.brain = None
+                old_name = self.brain_file
                 self.brain_file = ""
+                return IRCResponse(ResponseType.SAY, "Successfully unloaded markov brain {!r}".format(old_name), message.reply_to)
         elif message.user.name == self.bot.nickname:
             return
         elif message.target_type is TargetTypes.USER and message.command not in self.bot.module_handler.mapped_triggers:
