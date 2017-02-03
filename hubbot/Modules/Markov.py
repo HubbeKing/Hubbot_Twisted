@@ -13,11 +13,13 @@ class Markov(ModuleInterface):
 
     def __init__(self, bot):
         self.brain = None
+        self.brain_file = ""
         super(Markov, self).__init__(bot)
 
     def on_load(self):
         if self.bot.network is not None:
             self.brain = Brain(os.path.join("hubbot", "data", "{}.brain".format(self.bot.network)))
+            self.brain_file = self.bot.network
             self.bot.logger.info("Markov module loaded successfully.")
         else:
             self.bot.logger.info("Markov module could not get network name, delaying load...")
@@ -36,17 +38,19 @@ class Markov(ModuleInterface):
             return True
         return False
 
-    def _index_containing_substring(self, stringlist, substring):
+    @staticmethod
+    def _index_containing_substring(string_list, substring):
         """
         Given a list of strings, returns the index of the first element that contains a given substring
         If none exists, returns -1
         """
-        for i, s in enumerate(stringlist):
+        for i, s in enumerate(string_list):
             if substring in s:
                 return i
         return -1
 
-    def _clean_up_string(self, string):
+    @staticmethod
+    def _clean_up_string(string):
         new_string = "".join(c for c in string if ord(c) >= 0x20).lstrip("~").lstrip("!").lstrip(".").lstrip("@")
         return new_string.replace("(.+.+)", "")
 
@@ -58,8 +62,10 @@ class Markov(ModuleInterface):
             if len(message.parameter_list) == 2 and message.parameter_list[0].lower() == "load":
                 self.brain = None
                 self.brain = Brain(os.path.join("hubbot", "data", "{}.brain".format(message.parameter_list[1])))
+                self.brain_file = message.parameter_list[1]
             elif message.parameter_list[0].lower() == "unload":
                 self.brain = None
+                self.brain_file = ""
         elif message.user.name == self.bot.nickname:
             return
         elif message.target_type is TargetTypes.USER and message.command not in self.bot.module_handler.mapped_triggers:
@@ -88,5 +94,6 @@ class Markov(ModuleInterface):
                 reply = self._clean_up_string(reply)
             return IRCResponse(ResponseType.SAY, reply.capitalize(), message.reply_to)
         elif message.type == "PRIVMSG":
-            message_list = [item.lower() for item in message.message_list if item.lower() != self.bot.nickname.lower()]
-            self.add_to_brain(" ".join(message_list))
+            if self.brain_file == self.bot.network:
+                message_list = [item.lower() for item in message.message_list if item.lower() != self.bot.nickname.lower()]
+                self.add_to_brain(" ".join(message_list))
