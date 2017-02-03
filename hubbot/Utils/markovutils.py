@@ -153,9 +153,9 @@ if __name__ == "__main__":
     parser.add_argument("-p", "--parse", help="Don't train a brain, instead output logs as a file of newline-separated text.", action="store_true")
     options = parser.parse_args()
 
-    if options.parse:
+    if options.parse and not options.singlenick:
         consolidate_log_files(options.target_folder, options.filename)
-    elif options.singlenick:
+    elif options.singlenick and not options.parse:
         batch_learn_from_singlenick(options.target_folder, options.nick, options.filename)
     elif options.singlenick and options.parse:
         consolidate_single_nick(options.target_folder, options.nick, options.filename)
