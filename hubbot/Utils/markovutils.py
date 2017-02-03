@@ -5,7 +5,7 @@ import logging
 import os
 import sys
 from cobe.brain import Brain
-from hubbot.Utils.stringutils import delta_time_to_string
+from stringutils import delta_time_to_string
 
 bots = ["ames", "bojii", "diderobot", "ekimbot", "harbot", "hubbot", "nopebot", "memebot", "pyheufybot",
         "re_heufybot", "heufybot", "pymoronbot", "moronbot", "robobo", "safebot", "unsafebot"]
