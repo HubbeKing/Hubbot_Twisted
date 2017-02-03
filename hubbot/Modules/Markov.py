@@ -69,7 +69,7 @@ class Markov(ModuleInterface):
                 else:
                     return IRCResponse(ResponseType.SAY, "That's not a brain that I have on file.", message.reply_to), \
                            IRCResponse(ResponseType.SAY, "Available brains are: {}".format(", ".join(available_brains)), message.reply_to)
-            elif len(message.parameter_list) == 2 and message.parameter_list[0].lower() == "unload":
+            elif len(message.parameter_list) == 1 and message.parameter_list[0].lower() == "unload":
                 self.brain = None
                 old_name = self.brain_file
                 self.brain_file = ""
