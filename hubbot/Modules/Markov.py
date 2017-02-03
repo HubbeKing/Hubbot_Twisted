@@ -64,7 +64,7 @@ class Markov(ModuleInterface):
                 self.brain = Brain(os.path.join("hubbot", "data", "{}.brain".format(message.parameter_list[1])))
                 self.brain_file = message.parameter_list[1]
                 return IRCResponse(ResponseType.SAY, "Successfully loaded markov brain {}".format(self.brain_file), message.reply_to)
-            elif message.parameter_list[0].lower() == "unload":
+            elif len(message.parameter_list) == 2 and message.parameter_list[0].lower() == "unload":
                 self.brain = None
                 old_name = self.brain_file
                 self.brain_file = ""
