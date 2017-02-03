@@ -114,18 +114,50 @@ def consolidate_single_nick(folder, nick, filename):
     return filename
 
 
+def batch_learn_from_singlenick(folder, nick, brainfile):
+    brain = Brain(brainfile)
+
+    logger = logging.getLogger("markov_batch_learn")
+    logger.setLevel(logging.INFO)
+    stream_handler = logging.StreamHandler(stream=sys.stdout)
+    stream_handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s', '%H:%M:%S'))
+    stream_handler.setLevel(logging.INFO)
+    logger.addHandler(stream_handler)
+
+    start_time = datetime.datetime.now()
+    logger.info("Consolidating log files for easy learning...")
+    try:
+        consolidate_single_nick(folder, nick, "temp.txt")
+    except:
+        logger.exception("Exception during file reading!")
+    logger.info("File reading done, beginning brain batch learn...")
+    with open("temp.txt") as temp_file:
+        full_log_lines = temp_file.readlines()
+        brain.start_batch_learning()
+        for line in full_log_lines:
+            brain.learn(line)
+        brain.stop_batch_learning()
+    logger.info("Brain learned {:,} lines.".format(len(full_log_lines)))
+    logger.info(
+        "Execution time: {}".format(delta_time_to_string((datetime.datetime.now() - start_time), resolution="s")))
+
+    return brain
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="A script to quickly teach a new markov brain from a folder of text files.")
     parser.add_argument("-t", "--target_folder", help="The folder to read through.", type=str)
     parser.add_argument("-f", "--filename", help="The filename to use for output.", type=str, default="output")
-    parser.add_argument("-p", "--parse", help="Don't train a brain, instead output logs as a file of newline-separated text.", action="store_true")
     parser.add_argument("-s", "--singlenick", help="Only use lines from one nick (and other like it) in the logs.", action="store_true")
     parser.add_argument("-n", "--nick", help="The nick to use for singlenick execution", type=str, default="None")
+    parser.add_argument("-p", "--parse", help="Don't train a brain, instead output logs as a file of newline-separated text.", action="store_true")
     options = parser.parse_args()
 
     if options.parse:
         consolidate_log_files(options.target_folder, options.filename)
     elif options.singlenick:
+        batch_learn_from_singlenick(options.target_folder, options.nick, options.filename)
+    elif options.singlenick and options.parse:
         consolidate_single_nick(options.target_folder, options.nick, options.filename)
     else:
         markov_batch = batch_learn(options.target_folder, options.filename)
