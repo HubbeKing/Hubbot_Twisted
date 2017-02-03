@@ -8,6 +8,15 @@ class ModuleAccessLevel(Enum):
 
 
 class ModuleInterface(object):
+    """
+    The interface modules should inherit and implement in order to function with the ModuleHandler.
+
+    triggers - command words that cause the module to trigger.
+    accepted_types - message types that can cause the module to trigger (PRIVMSG, ACTION, NOTICE).
+    help - help text for the module. May be unicode or a function on the message object help(message), returning a unicode object.
+    access_level - whether the module should be trigger-able by ANYONE, or only users on the admin list.
+    priority - the priority for the module. modules with high priority trigger before ones with low priority for any given message object.
+    """
     triggers = []
     accepted_types = ["PRIVMSG"]
     help = "No help defined yet."
