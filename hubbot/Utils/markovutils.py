@@ -87,14 +87,45 @@ def filter_log_lines(raw_lines):
     return filtered_lines
 
 
+def consolidate_single_nick(folder, nick, filename):
+    for log_file in os.listdir(folder):
+        try:
+            with open(filename, "a+") as output_file:
+                with open(os.path.join(folder, log_file)) as current_log:
+                    raw_lines = current_log.readlines()
+                    filtered_lines = []
+                    for line in raw_lines:
+                        decoded_line = line.decode("utf-8", errors="ignore")
+                        if "://" in decoded_line:
+                            continue
+                        newline = decoded_line.split("]", 1)[1].strip()
+                        nick_start_index = newline.find("<")
+                        nick_end_index = newline.find(">")
+                        if nick_start_index == 0 and nick_end_index != -1 and nick in newline[nick_start_index:nick_end_index + 1].lower():
+                            filtered_lines.append(newline[nick_end_index + 1:].lstrip())
+                    for line in filtered_lines:
+                        try:
+                            output_file.write(line + "\n")
+                        except:
+                            # this should only happen if we encounter weird chars, which we can probably skip
+                            continue
+        except:
+            raise
+    return filename
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="A script to quickly teach a new markov brain from a folder of text files.")
     parser.add_argument("-t", "--target_folder", help="The folder to read through.", type=str)
     parser.add_argument("-f", "--filename", help="The filename to use for output.", type=str, default="output")
     parser.add_argument("-p", "--parse", help="Don't train a brain, instead output logs as a file of newline-separated text.", action="store_true")
+    parser.add_argument("-s", "--singlenick", help="Only use lines from one nick (and other like it) in the logs.", action="store_true")
+    parser.add_argument("-n", "--nick", help="The nick to use for singlenick execution", type=str, default="None")
     options = parser.parse_args()
 
     if options.parse:
         consolidate_log_files(options.target_folder, options.filename)
+    elif options.singlenick:
+        consolidate_single_nick(options.target_folder, options.nick, options.filename)
     else:
         markov_batch = batch_learn(options.target_folder, options.filename)
