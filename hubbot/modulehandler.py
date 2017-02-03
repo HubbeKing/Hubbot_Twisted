@@ -23,6 +23,8 @@ class ModuleHandler(object):
 
     def send_response(self, response):
         """
+        Process the response object and send lines to the IRC server accordingly
+
         @type response: hubbot.reponse.IRCResponse
         """
         responses = []
@@ -54,6 +56,8 @@ class ModuleHandler(object):
 
     def handle_message(self, message):
         """
+        Process the message object through loaded modules, triggering when appropriate and handing any returns to send_response
+
         @type message: hubbot.message.IRCMessage
         """
         for module in sorted(self.modules.values(), key=operator.attrgetter("priority")):
@@ -72,6 +76,12 @@ class ModuleHandler(object):
                 self.send_response(IRCResponse(ResponseType.SAY, "Python Execution Error - {!r}".format(ex.message), message.reply_to))
 
     def load_module(self, module_name):
+        """
+        Load a module with the specified name into the bot.
+
+        @type module_name: unicode
+        @return: boolean
+        """
         module_name = module_name.lower()
 
         module_list = ModuleHandler.get_all_modules()
@@ -112,6 +122,11 @@ class ModuleHandler(object):
         return True
 
     def unload_module(self, module_name):
+        """
+        Unload a module with the specified name from the bot.
+        @type module_name: unicode
+        @return: boolean
+        """
         if module_name.lower() in self.module_case_map.keys():
             proper_name = self.module_case_map[module_name.lower()]
 
@@ -134,6 +149,9 @@ class ModuleHandler(object):
         return True
 
     def load_all_modules(self):
+        """
+        Load all modules in the Modules directory that are configured to load in the bot's config file.
+        """
         modules_to_load = []
         for module_name in self.modules_to_load:
             if module_name.lower() == "all":
@@ -154,6 +172,9 @@ class ModuleHandler(object):
 
     @staticmethod
     def get_all_modules():
+        """
+        Get the names of all modules in the hubbot/Modules directory.
+        """
         root = os.path.join(".", "hubbot", "Modules")
 
         for item in os.listdir(root):
