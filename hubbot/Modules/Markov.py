@@ -18,7 +18,7 @@ class Markov(ModuleInterface):
 
     def on_load(self):
         if self.bot.network is not None:
-            self.brain = Brain(os.path.join("hubbot", "data", "{}.brain".format(self.bot.network)))
+            self.brain = Brain(os.path.join("hubbot", "data", "brains", "{}.brain".format(self.bot.network)))
             self.brain_file = self.bot.network
             self.bot.logger.info("Markov module loaded successfully.")
         else:
@@ -61,7 +61,7 @@ class Markov(ModuleInterface):
         if message.command == "markov" and message.user.name in self.bot.admins:
             if len(message.parameter_list) == 2 and message.parameter_list[0].lower() == "load":
                 self.brain = None
-                self.brain = Brain(os.path.join("hubbot", "data", "{}.brain".format(message.parameter_list[1])))
+                self.brain = Brain(os.path.join("hubbot", "data", "brains", "{}.brain".format(message.parameter_list[1])))
                 self.brain_file = message.parameter_list[1]
                 return IRCResponse(ResponseType.SAY, "Successfully loaded markov brain {}".format(self.brain_file), message.reply_to)
             elif len(message.parameter_list) == 2 and message.parameter_list[0].lower() == "unload":
