@@ -60,10 +60,15 @@ class Markov(ModuleInterface):
         """
         if message.command == "markov" and message.user.name in self.bot.admins:
             if len(message.parameter_list) == 2 and message.parameter_list[0].lower() == "load":
-                self.brain = None
-                self.brain = Brain(os.path.join("hubbot", "data", "brains", "{}.brain".format(message.parameter_list[1])))
-                self.brain_file = message.parameter_list[1]
-                return IRCResponse(ResponseType.SAY, "Successfully loaded markov brain {}".format(self.brain_file), message.reply_to)
+                available_brains = sorted([brain.split(".", 1)[0] for brain in os.listdir(os.path.join("hubbot", "data", "brains")) if brain.split(".", 1)[1] == "brain"])
+                if message.parameter_list[1] in available_brains:
+                    self.brain = None
+                    self.brain = Brain(os.path.join("hubbot", "data", "brains", "{}.brain".format(message.parameter_list[1])))
+                    self.brain_file = message.parameter_list[1]
+                    return IRCResponse(ResponseType.SAY, "Successfully loaded markov brain {}".format(self.brain_file), message.reply_to)
+                else:
+                    return IRCResponse(ResponseType.SAY, "That's not a brain that I have on file.", message.reply_to), \
+                           IRCResponse(ResponseType.SAY, "Available brains are: {}".format(", ".join(available_brains)), message.reply_to)
             elif len(message.parameter_list) == 2 and message.parameter_list[0].lower() == "unload":
                 self.brain = None
                 old_name = self.brain_file
