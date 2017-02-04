@@ -146,10 +146,9 @@ def batch_learn_from_singlenick(folder, nick, brainfile):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="A script to quickly teach a new markov brain from a folder of text files.")
-    parser.add_argument("-t", "--target_folder", help="The folder to read through.", type=str)
-    parser.add_argument("-f", "--filename", help="The filename to use for output.", type=str, default="output")
-    parser.add_argument("-s", "--singlenick", help="Only use lines from one nick (and other like it) in the logs.", action="store_true")
-    parser.add_argument("-n", "--nick", help="The nick to use for singlenick execution", type=str, default="None")
+    parser.add_argument("target_folder", help="The folder to read through.", type=str)
+    parser.add_argument("filename", help="The filename to use for output.", type=str)
+    parser.add_argument("-s", "--singlenick", help="Only use lines from this (and others like it) in the logs.", type=str)
     parser.add_argument("-p", "--parse", help="Don't train a brain, instead output logs as a file of newline-separated text.", action="store_true")
     options = parser.parse_args()
 
