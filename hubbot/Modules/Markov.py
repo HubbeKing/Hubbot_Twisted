@@ -5,6 +5,7 @@ from hubbot.moduleinterface import ModuleInterface
 from hubbot.response import IRCResponse, ResponseType
 from cobe.brain import Brain
 import os
+import unicodedata
 
 
 class Markov(ModuleInterface):
@@ -51,7 +52,9 @@ class Markov(ModuleInterface):
 
     @staticmethod
     def _clean_up_string(string):
-        new_string = "".join(c for c in string if ord(c) >= 0x20).lstrip("~").lstrip("!").lstrip(".").lstrip("@")
+        new_string = "".join(c for c in string if ord(c) >= 0x20)
+        while unicodedata.category(new_string[0]) not in ["Ll", "Lu"]:
+            new_string = new_string[1:]
         return new_string.replace("(.+.+)", "")
 
     def on_trigger(self, message):
