@@ -2,5 +2,5 @@ PyYAML==3.12
 Twisted[tls]==16.6.0
 enum34==1.1.6
 pytimeparse==1.1.5
-cobe==2.1.2
 requests==2.12.3
+tensorflow==0.12.1
