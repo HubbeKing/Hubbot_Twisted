@@ -50,7 +50,7 @@ class RNNChatter(ModuleInterface):
                     new_list = [item for item in reply_list if nick not in item]
                     new_list.insert(nick_index, message.user.name)
                     reply = " ".join(new_list)
-            reply = self._clean_up_string(reply)
+            reply = self._clean_up_string(reply).replace("\n", " ")
             return IRCResponse(ResponseType.SAY, reply.capitalize(), message.reply_to)
 
     @staticmethod
