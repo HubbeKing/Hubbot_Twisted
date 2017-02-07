@@ -2,7 +2,10 @@ from __future__ import unicode_literals
 from hubbot.moduleinterface import ModuleInterface
 from hubbot.response import IRCResponse, ResponseType
 from hubbot.Utils.RNN.model import Model
-import cPickle
+try:
+    import cPickle as pickle
+except ImportError:
+    import pickle
 import os
 import tensorflow as tf
 import unicodedata
@@ -20,8 +23,8 @@ class RNNChatter(ModuleInterface):
 
     def on_load(self):
         try:
-            saved_args = cPickle.load(os.path.join(self.save_dir, "config.pkl"))
-            self.chars, self.vocab = cPickle.load(os.path.join(self.save_dir, "chars_vocab.pkl"))
+            saved_args = pickle.load(os.path.join(self.save_dir, "config.pkl"))
+            self.chars, self.vocab = pickle.load(os.path.join(self.save_dir, "chars_vocab.pkl"))
             self.model = Model(saved_args, True)
         except:
             self.bot.logger.exception("Exception when loading module 'RNNChatter'")
