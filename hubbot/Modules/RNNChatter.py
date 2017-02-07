@@ -13,16 +13,19 @@ class RNNChatter(ModuleInterface):
     save_dir = os.path.join("hubbot", "data", "RNN")
 
     def __init__(self, bot):
-        self.bot = bot
         self.model = None
         self.chars = None
         self.vocab = None
         super(RNNChatter, self).__init__(bot)
 
     def on_load(self):
-        saved_args = cPickle.load(os.path.join(self.save_dir, "config.pkl"))
-        self.chars, self.vocab = cPickle.load(os.path.join(self.save_dir, "chars_vocab.pkl"))
-        self.model = Model(saved_args, True)
+        try:
+            saved_args = cPickle.load(os.path.join(self.save_dir, "config.pkl"))
+            self.chars, self.vocab = cPickle.load(os.path.join(self.save_dir, "chars_vocab.pkl"))
+            self.model = Model(saved_args, True)
+        except:
+            self.bot.logger.exception("Exception when loading module 'RNNChatter'")
+            self.bot.modulehandler.unload_module("RNNChatter")
 
     def should_trigger(self, message):
         if message.type in self.accepted_types:
