@@ -4,6 +4,7 @@ import datetime
 import logging
 import os
 import sys
+import unicodedata
 from cobe.brain import Brain
 from stringutils import delta_time_to_string
 
@@ -82,6 +83,10 @@ def filter_log_lines(raw_lines):
         newline = decoded_line.split("]", 1)[1].strip()
         nick_start_index = newline.find("<")
         nick_end_index = newline.find(">")
+        for char in newline:
+            if unicodedata.category(char)[0] not in ["L", "M", "N", "P", "S", "Z"]:
+                # if character isn't a letter, mark, number, punctuation, symbol, or separator, remove it
+                newline = newline.replace(newline, "")
         if nick_start_index == 0 and nick_end_index != -1 and newline[nick_start_index:nick_end_index + 1].lower() not in bots:
             filtered_lines.append(newline[nick_end_index + 1:].lstrip())
     return filtered_lines
