@@ -49,7 +49,7 @@ class RNNChatter(ModuleInterface):
                 ckpt = tf.train.get_checkpoint_state(self.save_dir)
                 if ckpt and ckpt.model_checkpoint_path:
                     saver.restore(sess, ckpt.model_checkpoint_path)
-                    reply = self.model.sample(sess, self.chars, self.vocab, 50, prime_string, 2)
+                    reply = self.model.sample(sess, self.chars, self.vocab, 100, prime_string, 2)
             nick_list = [nick.lower() for nick in self.bot.channels[message.reply_to].users.keys()]
             for nick in nick_list:
                 if nick in reply.lower():
@@ -59,6 +59,8 @@ class RNNChatter(ModuleInterface):
                     new_list.insert(nick_index, message.user.name)
                     reply = " ".join(new_list)
             reply = self._clean_up_string(reply).replace("\n", " ")
+            if reply.startswith(prime_string.lower()):
+                reply = reply.replace(prime_string.lower(), "")
             return IRCResponse(ResponseType.SAY, reply.capitalize(), message.reply_to)
 
     @staticmethod
