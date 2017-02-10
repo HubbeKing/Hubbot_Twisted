@@ -23,8 +23,10 @@ class RNNChatter(ModuleInterface):
 
     def on_load(self):
         try:
-            saved_args = pickle.load(os.path.join(self.save_dir, "config.pkl"))
-            self.chars, self.vocab = pickle.load(os.path.join(self.save_dir, "chars_vocab.pkl"))
+            with open(os.path.join(self.save_dir, "config.pkl", "rb")) as config:
+                saved_args = pickle.load(config)
+            with open(os.path.join(self.save_dir, "chars_vocal.pkl", "rb")) as chars_vocab:
+                self.chars, self.vocab = pickle.load(chars_vocab)
             self.model = Model(saved_args, True)
         except:
             self.bot.logger.exception("Exception when loading module 'RNNChatter'")
