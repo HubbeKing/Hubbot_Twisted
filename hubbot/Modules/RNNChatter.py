@@ -32,6 +32,11 @@ class RNNChatter(ModuleInterface):
             self.bot.logger.exception("Exception when loading module 'RNNChatter'")
             self.bot.module_handler.unload_module("RNNChatter")
 
+    def on_unload(self):
+        self.chars = None
+        self.vocab = None
+        self.model = None
+
     def should_trigger(self, message):
         if message.type in self.accepted_types:
             return True
