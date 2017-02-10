@@ -47,16 +47,14 @@ class RNNChatter(ModuleInterface):
         """
         if self.bot.nickname.lower() in message.message_string.lower() and len(message.message_list) > 1:
             reply = ""
-            prime_string = message.message_string
             with tf.Session() as sess:
                 tf.global_variables_initializer().run()
                 saver = tf.train.Saver(tf.global_variables())
                 ckpt = tf.train.get_checkpoint_state(self.save_dir)
                 if ckpt and ckpt.model_checkpoint_path:
                     saver.restore(sess, ckpt.model_checkpoint_path)
-                    reply = self.model.sample(sess, self.chars, self.vocab, 100, prime_string, 2)
-            if reply.startswith(prime_string.lower()):
-                reply = reply.lower().replace(prime_string.lower(), "")
+                    reply = self.model.sample(sess, self.chars, self.vocab, num=115, sampling_type=2)
+                    reply = reply[:reply.rfind(" ")]
             nick_list = [nick.lower() for nick in self.bot.channels[message.reply_to].users.keys()]
             for nick in nick_list:
                 if nick in reply.lower():
