@@ -78,11 +78,16 @@ def filter_log_lines(raw_lines):
     filtered_lines = []
     for line in raw_lines:
         decoded_line = line.decode("utf-8", errors="ignore")
-        if "://" in decoded_line:
+        if "://" in decoded_line or "www." in decoded_line or ".com" in decoded_line:
+            # let's try our damndest to ignore things that contain hyperlinks
             continue
         newline = decoded_line.split("]", 1)[1].strip()
         nick_start_index = newline.find("<")
         nick_end_index = newline.find(">")
+        if unicodedata.category(newline[0])[0] not in ["L"]:
+            # let's filter out all lines that look like they might just be emoticons or bot commands
+            # filtering out everything that doesn't start with a letter seems like a good start?
+            continue
         for char in newline:
             if unicodedata.category(char)[0] not in ["L", "M", "N", "P", "S", "Z"]:
                 # if character isn't a letter, mark, number, punctuation, symbol, or separator, remove it
