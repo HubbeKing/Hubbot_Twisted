@@ -84,16 +84,18 @@ def filter_log_lines(raw_lines):
         newline = decoded_line.split("]", 1)[1].strip()
         nick_start_index = newline.find("<")
         nick_end_index = newline.find(">")
-        if unicodedata.category(newline[nick_end_index + 1:].lstrip()[0])[0] != "L":
-            # if the line after the nick starts with a non-letter, it's probably something weird
-            # like an emoticon or a bot command
-            continue
         for char in newline:
             if unicodedata.category(char)[0] not in ["L", "M", "N", "P", "S", "Z"]:
                 # if character isn't a letter, mark, number, punctuation, symbol, or separator, remove it
                 newline = newline.replace(newline, "")
         if nick_start_index == 0 and nick_end_index != -1 and newline[nick_start_index:nick_end_index + 1].lower() not in bots:
             filtered_lines.append(newline[nick_end_index + 1:].lstrip())
+    for line in filtered_lines:
+        if line == "" or line == "\n":
+            filtered_lines.remove(line)
+        elif unicodedata.category(line[0])[0] != "L":
+            filtered_lines.remove(line)
+            # try to remove things that look like bot commands
     return filtered_lines
 
 
