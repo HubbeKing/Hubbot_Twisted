@@ -42,6 +42,6 @@ class Timer(ModuleInterface):
         @type message: hubbot.message.IRCMessage
         """
         if flag:
-            self.bot.moduleHandler.sendResponse(IRCResponse(ResponseType.SAY, "{}: Your {} second timer is up!".format(message.user.name, message.parameter_list[0]), message.reply_to))
+            self.bot.module_handler.send_response(IRCResponse(ResponseType.SAY, "{}: Your {} second timer is up!".format(message.user.name, message.parameter_list[0]), message.reply_to))
         else:
-            self.bot.moduleHandler.sendResponse(IRCResponse(ResponseType.SAY, "{}: Your {} timer is up!".format(message.user.name, " ".join(message.parameter_list)), message.reply_to))
+            self.bot.module_handler.send_response(IRCResponse(ResponseType.SAY, "{}: Your {} timer is up!".format(message.user.name, " ".join(message.parameter_list)), message.reply_to))
