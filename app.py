@@ -5,13 +5,6 @@ import argparse
 import logging
 import sys
 
-
-def exception_handler(type, value, tb):
-    if issubclass(type, KeyboardInterrupt):
-        sys.__excepthook__(type, value, tb)
-        return
-    logging.getLogger().exception("Uncaught exception.", exc_info=(type, value, tb))
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="A derpy Twisted IRC bot.")
     parser.add_argument("-c", "--config", help="The configuration file to user", type=str, default="hubbot.yaml")
@@ -30,7 +23,6 @@ if __name__ == "__main__":
         logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s', '%Y/%m/%d-%H:%M:%S'))
     fileHandler.setLevel(logging.ERROR)
     root_logger.addHandler(fileHandler)
-    sys.excepthook = exception_handler
 
     config = Config(options.config)
     try:
