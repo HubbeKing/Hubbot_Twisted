@@ -87,7 +87,7 @@ class Headcanon(ModuleInterface):
                         return_string = match.string
                         break
                 return IRCResponse(ResponseType.SAY, return_string, message.reply_to)
-            except:
+            except Exception:
                 return IRCResponse(ResponseType.SAY, return_string, message.reply_to)
 
         elif sub_command.lower() == "list":

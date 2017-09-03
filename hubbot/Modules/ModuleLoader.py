@@ -77,7 +77,7 @@ class ModuleLoader(ModuleInterface):
                         successes.append(self.bot.module_handler.module_case_map[module_name])
                     else:
                         failures.append(module_case_map[module_name])
-                except:
+                except Exception:
                     exceptions.append(module_case_map[module_name])
                     self.bot.logger.exception("Exception when loading module {!r}".format(module_case_map[module_name]))
 
@@ -96,7 +96,7 @@ class ModuleLoader(ModuleInterface):
                     continue
                 try:
                     self.bot.module_handler.load_module(name)
-                except:
+                except Exception:
                     self.bot.logger.exception("Exception when reloading module {!r}".format(name))
 
             return ["all modules"], [], []
@@ -113,7 +113,7 @@ class ModuleLoader(ModuleInterface):
                         successes.append(self.bot.module_handler.module_case_map[module_name])
                     else:
                         failures.append(module_case_map[module_name])
-                except:
+                except Exception:
                     exceptions.append(module_case_map[module_name])
                     self.bot.logger.exception("Exception when reloading module {!r}".format(module_case_map[module_name]))
 
@@ -133,7 +133,7 @@ class ModuleLoader(ModuleInterface):
                     successes.append(module_case_map[module_name])
                 else:
                     failures.append(module_case_map[module_name])
-            except:
+            except Exception:
                 exceptions.append(module_case_map[module_name])
                 self.bot.logger.exception("Exception when unloading module {!r}".format(module_case_map[module_name]))
 

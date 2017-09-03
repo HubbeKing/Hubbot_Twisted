@@ -51,7 +51,7 @@ class ModuleHandler(object):
                 elif response.type == ResponseType.RAW:
                     self.bot.logger.info("Sent raw {!r}".format(response.message))
                     self.bot.sendLine(response.message.encode("utf-8"))
-            except:
+            except Exception:
                 self.bot.logger.exception("Python Execution Error sending responses {!r}".format(responses))
 
     def handle_message(self, message):
@@ -166,7 +166,7 @@ class ModuleHandler(object):
         for new_module in modules_to_load:
             try:
                 self.load_module(new_module)
-            except:
+            except Exception:
                 self.bot.logger.exception("Exception when loading module {!r}".format(str(new_module)))
         self.bot.logger.info("Module loading complete.")
 

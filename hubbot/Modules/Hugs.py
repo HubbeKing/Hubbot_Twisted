@@ -113,7 +113,7 @@ class Hugs(ModuleInterface):
             for (user, hugCounts) in hug_dict.items():
                 try:
                     match = re.search(target, user, re.IGNORECASE)
-                except:
+                except Exception:
                     match = False
                 if match:
                     matches.append(match.string)

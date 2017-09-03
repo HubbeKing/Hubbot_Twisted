@@ -112,7 +112,7 @@ class RPG(ModuleInterface):
     def get_specific(self, table, number):
         try:
             choice = int(number)
-        except:
+        except Exception:
             return "I don't know what you mean by '{}'.".format(number)
         message_dict = {}
         with sqlite3.connect(self.bot.database_file) as conn:
@@ -160,7 +160,7 @@ class RPG(ModuleInterface):
             choice = int(line.split(" ")[-1])
             line = line.replace(line.split(" ")[-1], "", 1).strip()
             specific = True
-        except:
+        except Exception:
             choice = None
             specific = False
         with sqlite3.connect(self.bot.database_file) as conn:

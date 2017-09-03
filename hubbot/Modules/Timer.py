@@ -18,7 +18,7 @@ class Timer(ModuleInterface):
             try:
                 delay = int(message.parameter_list[0])
                 flag = True
-            except:
+            except Exception:
                 delay = timeparse(message.parameter_list[0])
         else:
             delay = timeparse(" ".join(message.parameter_list))
