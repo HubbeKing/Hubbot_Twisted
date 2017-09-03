@@ -33,8 +33,8 @@ class Triggers(ModuleInterface):
 
             else:
                 proper_name = self.bot.moduleHandler.moduleCaseMap[message.parameter_list[0].lower()]
-                module = self.bot.moduleHandler.modules[proper_name]
+                loaded_module = self.bot.moduleHandler.modules[proper_name]
 
                 return IRCResponse(ResponseType.SAY,
-                                   "Module {!r} contains the triggers: {}".format(proper_name, ", ".join(module.triggers)),
+                                   "Module {!r} contains the triggers: {}".format(proper_name, ", ".join(loaded_module.triggers)),
                                    message.reply_to)

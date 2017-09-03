@@ -11,7 +11,7 @@ class Config(object):
 
     def read_config(self):
         try:
-            with open(self.config_file, "r") as config:
+            with open(self.config_file, b"r") as config:
                 config_data = yaml.safe_load(config)
         except Exception as e:
             raise ConfigError(self.config_file, e)

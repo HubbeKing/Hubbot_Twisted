@@ -60,19 +60,19 @@ class ModuleHandler(object):
 
         @type message: hubbot.message.IRCMessage
         """
-        for module in sorted(self.modules.values(), key=operator.attrgetter("priority")):
+        for loaded_module in sorted(self.modules.values(), key=operator.attrgetter("priority")):
             try:
-                if module.should_trigger(message):
-                    if module.access_level == ModuleAccessLevel.ADMINS and len(self.bot.admins) != 0 and message.user.name not in self.bot.admins:
+                if loaded_module.should_trigger(message):
+                    if loaded_module.access_level == ModuleAccessLevel.ADMINS and len(self.bot.admins) != 0 and message.user.name not in self.bot.admins:
                         self.bot.logger.warning("User {!r} tried to use {!r} but was denied access.".format(message.user.name, message.command))
                         self.send_response(IRCResponse(ResponseType.SAY, "Only my admins may use that!", message.reply_to))
                     elif len(self.bot.ignores) == 0 or message.user.name not in self.bot.ignores:
                         self.bot.logger.debug("Responding to message {!r}".format(message.message_string))
-                        response = module.on_trigger(message)
+                        response = loaded_module.on_trigger(message)
                         self.send_response(response)
 
             except Exception as ex:
-                self.bot.logger.exception("Python Execution Error in {!r}".format(module.__class__.__name__))
+                self.bot.logger.exception("Python Execution Error in {!r}".format(loaded_module.__class__.__name__))
                 self.send_response(IRCResponse(ResponseType.SAY, "Python Execution Error - {!r}".format(ex.message), message.reply_to))
 
     def load_module(self, module_name):
@@ -97,16 +97,16 @@ class ModuleHandler(object):
             self.unload_module(module_name)
             already_loaded = True
 
-        module = importlib.import_module("hubbot.Modules." + module_list_case_map[module_name])
+        new_module = importlib.import_module("hubbot.Modules." + module_list_case_map[module_name])
 
-        reload(module)
+        reload(new_module)
 
-        class_ = getattr(module, module_list_case_map[module_name])
+        class_ = getattr(new_module, module_list_case_map[module_name])
 
         if already_loaded:
-            self.bot.logger.debug("Module {!r} reloaded.".format(module.__name__))
+            self.bot.logger.debug("Module {!r} reloaded.".format(new_module.__name__))
         else:
-            self.bot.logger.debug("Module {!r} loaded.".format(module.__name__))
+            self.bot.logger.debug("Module {!r} loaded.".format(new_module.__name__))
 
         constructed_module = class_(self.bot)
 
@@ -155,19 +155,19 @@ class ModuleHandler(object):
         modules_to_load = []
         for module_name in self.modules_to_load:
             if module_name.lower() == "all":
-                for module in ModuleHandler.get_all_modules():
-                    modules_to_load.append(module)
+                for existing_module in ModuleHandler.get_all_modules():
+                    modules_to_load.append(existing_module)
             elif module_name[0] != "-":
                 modules_to_load.append(module_name)
             else:
                 modules_to_load.remove(module_name[1:])
 
         self.bot.logger.info("Loading modules...")
-        for module in modules_to_load:
+        for new_module in modules_to_load:
             try:
-                self.load_module(module)
+                self.load_module(new_module)
             except:
-                self.bot.logger.exception("Exception when loading module {!r}".format(str(module)))
+                self.bot.logger.exception("Exception when loading module {!r}".format(str(new_module)))
         self.bot.logger.info("Module loading complete.")
 
     @staticmethod

@@ -86,10 +86,10 @@ class Alias(ModuleInterface):
                                        "'{}' is already a command!".format(message.parameter_list[0].lower()),
                                        message.reply_to)
 
-                if message.parameter_list[1].lower() not in self.bot.module_handler.mapped_triggers and \
-                                message.parameter_list[1].lower() not in self.aliases:
-                    return IRCResponse(ResponseType.SAY, "'{}' is not a valid command or alias!".format(
-                        message.parameter_list[1].lower()), message.reply_to)
+                if message.parameter_list[1].lower() not in self.bot.module_handler.mapped_triggers and message.parameter_list[1].lower() not in self.aliases:
+                    return IRCResponse(ResponseType.SAY,
+                                       "'{}' is not a valid command or alias!".format(message.parameter_list[1].lower()),
+                                       message.reply_to)
                 if message.parameter_list[0].lower() in self.aliases:
                     return IRCResponse(ResponseType.SAY,
                                        "'{}' is already an alias!".format(message.parameter_list[0].lower()),
@@ -101,8 +101,7 @@ class Alias(ModuleInterface):
                 self._new_alias(message.parameter_list[0].lower(), alias_params)
 
                 return IRCResponse(ResponseType.SAY,
-                                   "Created a new alias '{}' for '{}'.".format(message.parameter_list[0].lower(),
-                                                                               " ".join(message.parameter_list[1:])),
+                                   "Created a new alias '{}' for '{}'.".format(message.parameter_list[0].lower()," ".join(message.parameter_list[1:])),
                                    message.reply_to)
             elif message.command == "unalias":
                 if message.user.name not in self.bot.admins:
@@ -113,7 +112,8 @@ class Alias(ModuleInterface):
 
                 if message.parameter_list[0].lower() in self.aliases:
                     self._delete_alias(message.parameter_list[0].lower())
-                    return IRCResponse(ResponseType.SAY, "Deleted alias '{}'".format(message.parameter_list[0].lower()),
+                    return IRCResponse(ResponseType.SAY,
+                                       "Deleted alias '{}'".format(message.parameter_list[0].lower()),
                                        message.reply_to)
                 else:
                     return IRCResponse(ResponseType.SAY,
@@ -125,8 +125,8 @@ class Alias(ModuleInterface):
                     return IRCResponse(ResponseType.SAY, return_string, message.reply_to)
                 elif message.parameter_list[0].lower() in self.aliases:
                     return IRCResponse(ResponseType.SAY,
-                                       "{} is an alias for: {}".format(message.parameter_list[0].lower(), " ".join(
-                                           self.aliases[message.parameter_list[0].lower()])), message.reply_to)
+                                       "{} is an alias for: {}".format(message.parameter_list[0].lower(), " ".join(self.aliases[message.parameter_list[0].lower()])),
+                                       message.reply_to)
                 else:
                     return IRCResponse(ResponseType.SAY,
                                        "'{}' does not match any known alias!".format(message.parameter_list[0].lower()),
@@ -141,8 +141,9 @@ class Alias(ModuleInterface):
                                        "I have no alias called {!r}.".format(message.parameter_list[0].lower()),
                                        message.reply_to)
                 if len(message.parameter_list) == 1:
-                    return IRCResponse(ResponseType.SAY, "You didn't give me any help text to set for {!r}!".format(
-                        message.parameter_list[0].lower()), message.reply_to)
+                    return IRCResponse(ResponseType.SAY,
+                                       "You didn't give me any help text to set for {!r}!".format(message.parameter_list[0].lower()),
+                                       message.reply_to)
                 alias = message.parameter_list[0].lower()
                 alias_help = " ".join(message.parameter_list[1:])
                 self.alias_help_dict[alias] = alias_help
