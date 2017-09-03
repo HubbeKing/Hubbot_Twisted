@@ -41,7 +41,7 @@ def batch_learn(folder, brainfile):
     logger.info("Consolidating log files for easy learning...")
     try:
         consolidate_log_files(folder, "temp.txt")
-    except:
+    except Exception:
         logger.exception("Exception during file reading!")
     logger.info("File reading done, beginning brain batch learn...")
     with open("temp.txt") as temp_file:
@@ -59,17 +59,17 @@ def batch_learn(folder, brainfile):
 def consolidate_log_files(folder, output_filename):
     for log_file in os.listdir(folder):
         try:
-            with open(output_filename, "a+") as output_file:
+            with open(output_filename, b"a+") as output_file:
                 with open(os.path.join(folder, log_file)) as current_log:
                     raw_lines = current_log.readlines()
                     filtered_lines = filter_log_lines(raw_lines)
                     for line in filtered_lines:
                         try:
                             output_file.write(line + "\n")
-                        except:
+                        except Exception:
                             # this should only happen if we encounter weird chars, which we can probably skip
                             continue
-        except:
+        except Exception:
             raise
     return output_filename
 
@@ -102,7 +102,7 @@ def filter_log_lines(raw_lines):
 def consolidate_single_nick(folder, nick, filename):
     for log_file in os.listdir(folder):
         try:
-            with open(filename, "a+") as output_file:
+            with open(filename, b"a+") as output_file:
                 with open(os.path.join(folder, log_file)) as current_log:
                     raw_lines = current_log.readlines()
                     filtered_lines = []
@@ -122,10 +122,10 @@ def consolidate_single_nick(folder, nick, filename):
                     for line in filtered_lines:
                         try:
                             output_file.write(line + "\n")
-                        except:
+                        except Exception:
                             # this should only happen if we encounter weird chars, which we can probably skip
                             continue
-        except:
+        except Exception:
             raise
     return filename
 
@@ -144,7 +144,7 @@ def batch_learn_from_singlenick(folder, nick, brainfile):
     logger.info("Consolidating log files for easy learning...")
     try:
         consolidate_single_nick(folder, nick, "temp.txt")
-    except:
+    except Exception:
         logger.exception("Exception during file reading!")
     logger.info("File reading done, beginning brain batch learn...")
     with open("temp.txt") as temp_file:
