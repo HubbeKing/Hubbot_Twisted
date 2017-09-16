@@ -89,7 +89,7 @@ class Hugs(ModuleInterface):
                             c.execute("INSERT INTO hugs VALUES (?,?,?)", (giver, 1, 0))
                         else:
                             c.execute("UPDATE hugs SET given = given + 1 WHERE nick=?", (giver,))
-                        c.execute("SELECT count(*) FROM hugs WHER nick=?", (receiver,))
+                        c.execute("SELECT count(*) FROM hugs WHERE nick=?", (receiver,))
                         receiver_exists = c.fetchone()[0]
                         if receiver_exists == 0:
                             c.execute("INSERT INTO hugs VALUES (?,?,?)", (receiver, 0, 1))
