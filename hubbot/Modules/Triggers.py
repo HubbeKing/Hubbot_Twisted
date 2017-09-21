@@ -14,26 +14,26 @@ class Triggers(ModuleInterface):
         """
         if len(message.parameter_list) == 0:
             if message.user.name != message.reply_to:
-                return IRCResponse(ResponseType.SAY, "{} must be used over PM!".format(message.command),
-                                   message.reply_to)
+                response = ", ".join(sorted(self.bot.module_handler.mapped_triggers.keys()))
+                return IRCResponse(ResponseType.NOTICE, response, message.reply_to)
             else:
-                response = ", ".join(sorted(self.bot.moduleHandler.mappedTriggers.keys()))
+                response = ", ".join(sorted(self.bot.module_handler.mapped_triggers.keys()))
                 return IRCResponse(ResponseType.SAY, response, message.reply_to)
         else:
-            if message.parameter_list[0].lower() in self.bot.moduleHandler.mappedTriggers:
-                proper_name = self.bot.moduleHandler.mappedTriggers[message.parameter_list[0].lower()].__class__.__name__
+            if message.parameter_list[0].lower() in self.bot.module_handler.mapped_triggers:
+                proper_name = self.bot.module_handler.mapped_triggers[message.parameter_list[0].lower()].__class__.__name__
                 return IRCResponse(ResponseType.SAY,
-                                   "Module {!r} contains the triggers: {}".format(proper_name, ", ".join(self.bot.moduleHandler.mappedTriggers[message.parameter_list[0].lower()].triggers)),
+                                   "Module {!r} contains the triggers: {}".format(proper_name, ", ".join(self.bot.module_handler.mapped_triggers[message.parameter_list[0].lower()].triggers)),
                                    message.reply_to)
 
-            elif message.parameter_list[0].lower() not in self.bot.moduleHandler.moduleCaseMap:
+            elif message.parameter_list[0].lower() not in self.bot.module_handler.module_case_map:
                 return IRCResponse(ResponseType.SAY,
                                    "No module named {!r} is currently loaded!".format(message.parameter_list[0].lower()),
                                    message.reply_to)
 
             else:
-                proper_name = self.bot.moduleHandler.moduleCaseMap[message.parameter_list[0].lower()]
-                loaded_module = self.bot.moduleHandler.modules[proper_name]
+                proper_name = self.bot.module_handler.module_case_map[message.parameter_list[0].lower()]
+                loaded_module = self.bot.module_handler.modules[proper_name]
 
                 return IRCResponse(ResponseType.SAY,
                                    "Module {!r} contains the triggers: {}".format(proper_name, ", ".join(loaded_module.triggers)),

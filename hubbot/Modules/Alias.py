@@ -101,7 +101,7 @@ class Alias(ModuleInterface):
                 self._new_alias(message.parameter_list[0].lower(), alias_params)
 
                 return IRCResponse(ResponseType.SAY,
-                                   "Created a new alias '{}' for '{}'.".format(message.parameter_list[0].lower()," ".join(message.parameter_list[1:])),
+                                   "Created a new alias '{}' for '{}'.".format(message.parameter_list[0].lower(), " ".join(message.parameter_list[1:])),
                                    message.reply_to)
             elif message.command == "unalias":
                 if message.user.name not in self.bot.admins:

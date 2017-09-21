@@ -64,20 +64,20 @@ class Admin(ModuleInterface):
 
     def _new_admin(self, admin):
         self.bot.admins.append(admin)
-        with sqlite3.connect(self.bot.databaseFile) as conn:
+        with sqlite3.connect(self.bot.database_file) as conn:
             c = conn.cursor()
             c.execute("INSERT INTO admins VALUES (?)", (admin,))
             conn.commit()
 
     def _delete_admin(self, admin):
         self.bot.admins.remove(admin)
-        with sqlite3.connect(self.bot.databaseFile) as conn:
+        with sqlite3.connect(self.bot.database_file) as conn:
             c = conn.cursor()
             c.execute("DELETE FROM admins WHERE nick=?", (admin,))
             conn.commit()
 
     def _save_admins(self):
-        with sqlite3.connect(self.bot.databaseFile) as conn:
+        with sqlite3.connect(self.bot.database_file) as conn:
             c = conn.cursor()
             c.execute("DROP TABLE IF EXISTS admins")
             c.execute("CREATE TABLE admins (nick TEXT)")

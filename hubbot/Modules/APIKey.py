@@ -14,7 +14,7 @@ class APIKey(ModuleInterface):
         @type message: hubbot.message.IRCMessage
         """
         if len(message.parameter_list) == 2:
-            with sqlite3.connect(self.bot.databaseFile) as conn:
+            with sqlite3.connect(self.bot.database_file) as conn:
                 c = conn.cursor()
                 c.execute("CREATE TABLE IF NOT EXISTS keys (name text, apikey text)")
                 c.execute("INSERT OR REPLACE INTO keys VALUES (?,?)", (message.parameter_list[0], message.parameter_list[1]))
