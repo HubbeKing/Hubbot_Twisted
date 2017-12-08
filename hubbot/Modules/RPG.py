@@ -50,7 +50,7 @@ class RPG(ModuleInterface):
         with sqlite3.connect(self.bot.database_file) as conn:
             c = conn.cursor()
             c.execute("CREATE TABLE IF NOT EXISTS pathfinder (id int, message text)")
-            c.execute("CREATE TABLE IF NOT EXISTS sprawl (id int, message text")
+            c.execute("CREATE TABLE IF NOT EXISTS sprawl (id int, message text)")
             c.execute("CREATE TABLE IF NOT EXISTS welch (id int, message text)")
             conn.commit()
         self.api_key = self.get_api_key()
