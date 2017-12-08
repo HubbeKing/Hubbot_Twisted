@@ -49,9 +49,9 @@ class RPG(ModuleInterface):
         self.triggers = self.campaigns.keys()
         with sqlite3.connect(self.bot.database_file) as conn:
             c = conn.cursor()
-            c.execute("CREATE TABLE IF NOT EXISTS pathfinder (id int, message text)")
-            c.execute("CREATE TABLE IF NOT EXISTS sprawl (id int, message text)")
-            c.execute("CREATE TABLE IF NOT EXISTS welch (id int, message text)")
+            c.execute("CREATE TABLE IF NOT EXISTS pathfinder (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, message TEXT NOT NULL)")
+            c.execute("CREATE TABLE IF NOT EXISTS sprawl (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, message TEXT NOT NULL)")
+            c.execute("CREATE TABLE IF NOT EXISTS welch (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, message TEXT NOT NULL)")
             conn.commit()
         self.api_key = self.get_api_key()
 
