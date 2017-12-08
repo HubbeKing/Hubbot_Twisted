@@ -14,30 +14,24 @@ from hubbot.Utils.webutils import paste_ee
 class RPG(ModuleInterface):
     campaigns = {
         "pf": {"displayname": "Pathfinder", "tablename": "pathfinder", "isAddingAllowed": True},
-        "lp": {"displayname": "Let's Play", "tablename": "lp", "isAddingAllowed": True},
-        "mm": {"displayname": "Mutants & Masterminds", "tablename": "mm", "isAddingAllowed": True},
+        "sprawl": {"displayname": "SPRAWL", "tablename": "sprawl", "isAddingAllowed": True},
         "welch": {"displayname": "Welch", "tablename": "welch", "isAddingAllowed": False}
     }
     api_key = None
 
     def help(self, message):
         help_dict = {
-            "rpg": "pf/lp/mm/welch [number]/add <thing>/list [term]/search <term> -- Quotes and advice from various RPGs",
+            "rpg": "pf/sprawl/welch [number]/add <thing>/list [term]/search <term> -- Quotes and advice from various RPGs",
 
             "pf": "pf [number] -- Fetches a random or given entry from the Pathfinder list.",
             "pf add": "pf add <string> -- Adds the specified string as an entry in the Pathfinder list.",
             "pf list": "pf list [searchterm] -- Posts the Pathfinder list to paste.ee, with optional searchterm matching.",
             "pf search": "pf search <text> [number] -- Searches the Pathfinder list for the specified text, with optional numbered matching.",
 
-            "lp": "lp [number] -- Fetches a random or given entry from the Let's Play list.",
-            "lp add": "lp add <string> -- Adds the specified string as an entry in the Let's Play list.",
-            "lp list": "lp list [searchterm] -- Posts the Let's Play list to paste.ee, with optional searchterm matching.",
-            "lp search": "lp search <text> [number] -- Searches the Let's Play list for the specified text, with optional numbered matching.",
-
-            "mm": "mm [number] -- Fetches a random or given entry from the Mutants & Masterminds list.",
-            "mm add": "mm add <string> -- Adds the specified string as an entry in the Mutants & Masterminds list.",
-            "mm list": "mm list [searchterm] -- Posts the Mutants & Masterminds list to paste.ee, with optional searchterm matching.",
-            "mm search": "mm search <text> [number] -- Searches the Mutants & Masterminds list for the specified text, with optional numbered matching.",
+            "sprawl": "sprawl [number] -- Fetches a random or given entry from the SPRAWL list.",
+            "sprawl add": "sprawl add <string> -- Adds the specified string as an entry in the SPRAWL list.",
+            "sprawl list": "sprawl list [searchterm] -- Posts the SPRAWL list to paste.ee, with optional searchterm matching.",
+            "sprawl search": "sprawl search <text> [number] -- Searches the SPRAWL list for the specified text, with optional numbered matching.",
 
             "welch": "welch [number] -- Fetches a random or given entry from the Welch list.",
             "welch list": "welch list [searchterm] -- Posts the Welch list to paste.ee, with optional searchterm matching.",
@@ -55,9 +49,8 @@ class RPG(ModuleInterface):
         self.triggers = self.campaigns.keys()
         with sqlite3.connect(self.bot.database_file) as conn:
             c = conn.cursor()
-            c.execute("CREATE TABLE IF NOT EXISTS lp (id int, message text)")
-            c.execute("CREATE TABLE IF NOT EXISTS mm (id int, message text)")
             c.execute("CREATE TABLE IF NOT EXISTS pathfinder (id int, message text)")
+            c.execute("CREATE TABLE IF NOT EXISTS sprawl (id int, message text")
             c.execute("CREATE TABLE IF NOT EXISTS welch (id int, message text)")
             conn.commit()
         self.api_key = self.get_api_key()
