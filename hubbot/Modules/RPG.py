@@ -99,6 +99,8 @@ class RPG(ModuleInterface):
             c = conn.cursor()
             for row in c.execute("SELECT * FROM {}".format(table)):
                 message_dict[row[0]] = row[1]
+        if len(message_dict) == 0:
+            return "There are no entries in this list!"
         choice = random.choice(message_dict.keys())
         return "Entry #{}/{} - {}".format(str(choice), max(message_dict.keys()), message_dict[choice])
 
@@ -112,6 +114,8 @@ class RPG(ModuleInterface):
             c = conn.cursor()
             for row in c.execute("SELECT * FROM {}".format(table)):
                 message_dict[row[0]] = row[1]
+        if len(message_dict) == 0:
+            return "There are no entries in this list!"
         if choice in message_dict.keys():
             return "Entry #{}/{} - {}".format(str(choice), max(message_dict.keys()), message_dict[choice])
         else:
@@ -125,6 +129,8 @@ class RPG(ModuleInterface):
             c = conn.cursor()
             for row in c.execute("SELECT * FROM {}".format(table)):
                 message_dict[row[0]] = row[1]
+        if len(message_dict) == 0:
+            return "There are no entries in this list!"
         paste_string = ""
         if len(params) == 0:
             for number, string in message_dict.iteritems():
@@ -160,6 +166,8 @@ class RPG(ModuleInterface):
             c = conn.cursor()
             for row in c.execute("SELECT * FROM {}".format(table)):
                 message_dict[row[0]] = row[1]
+        if len(message_dict) == 0:
+            return "There are no entries in this list!"
         for number, text in message_dict.iteritems():
             match = re.search(line, text, re.IGNORECASE)
             if match:
