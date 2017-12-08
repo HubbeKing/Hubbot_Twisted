@@ -132,7 +132,8 @@ class ModuleHandler(object):
 
             if hasattr(self.modules[proper_name], "triggers"):
                 for trigger in self.modules[proper_name].triggers:
-                    del self.mapped_triggers[trigger]
+                    if trigger in self.mapped_triggers:
+                        del self.mapped_triggers[trigger]
 
             self.modules[proper_name].on_unload()
 
