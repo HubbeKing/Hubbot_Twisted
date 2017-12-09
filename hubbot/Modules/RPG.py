@@ -18,40 +18,34 @@ class RPG(ModuleInterface):
         "welch": {"displayname": "Welch", "tablename": "welch", "isAddingAllowed": False}
     }
     api_key = None
+    help_dict = {}
 
     def help(self, message):
-        help_dict = {
-            "rpg": "pf/sprawl/welch [number]/add <thing>/list [term]/search <term> -- Quotes and advice from various RPGs",
-
-            "pf": "pf [number] -- Fetches a random or given entry from the Pathfinder list.",
-            "pf add": "pf add <string> -- Adds the specified string as an entry in the Pathfinder list.",
-            "pf list": "pf list [searchterm] -- Posts the Pathfinder list to paste.ee, with optional searchterm matching.",
-            "pf search": "pf search <text> [number] -- Searches the Pathfinder list for the specified text, with optional numbered matching.",
-
-            "sprawl": "sprawl [number] -- Fetches a random or given entry from the SPRAWL list.",
-            "sprawl add": "sprawl add <string> -- Adds the specified string as an entry in the SPRAWL list.",
-            "sprawl list": "sprawl list [searchterm] -- Posts the SPRAWL list to paste.ee, with optional searchterm matching.",
-            "sprawl search": "sprawl search <text> [number] -- Searches the SPRAWL list for the specified text, with optional numbered matching.",
-
-            "welch": "welch [number] -- Fetches a random or given entry from the Welch list.",
-            "welch list": "welch list [searchterm] -- Posts the Welch list to paste.ee, with optional searchterm matching.",
-            "welch search": "welch search <text> [number] -- Searches the Welch list for the specified text, with optional numbered matching."
-        }
         if len(message.parameter_list) == 1:
             command = message.parameter_list[0].lower()
-            return help_dict[command]
+            return self.help_dict[command]
         else:
             command = u" ".join([word.lower() for word in message.parameter_list[:2]])
-            if command in help_dict:
-                return help_dict[command]
+            if command in self.help_dict:
+                return self.help_dict[command]
 
     def on_load(self):
+        """
+        Build up help dict, create SQLite tables if needed, and get Paste.ee API key from database
+        """
+        self.help_dict["rpg"] = "{} [number]/add <thing>/list [term]/search <term> -- Quotes and advices from various tabletop RPGs".format("/".join(self.campaigns.keys()))
+        for command, settings in self.campaigns.iteritems():
+            self.help_dict[command] = "{} [number] -- Fetches a random or given entry from the {} list.".format(command, settings["displayname"])
+            if settings["isAddingAllowed"]:
+                self.help_dict["{} add".format(command)] = "{} add <string> -- Adds the specified string as an entry in the {} list.".format(command, settings["displayname"])
+            self.help_dict["{} list".format(command)] = "{} list [search-term] -- Posts the {} list to paste.ee, with optional search-term matching".format(command, settings["displayname"])
+            self.help_dict["{} search".format(command)] = "{} search <text> [number] -- Searches the {} list for the specified text, with optional numbered matching.".format(command, settings["displayname"])
+
         self.triggers = self.campaigns.keys()
         with sqlite3.connect(self.bot.database_file) as conn:
             c = conn.cursor()
-            c.execute("CREATE TABLE IF NOT EXISTS pathfinder (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, message TEXT NOT NULL)")
-            c.execute("CREATE TABLE IF NOT EXISTS sprawl (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, message TEXT NOT NULL)")
-            c.execute("CREATE TABLE IF NOT EXISTS welch (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, message TEXT NOT NULL)")
+            for _, settings in self.campaigns.iteritems():
+                c.execute("CREATE TABLE IF NOT EXISTS {} (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, message TEXT NOT NULL)".format(settings["tablename"]))
             conn.commit()
         self.api_key = self.get_api_key()
 
