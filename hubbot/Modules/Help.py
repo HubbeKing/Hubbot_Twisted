@@ -14,13 +14,13 @@ class Help(ModuleInterface):
         if len(message.parameter_list) > 0:
             if message.parameter_list[0].lower() in self.bot.module_handler.module_case_map:
                 func = self.bot.module_handler.modules[self.bot.module_handler.module_case_map[message.parameter_list[0].lower()]]
-                if isinstance(func.help, str) or isinstance(func.help, unicode):
+                if isinstance(func.help, basestring):
                     return IRCResponse(ResponseType.SAY, func.help, message.reply_to)
                 else:
                     return IRCResponse(ResponseType.SAY, func.help(message), message.reply_to)
             elif message.parameter_list[0].lower() in self.bot.module_handler.mapped_triggers:
                 func_help = self.bot.module_handler.mapped_triggers[message.parameter_list[0].lower()].help
-                if isinstance(func_help, str) or isinstance(func_help, unicode):
+                if isinstance(func_help, basestring):
                     return IRCResponse(ResponseType.SAY, func_help, message.reply_to)
                 else:
                     return IRCResponse(ResponseType.SAY, func_help(message), message.reply_to)
