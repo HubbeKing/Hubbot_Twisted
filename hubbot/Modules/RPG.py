@@ -30,8 +30,13 @@ class RPG(ModuleInterface):
                 return self.help_dict[command]
 
     def on_load(self):
+        self._build_help_dict()
+        self._create_tables()
+        self.api_key = self._get_api_key()
+
+    def _build_help_dict(self):
         """
-        Build up help dict, create SQLite tables if needed, and get Paste.ee API key from database
+        Builds the module help dict based on the module campaigns dict
         """
         self.help_dict["rpg"] = "{} [number]/add <thing>/list [term]/search <term> -- Quotes and advices from various tabletop RPGs".format("/".join(self.campaigns.keys()))
         for command, settings in self.campaigns.iteritems():
@@ -41,15 +46,17 @@ class RPG(ModuleInterface):
             self.help_dict["{} list".format(command)] = "{} list [search-term] -- Posts the {} list to paste.ee, with optional search-term matching".format(command, settings["displayname"])
             self.help_dict["{} search".format(command)] = "{} search <text> [number] -- Searches the {} list for the specified text, with optional numbered matching.".format(command, settings["displayname"])
 
-        self.triggers = self.campaigns.keys()
+    def _create_tables(self):
+        """
+        Ensures each of the campaigns in the campaigns dict has its needed table in the sqlite database
+        """
         with sqlite3.connect(self.bot.database_file) as conn:
             c = conn.cursor()
             for _, settings in self.campaigns.iteritems():
                 c.execute("CREATE TABLE IF NOT EXISTS {} (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, message TEXT NOT NULL)".format(settings["tablename"]))
             conn.commit()
-        self.api_key = self.get_api_key()
 
-    def get_api_key(self):
+    def _get_api_key(self):
         """
         Get the API key for paste.ee from the sqlite database.
         """
