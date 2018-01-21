@@ -19,6 +19,7 @@ class RPG(ModuleInterface):
     }
     api_key = None
     help_dict = {}
+    triggers = list(campaigns.keys())
 
     def help(self, message):
         if len(message.parameter_list) == 1:
@@ -32,7 +33,6 @@ class RPG(ModuleInterface):
     def on_load(self):
         self._build_help_dict()
         self._create_tables()
-        self.triggers = self.campaigns.keys()
         self.api_key = self._get_api_key()
 
     def _build_help_dict(self):
