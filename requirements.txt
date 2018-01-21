@@ -1,5 +1,5 @@
 PyYAML==3.12
-Twisted[tls]==17.5.0
+Twisted[tls]==17.9.0
 enum34==1.1.6
 pytimeparse==1.1.7
 requests==2.18.4
