@@ -12,4 +12,4 @@ class Unmask(ModuleInterface):
         """
         @type message: hubbot.message.IRCMessage
         """
-        return IRCResponse(ResponseType.RAW, "MODE {} -x".format(self.bot.nickname), message.replyTo)
+        return IRCResponse(ResponseType.RAW, "MODE {} -x".format(self.bot.nickname), message.reply_to)
