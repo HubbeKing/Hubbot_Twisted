@@ -1,6 +1,6 @@
-PyYAML==3.12
-Twisted[tls]==17.9.0
+PyYAML==3.13
+Twisted[tls]==18.9.0
 enum34==1.1.6
-pytimeparse==1.1.7
-requests==2.18.4
+pytimeparse==1.1.8
+requests==2.20.0
 cobe==2.1.2
