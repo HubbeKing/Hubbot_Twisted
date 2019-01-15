@@ -39,7 +39,7 @@ class Update(ModuleInterface):
 
         if "requirements.txt" in files_changed:
             pip = os.path.join(os.path.dirname(sys.executable), "pip")
-            return_code = subprocess.check_call([pip, "install", "-r", "requirements.txt"])
+            return_code = subprocess.check_call([pip, "install", "--update", "-r", "requirements.txt"])
 
             if return_code != 0:
                 return IRCResponse(ResponseType.SAY,
