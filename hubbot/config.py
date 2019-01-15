@@ -1,5 +1,5 @@
 from __future__ import unicode_literals
-import yaml
+from ruamel.yaml import YAML
 
 _required = ["address"]
 
@@ -12,7 +12,8 @@ class Config(object):
     def read_config(self):
         try:
             with open(self.config_file, b"r") as config:
-                config_data = yaml.safe_load(config)
+                yaml = YAML(typ="safe")
+                config_data = yaml.load(config)
         except Exception as e:
             raise ConfigError(self.config_file, e)
         self._validate_config(config_data)
