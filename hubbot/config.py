@@ -1,4 +1,4 @@
-from ruamel.yaml import YAML
+import toml
 
 _required = ["address"]
 
@@ -10,9 +10,7 @@ class Config(object):
 
     def read_config(self):
         try:
-            with open(self.config_file, "r") as config:
-                yaml = YAML(typ="safe")
-                config_data = yaml.load(config)
+            config_data = toml.load(self.config_file)
         except Exception as e:
             raise ConfigError(self.config_file, e)
         self._validate_config(config_data)

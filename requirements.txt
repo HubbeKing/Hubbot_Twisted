@@ -3,5 +3,5 @@ Cython
 pytimeparse
 git+https://github.com/andreasvc/pyre2.git#egg=re2
 requests
-ruamel.yaml
+toml
 Twisted[tls]

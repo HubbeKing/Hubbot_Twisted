@@ -14,7 +14,7 @@ HOW TO USE:
 1. Install your preferred version of Python 3.6
 2. Install a virtualenv and activate it
 3. Run `pip install -r requirements.txt`. inside said virtualenv
-4. Create a config file from hubbot.yaml.example
+4. Create a config file from hubbot.toml.example
 5. Use said virtualenv to run `python app.py -c configFileName`
 
 
