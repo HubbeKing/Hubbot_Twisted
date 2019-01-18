@@ -1,4 +1,3 @@
-from __future__ import unicode_literals
 try:
     import re2 as re
 except ImportError:
@@ -40,7 +39,7 @@ class RPG(ModuleInterface):
         Builds the module help dict based on the module campaigns dict
         """
         self.help_dict["rpg"] = "{} [number]/add <thing>/list [term]/search <term> -- Quotes and advices from various tabletop RPGs".format("/".join(self.campaigns.keys()))
-        for command, settings in self.campaigns.iteritems():
+        for command, settings in self.campaigns.items():
             self.help_dict[command] = "{} [number] -- Fetches a random or given entry from the {} list.".format(command, settings["displayname"])
             if settings["isAddingAllowed"]:
                 self.help_dict["{} add".format(command)] = "{} add <string> -- Adds the specified string as an entry in the {} list.".format(command, settings["displayname"])
@@ -53,7 +52,7 @@ class RPG(ModuleInterface):
         """
         with sqlite3.connect(self.bot.database_file) as conn:
             c = conn.cursor()
-            for _, settings in self.campaigns.iteritems():
+            for _, settings in self.campaigns.items():
                 c.execute("CREATE TABLE IF NOT EXISTS {} (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, message TEXT NOT NULL)".format(settings["tablename"]))
             conn.commit()
 
@@ -135,10 +134,10 @@ class RPG(ModuleInterface):
             return "There are no entries in this list!"
         paste_string = ""
         if len(params) == 0:
-            for number, string in message_dict.iteritems():
+            for number, string in message_dict.items():
                 paste_string += str(number) + ". " + string + "\n"
         else:
-            for number, string in message_dict.iteritems():
+            for number, string in message_dict.items():
                 match = re.search(params, string, re.IGNORECASE)
                 if match:
                     paste_string += str(number) + ". " + string + "\n"
@@ -170,10 +169,10 @@ class RPG(ModuleInterface):
                 message_dict[row[0]] = row[1]
         if len(message_dict) == 0:
             return "There are no entries in this list!"
-        for number, text in message_dict.iteritems():
+        for number, text in message_dict.items():
             match = re.search(line, text, re.IGNORECASE)
             if match:
-                for nr, txt in message_dict.iteritems():
+                for nr, txt in message_dict.items():
                     if txt == match.string:
                         found_number = nr
                         matches.append("{}. {}".format(found_number, match.string))

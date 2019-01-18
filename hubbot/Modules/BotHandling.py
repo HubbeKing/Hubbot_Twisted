@@ -1,4 +1,3 @@
-from __future__ import unicode_literals
 import datetime
 import os
 import sys
@@ -26,13 +25,13 @@ class BotHandling(ModuleInterface):
             if datetime.datetime.utcnow() - self.bot.start_time > datetime.timedelta(seconds=10):
                 self.bot.quitting = True
                 reactor.addSystemEventTrigger("after", "shutdown", lambda: os.execl(sys.executable, sys.executable, *sys.argv))
-                self.bot.quit("Restarting...".encode("utf-8"))
+                self.bot.quit("Restarting...")
                 reactor.callLater(2.0, reactor.stop)
                 return
 
         elif message.command == "shutdown":
             if datetime.datetime.utcnow() - self.bot.start_time > datetime.timedelta(seconds=10):
                 self.bot.quitting = True
-                self.bot.quit("Shutting down...".encode("utf-8"))
+                self.bot.quit("Shutting down...")
                 reactor.callLater(2.0, reactor.stop)
                 return

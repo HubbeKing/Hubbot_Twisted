@@ -1,12 +1,11 @@
-from __future__ import unicode_literals
 import argparse
 import datetime
 import logging
 import os
 import sys
 import unicodedata
-from cobe.brain import Brain
-from stringutils import delta_time_to_string
+from cobe_hubbot.brain import Brain
+from hubbot.Utils.stringutils import delta_time_to_string
 
 bots = ["ames", "bojii", "diderobot", "ekimbot", "harbot", "hubbot", "nopebot", "memebot", "pyheufybot",
         "re_heufybot", "heufybot", "pymoronbot", "moronbot", "robobo", "safebot", "unsafebot"]
@@ -59,7 +58,7 @@ def batch_learn(folder, brainfile):
 def consolidate_log_files(folder, output_filename):
     for log_file in os.listdir(folder):
         try:
-            with open(output_filename, b"a+") as output_file:
+            with open(output_filename, "a+") as output_file:
                 with open(os.path.join(folder, log_file)) as current_log:
                     raw_lines = current_log.readlines()
                     filtered_lines = filter_log_lines(raw_lines)
@@ -102,15 +101,14 @@ def filter_log_lines(raw_lines):
 def consolidate_single_nick(folder, nick, filename):
     for log_file in os.listdir(folder):
         try:
-            with open(filename, b"a+") as output_file:
+            with open(filename, "a+") as output_file:
                 with open(os.path.join(folder, log_file)) as current_log:
                     raw_lines = current_log.readlines()
                     filtered_lines = []
                     for line in raw_lines:
-                        decoded_line = line.decode("utf-8", errors="ignore")
-                        if "://" in decoded_line:
+                        if "://" in line:
                             continue
-                        newline = decoded_line.split("]", 1)[1].strip()
+                        newline = line.split("]", 1)[1].strip()
                         nick_start_index = newline.find("<")
                         nick_end_index = newline.find(">")
                         for char in newline:

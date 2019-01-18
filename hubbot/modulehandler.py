@@ -1,4 +1,3 @@
-from __future__ import unicode_literals
 import importlib
 from glob import glob
 import operator
@@ -40,17 +39,17 @@ class ModuleHandler(object):
         for response in responses:
             try:
                 if response.type == ResponseType.SAY:
-                    self.bot.msg(response.target.encode("utf-8"), response.message.encode("utf-8"))
+                    self.bot.msg(response.target, response.message)
                     self.bot.logger.info('{} | <{}> {}'.format(response.target, self.bot.nickname, response.message))
                 elif response.type == ResponseType.DO:
-                    self.bot.describe(response.target.encode("utf-8"), response.message.encode("utf-8"))
+                    self.bot.describe(response.target, response.message)
                     self.bot.logger.info('{} | *{} {}*'.format(response.target, self.bot.nickname, response.message))
                 elif response.type == ResponseType.NOTICE:
-                    self.bot.notice(response.target.encode("utf-8"), response.message.encode("utf-8"))
+                    self.bot.notice(response.target, response.message)
                     self.bot.logger.info('{} | [{}] {}'.format(response.target, self.bot.nickname, response.message))
                 elif response.type == ResponseType.RAW:
                     self.bot.logger.info("Sent raw {!r}".format(response.message))
-                    self.bot.sendLine(response.message.encode("utf-8"))
+                    self.bot.sendLine(response.message)
             except Exception:
                 self.bot.logger.exception("Python Execution Error sending responses {!r}".format(responses))
 
@@ -73,7 +72,7 @@ class ModuleHandler(object):
 
             except Exception as ex:
                 self.bot.logger.exception("Python Execution Error in {!r}".format(loaded_module.__class__.__name__))
-                self.send_response(IRCResponse(ResponseType.SAY, "Python Execution Error - {!r}".format(ex.message), message.reply_to))
+                self.send_response(IRCResponse(ResponseType.SAY, "Python Execution Error - {!r}".format(ex), message.reply_to))
 
     def load_module(self, module_name):
         """
@@ -99,7 +98,7 @@ class ModuleHandler(object):
 
         new_module = importlib.import_module("hubbot.Modules." + module_list_case_map[module_name])
 
-        reload(new_module)
+        importlib.reload(new_module)
 
         class_ = getattr(new_module, module_list_case_map[module_name])
 

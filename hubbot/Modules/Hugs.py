@@ -1,4 +1,3 @@
-from __future__ import unicode_literals
 from hubbot.moduleinterface import ModuleInterface
 from hubbot.response import IRCResponse, ResponseType
 import sqlite3
@@ -49,7 +48,7 @@ class Hugs(ModuleInterface):
             for row in c.fetchall():
                 temp_dict[row[0]] = [row[1], row[2]]
             consolidated_hugs_count = [0, 0]
-            for nick, hug_list in temp_dict.iteritems():
+            for nick, hug_list in temp_dict.items():
                 c.execute("DELETE FROM hugs WHERE nick=?", (nick,))
                 consolidated_hugs_count[0] += hug_list[0]
                 consolidated_hugs_count[1] += hug_list[1]

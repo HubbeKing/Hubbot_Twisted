@@ -1,4 +1,3 @@
-from __future__ import unicode_literals
 from enum import Enum
 
 
@@ -12,11 +11,11 @@ class ResponseType(Enum):
 class IRCResponse(object):
     def __init__(self, message_type, message, target):
         self.type = message_type
-        try:
-            self.message = unicode(message, "utf-8")
-        except TypeError:
+        if isinstance(message, bytes):
+            self.message = message.decode("utf-8", "ignore")
+        else:
             self.message = message
-        try:
-            self.target = unicode(target, "utf-8")
-        except TypeError:
+        if isinstance(target, bytes):
+            self.target = target.decode("utf-8", "ignore")
+        else:
             self.target = target

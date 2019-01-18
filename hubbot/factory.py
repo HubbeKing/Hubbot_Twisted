@@ -1,4 +1,3 @@
-from __future__ import unicode_literals
 from twisted.internet import protocol, reactor
 try:
     from twisted.internet import ssl

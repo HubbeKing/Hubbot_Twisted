@@ -1,4 +1,3 @@
-from __future__ import unicode_literals
 from collections import OrderedDict
 
 
@@ -23,5 +22,5 @@ def delta_time_to_string(time_delta, resolution='m'):
         else:
             return '{0} {1}'.format(duration, duration_word)
 
-    delta_string = ' '.join([lex(word, number) for word, number in d.iteritems() if number > 0])
+    delta_string = ' '.join([lex(word, number) for word, number in d.items() if number > 0])
     return delta_string if len(delta_string) > 0 else 'seconds'

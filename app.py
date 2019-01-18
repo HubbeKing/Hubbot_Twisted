@@ -1,4 +1,3 @@
-from __future__ import unicode_literals
 from hubbot.config import Config, ConfigError
 from hubbot.factory import HubbotFactory
 import argparse

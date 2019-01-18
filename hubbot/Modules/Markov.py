@@ -1,9 +1,8 @@
-from __future__ import unicode_literals
 from twisted.internet import reactor
 from hubbot.message import TargetTypes
 from hubbot.moduleinterface import ModuleInterface
 from hubbot.response import IRCResponse, ResponseType
-from cobe.brain import Brain
+from cobe_hubbot.brain import Brain
 import os
 import unicodedata
 
@@ -62,8 +61,10 @@ class Markov(ModuleInterface):
         @type message: hubbot.message.IRCMessage
         """
         if message.command == "markov" and message.user.name in self.bot.admins:
+            available_brains = os.listdir(os.path.join("hubbot", "data", "brains"))
+            available_brains = sorted([brain.split(".")[0] for brain in available_brains if brain.endswith(".brain")])
+
             if len(message.parameter_list) == 2 and message.parameter_list[0].lower() == "load":
-                available_brains = sorted([brain.split(".", 1)[0] for brain in os.listdir(os.path.join("hubbot", "data", "brains")) if brain.split(".", 1)[1] == "brain"])
                 if message.parameter_list[1] in available_brains:
                     self.brain = None
                     self.brain = Brain(os.path.join("hubbot", "data", "brains", "{}.brain".format(message.parameter_list[1])))
@@ -72,13 +73,14 @@ class Markov(ModuleInterface):
                 else:
                     return IRCResponse(ResponseType.SAY, "That's not a brain that I have on file.", message.reply_to), \
                            IRCResponse(ResponseType.NOTICE, "Available brains are: {}".format(", ".join(available_brains)), message.user.name)
+
             elif len(message.parameter_list) == 1 and message.parameter_list[0].lower() == "unload":
                 self.brain = None
                 old_name = self.brain_file
                 self.brain_file = ""
                 return IRCResponse(ResponseType.SAY, "Successfully unloaded markov brain {}".format(old_name), message.reply_to)
+
             else:
-                available_brains = sorted([brain.split(".", 1)[0] for brain in os.listdir(os.path.join("hubbot", "data", "brains")) if brain.split(".", 1)[1] == "brain"])
                 return IRCResponse(ResponseType.SAY,
                                    "Current loaded brain is {}".format(self.brain_file),
                                    message.reply_to), \

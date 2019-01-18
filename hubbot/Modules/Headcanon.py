@@ -1,4 +1,3 @@
-from __future__ import unicode_literals
 import random
 try:
     import re2 as re
