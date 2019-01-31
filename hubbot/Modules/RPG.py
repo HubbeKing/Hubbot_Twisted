@@ -102,7 +102,7 @@ class RPG(ModuleInterface):
                 message_dict[row[0]] = row[1]
         if len(message_dict) == 0:
             return "There are no entries in this list!"
-        choice = random.choice(message_dict.keys())
+        choice = random.choice(list(message_dict.keys()))
         return "Entry #{}/{} - {}".format(str(choice), max(message_dict.keys()), message_dict[choice])
 
     def get_specific(self, table, number):
