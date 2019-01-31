@@ -137,7 +137,7 @@ class Hubbot(irc.IRCClient):
     def irc_PART(self, prefix, params):
         part_message = ""
         if len(params) > 1:
-            part_message = ", message: {}".format(" ".join(param.decode(encoding="utf-8", errors="ignore") for param in params[1:]))
+            part_message = ", message: {}".format(" ".join(param for param in params[1:]))
         channel = self.get_channel(params[0])
         if channel is None:
             channel = IRCChannel(params[0])
@@ -153,7 +153,7 @@ class Hubbot(irc.IRCClient):
     def irc_KICK(self, prefix, params):
         kick_message = ""
         if len(params) > 2:
-            kick_message = ", message: {}".format(" ".join(param.decode(encoding="utf-8", errors="ignore") for param in params[2:]))
+            kick_message = ", message: {}".format(" ".join(param for param in params[2:]))
 
         channel = self.get_channel(params[0])
         message = IRCMessage("KICK", prefix, channel, kick_message, self)
@@ -169,7 +169,7 @@ class Hubbot(irc.IRCClient):
     def irc_QUIT(self, prefix, params):
         quit_message = ""
         if len(params) > 0:
-            quit_message = ", message: {}".format(" ".join(param.decode(encoding="utf-8", errors="ignore") for param in params[0:]))
+            quit_message = ", message: {}".format(" ".join(param for param in params[0:]))
         for key in self.channels:
             channel = self.channels[key]
             message = IRCMessage("QUIT", prefix, channel, quit_message, self)
@@ -179,7 +179,7 @@ class Hubbot(irc.IRCClient):
                     del channel.ranks[message.user.name]
             self.module_handler.handle_message(message)
 
-    def irc_ERRROR(self, prefix, params):
+    def irc_ERROR(self, prefix, params):
         self.logger.error(" ".join(params))
 
     def nickChanged(self, nick):
