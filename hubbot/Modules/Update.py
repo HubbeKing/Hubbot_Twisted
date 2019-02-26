@@ -18,7 +18,7 @@ class Update(ModuleInterface):
 
         output = subprocess.check_output(['git', 'log', '--no-merges',
                                           '--pretty=format:%s', '..origin/master'])
-        changes = [s.strip() for s in output.splitlines()]
+        changes = [s.strip().decode('utf-8', 'ignore') for s in output.splitlines()]
 
         if len(changes) == 0:
             return IRCResponse(ResponseType.SAY, "The bot is already up to date.", message.reply_to)
@@ -27,7 +27,7 @@ class Update(ModuleInterface):
         response = "New Commits: {}".format(" | ".join(changes))
 
         output = subprocess.check_output(['git', 'show', '--pretty=format:', '--name-only', '..origin/master'])
-        files_changed = [s.strip() for s in output.splitlines()]
+        files_changed = [s.strip().decode('utf-8', 'ignore') for s in output.splitlines()]
 
         return_code = subprocess.check_call(['git', 'merge', 'origin/master'])
 
