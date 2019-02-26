@@ -21,7 +21,7 @@ class Timer(ModuleInterface):
                 delay = timeparse(message.parameter_list[0])
         else:
             delay = timeparse(" ".join(message.parameter_list))
-        if delay <= 0 or delay is None:
+        if delay is None or delay <= 0:
             return IRCResponse(ResponseType.SAY, "I don't think I understand that...", message.reply_to)
         elif delay > (60 * 60 * 24 * 365):
             return IRCResponse(ResponseType.SAY, "Do you really need a timer that long?", message.reply_to)
