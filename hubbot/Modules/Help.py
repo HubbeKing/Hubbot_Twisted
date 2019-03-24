@@ -26,7 +26,7 @@ class Help(ModuleInterface):
             else:
                 return IRCResponse(ResponseType.SAY, '"{}" not found, try "{}" without parameters to see a list of loaded modules'.format(message.parameter_list[0], message.command), message.reply_to)
         else:
-            funcs = ', '.join(sorted(self.bot.module_handler.modules.iterkeys(), key=lambda s: s.lower()))
+            funcs = ', '.join(sorted(self.bot.module_handler.modules.keys(), key=lambda s: s.lower()))
             return [IRCResponse(ResponseType.SAY, "Modules loaded are:", message.reply_to),
                     IRCResponse(ResponseType.SAY, funcs, message.reply_to),
                     IRCResponse(ResponseType.SAY, "Use {}help <module> for module commands.".format(self.bot.command_char), message.reply_to)]

@@ -56,7 +56,7 @@ class ModuleLoader(ModuleInterface):
         exceptions = []
 
         if len(module_names) == 1 and "all" in module_case_map:
-            for name, _ in self.bot.module_handler.modules.iteritems():
+            for name, _ in self.bot.module_handler.modules.items():
                 if name == "ModuleLoader":
                     continue
 
@@ -90,7 +90,7 @@ class ModuleLoader(ModuleInterface):
         exceptions = []
 
         if len(module_names) == 1 and "all" in module_case_map:
-            for name, _ in self.bot.module_handler.modules.iteritems():
+            for name, _ in self.bot.module_handler.modules.items():
                 if name == "ModuleLoader":
                     continue
                 try:
