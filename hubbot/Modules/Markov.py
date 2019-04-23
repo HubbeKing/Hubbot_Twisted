@@ -10,7 +10,6 @@ import unicodedata
 
 
 class Markov(ModuleInterface):
-    help = "Markov - Markov chain replies. Bot admins can use +markov load/unload to do brain surgery."
     accepted_types = ["PRIVMSG", "ACTION"]
 
     def __init__(self, bot):
@@ -20,6 +19,25 @@ class Markov(ModuleInterface):
         self.banwords_regex = re.compile(r"(?!)")
         # should match against nothing, making sure replies are still generated if we have no banned words
         super(Markov, self).__init__(bot)
+
+    def help(self, message):
+        """
+        @type message: hubbot.message.IRCMessage
+        """
+        help_dict = {
+            "load": "{}markov load <brain_file> - Swap the brainfile currently in use".format(self.bot.command_char),
+            "unload": "{}markov unload - Unload the brainfile, leaving the bot brainless.".format(self.bot.command_char),
+            "banword": "{}markov banword <word> - Ban a word from the bot, meaning any replies containing it will be discarded.".format(self.bot.command_char),
+            "banregex": "{}markov banregex <regex> - Ban a word or phrase from the bot using regex - any reply matching the regex will be discarded.".format(self.bot.command_char)
+        }
+        if len(message.parameter_list) == 1:
+            return "Markov - Markov chain replies. Generates replies when bot nick is mentioned. Subcommands: load, unload, banword, banregex"
+        else:
+            subcommand = message.parameter_list[1].lower()
+            if subcommand in help_dict:
+                return help_dict[subcommand]
+            return "Markov - Markov chain replies. Generates replies when bot nick is mentioned. Subcommands: load, unload, banword, banregex"
+
 
     def on_load(self):
         if self.bot.network is not None:
