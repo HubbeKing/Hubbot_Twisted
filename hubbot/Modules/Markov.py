@@ -28,7 +28,8 @@ class Markov(ModuleInterface):
             "load": "{}markov load <brain_file> - Swap the brainfile currently in use".format(self.bot.command_char),
             "unload": "{}markov unload - Unload the brainfile, leaving the bot brainless.".format(self.bot.command_char),
             "banword": "{}markov banword <word> - Ban a word from the bot, meaning any replies containing it will be discarded.".format(self.bot.command_char),
-            "banregex": "{}markov banregex <regex> - Ban a word or phrase from the bot using regex - any reply matching the regex will be discarded.".format(self.bot.command_char)
+            "banregex": "{}markov banregex <regex> - Ban a word or phrase from the bot using regex - any reply matching the regex will be discarded.".format(self.bot.command_char),
+            "clearbans": "{}markov clearbans - Remove all banned words and phrases. The bot is now free to generate replies containing anything.".format(self.bot.command_char)
         }
         if len(message.parameter_list) == 1:
             return "Markov - Markov chain replies. Generates replies when bot nick is mentioned. Subcommands: load, unload, banword, banregex"
