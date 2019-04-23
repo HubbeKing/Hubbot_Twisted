@@ -17,7 +17,7 @@ class Markov(ModuleInterface):
         self.brain = None
         self.brain_file = ""
         self.banword_regexes = []
-        self.banwords_regex = re.compile("(?!)")
+        self.banwords_regex = re.compile(r"(?!)")
         # should match against nothing, making sure replies are still generated if we have no banned words
         super(Markov, self).__init__(bot)
 
@@ -57,6 +57,14 @@ class Markov(ModuleInterface):
             c = conn.cursor()
             c.execute("INSERT INTO markov_banwords_regexes VALUES (NULL, ?)", (banned_regex,))
         self.banwords_regex = re.compile("|".join(self.banword_regexes), flags=re.IGNORECASE)
+
+    def _clear_banword_regexes(self):
+        self.banword_regexes = []
+        self.banwords_regex = re.compile(r"(?!)", re.IGNORECASE)
+        with sqlite3.connect(self.bot.database_file) as conn:
+            c = conn.cursor()
+            c.execute("DELETE FROM markov_banwords_regexes")
+            conn.commit()
 
     def add_to_brain(self, msg):
         if "://" not in msg and len(msg) > 1:
@@ -138,6 +146,12 @@ class Markov(ModuleInterface):
                 self._add_banword_regex(message.parameter_list[1])
                 return IRCResponse(ResponseType.SAY,
                                    "Alright, {} will now no longer generate Markov replies matching that regex.".format(self.bot.nickname),
+                                   message.reply_to)
+
+            elif len(message.parameter_list) == 1 and message.parameter_list[0].lower() == "clearbans":
+                self._clear_banword_regexes()
+                return IRCResponse(ResponseType.SAY,
+                                   "All banned words and regexes have now been removed.",
                                    message.reply_to)
 
             elif len(message.parameter_list) == 2 and message.parameter_list[0].lower() == "load":
