@@ -79,17 +79,24 @@ class Markov(ModuleInterface):
         reply = ""
         if self.brain is None:
             return reply
+        attempts = 0
         while len(reply.split()) < 2 or self.banwords_regex.match(reply):
+            if attempts >= 50:
+                # if we fail to generate a good reply after 50 attempts, stop trying
+                reply = "My brain appears to have broken a bit, let my owner know and they can try to fix that."
+                break
             reply = self.brain.reply(message_string, max_len=max_len)
             reply = self._clean_up_string(reply)
             if replace_nicks is not None:
                 for nick in replace_nicks:
+                    # check if any of the nicks in replace_nicks are in the reply and replace them with user_nick if so
                     if nick in reply.lower():
                         reply_list = reply.lower().split()
                         nick_index = self._index_containing_substring(reply_list, nick)
                         new_list = [item for item in reply_list if nick not in item]
                         new_list.insert(nick_index, user_nick)
                         reply = " ".join(new_list)
+            attempts += 1
         return reply
 
     @staticmethod
