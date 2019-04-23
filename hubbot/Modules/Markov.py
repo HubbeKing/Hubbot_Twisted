@@ -32,13 +32,12 @@ class Markov(ModuleInterface):
             "clearbans": "{}markov clearbans - Remove all banned words and phrases. The bot is now free to generate replies containing anything.".format(self.bot.command_char)
         }
         if len(message.parameter_list) == 1:
-            return "Markov - Markov chain replies. Generates replies when bot nick is mentioned. Subcommands: load, unload, banword, banregex"
+            return "Markov - Markov chain replies. Generates replies when bot nick is mentioned. Subcommands: {}".format(", ".join(help_dict.keys()))
         else:
             subcommand = message.parameter_list[1].lower()
             if subcommand in help_dict:
                 return help_dict[subcommand]
-            return "Markov - Markov chain replies. Generates replies when bot nick is mentioned. Subcommands: load, unload, banword, banregex"
-
+            return "Markov - Markov chain replies. Generates replies when bot nick is mentioned. Subcommands: {}".format(", ".join(help_dict.keys()))
 
     def on_load(self):
         if self.bot.network is not None:
