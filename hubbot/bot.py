@@ -3,8 +3,10 @@ import logging
 from logging.handlers import TimedRotatingFileHandler
 import os
 import platform
+import sys
 
 from twisted.words.protocols import irc
+from twisted.words.protocols.irc import lowDequote, parsemsg, numeric_to_symbolic, IRCBadMessage
 
 from hubbot import __version__
 from hubbot.channel import IRCChannel
@@ -51,6 +53,21 @@ class Hubbot(irc.IRCClient):
         self.start_time = datetime.datetime.utcnow()
         self.module_handler = ModuleHandler(self)
         self.module_handler.load_all_modules()
+
+    def lineReceived(self, line):
+        """
+        Override IRCClient.lineReceived() to properly decode bytes to unicode and ignore errors.
+        """
+        if isinstance(line, bytes):
+            line = line.decode("utf-8", errors="ignore")
+        line = lowDequote(line)
+        try:
+            prefix, command, params = parsemsg(line)
+            if command in numeric_to_symbolic:
+                command = numeric_to_symbolic[command]
+            self.handleCommand(command, prefix, params)
+        except IRCBadMessage:
+            self.badMessage(line, *sys.exc_info())
 
     def signedOn(self):
         for channel in self.channel_list:
