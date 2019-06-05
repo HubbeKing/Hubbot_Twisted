@@ -13,4 +13,6 @@ RUN pip install Cython && pip install -r requirements.txt
 
 RUN git remote set-url origin https://github.com/HubbeKing/Hubbot_Twisted.git
 
+ENV PYTHONUNBUFFERED=1
+
 ENTRYPOINT ["python", "-u", "app.py"]
