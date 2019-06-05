@@ -1,10 +1,7 @@
 from hubbot.moduleinterface import ModuleInterface
 from hubbot.response import IRCResponse, ResponseType
+import re
 import sqlite3
-try:
-    import re2 as re
-except ImportError:
-    import re
 
 
 class Hugs(ModuleInterface):

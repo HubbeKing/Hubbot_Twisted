@@ -31,5 +31,5 @@ ERROR LOGGING:
 By default, INFO level logging is done in the `hubbot/logs` folder, using the server name as the filename.
 These server logs are kept for 7 days on a `rotatingFileHandler`.
 
-In addition, any errors and exceptions are logged in `hubbot.log` in the root directory.
+In addition, any errors and exceptions are logged in `hubbot.log` in the same directory.
 This filename can be changed with the optional `app.py -l logFileName` command line argument

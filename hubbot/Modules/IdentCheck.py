@@ -1,9 +1,6 @@
 from hubbot.response import IRCResponse, ResponseType
 from hubbot.moduleinterface import ModuleInterface
-try:
-    import re2 as re
-except ImportError:
-    import re
+import re
 import time
 
 

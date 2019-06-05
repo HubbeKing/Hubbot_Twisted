@@ -1,7 +1,5 @@
 git+https://github.com/HubbeKing/cobe.git#egg=cobe-hubbot
-Cython
 pytimeparse
-git+https://github.com/andreasvc/pyre2.git#egg=re2
 requests
 toml
 Twisted[tls]
