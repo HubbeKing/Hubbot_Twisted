@@ -1,0 +1,10 @@
+version: '3'
+services:
+  hubbot:
+    image: hubbeking/hubbot
+    container_name: hubbot
+    restart: unless-stopped
+    volumes:
+      - ./data:/app/hubbot/data
+      - ./logs:/app/hubbot/logs
+      - ./config.toml:/app/hubbot.toml

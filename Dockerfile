@@ -1,18 +1,16 @@
-FROM python:3.6-alpine
+FROM python:3.6-slim
 
-RUN apk --update add \
-    build-base \
+RUN apt update && apt install -y \
+    build-essential \
     git \
-    libffi-dev \
-    openssl-dev \
-    re2-dev
-
-ADD . /app
+    libre2-dev
 
 WORKDIR /app
 
-RUN pip install Cython
+ADD . /app
 
-RUN pip install -r requirements.txt
+RUN pip install Cython && pip install -r requirements.txt
 
-ENTRYPOINT ["python", "app.py"]
+RUN git remote set-url origin https://github.com/HubbeKing/Hubbot_Twisted.git
+
+ENTRYPOINT ["python", "-u", "app.py"]
