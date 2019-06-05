@@ -10,12 +10,11 @@ This can be changed in the config file.
 
 HOW TO USE:
 
-0. Don't.
-1. Install your preferred version of Python 3.6
-2. Install a virtualenv and activate it
-3. Run `pip install -r requirements.txt`. inside said virtualenv
-4. Create a config file from hubbot.toml.example
-5. Use said virtualenv to run `python app.py -c configFileName`
+1. Create a config from `hubbot.toml.example`
+2. Create a `docker-compose.yml` file from `docker-compose.example.yml`
+3. Run the bot using `docker-compose` -Note the volume mounts for the `data` and `logs` folders.
+4. ???
+5. Profit?
 
 
 MODULE SYSTEM:
