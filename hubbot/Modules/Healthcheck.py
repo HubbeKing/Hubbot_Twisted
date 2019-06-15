@@ -1,14 +1,17 @@
-from twisted.internet import reactor, protocol
+from twisted.protocols import basic
+from twisted.internet import protocol, reactor
 
 from hubbot.moduleinterface import ModuleInterface
 
 
-class Echo(protocol.Protocol):
-    """This is just about the simplest possible protocol"""
-
-    def dataReceived(self, data):
-        """As soon as any data is received, write it back."""
-        self.transport.write(data)
+class HealthcheckProtocol(basic.LineReceiver):
+    def lineReceived(self, line):
+        response_body = "All is well. Ish."
+        self.sendLine("HTTP/1.0 200 OK".encode("UTF-8"))
+        self.sendLine("Content-Type: text/plain".encode("UTF-8"))
+        self.sendLine(f"Content-Length: {len(response_body)}\n".encode("UTF-8"))
+        self.transport.write(response_body)
+        self.transport.loseConnection()
 
 
 class Healthcheck(ModuleInterface):
@@ -16,7 +19,7 @@ class Healthcheck(ModuleInterface):
 
     def __init__(self, bot):
         self.healthcheck_server = protocol.ServerFactory()
-        self.healthcheck_server.protocol = Echo
+        self.healthcheck_server.protocol = HealthcheckProtocol
 
         super().__init__(bot)
 
