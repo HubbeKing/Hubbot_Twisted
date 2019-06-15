@@ -6,7 +6,7 @@ from hubbot.moduleinterface import ModuleInterface
 
 class HealthcheckProtocol(basic.LineReceiver):
     def lineReceived(self, line):
-        response_body = "All is well. Ish."
+        response_body = "All is well. Ish.".encode("UTF-8")
         self.sendLine("HTTP/1.0 200 OK".encode("UTF-8"))
         self.sendLine("Content-Type: text/plain".encode("UTF-8"))
         self.sendLine(f"Content-Length: {len(response_body)}\n".encode("UTF-8"))
