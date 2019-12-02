@@ -41,7 +41,7 @@ class Markov(ModuleInterface):
 
     def on_load(self):
         if self.bot.network is not None:
-            self.brain = Brain(os.path.join("hubbot", "data", "brains", "{}.brain".format(self.bot.network)))
+            self.brain = Brain(os.path.join("data", "brains", "{}.brain".format(self.bot.network)))
             self.brain_file = self.bot.network
             self._create_banwords_table()
             self._load_banwords_regexes()

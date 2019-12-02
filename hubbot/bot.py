@@ -39,7 +39,7 @@ class Hubbot(irc.IRCClient):
 
         self.logger = None
         self.setup_logging()
-        self.database_file = os.path.join("hubbot", "data", "data.db")
+        self.database_file = os.path.join("data", "data.db")
         self.admins = []
         self.ignores = []
 
@@ -222,14 +222,11 @@ class Hubbot(irc.IRCClient):
             return None
 
     def setup_logging(self):
-        abspath = os.path.abspath(__file__)
-        dname = os.path.dirname(abspath)
-        log_path = os.path.join(dname, "logs")
-        if not os.path.exists(log_path):
-            os.makedirs(log_path)
+        os.makedirs("logs", exist_ok=True)
 
         logger = logging.getLogger("bot")
-        handler = TimedRotatingFileHandler(os.path.join(log_path, "{}.log".format(self.address)), when="midnight",
+        handler = TimedRotatingFileHandler(os.path.join("logs", "{}.log".format(self.address)),
+                                           when="midnight",
                                            backupCount=7)
         handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s', '%H:%M:%S'))
         handler.setLevel(logging.INFO)

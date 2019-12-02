@@ -7,7 +7,7 @@ import sys
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="A derpy Twisted IRC bot.")
     parser.add_argument("-c", "--config", help="The configuration file to user", type=str, default="hubbot.toml")
-    parser.add_argument("-l", "--logfile", help="The file used for global error logging", type=str, default="hubbot/logs/hubbot.log")
+    parser.add_argument("-l", "--logfile", help="The file used for global error logging", type=str, default="logs/hubbot.log")
     options = parser.parse_args()
 
     root_logger = logging.getLogger()
