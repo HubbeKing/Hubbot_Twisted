@@ -2,7 +2,8 @@ from twisted.internet import reactor
 from hubbot.message import TargetTypes
 from hubbot.moduleinterface import ModuleInterface
 from hubbot.response import IRCResponse, ResponseType
-from cobe_hubbot.brain import Brain
+from cobe_hubbot.mysql_brain import MySQLBrain
+from cobe_hubbot.sqlite_brain import SQLiteBrain
 import os
 import re
 import sqlite3
@@ -25,8 +26,6 @@ class Markov(ModuleInterface):
         @type message: hubbot.message.IRCMessage
         """
         help_dict = {
-            "load": "{}markov load <brain_file> - Swap the brainfile currently in use".format(self.bot.command_char),
-            "unload": "{}markov unload - Unload the brainfile, leaving the bot brainless.".format(self.bot.command_char),
             "banword": "{}markov banword <word> - Ban a word from the bot, meaning any replies containing it will be discarded.".format(self.bot.command_char),
             "banregex": "{}markov banregex <regex> - Ban a word or phrase from the bot using regex - any reply matching the regex will be discarded.".format(self.bot.command_char),
             "clearbans": "{}markov clearbans - Remove all banned words and phrases. The bot is now free to generate replies containing anything.".format(self.bot.command_char)
@@ -41,9 +40,17 @@ class Markov(ModuleInterface):
 
     def on_load(self):
         if self.bot.network is not None:
-            self.brain = Brain(os.path.join("data", "brains", "{}.brain".format(self.bot.network)))
-            self.brain_file = self.bot.network
-            self._create_banwords_table()
+            brain_host = os.environ.get("MYSQL_HOST", None)
+            brain_user = os.environ.get("MYSQL_USER", None)
+            brain_password = os.environ.get("MYSQL_PASSWORD", None)
+            if None not in (brain_host, brain_user, brain_password):
+                self.bot.logger.info("Connecting to {!r} for brain database...".format(brain_host))
+                self.brain = MySQLBrain(brain_name=self.bot.network, mysql_host=brain_host, mysql_user=brain_user, mysql_password=brain_password)
+            else:
+                # fallback to sqlite3 brain
+                self.bot.logger.warning("Markov is using SQLite fallback brain!")
+                self.brain = SQLiteBrain(filename=os.path.join("data", "brains", "{}.brain".format(self.bot.network)))
+            self._init_banwords_db()
             self._load_banwords_regexes()
             self.bot.logger.info("Markov module loaded successfully.")
         else:
@@ -51,7 +58,7 @@ class Markov(ModuleInterface):
             self.bot.module_handler.unload_module("Markov")
             reactor.callLater(5.0, self.bot.module_handler.load_module, "Markov")
 
-    def _create_banwords_table(self):
+    def _init_banwords_db(self):
         with sqlite3.connect(self.bot.database_file) as conn:
             c = conn.cursor()
             c.execute("CREATE TABLE IF NOT EXISTS markov_banwords_regexes (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, regex TEXT NOT NULL)")
@@ -151,9 +158,6 @@ class Markov(ModuleInterface):
         @type message: hubbot.message.IRCMessage
         """
         if message.command == "markov" and message.user.name in self.bot.admins:
-            available_brains = os.listdir(os.path.join("hubbot", "data", "brains"))
-            available_brains = sorted([brain.split(".")[0] for brain in available_brains if brain.endswith(".brain")])
-
             if len(message.parameter_list) == 2 and message.parameter_list[0].lower() == "banword":
                 self._add_banned_word(message.parameter_list[1])
                 return IRCResponse(ResponseType.SAY,
@@ -171,31 +175,6 @@ class Markov(ModuleInterface):
                 return IRCResponse(ResponseType.SAY,
                                    "All banned words and regexes have now been removed.",
                                    message.reply_to)
-
-            elif len(message.parameter_list) == 2 and message.parameter_list[0].lower() == "load":
-                if message.parameter_list[1] in available_brains:
-                    self.brain = None
-                    self.brain = Brain(os.path.join("hubbot", "data", "brains", "{}.brain".format(message.parameter_list[1])))
-                    self.brain_file = message.parameter_list[1]
-                    return IRCResponse(ResponseType.SAY, "Successfully loaded markov brain {}".format(self.brain_file), message.reply_to)
-                else:
-                    return IRCResponse(ResponseType.SAY, "That's not a brain that I have on file.", message.reply_to), \
-                           IRCResponse(ResponseType.NOTICE, "Available brains are: {}".format(", ".join(available_brains)), message.user.name)
-
-            elif len(message.parameter_list) == 1 and message.parameter_list[0].lower() == "unload":
-                self.brain = None
-                old_name = self.brain_file
-                self.brain_file = ""
-                return IRCResponse(ResponseType.SAY, "Successfully unloaded markov brain {}".format(old_name), message.reply_to)
-
-            else:
-                return IRCResponse(ResponseType.SAY,
-                                   "Current loaded brain is {}".format(self.brain_file),
-                                   message.reply_to), \
-                       IRCResponse(ResponseType.NOTICE,
-                                   "Available brains are: {}".format(", ".join(available_brains)),
-                                   message.user.name)
-
         elif message.user.name == self.bot.nickname:
             return
         elif message.target_type is TargetTypes.USER and message.command not in self.bot.module_handler.mapped_triggers:
