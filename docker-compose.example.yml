@@ -5,6 +5,6 @@ services:
     container_name: hubbot
     restart: unless-stopped
     volumes:
-      - ./data:/app/hubbot/data
-      - ./logs:/app/hubbot/logs
+      - ./data:/app/data
+      - ./logs:/app/logs
       - ./config.toml:/app/hubbot.toml

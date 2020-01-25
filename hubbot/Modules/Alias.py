@@ -1,4 +1,7 @@
-import re
+try:
+    import re2 as re
+except ImportError:
+    import re
 import sqlite3
 from hubbot.moduleinterface import ModuleInterface
 from hubbot.response import IRCResponse, ResponseType

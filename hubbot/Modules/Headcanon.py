@@ -1,5 +1,8 @@
 import random
-import re
+try:
+    import re2 as re
+except ImportError:
+    import re
 import sqlite3
 
 from hubbot.response import IRCResponse, ResponseType

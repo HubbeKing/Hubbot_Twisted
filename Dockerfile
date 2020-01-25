@@ -1,16 +1,22 @@
-FROM python:3.6-slim
+FROM python:3.6-alpine
 
-RUN apt update && apt install -y \
-    build-essential \
-    libmariadb-dev  \
+RUN apk --update add \
+    build-base \
     curl \
-    git
+    git \
+    libffi-dev \
+    mariadb-connector-c-dev \
+    openssl-dev \
+    re2-dev
+
+# Cython needs to be installed/compiled manually, otherwise the re2 library fails to install
+RUN pip install Cython
 
 WORKDIR /app
 
 ADD . /app
 
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install -r requirements.txt
 
 RUN git remote set-url origin https://github.com/HubbeKing/Hubbot_Twisted.git
 
