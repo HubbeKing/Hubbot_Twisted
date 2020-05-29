@@ -7,7 +7,8 @@ RUN apk --update add \
     libffi-dev \
     mariadb-connector-c-dev \
     openssl-dev \
-    re2-dev
+    re2-dev \
+    sqlite
 
 # Cython needs to be installed/compiled manually, otherwise the re2 library fails to install
 RUN pip install Cython
