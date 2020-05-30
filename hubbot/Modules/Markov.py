@@ -75,7 +75,7 @@ class Markov(ModuleInterface):
     def _add_banned_word(self, banned_word):
         regex = r"\b({})\b".format(banned_word)
         self._add_banword_regex(regex)
-            
+
     def _add_banword_regex(self, banned_regex):
         self.banword_regexes.append(banned_regex)
         with sqlite3.connect(self.bot.database_file) as conn:
@@ -113,7 +113,7 @@ class Markov(ModuleInterface):
         if self.brain is None:
             return reply
         attempts = 0
-        while len(reply.split()) < 2 or self.banwords_regex.match(reply):
+        while len(reply.split()) < 2 or self.banwords_regex.search(reply):
             if attempts >= 50:
                 # if we fail to generate a good reply after 50 attempts, stop trying
                 reply = "My brain appears to have broken a bit, let my owner know and they can try to fix that."
