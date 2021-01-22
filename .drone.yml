@@ -3,8 +3,23 @@ type: kubernetes
 name: default
 
 steps:
-  - name: docker-build
-    image: plugins/docker
+  - name: build
+    image: quay.io/containers/buildah:latest
+    environment:
+      # tell buildah to just use chroot isolation
+      # we don’t need to run with extra isolation because we are already running within a container
+      # also, this way we don't need CAP_SYS_ADMIN, which we'd otherwise need to make namespaces
+      _BUILDAH_STARTED_IN_USERNS: ""
+      BUILDAH_ISOLATION: "chroot"
+      # get registry credentials from secret
+      REGISTRY_USERNAME:
+        from_secret: registry_username
+      REGISTRY_PASSWORD:
+        from_secret: registry_password
+    commands:
+      - buildah login -u ${REGISTRY_USERNAME} -p ${REGISTRY_PASSWORD} registry.hubbe.club
+      - buildah bud --tag registry.hubbe.club/hubbot:latest .
+      - buildah push registry.hubbe.club/hubbot:latest
     resources:
       requests:
         cpu: 100
@@ -12,21 +27,15 @@ steps:
       limits:
         cpu: 500
         memory: 500MiB
-    settings:
-      username:
-        from_secret: registry_username
-      password:
-        from_secret: registry_password
-      repo: hubbot
-      registry: registry.hubbe.club
-      autotag: true
 ---
+# get secret from k8s secret
 kind: secret
 name: registry_username
 get:
   path: registry-credentials
   name: username
 ---
+# get secret from k8s secret
 kind: secret
 name: registry_password
 get:
