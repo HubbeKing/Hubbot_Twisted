@@ -17,7 +17,7 @@ steps:
       REGISTRY_PASSWORD:
         from_secret: registry_password
     commands:
-      - buildah login -u ${REGISTRY_USERNAME} -p ${REGISTRY_PASSWORD} registry.hubbe.club
+      - buildah login -u $REGISTRY_USERNAME -p $REGISTRY_PASSWORD registry.hubbe.club
       - buildah bud --tag registry.hubbe.club/hubbot:latest .
       - buildah push registry.hubbe.club/hubbot:latest
     resources:
