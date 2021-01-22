@@ -27,17 +27,3 @@ steps:
       limits:
         cpu: 500
         memory: 500MiB
----
-# get secret from k8s secret
-kind: secret
-name: registry_username
-get:
-  path: registry-credentials
-  name: username
----
-# get secret from k8s secret
-kind: secret
-name: registry_password
-get:
-  path: registry-credentials
-  name: password
