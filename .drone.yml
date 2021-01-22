@@ -5,6 +5,13 @@ name: default
 steps:
   - name: docker-build
     image: plugins/docker
+    resources:
+      requests:
+        cpu: 100
+        memory: 100MiB
+      limits:
+        cpu: 500
+        memory: 500MiB
     settings:
       username:
         from_secret: registry_username
