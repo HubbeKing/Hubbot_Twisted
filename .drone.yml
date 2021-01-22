@@ -6,6 +6,8 @@ steps:
   - name: build
     image: quay.io/buildah/stable:latest
     environment:
+      # set buildah to use vfs instead of fuse
+      STORAGE_DRIVER: vfs
       # get registry credentials from orgsecrets
       REGISTRY_USERNAME:
         from_secret: registry_username
