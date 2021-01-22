@@ -4,7 +4,7 @@ name: default
 
 steps:
   - name: build
-    image: quay.io/containers/buildah:stable
+    image: quay.io/buildah/stable:latest
     environment:
       # get registry credentials from orgsecrets
       REGISTRY_USERNAME:
