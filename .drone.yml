@@ -1,0 +1,27 @@
+kind: pipeline
+type: kubernetes
+name: default
+
+steps:
+  - name: docker-build
+    image: plugins/docker
+    settings:
+      username:
+        from_secret: registry_username
+      password:
+        from_secret: registry_password
+      repo: hubbot
+      registry: registry.hubbe.club
+      autotag: true
+---
+kind: secret
+name: registry_username
+get:
+  path: registry-credentials
+  name: username
+---
+kind: secret
+name: registry_password
+get:
+  path: registry-credentials
+  name: password
