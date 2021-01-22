@@ -4,14 +4,9 @@ name: default
 
 steps:
   - name: build
-    image: quay.io/containers/buildah:latest
+    image: quay.io/containers/buildah:stable
     environment:
-      # tell buildah to just use chroot isolation
-      # we don’t need to run with extra isolation because we are already running within a container
-      # also, this way we don't need CAP_SYS_ADMIN, which we'd otherwise need to make namespaces
-      _BUILDAH_STARTED_IN_USERNS: ""
-      BUILDAH_ISOLATION: "chroot"
-      # get registry credentials from secret
+      # get registry credentials from orgsecrets
       REGISTRY_USERNAME:
         from_secret: registry_username
       REGISTRY_PASSWORD:
