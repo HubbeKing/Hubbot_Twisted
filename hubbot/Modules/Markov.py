@@ -2,7 +2,7 @@ from twisted.internet import reactor
 from hubbot.message import TargetTypes
 from hubbot.moduleinterface import ModuleInterface
 from hubbot.response import IRCResponse, ResponseType
-from cobe_hubbot.mysql_brain import MySQLBrain
+from cobe_hubbot.mariadb_brain import MariaDBBrain
 from cobe_hubbot.sqlite_brain import SQLiteBrain
 import os
 import re
@@ -45,7 +45,10 @@ class Markov(ModuleInterface):
             brain_password = os.environ.get("MYSQL_PASSWORD", None)
             if None not in (brain_host, brain_user, brain_password):
                 self.bot.logger.info("Connecting to {!r} for brain database...".format(brain_host))
-                self.brain = MySQLBrain(brain_name=self.bot.network, mysql_host=brain_host, mysql_user=brain_user, mysql_password=brain_password)
+                self.brain = MariaDBBrain(brain_name=self.bot.network,
+                                          mariadb_host=brain_host,
+                                          mariadb_user=brain_user,
+                                          mariadb_password=brain_password)
             else:
                 # fallback to sqlite3 brain
                 self.bot.logger.warning("Markov is using SQLite fallback brain!")
