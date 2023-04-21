@@ -30,4 +30,4 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: ghcr.io/HubbeKing/Hubbot_Twisted:latest
+          tags: ghcr.io/hubbeking/hubbot:latest
