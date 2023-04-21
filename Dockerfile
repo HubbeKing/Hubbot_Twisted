@@ -1,4 +1,4 @@
-FROM python:3.6-slim
+FROM docker.io/library/python:3.6-slim
 
 RUN apt update && apt install --no-install-recommends -y \
     build-essential \
@@ -9,7 +9,7 @@ RUN apt update && apt install --no-install-recommends -y \
     libssl-dev \
     libre2-dev \
     pkg-config \
-    sqlite
+    sqlite3
 
 # Cython needs to be installed/compiled manually, otherwise the re2 library fails to install
 RUN pip install Cython
