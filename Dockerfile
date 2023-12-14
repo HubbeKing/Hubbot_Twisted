@@ -1,4 +1,4 @@
-FROM docker.io/library/python:3.6-slim
+FROM docker.io/library/python:3.11-slim
 
 RUN apt update && apt install --no-install-recommends -y \
     build-essential \
@@ -19,8 +19,5 @@ WORKDIR /app
 ADD . /app
 
 RUN pip install -r requirements.txt
-
-# set the remote url for the repo so the update module can work
-RUN git remote set-url origin https://github.com/HubbeKing/Hubbot_Twisted.git
 
 ENTRYPOINT ["python", "-u", "app.py"]
