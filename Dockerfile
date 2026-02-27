@@ -1,4 +1,4 @@
-FROM docker.io/library/python:3.11-slim
+FROM docker.io/library/python:3.13-slim
 
 RUN apt update && apt install --no-install-recommends -y \
     build-essential \
